@@ -1,0 +1,102 @@
+{
+  "type": "checkers",
+  "board": "square",
+  "boardSize": "8x8",
+  "boardColors": ["black", "white"],
+  "rules": "default",
+  "pieces": [
+    {
+      "type": "men",
+      "color": "black",
+      "position": "0,1"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "0,3"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "0,5"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "1,0"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "1,2"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "1,4"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "1,6"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "2,1"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "2,3"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "2,5"
+    },{
+      "type": "men",
+      "color": "black",
+      "position": "2,7"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "7,0"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "7,2"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "7,4"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "7,6"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "6,1"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "6,3"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "6,5"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "6,7"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "5,0"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "5,2"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "5,4"
+    },{
+      "type": "men",
+      "color": "red",
+      "position": "5,6"
+    }
+  ]
+}

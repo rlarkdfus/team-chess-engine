@@ -2,7 +2,7 @@
   "type": "chess",
   "board": "square",
   "boardSize": "8x8",
-  "boardColors": ["#000000", "#FFFFFF"],
+  "boardColors": ["black", "white"],
   "rules": "default",
   "pieces": [
     {
