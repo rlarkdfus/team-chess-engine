@@ -1,14 +1,50 @@
-##Class Name
-Piece
-###Attributes
-Int xPosition
-Int yPosition
+# APIs
+>Builder
+
+>Controller
+
+>Parser
+
+>Board
+
+>Engine
+
+>Piece
+
+>BoardView
+
+>PieceView
+
+
+## Class Name
+Movable interface
+### Responsibilities
+Get location
+Boolean isValidMove()
+SetLocation
+
+## Class Name
+Location
+##Attribute
+### Responsibilities
+
+## Class Name 
+Constraints interface
+## Responsibilities
+SetMoves()
+setValue()
+
+## Class Name
+Abstract Piece implements Movable Interface, ConstraintsInterfaces
+### Attributes
+Location getLocationg
+Int piece color
 Int value
-###Responsibilities
+### Responsibilities
 getPossibleMoves()
 move()
 isKilled()
-##Subclasses
+## Subclasses
 Chess(Pawn, knight, bishop, etc, override move methods)
 
 
@@ -16,60 +52,60 @@ Chess(Pawn, knight, bishop, etc, override move methods)
 ### Attributes
 Boolean win
 Boolean tie
-###
 
-###Subclasses
+### Subclasses
 Chess Interface, Checkers Interface, connect4?
 
 
 
-##ClassName
+## ClassName
 Board (or Grid)
-###Attributes
+### Attributes
 Int width
 Int height
 map<position, piece>
-###Responsibilities
+### Responsibilities
 getLegalMoves()
-movePiece()
-selectPiece()
 
-##ClassName
-Square (cell?)
-###Attributes
-color
-piece
-###Responsibilities
-assignPiece()
-
-
-##Class Name
+## Class Name
 JSONparser
-###Attributes
+### Attributes
 Scanner scanner
-###Responsibilities
+### Responsibilities
 getProperties(FILE file)
 jsonToString(FILE file)
 createMap(JSONObject)
 
-##Class Name
+## Class Name
+GameBuilder
+### Attributes
+map<String, String>
+### Responsibilities
+createGame()
+
+## Class Name
 Controller
-###Attributes
+
+### Attributes
 Board board
 Model model
 BoardDisplay display
 JSONparser parser
 Player currPlayer
-###Responsibilities
-runModel()
-updateView()
-changePlayer()ssswe
-parseFile()ass
+View view
 
-##Class Name
+### Responsibilities
+
+changePlayer()
+parseFile()ass
+movePiece()
+selectPiece()
+
+
+## Class Name 
 Player
-###Attributes
-Timer timer
+### Attributes
+Timer timer 
 Int score
 Arraylist[] playersPieces
 Arraylist[] capturedPieces
@@ -77,8 +113,8 @@ Arraylist[] capturedPieces
 makeTurn()
 
 ## Class Name
-Timer
-###Attributes
+Timer 
+### Attributes
 Int secondsRemaining
 Boolean timeUp
 ###Responsibilities
@@ -88,9 +124,9 @@ timeUp()
 
 ## Class Name
 PieceDisplay
-###Attributes
+### Attributes
 ImageView image
-###Responsibilities
+### Responsibilities
 setupDisplay()
 
 
@@ -98,14 +134,55 @@ setupDisplay()
 BoardDisplay
 ###Attributes
 PieceDisplay[][] pieceDisplayArray
-###Responsibilities
+### Responsibilities
+updateBoardDisplay()
+
+## Class Name
+SquareDisplay (or CellDisplay)
+### Attributes
+Color
+PieceDisplay
+### Responsibilities
 updateBoardDisplay()
 
 
 ## Class Name
 GameView
-###Attributes
+### Attributes
 BoardDisplay boardDisplay
-###Responsibilities
+SettingsPanelView settingsPanel
+CurrentGameConfigurationView currentGame
+### Responsibilities
 setupDisplay()
 
+## Class Name
+SettingsPanelView
+### Attributes
+List<Game variations>
+double time
+double increment
+List<Color> boardColor
+List<piecestyle?> pieceStyle
+### Responsibilities
+createNewGame()
+
+## Class Name
+CurrentGameConfigurationView
+### Attributes
+Variation
+Time Control
+Board color
+Piece style
+### Responsibilities
+updateDisplay()
+
+## Class Name
+GameInfoView
+### Attributes
+black/white timer 
+Move history
+Resign button
+Draw button
+Download current game
+### Responsibilities
+setupDisplay()
