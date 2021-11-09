@@ -37,6 +37,12 @@
             <version>jdk-12.0.1+2</version>
             <scope>test</scope>
         </dependency>
+        <!-- json parser -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
     </dependencies>
 
     <build>
