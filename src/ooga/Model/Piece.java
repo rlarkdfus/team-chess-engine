@@ -1,11 +1,10 @@
 package ooga.Model;
 
-import java.util.List;
-
 public interface Piece {
-    void getX();
-    void getY();
-    void getType();
+    int getX();
+    int getY();
+    String getType();
+    int getTeam();
     List<Location> getMoves();
     void getLimited();
     void getValue();
