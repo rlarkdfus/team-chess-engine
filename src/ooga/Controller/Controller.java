@@ -1,7 +1,5 @@
 package ooga.Controller;
 
-import ooga.Model.Location;
-
 public interface Controller {
 
     /**

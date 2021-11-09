@@ -1,0 +1,79 @@
+public class API_USE_CASES {
+
+    // use case 1: move a piece to empty square
+    // occurs inside BoardView
+    void useCase1() {
+        start = ...;
+        end = ...;
+        controller.movePiece(start, end);
+    }
+
+    // use case 2: move a piece and take
+    // occurs inside BoardView
+    void useCase() {
+        start = ...;
+        end = ...;
+        controller.movePiece(start, end);
+    }
+
+    // use case 3: Current game ends based on game rules
+    // occurs inside
+    void useCase3() {
+        if (controller.gameFinished() != -1) {
+            displayGameResult(controller.gameFinished());
+        }
+    }
+
+    // use case 4: User changes colors
+    // in occurs inside view, but would be called from controller
+    void useCase4() {
+        boardView.initializeBoardView();
+    }
+
+    // use case 5:
+    void useCase5() {
+        boardView.
+    }
+
+    //theoretically
+    public class ChessController implements Controller {
+        Engine model;
+        View view;
+
+        public ChessController() {
+            model = new Model();
+            view = new View(this);
+        }
+
+        public void movePiece(Location start, Location end) {
+            model.movePiece(start, end);
+            view.updateDisplay();
+        }
+
+        public int gameFinished() {
+            return model.gameFinished();
+        }
+    }
+
+    public class ChessModel implements Engine {
+        Board board;
+        public ChessModel() {
+            board = new ChessBoard();
+        }
+
+        @Override
+        int gameFinished() {
+            // -1: running game
+            // 0: draw
+            // 1: decisive
+            int gameState = -1;
+            if (player1.timeRemaining == 0 || player2.timeRemaining == 0 || player1.checkmate() || player2.checkmate()) {
+                gameState = 1;
+            }
+            if (draw) {
+                gameState = 0;
+            }
+            return winner;
+        }
+    }
+}
