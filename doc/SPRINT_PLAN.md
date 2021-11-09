@@ -2,28 +2,21 @@
 
 ###Controller
 * Luis, Albert
-* test - controls chess
-* basic - controls chess
-* complete - controls checkers/connect4
+* test - controls chess, use cases 1,2,3,9,18
+* basic - controls chess, use cases 19,27,28,29,30,31
+* complete - controls checkers/connect4, use cases 32,33,34,35
 * demo - controls any game
 
 ###Engine
 * Tarun, Sam
-* test - simulates chess
-* basic - simulates chess
-* complete - simulates checkers/connect4
+* test - simulates chess, use cases 1,2,18,19
+* basic - simulates chess, use cases 27,28,29,30
+* complete - simulates checkers/connect4, use cases 31,32,33
 * demo - simulates any game
-
-###Piece
-* Sam, Tarun
-* test - holds information for chess piece
-* basic - holds information for chess piece
-* complete - holds information for checkers/connect4 piece
-* demo - holds information for any game piece
 
 ###View
 * Richard, Gordon
-* test - displays chess
-* basic - displays chess
-* complete - displays connect4/checkers
+* test - displays chess, use cases 4,5,
+* basic - displays chess, use cases 6,15
+* complete - displays connect4/checkers, use cases 16,17
 * demo - displays any game type
