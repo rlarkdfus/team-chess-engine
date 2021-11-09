@@ -1,4 +1,4 @@
-# Example Games Ooga 
+# Example Games
 
 The three games we selected for this project are chess, checkers, and connect 4. These games are similar in the board set-up they all share, but are different in the way each of the pieces are allowed to move. We chose these games because they all share a sort of inherent structure with the idea of the board, but provide an interesting level of complexity when it comes to providing different rules for how each piece will be allowed to move. Each specific game should be able to abstract these complexities in unique ways to combine for an interesting project. 
 

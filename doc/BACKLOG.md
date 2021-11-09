@@ -9,8 +9,6 @@ void useCase1() {
     controller.movePiece(start, end);
 }
 ```
-
-
 #### use case 2: move a piece and take
 ```java
 // occurs inside BoardView
