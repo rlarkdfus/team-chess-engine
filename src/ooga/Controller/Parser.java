@@ -11,9 +11,10 @@ public class Parser  {
     
   }
 
-  public void loadFile(File file){
+  public JSONObject loadFile(File file){
     String currFileString = readFile(file);
-    JSONObject currJSONObject = buildJSON(currFileString);
+    JSONObject jsonObject = buildJSON(currFileString);
+    return jsonObject;
   }
 
 //  private File selectFile() {
