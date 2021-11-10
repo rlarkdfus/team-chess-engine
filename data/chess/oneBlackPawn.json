@@ -1,0 +1,14 @@
+{
+  "type": "chess",
+  "board": "square",
+  "boardSize": "8x8",
+  "boardColors": ["black", "white"],
+  "rules": "default",
+  "pieces": [
+    {
+      "type": "pawn",
+      "color": "black",
+      "position": "1,0"
+    }
+  ]
+}

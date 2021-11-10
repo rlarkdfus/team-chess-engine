@@ -44,11 +44,12 @@ public class Parser {
       currFileString += scan.nextLine();
     }
     scan.close();
-    return null;
+    return currFileString;
   }
 
   private JSONObject buildJSON(String currFileString) {
-    return new JSONObject(currFileString);
+    JSONObject obj = new JSONObject(currFileString);
+    return obj;
   }
 
 }
