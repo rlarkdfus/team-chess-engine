@@ -3,33 +3,30 @@ package ooga.Controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 import org.json.JSONObject;
 
-public class Parser {
+public class Parser  {
 
   public Parser(){
     
   }
-  public void loadFile(){
-    File currFile = selectFile();
-    String currFileString = readFile(currFile);
+
+  public void loadFile(File file){
+    String currFileString = readFile(file);
     JSONObject currJSONObject = buildJSON(currFileString);
   }
 
-  private File selectFile() {
-    FileChooser fileChooser = new FileChooser();
-//    fileChooser.setTitle(myResources.getString("LoadJSONFile"));
-    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON", "*.json"));
-    File selectedFile = fileChooser.showOpenDialog(new Stage());
-    if (selectedFile != null) {
-      return selectedFile;
-    }
-    System.out.println("no file selected");
-    return null;
-  }
+//  private File selectFile() {
+//    FileChooser fileChooser = new FileChooser();
+////    fileChooser.setTitle(myResources.getString("LoadJSONFile"));
+//    fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON", "*.json"));
+//    File selectedFile = fileChooser.showOpenDialog(s);
+//    if (selectedFile != null) {
+//      return selectedFile;
+//    }
+//    System.out.println("no file selected");
+//    return null;
+//  }
 
   private String readFile(File currFile) {
     Scanner scan = null;

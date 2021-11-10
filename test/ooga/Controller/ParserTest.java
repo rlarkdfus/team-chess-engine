@@ -17,15 +17,7 @@ class ParserTest extends DukeApplicationTest {
   void setUp(){
     p = new Parser();
   }
-  @Test
-  void testSelectFile()
-      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-    Method m = p.getClass().getDeclaredMethod("selectFile");
-    m.setAccessible(true);
-    m.invoke(p);
 
-
-  }
   @Test
   void testParser()throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
     Method readFile = p.getClass().getDeclaredMethod("readFile", File.class);
