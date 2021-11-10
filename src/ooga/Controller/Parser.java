@@ -29,6 +29,7 @@ public class Parser {
       currFile = selectedFile;
       return;
     }
+    System.out.println("no file selected");
     currFile = null;
   }
 
