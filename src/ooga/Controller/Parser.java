@@ -8,38 +8,35 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import org.json.JSONObject;
 
 public class Parser {
-  File currFile;
-  String currFileString;
-  JSONObject currJSONObject;
+
   public Parser(){
     
   }
   public void loadFile(){
-    selectFile();
-    readFile();
-    buildJSON();
+    File currFile = selectFile();
+    String currFileString = readFile(currFile);
+    JSONObject currJSONObject = buildJSON(currFileString);
   }
 
-  private void selectFile() {
+  private File selectFile() {
     FileChooser fileChooser = new FileChooser();
-//    fileChooser.setTitle(myResources.getString("LoadSim"));
+//    fileChooser.setTitle(myResources.getString("LoadJSONFile"));
     fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON", "*.json"));
     File selectedFile = fileChooser.showOpenDialog(null);
     if (selectedFile != null) {
-      currFile = selectedFile;
-      return;
+      return selectedFile;
     }
     System.out.println("no file selected");
-    currFile = null;
+    return null;
   }
 
-  private void readFile() {
+  private String readFile(File currFile) {
     Scanner scan = null;
-
+    String currFileString;
     try {
       scan = new Scanner(currFile);
     } catch (FileNotFoundException e) {
-      return;
+      return null;
     }
 
     currFileString = new String();
@@ -47,10 +44,11 @@ public class Parser {
       currFileString += scan.nextLine();
     }
     scan.close();
+    return null;
   }
 
-  private void buildJSON() {
-    currJSONObject = new JSONObject(currFileString);
+  private JSONObject buildJSON(String currFileString) {
+    return new JSONObject(currFileString);
   }
 
 }
