@@ -1,6 +1,6 @@
-package ooga.View;
+package ooga.view;
 
-public interface View {
+public interface ViewInterface {
     /**
      * Updates position of pieces on the board
      */
