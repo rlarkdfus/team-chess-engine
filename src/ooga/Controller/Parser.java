@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 import org.json.JSONObject;
 
 public class Parser {
@@ -22,7 +23,7 @@ public class Parser {
     FileChooser fileChooser = new FileChooser();
 //    fileChooser.setTitle(myResources.getString("LoadJSONFile"));
     fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON", "*.json"));
-    File selectedFile = fileChooser.showOpenDialog(null);
+    File selectedFile = fileChooser.showOpenDialog(new Stage());
     if (selectedFile != null) {
       return selectedFile;
     }
