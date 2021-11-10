@@ -1,7 +1,7 @@
 package ooga.Controller;
 
 import ooga.Model.Engine;
-import ooga.View.BoardViewInterface;
+import ooga.view.BoardViewInterface;
 
 public interface Builder {
   Engine buildEngine();

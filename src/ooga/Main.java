@@ -3,7 +3,7 @@ package ooga;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import ooga.View.View;
+import ooga.view.View;
 
 /**
  * Feel free to completely change this code or delete it entirely. 
