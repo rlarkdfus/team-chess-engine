@@ -1,9 +1,9 @@
 package ooga.Controller;
 
 import ooga.Model.Engine;
-import ooga.View.BoardView;
+import ooga.view.BoardViewInterface;
 
 public interface Builder {
   Engine buildEngine();
-  BoardView buildView();
+  BoardViewInterface buildView();
 }

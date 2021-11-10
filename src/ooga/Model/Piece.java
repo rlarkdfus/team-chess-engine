@@ -1,5 +1,9 @@
 package ooga.Model;
 
+import ooga.Location;
+
+import java.util.List;
+
 public interface Piece {
     int getX();
     int getY();

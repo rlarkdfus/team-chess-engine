@@ -1,5 +1,7 @@
 package ooga.Model;
 
+import ooga.Location;
+
 public interface Engine {
     /**
      * Create default board of pieces
