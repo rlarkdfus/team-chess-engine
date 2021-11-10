@@ -1,4 +1,4 @@
-package ooga.view;
+package ooga.View;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;

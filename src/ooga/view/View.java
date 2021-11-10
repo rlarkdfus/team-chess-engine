@@ -1,4 +1,4 @@
-package ooga.view;
+package ooga.View;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;

@@ -1,4 +1,4 @@
-package ooga.view;
+package ooga.View;
 
 public interface PieceViewInterface {
 
