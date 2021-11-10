@@ -1,6 +1,8 @@
-package ooga.View;
+package ooga.view;
 
-public interface BoardView {
+import javafx.scene.paint.Paint;
+
+public interface BoardViewInterface {
     /**
      * Update pieces based on model
      */
