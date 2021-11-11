@@ -1,6 +1,8 @@
 package ooga.view;
 
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import ooga.Location;
 
 public interface BoardViewInterface {
     /**
@@ -11,17 +13,17 @@ public interface BoardViewInterface {
     /**
      * Initializes the Board View
       */
-    void initializeBoardView();
+    void initializeBoardView(int row, int col);
 
     /**
      * Checkered pattern board colors
      * @param color1
      * @param color2
      */
-    void changeColors(Paint color1, Paint color2);
+    void changeColors(Color color1, Color color2);
 
     /**
      * Highlights squares on the board that are legal
      */
-    void showLegalMoves();
+    void showLegalMoves(Location location);
 }
