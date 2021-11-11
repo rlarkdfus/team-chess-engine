@@ -17,4 +17,8 @@ public class Location {
     public int getY() {
         return y;
     }
+
+    public boolean equals(Location other) {
+        return this.x == other.getX() && this.y == other.getY();
+    }
 }

@@ -1,55 +1,128 @@
 package ooga.view;
 
-import javafx.scene.layout.GridPane;
+import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import ooga.Location;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-// Potential design alternative:
-// instead of PieceView holding image and square, what if only held images
-// BoardView holds squares and its Location, maybe PieceView moves around separate from squares
-// Squares can hold boolean holdingPiece
-// PieceView can extend ImageView instead and hold side, piece, image
-// BoardView moves piece manually based on square location
-public class BoardView extends GridPane implements BoardViewInterface {
+import java.util.List;
+
+public class BoardView extends Group implements BoardViewInterface {
 
     private final String[] CHESS_PIECES = {"pawn", "knight", "bishop", "rook", "queen", "king"};
     private final String[] CHESS_SIDES = {"white", "black"};
 
-    private final Paint LICHESS_COLOR1 = Color.web("#f3dab0");
-    private final Paint LICHESS_COLOR2 = Color.web("#bb885b");
+    private final Color LICHESS_COLOR1 = Color.web("#f3dab0");
+    private final Color LICHESS_COLOR2 = Color.web("#bb885b");
 
-    private boolean pieceSelected;
-    private PieceView selectedPiece;
-    private int row;
-    private int col;
-    PieceView[][] board;
-    Map<PieceView, Location> pieceMap;
+    private Location startLocation;
+    private BoardSquare[][] background;
+    private PieceView[][] pieceGrid;
 
     public BoardView(int row, int col) {
-        this.pieceSelected = false;
-        this.row = row;
-        this.col = col;
-        board = new PieceView[row][col];
-        pieceMap = new HashMap<>();
-        initializeBoardView();
+        startLocation = null;
+        pieceGrid = new PieceView[row][col];
+        initializeBoardView(row, col);
     }
 
     @Override
-    public void initializeBoardView() {
-        for(int i = 0; i < row; i++) {
-            for(int j = 0; j < col; j++) {
-                PieceView pieceView = new PieceView();
-                board[i][j] = pieceView;
-                pieceView.setOnMouseClicked(e -> clickSquare(pieceView));
-                this.add(pieceView, j, i);
+    public void initializeBoardView(int row, int col) {
+        renderBackground(row, col);
+        renderChessPieces();
+        this.setOnMouseClicked(e -> clickBoard(e));
+    }
+
+    private void clickBoard(MouseEvent mouse) {
+        Location clickLocation = new Location((int)mouse.getY()/60, (int)mouse.getX()/60);
+        //user doesn't have piece selected and clicks on new piece
+        if(startLocation == null) {
+            if(pieceGrid[clickLocation.getX()][clickLocation.getY()] != null) {
+                selectPiece(clickLocation);
+            }
+        } else { //user selects new location with piece
+            if (!clickLocation.equals(startLocation) && isLegalMove(clickLocation)) { //user clicks new location
+                movePiece(startLocation, clickLocation);
+            }
+            unselectPiece(); // if user clicks the same piece then selection is reset
+        }
+
+    }
+
+    private void selectPiece(Location location) {
+        startLocation = location;
+
+        showLegalMoves(location);
+    }
+
+    private void unselectPiece() {
+        for(int i = 0; i < background.length; i++) {
+            for(int j = 0; j < background[0].length; j++) {
+                background[i][j].resetBoardSquare();
             }
         }
-        initializeChessPieces();
+        startLocation = null;
+    }
+
+    private void movePiece(Location start, Location end) {
+        removePiece(end);
+
+        PieceView movedPiece = pieceGrid[start.getX()][start.getY()];
+        pieceGrid[end.getX()][end.getY()] = movedPiece;
+        pieceGrid[start.getX()][start.getY()] = null;
+        movedPiece.moveTo(end);
+    }
+
+    private void removePiece(Location location) {
+        this.getChildren().remove(pieceGrid[location.getX()][location.getY()]);
+        pieceGrid[location.getX()][location.getY()] = null;
+    }
+
+    private void renderBackground(int row, int col) {
+        background = new BoardSquare[row][col];
+        for(int i = 0; i < row; i++) {
+            for(int j = 0; j < col; j++) {
+                Location location = new Location(i, j);
+                BoardSquare boardSquare = new BoardSquare(location, null);
+                background[i][j] = boardSquare;
+                this.getChildren().add(boardSquare);
+            }
+        }
         changeColors(LICHESS_COLOR1, LICHESS_COLOR2);
+    }
+
+    private void renderChessPieces() {
+        String[] orientation = new String[]{"rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"};
+        for(int i=0; i<2; i++) {
+            String side = CHESS_SIDES[i];
+            int pawnRow = i == 0 ? 6 : 1;
+            int pieceRow = i == 0 ? 7 : 0;
+            for(int j = 0; j < 8; j++) {
+                Location pawnLoc = new Location(pawnRow, j);
+                PieceView pawn = new PieceView(side, "pawn", pawnLoc);
+
+                Location pieceLoc = new Location(pieceRow, j);
+                PieceView piece = new PieceView(side, orientation[j], pieceLoc);
+
+                pieceGrid[pawnRow][j] = pawn;
+                pieceGrid[pieceRow][j] = piece;
+
+                this.getChildren().addAll(pawn, piece);
+            }
+        }
+    }
+
+    @Override
+    public void changeColors(Color color1, Color color2) {
+        for(int i = 0; i < background.length; i++) {
+            for(int j = 0; j < background[0].length; j++) {
+                Color color = (i+j)%2 == 0 ? color1 : color2;
+                background[i][j].setColor(color);
+            }
+        }
+    }
+
+    private boolean isLegalMove(Location location) {
+        return true;
     }
 
     @Override
@@ -58,44 +131,13 @@ public class BoardView extends GridPane implements BoardViewInterface {
     }
 
     @Override
-    public void changeColors(Paint color1, Paint color2) {
-        for(int i = 0; i < row; i++) {
-            for(int j = 0; j < col; j++) {
-                Paint color = i%2 == j%2 ? color1 : color2;
-                board[i][j].setFill(color);
-            }
+    public void showLegalMoves(Location location) {
+        List<Location> legalMoves = List.of(
+                new Location(location.getX() - 1, location.getY()),
+                new Location(location.getX() - 2, location.getY()));
+        background[location.getX()][location.getY()].highlightSelected();
+        for(Location squareLoc : legalMoves) {
+            background[squareLoc.getX()][squareLoc.getY()].highlightLegalMove();
         }
-    }
-
-    @Override
-    public void showLegalMoves() {
-
-    }
-
-    // Grunt of the frontend board logic
-    private void clickSquare(PieceView clickedSquare) {
-        if(!pieceSelected) {
-            if(!clickedSquare.isHoldingPiece()) { //clicks on empty space -> do nothing
-                return;
-            }
-            selectedPiece = clickedSquare; //selects piece to move
-        } else {
-            clickedSquare.movePiece(selectedPiece); // move selected piece to clicked pieceView
-        }
-        pieceSelected = !pieceSelected;
-    }
-
-    private void initializeChessPieces() {
-        List<String> orientation = List.of("rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook");
-        for(int i=0; i<2; i++) {
-            String color = CHESS_SIDES[i];
-            int pawnRow = i == 0 ? 6 : 1;
-            int pieceRow = i == 0 ? 7 : 0;
-            for(int j = 0; j < 8; j++) {
-                board[pawnRow][j].setPiece(color, "pawn");
-                board[pieceRow][j].setPiece(color, orientation.get(j));
-            }
-        }
-
     }
 }
