@@ -1,0 +1,11 @@
+{
+  "takeMoves": [[2,1],[2,-1],[1,2],[1,-2],[-2,1],[-2,-1],[-1,2],[-1,-2]],
+  "moves": [[2,1],[2,-1],[1,2],[1,-2],[-2,1],[-2,-1],[-1,2],[-1,-2]],
+  "initialMoves": [],
+  "attributes": {
+    "limited": true,
+    "canEnPassant": false,
+    "canTransform": false,
+    "canCastle": false
+  }
+}

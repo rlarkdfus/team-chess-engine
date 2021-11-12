@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,12 +56,15 @@ class ParserTest extends DukeApplicationTest {
     buildJSON.setAccessible(true);
     JSONObject testObj = (JSONObject) buildJSON.invoke(p,jsonString);
     String gameType = testObj.getString("type");
-    JSONObject pieces = testObj.getJSONArray("pieces").getJSONObject(0);
+
     for (int i = 0; i < testObj.getJSONArray("pieces").length();i++){
       String piece = testObj.getJSONArray("pieces").getJSONObject(i).getString("type");
-      jsonString = (String) readFile.invoke(p, new File("data/"+gameType+"/"+piece+".json"));
+      jsonString = (String) readFile.invoke(p, new File("data/"+gameType+"/pieces/"+piece+".json"));
       JSONObject pieceObj = (JSONObject) buildJSON.invoke(p,jsonString);
-      assertEquals("src/black/pawn.png", pieceObj.getString("image"), "should be src/black/pawn.png. got: " + pieceObj.getString("image"));
+      JSONArray takeMoves = pieceObj.getJSONArray("takeMoves");
+      for (Object a : takeMoves ){
+
+      }
     }
 
   }
