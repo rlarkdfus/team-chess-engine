@@ -1,4 +1,4 @@
-package ooga.Controller;
+package ooga.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -38,7 +38,9 @@ class ParserTest extends DukeApplicationTest {
     JSONObject pieces = testObj.getJSONArray("pieces").getJSONObject(0);
     assertEquals("pawn", pieces.getString("type"), "should be pawn. got: " + pieces.getString("type"));
     assertEquals("black", pieces.getString("color"), "should be black. got: " + pieces.getString("color"));
-    assertEquals("1,0", pieces.getString("position"), "should be 1,0. got: " + pieces.getString("position"));
+    assertEquals(1, pieces.getJSONArray("position").getInt(0), "x should be 1. got: " + pieces.getJSONArray("position").getInt(0));
+    assertEquals(0, pieces.getJSONArray("position").getInt(1), "y should be 0. got: " + pieces.getJSONArray("position").getInt(1));
+
 
   }
 

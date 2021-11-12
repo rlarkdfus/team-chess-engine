@@ -1,4 +1,4 @@
-package ooga.Controller;
+package ooga.controller;
 
 import java.io.File;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package ooga.Controller;
+package ooga.controller;
 
 public interface Controller {
 

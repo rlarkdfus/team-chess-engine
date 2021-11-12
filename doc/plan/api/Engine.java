@@ -1,4 +1,4 @@
-package ooga.Model;
+package ooga.model;
 
 public interface Engine {
     /**

@@ -1,6 +1,6 @@
-package ooga.Controller;
+package ooga.controller;
 
-import ooga.Model.Engine;
+import ooga.model.Engine;
 import ooga.view.BoardViewInterface;
 
 public interface Builder {
