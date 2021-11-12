@@ -1,6 +1,7 @@
 package ooga.view;
 
 import javafx.scene.Group;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
@@ -34,10 +35,18 @@ public class BoardView extends Group implements BoardViewInterface {
 
     private void clickBoard(MouseEvent mouse) {
         Location clickLocation = new Location((int)mouse.getY()/60, (int)mouse.getX()/60);
+
+        if(mouse.getButton() == MouseButton.SECONDARY) {
+            background[clickLocation.getX()][clickLocation.getY()].annotate();
+            return;
+        }
+
         //user doesn't have piece selected and clicks on new piece
         if(startLocation == null) {
             if(pieceGrid[clickLocation.getX()][clickLocation.getY()] != null) {
                 selectPiece(clickLocation);
+            } else {
+                unselectPiece();
             }
         } else { //user selects new location with piece
             if (!clickLocation.equals(startLocation) && isLegalMove(clickLocation)) { //user clicks new location
@@ -50,7 +59,6 @@ public class BoardView extends Group implements BoardViewInterface {
 
     private void selectPiece(Location location) {
         startLocation = location;
-
         showLegalMoves(location);
     }
 
@@ -135,9 +143,9 @@ public class BoardView extends Group implements BoardViewInterface {
         List<Location> legalMoves = List.of(
                 new Location(location.getX() - 1, location.getY()),
                 new Location(location.getX() - 2, location.getY()));
-        background[location.getX()][location.getY()].highlightSelected();
+        background[location.getX()][location.getY()].select();
         for(Location squareLoc : legalMoves) {
-            background[squareLoc.getX()][squareLoc.getY()].highlightLegalMove();
+            background[squareLoc.getX()][squareLoc.getY()].highlight();
         }
     }
 }
