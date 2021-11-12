@@ -2,23 +2,22 @@ package ooga.Controller;
 
 import ooga.Location;
 
-public interface Controller {
+public class Controller implements ControllerInterface{
 
-    /**
-     * View updates pieces on the board
-     */
-    void updateView();
+  public Controller(){}
 
-    /**
-     * View calls loadFile to choose a file to load a game
-     */
-    void loadFile();
+  @Override
+  public void updateView() {
 
-    /**
-     * View calls movePiece when user moves piece on GUI, which moves piece in model
-     * movePiece calls updateView();
-     * @param start is initial location of moved piece
-     * @param end is final location of moved piece
-     */
-    void movePiece(Location start, Location end);
+  }
+
+  @Override
+  public void loadFile() {
+//    model = builder.buildModel();
+  }
+
+  @Override
+  public void movePiece(Location start, Location end) {
+
+  }
 }

@@ -5,12 +5,13 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import org.json.JSONObject;
 
-public class Parser  {
+public class Parser implements ParserInterface {
 
   public Parser(){
     
   }
 
+  @Override
   public JSONObject loadFile(File file){
     String currFileString = readFile(file);
     JSONObject jsonObject = buildJSON(currFileString);
