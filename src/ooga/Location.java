@@ -2,23 +2,23 @@ package ooga;
 
 public class Location {
 
-    private int x;
-    private int y;
+    private int row;
+    private int col;
 
     public Location(int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.row = x;
+        this.col = y;
     }
 
-    public int getX() {
-        return x;
+    public int getRow() {
+        return row;
     }
 
-    public int getY() {
-        return y;
+    public int getCol() {
+        return col;
     }
 
     public boolean equals(Location other) {
-        return this.x == other.getX() && this.y == other.getY();
+        return this.row == other.getRow() && this.col == other.getCol();
     }
 }
