@@ -8,6 +8,11 @@ import ooga.view.ui.GameSettingsUI;
 import ooga.view.ui.SettingsUI;
 
 public class View implements ViewInterface {
+
+    private static final String DEFAULT_RESOURCE_PACKAGE = View.class.getPackageName() + ".resources.";
+    private static final String STYLE_PACKAGE = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
+    private static final String DEFAULT_STYLESHEET = STYLE_PACKAGE + "style.css";
+
     private final int STAGE_WIDTH = 1000;
     private final int STAGE_HEIGHT = 700;
 
@@ -33,8 +38,11 @@ public class View implements ViewInterface {
         root = new GridPane();
         root.add(settingsUI, 2, 1);
         root.add(gameSettingsInfoUI, 0 , 1);
+        root.add(gameInfoUI, 1, 0, 2, 1);
         root.add(boardView, 1, 1);
-        return new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
+        Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
+        scene.getStylesheets().add(getClass().getResource(DEFAULT_STYLESHEET).toExternalForm());
+        return scene;
     }
 
     @Override

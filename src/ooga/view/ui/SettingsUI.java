@@ -13,6 +13,7 @@ public class SettingsUI extends GridPane implements UIInterface{
     private final Color LICHESS_COLOR2 = Color.web("#bb885b");
 
     public SettingsUI() {
+        this.getStyleClass().add("SettingsUI");
         createUI();
     }
 

@@ -6,6 +6,7 @@ import ooga.view.util.ViewUtility;
 public class GameInfoUI extends GridPane implements UIInterface {
 
     public GameInfoUI() {
+        this.getStyleClass().add("GameInfoUI");
         createUI();
     }
 
