@@ -14,10 +14,19 @@ public class Turn {
         removedPieces = new ArrayList<>();
     }
 
+    /**
+     * add moved piece to list
+     * @param start
+     * @param end
+     */
     public void movePiece(Location start, Location end){
         moves.add(new PieceMove(start, end));
     }
 
+    /**
+     * add removed piece to list
+     * @param location
+     */
     public void removePiece(Location location) {
         removedPieces.add(location);
     }
@@ -31,10 +40,18 @@ public class Turn {
             this.end = end;
         }
 
+        /**
+         * get the starting location
+         * @return
+         */
         public Location getStartLocation() {
             return start;
         }
 
+        /**
+         * get the ending location
+         * @return
+         */
         public Location getEndLocation() {
             return end;
         }

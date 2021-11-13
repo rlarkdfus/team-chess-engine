@@ -22,7 +22,7 @@ public class View implements ViewInterface {
     private GameInfoUI gameInfoUI; // left
     private GameSettingsUI gameSettingsInfoUI; // top
 
-    public View() {
+    public View(Controller controller) {
         this.boardView = new BoardView(8, 8);
 
         this.settingsUI = new SettingsUI();

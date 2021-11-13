@@ -37,13 +37,13 @@ public class BoardView extends Group implements BoardViewInterface {
         Location clickLocation = new Location((int)mouse.getY()/60, (int)mouse.getX()/60);
 
         if(mouse.getButton() == MouseButton.SECONDARY) {
-            background[clickLocation.getX()][clickLocation.getY()].annotate();
+            background[clickLocation.getRow()][clickLocation.getCol()].annotate();
             return;
         }
 
         //user doesn't have piece selected and clicks on new piece
         if(startLocation == null) {
-            if(pieceGrid[clickLocation.getX()][clickLocation.getY()] != null) {
+            if(pieceGrid[clickLocation.getRow()][clickLocation.getCol()] != null) {
                 selectPiece(clickLocation);
             } else {
                 unselectPiece();
@@ -74,15 +74,15 @@ public class BoardView extends Group implements BoardViewInterface {
     private void movePiece(Location start, Location end) {
         removePiece(end);
 
-        PieceView movedPiece = pieceGrid[start.getX()][start.getY()];
-        pieceGrid[end.getX()][end.getY()] = movedPiece;
-        pieceGrid[start.getX()][start.getY()] = null;
+        PieceView movedPiece = pieceGrid[start.getRow()][start.getCol()];
+        pieceGrid[end.getRow()][end.getCol()] = movedPiece;
+        pieceGrid[start.getRow()][start.getCol()] = null;
         movedPiece.moveTo(end);
     }
 
     private void removePiece(Location location) {
-        this.getChildren().remove(pieceGrid[location.getX()][location.getY()]);
-        pieceGrid[location.getX()][location.getY()] = null;
+        this.getChildren().remove(pieceGrid[location.getRow()][location.getCol()]);
+        pieceGrid[location.getRow()][location.getCol()] = null;
     }
 
     private void renderBackground(int row, int col) {
@@ -141,11 +141,11 @@ public class BoardView extends Group implements BoardViewInterface {
     @Override
     public void showLegalMoves(Location location) {
         List<Location> legalMoves = List.of(
-                new Location(location.getX() - 1, location.getY()),
-                new Location(location.getX() - 2, location.getY()));
-        background[location.getX()][location.getY()].select();
+                new Location(location.getRow() - 1, location.getCol()),
+                new Location(location.getRow() - 2, location.getCol()));
+        background[location.getRow()][location.getCol()].select();
         for(Location squareLoc : legalMoves) {
-            background[squareLoc.getX()][squareLoc.getY()].highlight();
+            background[squareLoc.getRow()][squareLoc.getCol()].highlight();
         }
     }
 }

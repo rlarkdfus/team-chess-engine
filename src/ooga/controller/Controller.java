@@ -1,10 +1,27 @@
 package ooga.controller;
 
 import ooga.Location;
+import ooga.model.Board;
+import ooga.model.Engine;
+import ooga.view.View;
+import ooga.view.ViewInterface;
 
 public class Controller implements ControllerInterface{
 
-  public Controller(){}
+  private Engine model;
+  private ViewInterface view;
+
+  public Controller(){
+    model = new Board();
+    view = new View();
+
+    initializeGame();
+  }
+
+  private void initializeGame() {
+    model.initializeBoard();
+    view.updateDisplay();
+  }
 
   @Override
   public void updateView() {
