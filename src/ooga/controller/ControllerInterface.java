@@ -1,5 +1,6 @@
 package ooga.controller;
 
+import java.io.File;
 import ooga.Location;
 
 public interface ControllerInterface {
@@ -12,7 +13,7 @@ public interface ControllerInterface {
     /**
      * View calls loadFile to choose a file to load a game
      */
-    void loadFile();
+    void loadFile(File file);
 
     /**
      * View calls movePiece when user moves piece on GUI, which moves piece in model
