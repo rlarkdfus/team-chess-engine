@@ -2,11 +2,13 @@ package ooga.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Player implements PlayerInterface {
     List<PieceInterface> remainingPieces;
     private String team;
-    //Chess timer
+    private int secondsLeft;
 //FIXME:
    int score = 0;
 
@@ -67,4 +69,22 @@ public class Player implements PlayerInterface {
     //Check opponent player if they have a king
     //If it doesn't have king -> other player wins, if it has king, but can't make moves stalemate,
 
+  public void startTimer() {
+    secondsLeft = 30;
+    setTimer();
+  }
+  public int getSecondsLeft() {
+    return secondsLeft;
+  }
+
+  private void setTimer() {
+      Timer timer = new Timer();
+      TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+          secondsLeft--;
+        }
+      };
+      timer.scheduleAtFixedRate(task, 1000, 1000);
+    }
 }
