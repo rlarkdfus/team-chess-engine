@@ -43,6 +43,12 @@
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
+        <!-- open csv -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.5.2</version>
+        </dependency>
     </dependencies>
 
     <build>
