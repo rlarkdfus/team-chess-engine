@@ -9,7 +9,7 @@
       "type": "pawn",
       "color": "black",
       "image": "src/black/pawn.png",
-      "position": [1,0]
+      "location": "1,0"
     }
   ]
 }

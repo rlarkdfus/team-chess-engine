@@ -6,7 +6,9 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,8 +43,7 @@ class ParserTest extends DukeApplicationTest {
     JSONObject pieces = testObj.getJSONArray("pieces").getJSONObject(0);
     assertEquals("pawn", pieces.getString("type"), "should be pawn. got: " + pieces.getString("type"));
     assertEquals("black", pieces.getString("color"), "should be black. got: " + pieces.getString("color"));
-    assertEquals(1, pieces.getJSONArray("position").getInt(0), "x should be 1. got: " + pieces.getJSONArray("position").getInt(0));
-    assertEquals(0, pieces.getJSONArray("position").getInt(1), "y should be 0. got: " + pieces.getJSONArray("position").getInt(1));
+    assertEquals("1,0", pieces.getString("location"), "position should be 1,0. got: " + pieces.getString("location"));
 
 
   }
@@ -61,23 +62,44 @@ class ParserTest extends DukeApplicationTest {
 
     for (int i = 0; i < testObj.getJSONArray("pieces").length();i++){
       String piece = testObj.getJSONArray("pieces").getJSONObject(i).getString("type");
-      List<Integer> location = JSONtoList(testObj.getJSONArray("pieces").getJSONObject(i).getJSONArray("location"));
+//      String location = testObj.getJSONArray("pieces").getJSONObject(i).getString("location");
 
-      jsonString = (String) readFile.invoke(p, new File("data/"+gameType+"/pieces/"+piece+".json"));
-      JSONObject pieceObj = (JSONObject) buildJSON.invoke(p,jsonString);
-      List<Integer> takeMoves = JSONtoList(pieceObj.getJSONArray("takeMoves"));
-      List<Integer> moves = JSONtoList(pieceObj.getJSONArray("moves"));
-      List<Integer> initialMoves = JSONtoList(pieceObj.getJSONArray("initialMoves"));
+      String pieceJSONString = (String) readFile.invoke(p, new File("data/"+gameType+"/pieces/"+piece+".json"));
+      JSONObject pieceObj = (JSONObject) buildJSON.invoke(p,pieceJSONString);
+
+      List<String> takeMoves = JSONtoList(pieceObj.getJSONArray("takeMoves"));
+      boolean checkTakeMoves = takeMoves.containsAll(List.of("1,-1","1,1"));
+
+      List<String> moves = JSONtoList(pieceObj.getJSONArray("moves"));
+      boolean checkMoves = moves.containsAll(List.of("1,0"));
+
+      List<String> initialMoves = JSONtoList(pieceObj.getJSONArray("initialMoves"));
+      boolean checkInitialMoves = initialMoves.containsAll(List.of("2,0","1,0"));
+
+      Map<String,Boolean> attributes = JSONtoMap(pieceObj.getJSONObject("attributes"));
+      boolean checkAttributes = attributes.keySet().containsAll(List.of("limited","canEnPassant","canTransform","canCastle"));
+      assertEquals(true, checkTakeMoves,"not all takemoves are there");
+      assertEquals(true, checkMoves,"not all moves are there");
+      assertEquals(true, checkInitialMoves,"not all initialmoves are there");
+      assertEquals(true, checkAttributes, "not all attributes are there");
 
 
 
     }
 
   }
-  private List<Integer> JSONtoList(JSONArray jsonArray){
-    List<Integer> ret = new ArrayList<>();
+  private List<String> JSONtoList(JSONArray jsonArray){
+    List<String> ret = new ArrayList<>();
     for (int i = 0; i < jsonArray.length(); i++){
-      ret.add(jsonArray.getInt(i));
+      ret.add(jsonArray.getString(i));
+    }
+    return ret;
+  }
+
+  private Map<String,Boolean> JSONtoMap(JSONObject jsonObj){
+    Map<String,Boolean> ret = new HashMap<>();
+    for (String key : jsonObj.keySet()){
+      ret.put(key,jsonObj.getBoolean(key));
     }
     return ret;
   }
