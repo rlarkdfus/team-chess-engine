@@ -13,10 +13,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import util.DukeApplicationTest;
 
 
-class ParserTest extends DukeApplicationTest {
+class JsonParserTest {
   JsonParser p;
   @BeforeEach
   void setUp(){
@@ -39,10 +38,10 @@ class ParserTest extends DukeApplicationTest {
     assertEquals("8x8", testObj.getString("boardSize"), "should be 8x8. got: " + testObj.getString("boardSize"));
     assertEquals("#f3dab0", testObj.getJSONArray("boardColors").getString(0), "should be f3dab0. got: " + testObj.getJSONArray("boardColors").getString(0));
     assertEquals("#bb885b", testObj.getJSONArray("boardColors").getString(1), "should be bb885b. got: " + testObj.getJSONArray("boardColors").getString(1));
-    assertEquals("white", testObj.getJSONArray("players").getString(0), "should be white. got: " + testObj.getJSONArray("players").getString(0));
-    assertEquals("black", testObj.getJSONArray("players").getString(1), "should be black. got: " + testObj.getJSONArray("players").getString(1));
+    assertEquals("w", testObj.getJSONArray("players").getString(0), "should be white(w). got: " + testObj.getJSONArray("players").getString(0));
+    assertEquals("b", testObj.getJSONArray("players").getString(1), "should be black(b). got: " + testObj.getJSONArray("players").getString(1));
     assertEquals("default", testObj.getString("rules"), "should be default. got: " + testObj.getString("rules"));
-    assertEquals("oneBlackPawn.csv", testObj.getString("csv"),"should be oneBlackPawn.csv");
+    assertEquals("data/chess/locations/oneBlackPawn.csv", testObj.getString("csv"),"should be data/chess/locations/oneBlackPawn.csv");
   }
 
 //  @Test

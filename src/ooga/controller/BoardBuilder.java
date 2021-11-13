@@ -14,50 +14,56 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class BoardBuilder implements Builder {
+  public static final String DEFAULT_STYLE = "companion";
 
-  String gameType;
-  String boardShape;
-  List<Integer> boardSize;
-  List<String> boardColors;
-  List<String> players;
-  String bottomColor;
-  String rules;
-  String csv;
-  List<List<String>> csvData;
-  PieceInterface[][] pieceGrid;
+  private String gameType;
+  private String boardShape;
+  private List<Integer> boardSize;
+  private List<String> boardColors;
+  private List<String> players;
+  private String bottomColor;
+  private String rules;
+  private String csv;
+  private List<List<String>> csvData;
+  private PieceInterface[][] pieceGrid;
 
-  //  LocationParser locationParser;
-  JsonParser jsonParser;
+  private LocationParser locationParser;
+  private JsonParser jsonParser;
+
   public BoardBuilder() {
-//    locationParser = new LocationParser();
+    locationParser = new LocationParser();
     jsonParser = new JsonParser();
   }
 
 
   /**
-   *
-   * @param jsonObject
+   * Overridden interface method. builds a pieceinterface which is essentially the grid
+   * that holds the pieces of the game.
+   * @param jsonObject - parsed .json file
+   * @returns - a pieceinterface grid
+   * @throws Exception - if the csv file in the JSONObject isn't valid
    */
   @Override
-  public PieceInterface[][] build(JSONObject jsonObject) {
+  public PieceInterface[][] build(JSONObject jsonObject) throws Exception {
     extractJSONObj(jsonObject);
     pieceGrid = new PieceInterface[boardSize.get(0)][boardSize.get(1)];
-//    csvData = locationParser.getInitialLocations(csv);
-    iterateCSVData();
+    csvData = locationParser.getInitialLocations(csv);
+    iterateCSVData(csvData);
     return pieceGrid;
   }
 
   /**
    * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
    * pieceGrid
+   * @param csvData - list of list representing the locations of the pieces
    */
-  private void iterateCSVData() {
+  private void iterateCSVData(List<List<String>> csvData) {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
-        String[] square = csvData.get(r).get(c).split("_");
+        String[] square = this.csvData.get(r).get(c).split("_");
         String pieceColor = square[0];
         String pieceType = square[1];
-        String pieceImagePath = "data/" + gameType + "/images/" + pieceColor + "_" + pieceType + ".png";
+        String pieceImagePath = "src/images/"+DEFAULT_STYLE+"/"+ pieceColor + pieceType + ".png";
         JSONObject pieceJSON = jsonParser.loadFile(new File("data/"+gameType+"/pieces/"+pieceType+".json"));
         JSONObject attributes = pieceJSON.getJSONObject("attributes");
         JSONObject moveVectors = pieceJSON.getJSONObject("moveVectors");
