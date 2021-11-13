@@ -13,7 +13,7 @@ import java.util.List;
 public class BoardView extends Group implements BoardViewInterface {
 
     private final String[] CHESS_PIECES = {"pawn", "knight", "bishop", "rook", "queen", "king"};
-    private final String[] CHESS_SIDES = {"white", "black"};
+    private final String[] CHESS_SIDES = {"w", "b"};
 
     private final Color LICHESS_COLOR1 = Color.web("#f3dab0");
     private final Color LICHESS_COLOR2 = Color.web("#bb885b");
@@ -109,17 +109,17 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void renderChessPieces() {
-        String[] orientation = new String[]{"rook", "knight", "bishop", "queen", "king", "bishop", "knight", "rook"};
+        String[] orientation = new String[]{"R", "N", "B", "Q", "K", "B", "N", "R"};
         for(int i=0; i<2; i++) {
             String side = CHESS_SIDES[i];
             int pawnRow = i == 0 ? 6 : 1;
             int pieceRow = i == 0 ? 7 : 0;
             for(int j = 0; j < 8; j++) {
                 Location pawnLoc = new Location(pawnRow, j);
-                PieceView pawn = new PieceView(side, "pawn", pawnLoc);
+                PieceView pawn = new PieceView(side, "P", "companion", pawnLoc);
 
                 Location pieceLoc = new Location(pieceRow, j);
-                PieceView piece = new PieceView(side, orientation[j], pieceLoc);
+                PieceView piece = new PieceView(side, orientation[j], "companion", pieceLoc);
 
                 pieceGrid[pawnRow][j] = pawn;
                 pieceGrid[pieceRow][j] = piece;
