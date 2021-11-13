@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ooga.model.Builder;
-import ooga.model.Engine;
 import ooga.model.Piece;
 import ooga.model.PieceInterface;
 import org.json.JSONArray;
@@ -35,20 +33,18 @@ public class BoardBuilder implements Builder {
     jsonParser = new JsonParser();
   }
 
-  @Override
-  public Engine buildEngine() {
-    return null;
-  }
 
   /**
    *
    * @param jsonObject
    */
-  public void build(JSONObject jsonObject) {
+  @Override
+  public PieceInterface[][] build(JSONObject jsonObject) {
     extractJSONObj(jsonObject);
     pieceGrid = new PieceInterface[boardSize.get(0)][boardSize.get(1)];
 //    csvData = locationParser.getInitialLocations(csv);
     iterateCSVData();
+    return pieceGrid;
   }
 
   /**
