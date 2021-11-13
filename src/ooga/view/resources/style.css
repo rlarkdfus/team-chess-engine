@@ -5,9 +5,23 @@
     -fx-background-color: lightblue;
 }
 
+. BoardStyleUI {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: lightblue;
+}
+
 . GameInfoUI {
     -fx-hgap: 10px;
     -fx-vgap: 10px;
     -fx-padding: 20px;
     -fx-background-color: lightgreen;
+}
+
+. GameSettingsUI {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: lightpink;
 }

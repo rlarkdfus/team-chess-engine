@@ -30,6 +30,7 @@ public class BoardSquare extends StackPane {
         this.setLayoutY(location.getRow()*60);
 
         square = new Rectangle(60, 60);
+        square.setId(String.format("square(%d,%d)", location.getRow(), location.getCol()));
         square.setFill(originalColor);
         this.getChildren().add(square);
 

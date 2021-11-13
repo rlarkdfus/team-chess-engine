@@ -1,17 +1,22 @@
 package ooga.view;
 
+import javafx.scene.paint.Color;
+
 /**
  * Handles changes in the view that do not involve the model
  */
 public class ViewController {
-    BoardView boardView;
+    ViewInterface view;
 
-    public ViewController(BoardView boardView) {
-        this.boardView = boardView;
+    public ViewController() {
     }
 
-    public void changeBoardColor() {
+    public void setView(View view) {
+        this.view = view;
+    }
 
+    public void changeBoardColor(Color color1, Color color2) {
+        view.changeBoardColor(color1, color2);
     }
 
 }

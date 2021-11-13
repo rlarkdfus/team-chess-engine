@@ -1,10 +1,13 @@
-package ooga.view.ui;
+package ooga.view.ui.gameSettingsUI;
 
 import javafx.scene.layout.GridPane;
+import ooga.view.ViewController;
+import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
 
 public class GameSettingsUI extends GridPane implements UIInterface {
-    public GameSettingsUI() {
+    public GameSettingsUI(ViewController viewController) {
+        this.getStyleClass().add("GameSettingsUI");
         createUI();
     }
 
