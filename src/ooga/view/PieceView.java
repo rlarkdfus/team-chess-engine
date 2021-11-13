@@ -5,8 +5,13 @@ import ooga.Location;
 
 public class PieceView extends ImageView {
 
-    public PieceView(String side, String piece, Location location) {
-        super("images/" + side + "/" + piece + ".png");
+    public static final int PIECE_WIDTH = 60;
+    public static final int PIECE_HEIGHT = 60;
+
+    public PieceView(String side, String piece, String style, Location location) {
+        super("images/" + "companion" + "/" + side + piece + ".png");
+        this.setFitWidth(PIECE_WIDTH);
+        this.setFitHeight(PIECE_HEIGHT);
         moveTo(location);
     }
 
