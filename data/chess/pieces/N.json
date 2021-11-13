@@ -23,6 +23,7 @@
     "initialMoves": []
   },
   "attributes": {
+    "pieceName": "n",
     "limited": true,
     "canEnPassant": false,
     "canTransform": false,
