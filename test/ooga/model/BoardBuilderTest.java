@@ -1,6 +1,7 @@
 package ooga.model;
 
 import java.lang.reflect.InvocationTargetException;
+import ooga.controller.BoardBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;

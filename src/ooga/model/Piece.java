@@ -1,19 +1,27 @@
 package ooga.model;
 
-import ooga.Location;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Piece implements PieceInterface{
-    private MoveVector moveVector;
-    private int team;
-    private boolean limited;
+    private MoveVectors moveVectors;
+    private MoveVectors takeMoveVectors;
+    private MoveVectors initialMoveVectors;
 
-    public Piece(int team, List<List<Integer>> vectors, boolean limited) {
+    private String team;
+    private boolean limited;
+    private Map<String, Boolean> attributes;
+
+
+    public Piece(String team, Map<String, List<List<Integer>>> vectors,
+        Map<String, Boolean> attributes, String pieceImagePath) {
         this.team = team;
         this.limited = limited;
-        moveVector = new MoveVector(vectors);
+        this.attributes = attributes;
+        moveVectors = new MoveVectors(vectors.get("moveVectors"));
+        takeMoveVectors = new MoveVectors(vectors.get("takeMoveVectors"));
+        initialMoveVectors = new MoveVectors(vectors.get("initialMoveVectors"));
+
     }
 
     /**
@@ -21,18 +29,18 @@ public class Piece implements PieceInterface{
      * @return
      */
     @Override
-    public int getTeam() {
+    public String getTeam() {
         return team;
     }
 
     /**
      * returns a list of all the possible move locations for a piece at given location
-     * @param location
+     * @param
      * @return
      */
     @Override
-    public MoveVector getMoves() {
-        return moveVector;
+    public MoveVectors getMoves() {
+        return moveVectors;
     }
 
     /**
@@ -46,7 +54,7 @@ public class Piece implements PieceInterface{
 
     @Override
     public String toString(){
-        return moveVector.toString();
+        return moveVectors.toString();
     }
 
 //    @Override
@@ -69,12 +77,11 @@ public class Piece implements PieceInterface{
     /**
      * holds the vector of move directions for each piece
      */
-    public class MoveVector {
+    public class MoveVectors {
         private boolean limited;
-        private List<List<Integer>> vectors;
-
-        public MoveVector(List<List<Integer>> vectors) {
-            this.vectors = vectors;
+        private List<List<Integer>> moveVectors;
+        public MoveVectors(List<List<Integer>> vectors) {
+            this.moveVectors = vectors;
         }
 
         /**
@@ -82,7 +89,7 @@ public class Piece implements PieceInterface{
          * @return
          */
         public List<List<Integer>> getMoveVectors() {
-            return vectors;
+            return moveVectors;
         }
 
         /**
@@ -91,7 +98,7 @@ public class Piece implements PieceInterface{
          * @return
          */
         public int getRowVector(int index) {
-            return vectors.get(index).get(0);
+            return moveVectors.get(index).get(0);
         }
 
         /**
@@ -100,7 +107,7 @@ public class Piece implements PieceInterface{
          * @return
          */
         public int getColVector(int index) {
-            return vectors.get(index).get(1);
+            return moveVectors.get(index).get(1);
         }
 
 //        public boolean isLimited(){

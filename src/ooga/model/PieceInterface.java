@@ -1,14 +1,12 @@
 package ooga.model;
 
-import ooga.Location;
-
-import java.util.List;
+import ooga.model.Piece.MoveVectors;
 
 public interface PieceInterface {
 //    String getType();
-    int getTeam();
+    String getTeam();
 //    List<Location> getMoves(Location location);
-    Piece.MoveVector getMoves();
+    MoveVectors getMoves();
 //    void getValue();
     boolean isLimited();
 }

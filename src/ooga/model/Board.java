@@ -1,10 +1,13 @@
 package ooga.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import ooga.Location;
 import ooga.Turn;
 
 import java.util.ArrayList;
 import java.util.List;
+import ooga.model.Piece.MoveVectors;
 
 public class Board implements Engine {
 
@@ -31,8 +34,12 @@ public class Board implements Engine {
                 vectors.add(List.of(0, 1));
                 vectors.add(List.of(0, -1));
 
-                PieceInterface pawn = new Piece(0,vectors, false);
-                PieceInterface piece = new Piece(0,vectors, false);
+                Map<String, List<List<Integer>>>  vectorsMap = Map.of("moveVectors", List.of(new ArrayList()),
+                    "takeMoveVectors", List.of(new ArrayList()),"initialMoveVectors", List.of(new ArrayList()));
+                Map<String, Boolean> attributes = new HashMap<>();
+                String imagePath = "path";
+                PieceInterface pawn = new Piece("white",vectorsMap, attributes, imagePath);
+                PieceInterface piece = new Piece("white", vectorsMap, attributes, imagePath);
 
                 pieceGrid[pawnRow][j] = pawn;
                 pieceGrid[pieceRow][j] = piece;
@@ -78,7 +85,7 @@ public class Board implements Engine {
 
         System.out.println("board received location " + location.getRow() + " " + location.getCol());
         // get moves from piece
-        Piece.MoveVector vectors = piece.getMoves();
+        MoveVectors vectors = piece.getMoves();
 
         for(int i = 0; i < vectors.getMoveVectors().size(); i++) {
             int pieceRow = location.getRow() + vectors.getRowVector(i);

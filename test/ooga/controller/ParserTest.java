@@ -17,10 +17,10 @@ import util.DukeApplicationTest;
 
 
 class ParserTest extends DukeApplicationTest {
-  Parser p;
+  JsonParser p;
   @BeforeEach
   void setUp(){
-    p = new Parser();
+    p = new JsonParser();
   }
 
   @Test
@@ -64,7 +64,7 @@ class ParserTest extends DukeApplicationTest {
 //      String imagePath = "src/"+color+"/"+piece+".png";
 //
 //      assertEquals("black",color,"should be black");
-//      assertEquals("src/black/pawn.png",imagePath,"should be src/black/pawn.png");
+//      assertEquals("src/black/black_pawn.png",imagePath,"should be src/black/black_pawn.png");
 //      assertEquals("1,0",location,"should be 1,0");
 //
 //      String pieceJSONString = (String) readFile.invoke(p, new File("data/"+gameType+"/pieces/"+piece+".json"));

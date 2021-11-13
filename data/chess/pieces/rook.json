@@ -1,7 +1,22 @@
 {
-  "takeMoves": ["0,1","0,-1","1,0","-1,0"],
-  "moves": ["0,1","0,-1","1,0","-1,0"],
-  "initialMoves": ["0,3","0,2"],
+  "moveVectors": {
+    "takeMoves": [
+      "0,1",
+      "0,-1",
+      "1,0",
+      "-1,0"
+    ],
+    "moves": [
+      "0,1",
+      "0,-1",
+      "1,0",
+      "-1,0"
+    ],
+    "initialMoves": [
+      "0,3",
+      "0,2"
+    ]
+  },
   "attributes": {
     "limited": false,
     "canEnPassant": false,
