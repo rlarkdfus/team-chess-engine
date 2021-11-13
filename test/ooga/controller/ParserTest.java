@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -59,13 +61,24 @@ class ParserTest extends DukeApplicationTest {
 
     for (int i = 0; i < testObj.getJSONArray("pieces").length();i++){
       String piece = testObj.getJSONArray("pieces").getJSONObject(i).getString("type");
+      List<Integer> location = JSONtoList(testObj.getJSONArray("pieces").getJSONObject(i).getJSONArray("location"));
+
       jsonString = (String) readFile.invoke(p, new File("data/"+gameType+"/pieces/"+piece+".json"));
       JSONObject pieceObj = (JSONObject) buildJSON.invoke(p,jsonString);
-      JSONArray takeMoves = pieceObj.getJSONArray("takeMoves");
-      for (Object a : takeMoves ){
+      List<Integer> takeMoves = JSONtoList(pieceObj.getJSONArray("takeMoves"));
+      List<Integer> moves = JSONtoList(pieceObj.getJSONArray("moves"));
+      List<Integer> initialMoves = JSONtoList(pieceObj.getJSONArray("initialMoves"));
 
-      }
+
+
     }
 
+  }
+  private List<Integer> JSONtoList(JSONArray jsonArray){
+    List<Integer> ret = new ArrayList<>();
+    for (int i = 0; i < jsonArray.length(); i++){
+      ret.add(jsonArray.getInt(i));
+    }
+    return ret;
   }
 }
