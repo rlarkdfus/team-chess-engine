@@ -22,6 +22,7 @@ public class BoardBuilder implements Builder {
   List<Integer> boardSize;
   List<String> boardColors;
   List<String> players;
+  String bottomColor;
   String rules;
   String csv;
   List<List<String>> csvData;
@@ -39,6 +40,10 @@ public class BoardBuilder implements Builder {
     return null;
   }
 
+  /**
+   *
+   * @param jsonObject
+   */
   public void build(JSONObject jsonObject) {
     extractJSONObj(jsonObject);
     pieceGrid = new PieceInterface[boardSize.get(0)][boardSize.get(1)];
@@ -46,6 +51,10 @@ public class BoardBuilder implements Builder {
     iterateCSVData();
   }
 
+  /**
+   * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
+   * pieceGrid
+   */
   private void iterateCSVData() {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
@@ -57,13 +66,17 @@ public class BoardBuilder implements Builder {
         JSONObject attributes = pieceJSON.getJSONObject("attributes");
         JSONObject moveVectors = pieceJSON.getJSONObject("moveVectors");
 
-        Piece piece = new Piece(pieceColor,getMoveVectors(moveVectors), getAttributes(attributes), pieceImagePath);
+        Piece piece = new Piece(pieceColor,getMoveVectors(moveVectors,pieceColor), getAttributes(attributes), pieceImagePath);
         pieceGrid[r][c] = piece;
       }
 
     }
   }
 
+  /**
+   * @param attributes - JSON object that contains a bunch of attribute field values
+   * @return a map of all the attributes and their values
+   */
   private Map<String, Boolean> getAttributes(JSONObject attributes) {
     Map<String, Boolean> map = new HashMap<>();
     for (String attribute : attributes.keySet()){
@@ -75,32 +88,33 @@ public class BoardBuilder implements Builder {
 
   /**
    * @param moveVectors - JSONObject which contains a bunch Lists<lists> that represent movement vectors
-   * @return a map of the movement vector type (ie takeMoveVectors) to a list<list> that represents movement vectors
+   * @return a map of the movement vector type (ie takeMoveVectors) to a list<list>
    */
-  private Map<String,List<List<Integer>>> getMoveVectors(JSONObject moveVectors) {
+  private Map<String,List<List<Integer>>> getMoveVectors(JSONObject moveVectors, String color) {
     Map<String,List<List<Integer>>> map = new HashMap<>();
     for (String vectorType : moveVectors.keySet()){
       JSONArray jsonArray = moveVectors.getJSONArray(vectorType);
-      List<List<Integer>> vectors = extractMoveVectors(jsonArray);
+      List<List<Integer>> vectors = extractMoveVectors(jsonArray, color);
       map.put(vectorType,vectors);
     }
     return map;
   }
 
   /**
-   * @param jsonArray Takes a jsonArray which has nested jsonArrays that represent movement vectors.
+   * @param jsonArray Takes a jsonArray of strings that represent 1 type of movement vector (ie takeMove).
    * @return ret - List<List<Integer>> version of the jsonArrays
    */
-  private List<List<Integer>> extractMoveVectors(JSONArray jsonArray) {
+  private List<List<Integer>> extractMoveVectors(JSONArray jsonArray, String color) {
     List<List<Integer>> ret = new ArrayList<>();
 
     for (int i = 0; i<jsonArray.length();i++){
-      JSONArray nestedArray = jsonArray.getJSONArray(i);
-      List<Integer> newList = new ArrayList<>();
-      for (int j = 0; j<nestedArray.length();j++){
-        newList.add(nestedArray.getInt(j));
+      String[] splitString = jsonArray.getString(i).split(",");
+      int row = parseInt(splitString[0]);
+      int col = parseInt(splitString[1]);
+      if (color.equals(bottomColor)){
+        row = row * -1;
       }
-      ret.add(newList);
+      ret.add(List.of(row,col));
     }
     return ret;
   }
@@ -117,6 +131,7 @@ public class BoardBuilder implements Builder {
     a.forEach((num) -> boardSize.add(parseInt(num)));
     boardColors = extractColors(jsonObject.getJSONArray("boardColors"));
     players = extractColors(jsonObject.getJSONArray("players"));
+    bottomColor = players.get(0); //assumes that bottom player is the first given player color
     rules = jsonObject.getString("rules");
     csv = jsonObject.getString("csv");
   }
@@ -132,6 +147,4 @@ public class BoardBuilder implements Builder {
     }
     return ret;
   }
-
-
 }

@@ -3,7 +3,7 @@
   "board": "square",
   "boardSize": "8x8",
   "boardColors": ["#f3dab0", "#bb885b"],
-  "players": ["black", "white"],
+  "players": ["white", "black"],
   "rules": "default",
   "csv": "oneBlackPawn.csv"
 }

@@ -49,7 +49,7 @@ public class Piece implements PieceInterface{
      */
     @Override
     public boolean isLimited() {
-        return limited;
+        return attributes.get("limited");
     }
 
     @Override
