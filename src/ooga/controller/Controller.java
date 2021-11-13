@@ -1,32 +1,34 @@
 package ooga.controller;
 
 import java.io.File;
+import java.util.List;
 import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.view.View;
-import ooga.view.ViewController;
 import ooga.view.ViewInterface;
-
-import java.util.List;
 import org.json.JSONObject;
 
 public class Controller implements ControllerInterface {
 
   private Engine model;
   private ViewInterface view;
-  private Parser parser;
+  private JsonParser parser;
 
   public Controller(){
     model = new Board();
     view = new View(this);
-    parser = new Parser();
+    parser = new JsonParser();
     initializeGame();
   }
 
   private void initializeGame() {
     model.initializeBoard();
     view.initializeDisplay();
+  }
+
+  public boolean canMovePiece(Location location) {
+    return model.canMovePiece(location);
   }
 
   @Override

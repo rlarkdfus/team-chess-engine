@@ -7,16 +7,30 @@ import ooga.Turn;
 
 import java.util.ArrayList;
 import java.util.List;
-import ooga.model.Piece.MoveVectors;
+import ooga.model.Piece.MoveVector;
 
 public class Board implements Engine {
 
     private final String[] CHESS_SIDES = {"white", "black"};
-
     private PieceInterface[][] pieceGrid;
+    private int totalTurns;
+    private List<PlayerInterface> players;
 
-    public Board(){
+    public Board() {
+        initializePlayers();
         initializeBoard();
+    }
+
+    public Board(PieceInterface[][] pieceGrid) {
+        this.pieceGrid = pieceGrid;
+    }
+
+    private void initializePlayers() {
+        totalTurns = 0;
+        players = new ArrayList<>();
+        players.add(new Player("white"));
+        players.add(new Player("black"));
+        // loop through players passed by controller and add them to players
     }
 
     /**
@@ -28,18 +42,22 @@ public class Board implements Engine {
             int pawnRow = i == 0 ? 6 : 1;
             int pieceRow = i == 0 ? 7 : 0;
             for(int j = 0; j < 8; j++) {
-                List<List<Integer>> vectors = new ArrayList<>();
-                vectors.add(List.of(-1, 0));
-                vectors.add(List.of(1, 0));
-                vectors.add(List.of(0, 1));
-                vectors.add(List.of(0, -1));
+                List<Piece.Vector> vectors = new ArrayList<>();
 
-                Map<String, List<List<Integer>>>  vectorsMap = Map.of("moveVectors", List.of(new ArrayList()),
-                    "takeMoveVectors", List.of(new ArrayList()),"initialMoveVectors", List.of(new ArrayList()));
-                Map<String, Boolean> attributes = new HashMap<>();
-                String imagePath = "path";
-                PieceInterface pawn = new Piece("white",vectorsMap, attributes, imagePath);
-                PieceInterface piece = new Piece("white", vectorsMap, attributes, imagePath);
+                vectors.add(new Piece.Vector(-1, 0));
+                vectors.add(new Piece.Vector(1, 0));
+                vectors.add(new Piece.Vector(0, 1));
+                vectors.add(new Piece.Vector(0, -1));
+
+                PieceInterface pawn = new Piece(CHESS_SIDES[i], vectors, false);
+                PieceInterface piece = new Piece(CHESS_SIDES[i],vectors, false);
+
+                for(PlayerInterface player : players) {
+                   if(player.getTeam().equals(piece.getTeam())) {
+                       player.addPiece(piece);
+                       player.addPiece(pawn);
+                   }
+                }
 
                 pieceGrid[pawnRow][j] = pawn;
                 pieceGrid[pieceRow][j] = piece;
@@ -70,6 +88,9 @@ public class Board implements Engine {
 
         // castling
 
+        // increment whose turn it is
+        totalTurns++;
+
         return currentTurn;
     }
 
@@ -79,13 +100,14 @@ public class Board implements Engine {
      * @return
      */
     public List<Location> getLegalMoves(Location location){
+
         List<Location> legalMoves = new ArrayList<>();
         // get piece at location
         PieceInterface piece = pieceGrid[location.getRow()][location.getCol()];
 
         System.out.println("board received location " + location.getRow() + " " + location.getCol());
         // get moves from piece
-        MoveVectors vectors = piece.getMoves();
+        MoveVector vectors = piece.getMoves();
 
         for(int i = 0; i < vectors.getMoveVectors().size(); i++) {
             int pieceRow = location.getRow() + vectors.getRowVector(i);
@@ -98,6 +120,9 @@ public class Board implements Engine {
                     break;
                 }
                 legalMoves.add(new Location(pieceRow, pieceCol));
+                if(pieceGrid[pieceRow][pieceCol] != null && pieceGrid[pieceRow][pieceCol].getTeam() != piece.getTeam()) {
+                    break;
+                }
                 if (piece.isLimited()){
                     break;
                 }
@@ -120,5 +145,16 @@ public class Board implements Engine {
      */
     public boolean gameFinished(){
         return false;
+    }
+
+    /**
+     * determine whether player selects their own piece on their turn
+     * @param location
+     * @return
+     */
+    public boolean canMovePiece(Location location) {
+        PieceInterface piece = pieceGrid[location.getRow()][location.getCol()];
+        int index = totalTurns % players.size();
+        return (piece != null && piece.getTeam().equals(players.get(index).getTeam()));
     }
 }
