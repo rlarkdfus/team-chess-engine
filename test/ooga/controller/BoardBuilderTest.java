@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import ooga.model.PieceInterface;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,18 +28,23 @@ class BoardBuilderTest {
     jp = new JsonParser();
     String testFile = "data/chess/oneBlackPawn.json";
     parsedFile = jp.loadFile(new File(testFile));
-    String gameType = parsedFile.getString("type");
+  }
+
+  @Test
+  void testBuild(){
+    PieceInterface[][] ret;
+    PieceInterface piece;
     try {
-      parsedCSV = lp.getInitialLocations(parsedFile.getString("csv"));
-      String[] square = parsedCSV.get(0).get(0).split("_");
-      String pieceType = square[1];
-      String pieceJsonString = "data/"+gameType+"/pieces/"+pieceType+".json";
-      piece = jp.loadFile(new File(pieceJsonString));
+      ret = b.build(parsedFile);
+      piece = ret[0][0];
+      assertEquals("b", piece.getTeam(),"team should be black");
+//      assertEquals("pawn", piece.getPieceName(),"name should be pawn");
+
     } catch (Exception e) {
       e.printStackTrace();
     }
-  }
 
+  }
   @Test
   void testCorrectImagePath(){
     String[] square = parsedCSV.get(0).get(0).split("_");
@@ -46,7 +52,6 @@ class BoardBuilderTest {
     String pieceType = square[1];
     String pieceImagePath = "src/images/"+BoardBuilder.DEFAULT_STYLE+"/"+ pieceColor + pieceType + ".png";
     assertEquals("src/images/companion/bP.png",pieceImagePath,"incorrect image path");
-
   }
   @Test
   void testGetAttributes()throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

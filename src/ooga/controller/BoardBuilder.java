@@ -61,6 +61,9 @@ public class BoardBuilder implements Builder {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
         String[] square = this.csvData.get(r).get(c).split("_");
+        if (square.length < 2){
+          continue;
+        }
         String pieceColor = square[0];
         String pieceType = square[1];
         String pieceImagePath = "src/images/"+DEFAULT_STYLE+"/"+ pieceColor + pieceType + ".png";
@@ -129,7 +132,7 @@ public class BoardBuilder implements Builder {
     gameType = jsonObject.getString("type");
     boardShape = jsonObject.getString("board");
     boardSize = new ArrayList<>();
-    List<String> a = Arrays.asList(jsonObject.getString("boardSize").split(","));
+    List<String> a = Arrays.asList(jsonObject.getString("boardSize").split("x"));
     a.forEach((num) -> boardSize.add(parseInt(num)));
     boardColors = extractColors(jsonObject.getJSONArray("boardColors"));
     players = extractColors(jsonObject.getJSONArray("players"));
