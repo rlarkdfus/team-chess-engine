@@ -133,7 +133,7 @@ public class BoardView extends Group implements BoardViewInterface {
     public void changeColors(Color color1, Color color2) {
         for(int i = 0; i < background.length; i++) {
             for(int j = 0; j < background[0].length; j++) {
-                Color color = (i+j)%2 == 0 ? color1 : color2;
+                Color color = (i + j) % 2 == 0 ? color1 : color2;
                 background[i][j].setColor(color);
             }
         }

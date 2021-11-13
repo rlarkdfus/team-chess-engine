@@ -4,6 +4,7 @@ import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.view.View;
+import ooga.view.ViewController;
 import ooga.view.ViewInterface;
 
 import java.util.List;
@@ -12,12 +13,17 @@ public class Controller implements ControllerInterface {
 
   private Engine model;
   private ViewInterface view;
+  private ViewController viewController;
 
-  public Controller(){
+  public Controller() {
     model = new Board();
+    //viewController = new ViewController();
     view = new View(this);
-
     initializeGame();
+  }
+
+  public ViewController getViewController() {
+    return viewController;
   }
 
   private void initializeGame() {
