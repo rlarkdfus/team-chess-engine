@@ -5,6 +5,7 @@ import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.view.View;
+import ooga.view.ViewController;
 import ooga.view.ViewInterface;
 
 import java.util.List;
