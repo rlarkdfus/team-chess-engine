@@ -86,8 +86,9 @@ public class ViewUtility {
         return (Slider) setID(property, result);
     }
 
-    public static ColorPicker makeColorPicker(String property, Color color) {
-        ColorPicker result = new ColorPicker(color);
+    public static ColorPicker makeColorPicker(String property, Color defaultColor, Consumer<Color> response) {
+        ColorPicker result = new ColorPicker(defaultColor);
+        result.valueProperty().addListener((o, oldColor, newColor) -> response.accept(newColor));
         return (ColorPicker) setID(property, result);
     }
 
