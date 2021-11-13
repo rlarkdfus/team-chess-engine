@@ -1,11 +1,15 @@
 package ooga.model;
 
+import ooga.Location;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player implements PlayerInterface {
     List<PieceInterface> remainingPieces;
     private String team;
+//    private Location kingLocation;
+    private boolean inCheck;
     //Chess timer
 //FIXME:
    int score = 0;
@@ -67,4 +71,16 @@ public class Player implements PlayerInterface {
     //Check opponent player if they have a king
     //If it doesn't have king -> other player wins, if it has king, but can't make moves stalemate,
 
+    public Location getKingLocation(){
+        for(PieceInterface piece : remainingPieces) {
+            if(piece.getName().equals("K")) {
+                return piece.getLocation();
+            }
+        }
+        return null;
+    }
+
+    public void setInCheck(boolean inCheck) {
+        this.inCheck = inCheck;
+    }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Board implements Engine {
 
-    private final String[] CHESS_SIDES = {"white", "black"};
+    private final String[] CHESS_SIDES = {"w", "b"};
     private PieceInterface[][] pieceGrid;
     private int totalTurns;
     private List<PlayerInterface> players;
@@ -25,8 +25,8 @@ public class Board implements Engine {
     private void initializePlayers() {
         totalTurns = 0;
         players = new ArrayList<>();
-        players.add(new Player("white"));
-        players.add(new Player("black"));
+        players.add(new Player("w"));
+        players.add(new Player("b"));
         // loop through players passed by controller and add them to players
     }
 
@@ -46,8 +46,11 @@ public class Board implements Engine {
                 vectors.add(new Piece.Vector(0, 1));
                 vectors.add(new Piece.Vector(0, -1));
 
-                PieceInterface pawn = new Piece(CHESS_SIDES[i], vectors, false);
-                PieceInterface piece = new Piece(CHESS_SIDES[i],vectors, false);
+                Location pawnLocation = new Location(pawnRow, j);
+                Location pieceLocation = new Location(pieceRow, j);
+
+                PieceInterface pawn = new Piece(pawnLocation, CHESS_SIDES[i], vectors, false);
+                PieceInterface piece = new Piece(pieceLocation, CHESS_SIDES[i],vectors, false);
 
                 for(PlayerInterface player : players) {
                    if(player.getTeam().equals(piece.getTeam())) {
@@ -70,6 +73,8 @@ public class Board implements Engine {
     public Turn movePiece(Location start, Location end){
         Turn currentTurn = new Turn();
 
+        // castling
+
         //basic
         currentTurn.movePiece(start, end);
         PieceInterface movedPiece = pieceGrid[start.getRow()][start.getCol()];
@@ -82,13 +87,27 @@ public class Board implements Engine {
         // move piece from start to end
         pieceGrid[end.getRow()][end.getCol()] = movedPiece;
         pieceGrid[start.getRow()][start.getCol()] = null;
+        movedPiece.updateLocation(end);
 
-        // castling
+        // look for checks here
+        findCurrentPlayer(totalTurns + 1).setInCheck(inCheck(findCurrentPlayer(totalTurns)));
 
         // increment whose turn it is
         totalTurns++;
 
         return currentTurn;
+    }
+
+    private boolean inCheck(PlayerInterface checker) {
+        for(PieceInterface piece : checker.getPieces()) {
+            for(Location attackLocation : getLegalMoves(piece.getLocation())) {
+                PlayerInterface checkee = findCurrentPlayer(totalTurns + 1);
+                if(checkee.getKingLocation().equals(attackLocation)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -151,7 +170,10 @@ public class Board implements Engine {
      */
     public boolean canMovePiece(Location location) {
         PieceInterface piece = pieceGrid[location.getRow()][location.getCol()];
-        int index = totalTurns % players.size();
-        return (piece != null && piece.getTeam().equals(players.get(index).getTeam()));
+        return (piece != null && piece.getTeam().equals(findCurrentPlayer(totalTurns)));
+    }
+
+    private PlayerInterface findCurrentPlayer(int totalTurns) {
+        return players.get((totalTurns) % players.size());
     }
 }

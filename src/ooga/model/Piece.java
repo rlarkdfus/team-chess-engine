@@ -7,29 +7,41 @@ import java.util.List;
 
 public class Piece implements PieceInterface{
     private MoveVector moveVector;
+
+    private Location location;
+
     private String team;
     private boolean limited;
     private boolean hasMoved;
     private int score;
     private String pieceName;
 
-    public Piece(String team, List<Vector> vectors, boolean limited) {
+    public Piece(Location location, String team, List<Vector> vectors, boolean limited) {
+        this.location = location;
         this.team = team;
         this.limited = limited;
         hasMoved = false;
         moveVector = new MoveVector(vectors, vectors, vectors); //FIXME: change to different vectors
     }
 
-    public Piece(String pieceName, String team, List<Vector> vectors, boolean limited, int score) {
-        this.pieceName = pieceName;
-        this.team = team;
-        this.limited = limited;
-        moveVector = new MoveVector(vectors, vectors, vectors);
-        this.score = score;
+//    public Piece(String pieceName, String team, List<Vector> vectors, boolean limited, int score) {
+//        this.pieceName = pieceName;
+//        this.team = team;
+//        this.limited = limited;
+//        moveVector = new MoveVector(vectors, vectors, vectors);
+//        this.score = score;
+//    }
+
+    public Location getLocation(){
+        return location;
+    }
+
+    public void updateLocation(Location location){
+        this.location = location;
     }
 
     @Override
-    public String getPieceName() {return pieceName;}
+    public String getName() {return pieceName;}
 
 
     /**
