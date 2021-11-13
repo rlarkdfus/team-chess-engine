@@ -46,25 +46,27 @@ public class BoardView extends Group implements BoardViewInterface {
         }
 
         //user doesn't have piece selected and clicks on new piece
+        //And add logic and is the same team
+
         if(startLocation == null) {
-            if(pieceGrid[clickLocation.getRow()][clickLocation.getCol()] != null) {
+            if(isLegalSquare(clickLocation)) {
                 selectPiece(clickLocation);
             } else {
                 unselectPiece();
             }
         } else { //user selects new location with piece
-            if (!clickLocation.equals(startLocation) && isLegalMove(clickLocation)) { //user clicks new location
+            if (isLegalMove(clickLocation)) { //user clicks new location
                 System.out.println("call controller to move piece");
                 controller.movePiece(startLocation, clickLocation);
             }
             unselectPiece(); // if user clicks the same piece then selection is reset
         }
-
     }
 
     private void selectPiece(Location location) {
         System.out.println("Piece selected");
         startLocation = location;
+        background[location.getRow()][location.getCol()].select();
         showLegalMoves(location);
     }
 
@@ -132,6 +134,10 @@ public class BoardView extends Group implements BoardViewInterface {
                 background[i][j].setColor(color);
             }
         }
+    }
+    
+    private boolean isLegalSquare(Location clickLocation) {
+        return controller.canMovePiece(clickLocation);
     }
 
     private boolean isLegalMove(Location clickLocation) {

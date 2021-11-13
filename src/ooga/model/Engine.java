@@ -24,4 +24,6 @@ public interface Engine {
     boolean gameFinished();
 
     List<Location> getLegalMoves(Location location);
+    
+    boolean canMovePiece(Location location);
 }
