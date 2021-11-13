@@ -1,10 +1,29 @@
 package ooga.controller;
 
 import ooga.Location;
+import ooga.model.Board;
+import ooga.model.Engine;
+import ooga.view.View;
+import ooga.view.ViewInterface;
 
-public class Controller implements ControllerInterface{
+import java.util.List;
 
-  public Controller(){}
+public class Controller implements ControllerInterface {
+
+  private Engine model;
+  private ViewInterface view;
+
+  public Controller(){
+    model = new Board();
+    view = new View(this);
+
+    initializeGame();
+  }
+
+  private void initializeGame() {
+    model.initializeBoard();
+    view.initializeDisplay();
+  }
 
   @Override
   public void updateView() {
@@ -18,6 +37,10 @@ public class Controller implements ControllerInterface{
 
   @Override
   public void movePiece(Location start, Location end) {
+    view.updateDisplay(model.movePiece(start, end));
+  }
 
+  public List<Location> getLegalMoves(Location location){
+    return model.getLegalMoves(location);
   }
 }

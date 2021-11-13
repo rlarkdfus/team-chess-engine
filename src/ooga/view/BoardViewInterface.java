@@ -1,14 +1,14 @@
 package ooga.view;
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import ooga.Location;
+import ooga.Turn;
 
 public interface BoardViewInterface {
     /**
      * Update pieces based on model
      */
-    void updateBoardView();
+    void updateBoardView(Turn turn);
 
     /**
      * Initializes the Board View

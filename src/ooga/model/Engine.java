@@ -1,6 +1,9 @@
 package ooga.model;
 
 import ooga.Location;
+import ooga.Turn;
+
+import java.util.List;
 
 public interface Engine {
     /**
@@ -13,10 +16,12 @@ public interface Engine {
      * @param start is piece initial location
      * @param end is piece new location
      */
-    void movePiece(Location start, Location end);
+    Turn movePiece(Location start, Location end);
 
     /**
      * Determine whether the win condition of the game is satisfied, and declare a winner.
      */
     boolean gameFinished();
+
+    List<Location> getLegalMoves(Location location);
 }
