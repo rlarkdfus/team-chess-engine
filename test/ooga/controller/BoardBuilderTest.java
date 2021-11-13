@@ -32,7 +32,8 @@ class BoardBuilderTest {
       parsedCSV = lp.getInitialLocations(parsedFile.getString("csv"));
       String[] square = parsedCSV.get(0).get(0).split("_");
       String pieceType = square[1];
-      piece = jp.loadFile(new File("data/"+gameType+"/pieces/"+pieceType+".json"));
+      String pieceJsonString = "data/"+gameType+"/pieces/"+pieceType+".json";
+      piece = jp.loadFile(new File(pieceJsonString));
     } catch (Exception e) {
       e.printStackTrace();
     }
