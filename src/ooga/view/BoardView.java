@@ -37,6 +37,11 @@ public class BoardView extends Group implements BoardViewInterface {
         this.setOnMouseClicked(e -> clickBoard(e));
     }
 
+    //TODO: maybe refactor this cuz getters are bad
+    public BoardSquare[][] getBackground() {
+        return background;
+    }
+
     private void clickBoard(MouseEvent mouse) {
         Location clickLocation = new Location((int)mouse.getY()/60, (int)mouse.getX()/60);
 
