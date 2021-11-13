@@ -67,7 +67,8 @@ public class BoardBuilder implements Builder {
         String pieceColor = square[0];
         String pieceType = square[1];
         String pieceImagePath = "src/images/"+DEFAULT_STYLE+"/"+ pieceColor + pieceType + ".png";
-        JSONObject pieceJSON = jsonParser.loadFile(new File("data/"+gameType+"/pieces/"+pieceType+".json"));
+        String pieceJsonPath = "data/"+gameType+"/pieces/"+pieceType+".json";
+        JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
         JSONObject attributes = pieceJSON.getJSONObject("attributes");
         JSONObject moveVectors = pieceJSON.getJSONObject("moveVectors");
 
