@@ -29,7 +29,7 @@ public class ViewTest extends DukeApplicationTest {
     @Test
     void testChangeColor1() {
         ColorPicker colorPicker1 = lookup("#board_color_1").query();
-        Rectangle testSquare = lookup("#square(0,0)").query();
+        Rectangle testSquare = lookup("#square_location(0,0)").query();
         Color expected = Color.RED;
         setValue(colorPicker1, expected);
         assertEquals(expected, testSquare.getFill());
@@ -38,9 +38,16 @@ public class ViewTest extends DukeApplicationTest {
     @Test
     void testChangeColor2() {
         ColorPicker colorPicker2 = lookup("#board_color_2").query();
-        Rectangle testSquare = lookup("#square(0,1)").query();
+        Rectangle testSquare = lookup("#square_location(0,1)").query();
         Color expected = Color.GREEN;
         setValue(colorPicker2, expected);
         assertEquals(expected, testSquare.getFill());
+    }
+
+    @Test
+    void testChangeStyle() {
+        ColorPicker colorPicker2 = lookup("#board_color_2").query();
+        Rectangle testPiece = lookup("#square_location(0,1)").query();
+
     }
 }

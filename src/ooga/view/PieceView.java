@@ -9,7 +9,8 @@ public class PieceView extends ImageView {
     public static final int PIECE_HEIGHT = 60;
 
     public PieceView(String side, String piece, String style, Location location) {
-        super("images/" + "companion" + "/" + side + piece + ".png");
+        super(String.format("images/%s/%s%s.png", style, side, piece));
+        this.setId(String.format("pieceView_location(%d,%d)_style(%s)", location.getRow(), location.getCol(), style));
         this.setFitWidth(PIECE_WIDTH);
         this.setFitHeight(PIECE_HEIGHT);
         moveTo(location);

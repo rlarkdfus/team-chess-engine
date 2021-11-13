@@ -19,4 +19,8 @@ public class ViewController {
         view.changeBoardColor(color1, color2);
     }
 
+    public void changePieceStyle(String style) {
+        view.changePieceStyle(style);
+    }
+
 }

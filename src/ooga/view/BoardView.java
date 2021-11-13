@@ -12,19 +12,22 @@ import java.util.List;
 
 public class BoardView extends Group implements BoardViewInterface {
 
-    private final String[] CHESS_PIECES = {"pawn", "knight", "bishop", "rook", "queen", "king"};
+    //private final String[] CHESS_PIECES = {"pawn", "knight", "bishop", "rook", "queen", "king"};
     private final String[] CHESS_SIDES = {"w", "b"};
 
-    private final Color LICHESS_COLOR1 = Color.web("#f3dab0");
-    private final Color LICHESS_COLOR2 = Color.web("#bb885b");
+    private final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
+    private final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
+    private final String DEFAULT_PIECE_STYLE = "companion";
 
     private Controller controller;
+    private ViewController viewController;
     private Location startLocation;
     private BoardSquare[][] background;
     private PieceView[][] pieceGrid;
 
-    public BoardView(Controller controller, int row, int col) {
+    public BoardView(Controller controller, ViewController viewController, int row, int col) {
         this.controller = controller;
+        this.viewController = viewController;
         startLocation = null;
         pieceGrid = new PieceView[row][col];
         initializeBoardView(row, col);
@@ -33,7 +36,7 @@ public class BoardView extends Group implements BoardViewInterface {
     @Override
     public void initializeBoardView(int row, int col) {
         renderBackground(row, col);
-        renderChessPieces();
+        renderChessPieces(DEFAULT_PIECE_STYLE);
         this.setOnMouseClicked(e -> clickBoard(e));
     }
 
@@ -105,10 +108,11 @@ public class BoardView extends Group implements BoardViewInterface {
                 this.getChildren().add(boardSquare);
             }
         }
-        changeColors(LICHESS_COLOR1, LICHESS_COLOR2);
+        changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
     }
 
-    private void renderChessPieces() {
+    private void renderChessPieces(String style) {
+        //pieceGrid.clear
         String[] orientation = new String[]{"R", "N", "B", "Q", "K", "B", "N", "R"};
         for(int i=0; i<2; i++) {
             String side = CHESS_SIDES[i];
@@ -116,10 +120,11 @@ public class BoardView extends Group implements BoardViewInterface {
             int pieceRow = i == 0 ? 7 : 0;
             for(int j = 0; j < 8; j++) {
                 Location pawnLoc = new Location(pawnRow, j);
-                PieceView pawn = new PieceView(side, "P", "companion", pawnLoc);
+                PieceView pawn = new PieceView(side, "P", style, pawnLoc);
 
                 Location pieceLoc = new Location(pieceRow, j);
-                PieceView piece = new PieceView(side, orientation[j], "companion", pieceLoc);
+                PieceView piece = new PieceView(side, orientation[j], style, pieceLoc);
+                //removePiece(pieceLoc);
 
                 pieceGrid[pawnRow][j] = pawn;
                 pieceGrid[pieceRow][j] = piece;
@@ -137,6 +142,12 @@ public class BoardView extends Group implements BoardViewInterface {
                 background[i][j].setColor(color);
             }
         }
+    }
+
+    @Override
+    public void changePieceStyle(String style) {
+        System.out.println("changed style: " + style);
+        renderChessPieces(style);
     }
 
     private boolean isLegalMove(Location clickLocation) {

@@ -12,4 +12,6 @@ public interface ViewInterface {
     void initializeDisplay();
 
     void changeBoardColor(Color color1, Color color2);
+
+    void changePieceStyle(String style);
 }
