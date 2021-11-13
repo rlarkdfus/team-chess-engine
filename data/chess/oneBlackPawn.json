@@ -2,14 +2,8 @@
   "type": "chess",
   "board": "square",
   "boardSize": "8x8",
-  "boardColors": ["black", "white"],
+  "boardColors": ["#f3dab0", "#bb885b"],
+  "players": ["black", "white"],
   "rules": "default",
-  "pieces": [
-    {
-      "type": "pawn",
-      "color": "black",
-      "image": "src/black/pawn.png",
-      "location": "1,0"
-    }
-  ]
+  "csv": "oneBlackPawn.csv"
 }

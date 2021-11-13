@@ -37,57 +37,60 @@ class ParserTest extends DukeApplicationTest {
     assertEquals("chess", testObj.getString("type"), "should be chess. got: " + testObj.getString("type"));
     assertEquals("square", testObj.getString("board"), "should be square. got: " + testObj.getString("board"));
     assertEquals("8x8", testObj.getString("boardSize"), "should be 8x8. got: " + testObj.getString("boardSize"));
-    assertEquals("black", testObj.getJSONArray("boardColors").getString(0), "should be black. got: " + testObj.getJSONArray("boardColors").getString(0));
-    assertEquals("white", testObj.getJSONArray("boardColors").getString(1), "should be white. got: " + testObj.getJSONArray("boardColors").getString(1));
+    assertEquals("#f3dab0", testObj.getJSONArray("boardColors").getString(0), "should be f3dab0. got: " + testObj.getJSONArray("boardColors").getString(0));
+    assertEquals("#bb885b", testObj.getJSONArray("boardColors").getString(1), "should be bb885b. got: " + testObj.getJSONArray("boardColors").getString(1));
+    assertEquals("black", testObj.getJSONArray("players").getString(0), "should be black. got: " + testObj.getJSONArray("players").getString(0));
+    assertEquals("white", testObj.getJSONArray("players").getString(1), "should be white. got: " + testObj.getJSONArray("players").getString(1));
     assertEquals("default", testObj.getString("rules"), "should be default. got: " + testObj.getString("rules"));
-    JSONObject pieces = testObj.getJSONArray("pieces").getJSONObject(0);
-    assertEquals("pawn", pieces.getString("type"), "should be pawn. got: " + pieces.getString("type"));
-    assertEquals("black", pieces.getString("color"), "should be black. got: " + pieces.getString("color"));
-    assertEquals("1,0", pieces.getString("location"), "position should be 1,0. got: " + pieces.getString("location"));
-
-
+    assertEquals("oneBlackPawn.csv", testObj.getString("csv"),"should be oneBlackPawn.csv");
   }
 
-  @Test
-  void testPieceParser()throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-    Method readFile = p.getClass().getDeclaredMethod("readFile", File.class);
-    readFile.setAccessible(true);
-    File f = new File("data/chess/oneBlackPawn.json");
-    String jsonString = (String) readFile.invoke(p, f);
-
-    Method buildJSON = p.getClass().getDeclaredMethod("buildJSON", String.class);
-    buildJSON.setAccessible(true);
-    JSONObject testObj = (JSONObject) buildJSON.invoke(p,jsonString);
-    String gameType = testObj.getString("type");
-
-    for (int i = 0; i < testObj.getJSONArray("pieces").length();i++){
-      String piece = testObj.getJSONArray("pieces").getJSONObject(i).getString("type");
+//  @Test
+//  void testPieceParser()throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+//    Method readFile = p.getClass().getDeclaredMethod("readFile", File.class);
+//    readFile.setAccessible(true);
+//    File f = new File("data/chess/oneBlackPawn.json");
+//    String jsonString = (String) readFile.invoke(p, f);
+//
+//    Method buildJSON = p.getClass().getDeclaredMethod("buildJSON", String.class);
+//    buildJSON.setAccessible(true);
+//    JSONObject testObj = (JSONObject) buildJSON.invoke(p,jsonString);
+//    String gameType = testObj.getString("type");
+//
+//    for (int i = 0; i < testObj.getJSONArray("pieces").length();i++){
+//      String piece = testObj.getJSONArray("pieces").getJSONObject(i).getString("type");
+//      String color = testObj.getJSONArray("pieces").getJSONObject(i).getString("color");
 //      String location = testObj.getJSONArray("pieces").getJSONObject(i).getString("location");
-
-      String pieceJSONString = (String) readFile.invoke(p, new File("data/"+gameType+"/pieces/"+piece+".json"));
-      JSONObject pieceObj = (JSONObject) buildJSON.invoke(p,pieceJSONString);
-
-      List<String> takeMoves = JSONtoList(pieceObj.getJSONArray("takeMoves"));
-      boolean checkTakeMoves = takeMoves.containsAll(List.of("1,-1","1,1"));
-
-      List<String> moves = JSONtoList(pieceObj.getJSONArray("moves"));
-      boolean checkMoves = moves.containsAll(List.of("1,0"));
-
-      List<String> initialMoves = JSONtoList(pieceObj.getJSONArray("initialMoves"));
-      boolean checkInitialMoves = initialMoves.containsAll(List.of("2,0","1,0"));
-
-      Map<String,Boolean> attributes = JSONtoMap(pieceObj.getJSONObject("attributes"));
-      boolean checkAttributes = attributes.keySet().containsAll(List.of("limited","canEnPassant","canTransform","canCastle"));
-      assertEquals(true, checkTakeMoves,"not all takemoves are there");
-      assertEquals(true, checkMoves,"not all moves are there");
-      assertEquals(true, checkInitialMoves,"not all initialmoves are there");
-      assertEquals(true, checkAttributes, "not all attributes are there");
-
-
-
-    }
-
-  }
+//      String imagePath = "src/"+color+"/"+piece+".png";
+//
+//      assertEquals("black",color,"should be black");
+//      assertEquals("src/black/pawn.png",imagePath,"should be src/black/pawn.png");
+//      assertEquals("1,0",location,"should be 1,0");
+//
+//      String pieceJSONString = (String) readFile.invoke(p, new File("data/"+gameType+"/pieces/"+piece+".json"));
+//      JSONObject pieceObj = (JSONObject) buildJSON.invoke(p,pieceJSONString);
+//
+//      List<String> takeMoves = JSONtoList(pieceObj.getJSONArray("takeMoves"));
+//      boolean checkTakeMoves = takeMoves.containsAll(List.of("1,-1","1,1"));
+//
+//      List<String> moves = JSONtoList(pieceObj.getJSONArray("moves"));
+//      boolean checkMoves = moves.containsAll(List.of("1,0"));
+//
+//      List<String> initialMoves = JSONtoList(pieceObj.getJSONArray("initialMoves"));
+//      boolean checkInitialMoves = initialMoves.containsAll(List.of("2,0","1,0"));
+//
+//      Map<String,Boolean> attributes = JSONtoMap(pieceObj.getJSONObject("attributes"));
+//      boolean checkAttributes = attributes.keySet().containsAll(List.of("limited","canEnPassant","canTransform","canCastle"));
+//      assertEquals(true, checkTakeMoves,"not all takemoves are there");
+//      assertEquals(true, checkMoves,"not all moves are there");
+//      assertEquals(true, checkInitialMoves,"not all initialmoves are there");
+//      assertEquals(true, checkAttributes, "not all attributes are there");
+//
+//
+//
+//    }
+//
+//  }
   private List<String> JSONtoList(JSONArray jsonArray){
     List<String> ret = new ArrayList<>();
     for (int i = 0; i < jsonArray.length(); i++){
