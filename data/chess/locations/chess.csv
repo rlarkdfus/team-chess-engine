@@ -1,9 +1,9 @@
-b_rook, b_knight,b_bishop,b_queen,b_king,b_bishop,b_knight,b_rook
-b_pawn,b_pawn,b_pawn,b_pawn,b_pawn,b_pawn,b_pawn,b_pawn
+b_R, b_N,b_B,b_Q,b_K,b_B,b_N,b_R
+b_P,b_P,b_P,b_P,b_P,b_P,b_P,b_P
 0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0
 0,0,0,0,0,0,0,0
-w_pawn,w_pawn,w_pawn,w_pawn,w_pawn,w_pawn,w_pawn,w_pawn
-w_rook,w_knight,w_bishop,w_queen,w_king,w_bishop,w_knight,w_rook
+w_P,w_P,w_P,w_P,w_P,w_P,w_P,w_P
+w_R,w_N,w_B,w_Q,w_K,w_B,w_N,w_R
 
