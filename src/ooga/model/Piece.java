@@ -32,12 +32,12 @@ public class Piece implements PieceInterface {
    * 2) BoardBuilder(a lot): getMoveVectors(), and add ^ attributes in getAttributes()
    * 3) Board.initializeboard. well actually maybe not since this will be replaced by boardbuilder.
    */
-  public Piece(String team, Map<String, List<List<Integer>>> vectors,
+  public Piece(String team, Map<String, List<Vector>> vectors,
       Map<String, Boolean> attributes, String imagePath) {
     this.team = team;
     this.attributes = attributes;
     hasMoved = false;
-//    moveVector = new MoveVector(vectors, vectors, vectors); //FIXME: change to different vectors
+    moveVector = new MoveVector(vectors.get("moves"), vectors.get("takeMoves"), vectors.get("initialMoves")); //FIXME: change to different vectors
   }
 
   public Piece(String pieceName, String team, List<Vector> vectors, boolean limited, int score) {

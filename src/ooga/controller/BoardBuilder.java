@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import ooga.model.Piece;
+import ooga.model.Piece.Vector;
 import ooga.model.PieceInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -67,7 +68,8 @@ public class BoardBuilder implements Builder {
         String pieceColor = square[0];
         String pieceType = square[1];
         String pieceImagePath = "src/images/"+DEFAULT_STYLE+"/"+ pieceColor + pieceType + ".png";
-        JSONObject pieceJSON = jsonParser.loadFile(new File("data/"+gameType+"/pieces/"+pieceType+".json"));
+        String pieceJsonPath = "data/"+gameType+"/pieces/"+pieceType+".json";
+        JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
         JSONObject attributes = pieceJSON.getJSONObject("attributes");
         JSONObject moveVectors = pieceJSON.getJSONObject("moveVectors");
 
@@ -95,11 +97,11 @@ public class BoardBuilder implements Builder {
    * @param moveVectors - JSONObject which contains a bunch Lists<lists> that represent movement vectors
    * @return a map of the movement vector type (ie takeMoveVectors) to a list<list>
    */
-  private Map<String,List<List<Integer>>> getMoveVectors(JSONObject moveVectors, String color) {
-    Map<String,List<List<Integer>>> map = new HashMap<>();
+  private Map<String,List<Vector>> getMoveVectors(JSONObject moveVectors, String color) {
+    Map<String,List<Vector>> map = new HashMap<>();
     for (String vectorType : moveVectors.keySet()){
       JSONArray jsonArray = moveVectors.getJSONArray(vectorType);
-      List<List<Integer>> vectors = extractMoveVectors(jsonArray, color);
+      List<Vector> vectors = extractMoveVectors(jsonArray, color);
       map.put(vectorType,vectors);
     }
     return map;
@@ -109,8 +111,8 @@ public class BoardBuilder implements Builder {
    * @param jsonArray Takes a jsonArray of strings that represent 1 type of movement vector (ie takeMove).
    * @return ret - List<List<Integer>> version of the jsonArrays
    */
-  private List<List<Integer>> extractMoveVectors(JSONArray jsonArray, String color) {
-    List<List<Integer>> ret = new ArrayList<>();
+  private List<Vector> extractMoveVectors(JSONArray jsonArray, String color) {
+    List<Vector> ret = new ArrayList<>();
 
     for (int i = 0; i<jsonArray.length();i++){
       String[] splitString = jsonArray.getString(i).split(",");
@@ -119,7 +121,8 @@ public class BoardBuilder implements Builder {
       if (color.equals(bottomColor)){
         row = row * -1;
       }
-      ret.add(List.of(row,col));
+
+      ret.add(new Vector(row,col));
     }
     return ret;
   }
