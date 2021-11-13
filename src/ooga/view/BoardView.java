@@ -5,6 +5,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
+import ooga.controller.Controller;
+import ooga.Turn;
 
 import java.util.List;
 
@@ -16,11 +18,13 @@ public class BoardView extends Group implements BoardViewInterface {
     private final Color LICHESS_COLOR1 = Color.web("#f3dab0");
     private final Color LICHESS_COLOR2 = Color.web("#bb885b");
 
+    private Controller controller;
     private Location startLocation;
     private BoardSquare[][] background;
     private PieceView[][] pieceGrid;
 
-    public BoardView(int row, int col) {
+    public BoardView(Controller controller, int row, int col) {
+        this.controller = controller;
         startLocation = null;
         pieceGrid = new PieceView[row][col];
         initializeBoardView(row, col);
@@ -50,7 +54,8 @@ public class BoardView extends Group implements BoardViewInterface {
             }
         } else { //user selects new location with piece
             if (!clickLocation.equals(startLocation) && isLegalMove(clickLocation)) { //user clicks new location
-                movePiece(startLocation, clickLocation);
+                System.out.println("call controller to move piece");
+                controller.movePiece(startLocation, clickLocation);
             }
             unselectPiece(); // if user clicks the same piece then selection is reset
         }
@@ -58,6 +63,7 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void selectPiece(Location location) {
+        System.out.println("Piece selected");
         startLocation = location;
         showLegalMoves(location);
     }
@@ -72,8 +78,7 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void movePiece(Location start, Location end) {
-        removePiece(end);
-
+        System.out.println("Piece moved");
         PieceView movedPiece = pieceGrid[start.getRow()][start.getCol()];
         pieceGrid[end.getRow()][end.getCol()] = movedPiece;
         pieceGrid[start.getRow()][start.getCol()] = null;
@@ -129,23 +134,36 @@ public class BoardView extends Group implements BoardViewInterface {
         }
     }
 
-    private boolean isLegalMove(Location location) {
-        return true;
+    private boolean isLegalMove(Location clickLocation) {
+        for(Location legalSquare : controller.getLegalMoves(startLocation)) {
+            if(legalSquare.equals(clickLocation)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public void updateBoardView() {
+    public void updateBoardView(Turn turn) {
+        System.out.println("update baordview");
 
+        for(Location removed : turn.getRemoved()){
+            removePiece(removed);
+        }
+
+        for(Turn.PieceMove move : turn.getMoves()) {
+            movePiece(move.getStartLocation(), move.getEndLocation());
+        }
     }
 
     @Override
     public void showLegalMoves(Location location) {
-        List<Location> legalMoves = List.of(
-                new Location(location.getRow() - 1, location.getCol()),
-                new Location(location.getRow() - 2, location.getCol()));
-        background[location.getRow()][location.getCol()].select();
+        List<Location> legalMoves = controller.getLegalMoves(location);
+        System.out.println("called for legal moves");
         for(Location squareLoc : legalMoves) {
-            background[squareLoc.getRow()][squareLoc.getCol()].highlight();
+            System.out.println("legal moves:" + squareLoc.getRow() + " " + squareLoc.getCol());
+            BoardSquare square = background[squareLoc.getRow()][squareLoc.getCol()];
+            square.highlight();
         }
     }
 }

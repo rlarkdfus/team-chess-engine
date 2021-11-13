@@ -43,6 +43,12 @@ public class Piece implements PieceInterface{
     public boolean isLimited() {
         return limited;
     }
+
+    @Override
+    public String toString(){
+        return moveVector.toString();
+    }
+
 //    @Override
 //    public List<Location> getMoves(Location location) {
 //        List<Location> moves = new ArrayList<>();
@@ -99,6 +105,13 @@ public class Piece implements PieceInterface{
 
 //        public boolean isLimited(){
 //            return limited;
+//        }
+
+//        @Override
+//        public String toString(){
+//            StringBuilder str = new StringBuilder();
+//
+//            for(List<Integer> v)
 //        }
     }
 

@@ -1,7 +1,7 @@
 package ooga.model;
 
 import ooga.Location;
-import ooga.view.PieceView;
+import ooga.Turn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +20,19 @@ public class Board implements Engine {
      * Create default board of pieces
      */
     public void initializeBoard(){
+        pieceGrid = new PieceInterface[8][8];
         for(int i=0; i<2; i++) {
             int pawnRow = i == 0 ? 6 : 1;
             int pieceRow = i == 0 ? 7 : 0;
             for(int j = 0; j < 8; j++) {
                 List<List<Integer>> vectors = new ArrayList<>();
+                vectors.add(List.of(-1, 0));
                 vectors.add(List.of(1, 0));
+                vectors.add(List.of(0, 1));
+                vectors.add(List.of(0, -1));
 
-                PieceInterface pawn = new Piece(i,vectors, false);
-                PieceInterface piece = new Piece(i,vectors, false);
+                PieceInterface pawn = new Piece(0,vectors, false);
+                PieceInterface piece = new Piece(0,vectors, false);
 
                 pieceGrid[pawnRow][j] = pawn;
                 pieceGrid[pieceRow][j] = piece;
@@ -72,17 +76,18 @@ public class Board implements Engine {
         // get piece at location
         PieceInterface piece = pieceGrid[location.getRow()][location.getCol()];
 
+        System.out.println("board received location " + location.getRow() + " " + location.getCol());
         // get moves from piece
         Piece.MoveVector vectors = piece.getMoves();
 
         for(int i = 0; i < vectors.getMoveVectors().size(); i++) {
-            int pieceRow = location.getRow() + vectors.getRowVector(i) * piece.getTeam();
-            int pieceCol = location.getCol() + vectors.getColVector(i) * piece.getTeam();
-
+            int pieceRow = location.getRow() + vectors.getRowVector(i);
+            int pieceCol = location.getCol() + vectors.getColVector(i);
+            System.out.println("potential location: " + pieceRow + " " + pieceCol);
             // while the new locations are in bounds
             while(inBounds(pieceRow, pieceCol)){
                 // same team check
-                if(pieceGrid[pieceRow][pieceCol].getTeam() == piece.getTeam()){
+                if(pieceGrid[pieceRow][pieceCol] != null && pieceGrid[pieceRow][pieceCol].getTeam() == piece.getTeam()){
                     break;
                 }
                 legalMoves.add(new Location(pieceRow, pieceCol));
@@ -90,8 +95,8 @@ public class Board implements Engine {
                     break;
                 }
 
-                pieceRow += vectors.getRowVector(i) * piece.getTeam();
-                pieceCol += vectors.getColVector(i) * piece.getTeam();
+                pieceRow += vectors.getRowVector(i);
+                pieceCol += vectors.getColVector(i);
             }
         }
 //        // if king is in check remove moves that do not stop check

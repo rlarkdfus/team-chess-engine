@@ -1,4 +1,4 @@
-package ooga.model;
+package ooga;
 
 import ooga.Location;
 
@@ -29,6 +29,22 @@ public class Turn {
      */
     public void removePiece(Location location) {
         removedPieces.add(location);
+    }
+
+    /**
+     * return the moved pieces
+     * @return
+     */
+    public List<PieceMove> getMoves(){
+        return moves;
+    }
+
+    /**
+     * return the removed pieces
+     * @return
+     */
+    public List<Location> getRemoved(){
+        return removedPieces;
     }
 
     public class PieceMove {

@@ -1,6 +1,9 @@
 package ooga.model;
 
 import ooga.Location;
+import ooga.Turn;
+
+import java.util.List;
 
 public interface Engine {
     /**
@@ -19,4 +22,6 @@ public interface Engine {
      * Determine whether the win condition of the game is satisfied, and declare a winner.
      */
     boolean gameFinished();
+
+    List<Location> getLegalMoves(Location location);
 }
