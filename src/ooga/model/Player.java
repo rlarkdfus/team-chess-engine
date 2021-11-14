@@ -81,11 +81,6 @@ public class Player implements PlayerInterface {
     }
 
     @Override
-    public void undoLastMove() {
-
-    }
-
-    @Override
     public PieceInterface getPiece(Location location) {
         for(PieceInterface piece : remainingPieces) {
             if(piece.getLocation().equals(location)) {
