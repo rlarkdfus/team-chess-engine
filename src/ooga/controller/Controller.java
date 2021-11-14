@@ -21,13 +21,8 @@ public class Controller implements ControllerInterface {
     view = new View(this);
 
     jsonParser = new JsonParser();
-    initializeGame();
   }
 
-  private void initializeGame() {
-    model.initializeBoard();
-    view.initializeDisplay();
-  }
 
   @Override
   public boolean canMovePiece(Location location) {
