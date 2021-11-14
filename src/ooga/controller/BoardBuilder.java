@@ -8,8 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ooga.model.Piece;
-import ooga.model.Piece.Vector;
+import ooga.model.Vector;
 import ooga.model.PieceInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -73,8 +72,8 @@ public class BoardBuilder implements Builder {
         JSONObject attributes = pieceJSON.getJSONObject("attributes");
         JSONObject moveVectors = pieceJSON.getJSONObject("moveVectors");
 
-        Piece piece = new Piece(pieceColor,getMoveVectors(moveVectors,pieceColor), getAttributes(attributes), pieceImagePath);
-        pieceGrid[r][c] = piece;
+//        Piece piece = new Piece(pieceColor, getMoveVectors(moveVectors,pieceColor), getAttributes(attributes), pieceImagePath);
+//        pieceGrid[r][c] = piece;
       }
 
     }

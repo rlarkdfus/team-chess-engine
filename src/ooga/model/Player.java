@@ -7,27 +7,19 @@ import java.util.List;
 
 public class Player implements PlayerInterface {
     List<PieceInterface> remainingPieces;
-    private String team;
-//    private Location kingLocation;
+    private final String team;
+    private Location kingLocation;
     private boolean inCheck;
-    //Chess timer
-//FIXME:
-   int score = 0;
+    private int score;
+
+    //TODO: Chess timer
+
 
     public Player(String team) {
         this.team = team;
         remainingPieces = new ArrayList<>();
-        calculateScore();
-    }
-
-//    public void holdPiece(Piece piece) {
-//        remainingPieces.add(piece);
-//    }
-
-    private void calculateScore(){
-        for(PieceInterface piece: remainingPieces){
-            score += piece.getScore();
-        }
+        inCheck = false;
+        score = 0;
     }
 
     /**
@@ -53,10 +45,11 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void addPiece(PieceInterface piece){
-        if(piece.getTeam().equals(this.getTeam())){
-            remainingPieces.add(piece);
-            score += piece.getScore();
+        if(piece.getName().equals("K")) {
+            kingLocation = piece.getLocation();
         }
+        remainingPieces.add(piece);
+        score += piece.getScore();
     }
 
     /**
@@ -68,16 +61,15 @@ public class Player implements PlayerInterface {
         return team;
     }
 
-    //Check opponent player if they have a king
-    //If it doesn't have king -> other player wins, if it has king, but can't make moves stalemate,
-
     public Location getKingLocation(){
-        for(PieceInterface piece : remainingPieces) {
-            if(piece.getName().equals("K")) {
-                return piece.getLocation();
-            }
+        return kingLocation;
+    }
+
+
+    private void calculateScore(){
+        for(PieceInterface piece: remainingPieces){
+            score += piece.getScore();
         }
-        return null;
     }
 
     public void setInCheck(boolean inCheck) {

@@ -29,6 +29,7 @@ public class Controller implements ControllerInterface {
     view.initializeDisplay();
   }
 
+  @Override
   public boolean canMovePiece(Location location) {
     return model.canMovePiece(location);
   }

@@ -1,6 +1,8 @@
 package ooga.controller;
 
 import java.io.File;
+import java.util.List;
+
 import ooga.Location;
 
 public interface ControllerInterface {
@@ -22,4 +24,12 @@ public interface ControllerInterface {
      * @param end is final location of moved piece
      */
     void movePiece(Location start, Location end);
+
+    /**
+     * Returns true if the piece at the location of user click can be moved
+     * @param location is the location of piece
+     */
+    boolean canMovePiece(Location location);
+
+    List<Location> getLegalMoves(Location location);
 }

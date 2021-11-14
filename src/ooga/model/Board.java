@@ -1,13 +1,11 @@
 package ooga.model;
 
-import java.util.HashMap;
-import java.util.Map;
 import ooga.Location;
 import ooga.Turn;
 
+import javax.swing.plaf.synth.SynthTabbedPaneUI;
 import java.util.ArrayList;
 import java.util.List;
-import ooga.model.Piece.MoveVector;
 
 public class Board implements Engine {
 
@@ -42,28 +40,33 @@ public class Board implements Engine {
             int pawnRow = i == 0 ? 6 : 1;
             int pieceRow = i == 0 ? 7 : 0;
             for(int j = 0; j < 8; j++) {
-                List<Piece.Vector> vectors = new ArrayList<>();
 
-                vectors.add(new Piece.Vector(-1, 0));
-                vectors.add(new Piece.Vector(1, 0));
-                vectors.add(new Piece.Vector(0, 1));
-                vectors.add(new Piece.Vector(0, -1));
+                List<Vector> vectors = new ArrayList<>();
+
+                vectors.add(new Vector(-1, 0));
+                vectors.add(new Vector(1, 0));
+                vectors.add(new Vector(0, 1));
+                vectors.add(new Vector(0, -1));
+                MoveVector moveVectors = new MoveVector(vectors, vectors, vectors);
+
 
                 Location pawnLocation = new Location(pawnRow, j);
                 Location pieceLocation = new Location(pieceRow, j);
 
-                PieceInterface pawn = new Piece(pawnLocation, CHESS_SIDES[i], vectors, false);
-                PieceInterface piece = new Piece(pieceLocation, CHESS_SIDES[i],vectors, false);
+                PieceInterface pawn = new Piece(CHESS_SIDES[i], CHESS_SIDES[i], pawnLocation, moveVectors, false);
+                PieceInterface piece = new Piece(CHESS_SIDES[i], CHESS_SIDES[i], pieceLocation, moveVectors, false);
 
-                for(PlayerInterface player : players) {
-                   if(player.getTeam().equals(piece.getTeam())) {
-                       player.addPiece(piece);
-                       player.addPiece(pawn);
-                   }
-                }
+                System.out.println(pawn != null);
 
                 pieceGrid[pawnRow][j] = pawn;
                 pieceGrid[pieceRow][j] = piece;
+
+                for(PlayerInterface player : players) {
+                    if(player.getTeam().equals(piece.getTeam())) {
+                        player.addPiece(pawn);
+                        player.addPiece(piece);
+                    }
+                }
             }
         }
     }
@@ -90,10 +93,10 @@ public class Board implements Engine {
         // move piece from start to end
         pieceGrid[end.getRow()][end.getCol()] = movedPiece;
         pieceGrid[start.getRow()][start.getCol()] = null;
-        movedPiece.updateLocation(end);
+        movedPiece.moveTo(end);
 
         // look for checks here
-        findCurrentPlayer(totalTurns + 1).setInCheck(inCheck(findCurrentPlayer(totalTurns)));
+//        findCurrentPlayer(totalTurns + 1).setInCheck(inCheck(findCurrentPlayer(totalTurns)));
 
         // increment whose turn it is
         totalTurns++;
@@ -104,8 +107,8 @@ public class Board implements Engine {
     private boolean inCheck(PlayerInterface checker) {
         for(PieceInterface piece : checker.getPieces()) {
             for(Location attackLocation : getLegalMoves(piece.getLocation())) {
-                PlayerInterface checkee = findCurrentPlayer(totalTurns + 1);
-                if(checkee.getKingLocation().equals(attackLocation)) {
+                Location kingLocation = findCurrentPlayer(totalTurns + 1).getKingLocation();
+                if(kingLocation.equals(attackLocation)) {
                     return true;
                 }
             }
@@ -173,10 +176,10 @@ public class Board implements Engine {
      */
     public boolean canMovePiece(Location location) {
         PieceInterface piece = pieceGrid[location.getRow()][location.getCol()];
-        return (piece != null && piece.getTeam().equals(findCurrentPlayer(totalTurns)));
+        return (piece != null && piece.getTeam().equals(findCurrentPlayer(totalTurns).getTeam()));
     }
 
-    private PlayerInterface findCurrentPlayer(int totalTurns) {
-        return players.get((totalTurns) % players.size());
+    private PlayerInterface findCurrentPlayer(int turn) {
+        return players.get((turn) % players.size());
     }
 }

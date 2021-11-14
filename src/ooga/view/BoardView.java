@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.controller.Controller;
 import ooga.Turn;
+import ooga.controller.ControllerInterface;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class BoardView extends Group implements BoardViewInterface {
     private final Color LICHESS_COLOR1 = Color.web("#f3dab0");
     private final Color LICHESS_COLOR2 = Color.web("#bb885b");
 
-    private Controller controller;
+    private ControllerInterface controller;
     private Location startLocation;
     private BoardSquare[][] background;
     private PieceView[][] pieceGrid;
@@ -54,7 +55,7 @@ public class BoardView extends Group implements BoardViewInterface {
         //And add logic and is the same team
 
         if(startLocation == null) {
-            if(isLegalSquare(clickLocation)) {
+            if(canMovePiece(clickLocation)) {
                 selectPiece(clickLocation);
             } else {
                 unselectPiece();
@@ -141,7 +142,7 @@ public class BoardView extends Group implements BoardViewInterface {
         }
     }
     
-    private boolean isLegalSquare(Location clickLocation) {
+    private boolean canMovePiece(Location clickLocation) {
         return controller.canMovePiece(clickLocation);
     }
 
