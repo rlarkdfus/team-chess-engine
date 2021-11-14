@@ -27,8 +27,10 @@ public class PieceView extends ImageView {
     }
 
     public void moveTo(Location location) {
+        this.location = location;
         this.setX(location.getCol()*60);
         this.setY(location.getRow()*60);
+        setId();
     }
 
     public void changeStyle(String style) {

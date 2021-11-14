@@ -30,13 +30,21 @@ public class BoardSquare extends StackPane {
         this.setLayoutY(location.getRow()*60);
 
         square = new Rectangle(60, 60);
-        square.setId(String.format("square_location(%d,%d)", location.getRow(), location.getCol()));
         square.setFill(originalColor);
         this.getChildren().add(square);
 
         highlightFilter = createHighlight(HIGHLIGHT_FILTER_COLOR);
         selectFilter = createHighlight(SELECT_FILTER_COLOR);
         annotateFilter = createHighlight(ANNOTATE_FILTER_COLOR);
+
+        setIDs(location);
+    }
+
+    private void setIDs(Location location) {
+        square.setId(String.format("square_location(%d,%d)", location.getRow(), location.getCol()));
+        highlightFilter.setId(String.format("highlight_location(%d,%d)", location.getRow(), location.getCol()));
+        selectFilter.setId(String.format("select_location(%d,%d)", location.getRow(), location.getCol()));
+        annotateFilter.setId(String.format("annotate_location(%d,%d)", location.getRow(), location.getCol()));
     }
 
     /**
