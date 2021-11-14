@@ -5,6 +5,9 @@
 //import org.junit.jupiter.api.BeforeEach;
 //import org.junit.jupiter.api.Test;
 //
+//import java.util.ArrayList;
+//import java.util.List;
+//
 //import static org.junit.jupiter.api.Assertions.*;
 //
 //class PlayerInterfaceTest {
@@ -13,13 +16,20 @@
 //    @BeforeEach
 //    void setUp() {
 //        player = new Player("white");
-//        piece = new Piece();
+//        List<Piece.Vector> vectors = new ArrayList<>();
+//        vectors.add(new Piece.Vector(-1, 0));
+//        vectors.add(new Piece.Vector(1, 0));
+//        vectors.add(new Piece.Vector(0, 1));
+//        vectors.add(new Piece.Vector(0, -1));
+//
+//
+//        piece = new Piece("white", vectors, false);
 //        player.addPiece(piece);
 //    }
 //
 //    @Test
 //    void removePiece() {
-//        player.removePiece(piece);
+//        player.removePiece((Piece) piece);
 //        Assertions.assertNull(player.getPieces());
 //    }
 //

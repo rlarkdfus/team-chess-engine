@@ -12,6 +12,7 @@ public interface PieceInterface {
 
     int getScore();
 
-    String getPieceName();
-
+    String getName();
+    Location getLocation();
+    void updateLocation(Location location);
 }

@@ -111,17 +111,44 @@ public class Piece implements PieceInterface {
 
   public class MoveVector implements MoveVectorInterface {
 
-    private boolean limited;
-    private List<Vector> moveVectors;
-    private List<Vector> takeVectors;
-    private List<Vector> initialVectors;
+public class Piece implements PieceInterface{
+    private MoveVector moveVector;
 
-    public MoveVector(List<Vector> moveVectors, List<Vector> takeVectors,
-        List<Vector> initialVectors) {
-      this.moveVectors = moveVectors;
-      this.takeVectors = takeVectors;
-      this.initialVectors = initialVectors;
+    private Location location;
+
+    private String team;
+    private boolean limited;
+    private boolean hasMoved;
+    private int score;
+    private String pieceName;
+
+    public Piece(Location location, String team, List<Vector> vectors, boolean limited) {
+        this.location = location;
+        this.team = team;
+        this.limited = limited;
+        hasMoved = false;
+        moveVector = new MoveVector(vectors, vectors, vectors); //FIXME: change to different vectors
     }
+
+//    public Piece(String pieceName, String team, List<Vector> vectors, boolean limited, int score) {
+//        this.pieceName = pieceName;
+//        this.team = team;
+//        this.limited = limited;
+//        moveVector = new MoveVector(vectors, vectors, vectors);
+//        this.score = score;
+//    }
+
+    public Location getLocation(){
+        return location;
+    }
+
+    public void updateLocation(Location location){
+        this.location = location;
+    }
+
+    @Override
+    public String getName() {return pieceName;}
+
 
     /**
      * return the possible move vectors
