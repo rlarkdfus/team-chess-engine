@@ -13,11 +13,11 @@ public class BoardStyleUI extends GridPane implements UIInterface {
 
     private final Color LICHESS_COLOR1 = Color.web("#f3dab0");
     private final Color LICHESS_COLOR2 = Color.web("#bb885b");
-    private final List<String> PIECE_STYLES = List.of("companion", "fresca");
-
+    private final List<String> PIECE_STYLES = List.of(
+            "california", "companion", "fantasy", "fresca",
+            "horsey", "pirouetti", "spatial", "staunty");
 
     private ViewController viewController;
-
     private ColorPicker colorPicker1;
     private ColorPicker colorPicker2;
 

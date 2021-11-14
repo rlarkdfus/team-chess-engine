@@ -12,7 +12,6 @@ import java.util.List;
 
 public class BoardView extends Group implements BoardViewInterface {
 
-    //private final String[] CHESS_PIECES = {"pawn", "knight", "bishop", "rook", "queen", "king"};
     private final String[] CHESS_SIDES = {"w", "b"};
 
     private final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
@@ -46,16 +45,16 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void clickBoard(MouseEvent mouse) {
-        Location clickLocation = new Location((int)mouse.getY()/60, (int)mouse.getX()/60);
+        Location clickLocation = new Location((int) mouse.getY() / 60, (int) mouse.getX() / 60);
 
-        if(mouse.getButton() == MouseButton.SECONDARY) {
+        if (mouse.getButton() == MouseButton.SECONDARY) {
             background[clickLocation.getRow()][clickLocation.getCol()].annotate();
             return;
         }
 
         //user doesn't have piece selected and clicks on new piece
-        if(startLocation == null) {
-            if(pieceGrid[clickLocation.getRow()][clickLocation.getCol()] != null) {
+        if (startLocation == null) {
+            if (pieceGrid[clickLocation.getRow()][clickLocation.getCol()] != null) {
                 selectPiece(clickLocation);
             } else {
                 unselectPiece();
@@ -67,7 +66,6 @@ public class BoardView extends Group implements BoardViewInterface {
             }
             unselectPiece(); // if user clicks the same piece then selection is reset
         }
-
     }
 
     private void selectPiece(Location location) {
@@ -77,8 +75,8 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void unselectPiece() {
-        for(int i = 0; i < background.length; i++) {
-            for(int j = 0; j < background[0].length; j++) {
+        for (int i = 0; i < background.length; i++) {
+            for (int j = 0; j < background[0].length; j++) {
                 background[i][j].resetBoardSquare();
             }
         }
@@ -100,8 +98,8 @@ public class BoardView extends Group implements BoardViewInterface {
 
     private void renderBackground(int row, int col) {
         background = new BoardSquare[row][col];
-        for(int i = 0; i < row; i++) {
-            for(int j = 0; j < col; j++) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
                 Location location = new Location(i, j);
                 BoardSquare boardSquare = new BoardSquare(location, null);
                 background[i][j] = boardSquare;
@@ -112,19 +110,17 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void renderChessPieces(String style) {
-        //pieceGrid.clear
         String[] orientation = new String[]{"R", "N", "B", "Q", "K", "B", "N", "R"};
-        for(int i=0; i<2; i++) {
+        for (int i = 0; i < 2; i++) {
             String side = CHESS_SIDES[i];
             int pawnRow = i == 0 ? 6 : 1;
             int pieceRow = i == 0 ? 7 : 0;
-            for(int j = 0; j < 8; j++) {
+            for (int j = 0; j < 8; j++) {
                 Location pawnLoc = new Location(pawnRow, j);
                 PieceView pawn = new PieceView(side, "P", style, pawnLoc);
 
                 Location pieceLoc = new Location(pieceRow, j);
                 PieceView piece = new PieceView(side, orientation[j], style, pieceLoc);
-                //removePiece(pieceLoc);
 
                 pieceGrid[pawnRow][j] = pawn;
                 pieceGrid[pieceRow][j] = piece;
@@ -136,8 +132,8 @@ public class BoardView extends Group implements BoardViewInterface {
 
     @Override
     public void changeColors(Color color1, Color color2) {
-        for(int i = 0; i < background.length; i++) {
-            for(int j = 0; j < background[0].length; j++) {
+        for (int i = 0; i < background.length; i++) {
+            for (int j = 0; j < background[0].length; j++) {
                 Color color = (i + j) % 2 == 0 ? color1 : color2;
                 background[i][j].setColor(color);
             }
@@ -146,13 +142,18 @@ public class BoardView extends Group implements BoardViewInterface {
 
     @Override
     public void changePieceStyle(String style) {
-        System.out.println("changed style: " + style);
-        renderChessPieces(style);
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (pieceGrid[i][j] != null) {
+                    pieceGrid[i][j].changeStyle(style);
+                }
+            }
+        }
     }
 
     private boolean isLegalMove(Location clickLocation) {
-        for(Location legalSquare : controller.getLegalMoves(startLocation)) {
-            if(legalSquare.equals(clickLocation)) {
+        for (Location legalSquare : controller.getLegalMoves(startLocation)) {
+            if (legalSquare.equals(clickLocation)) {
                 return true;
             }
         }
@@ -163,11 +164,11 @@ public class BoardView extends Group implements BoardViewInterface {
     public void updateBoardView(Turn turn) {
         System.out.println("update baordview");
 
-        for(Location removed : turn.getRemoved()){
+        for (Location removed : turn.getRemoved()) {
             removePiece(removed);
         }
 
-        for(Turn.PieceMove move : turn.getMoves()) {
+        for (Turn.PieceMove move : turn.getMoves()) {
             movePiece(move.getStartLocation(), move.getEndLocation());
         }
     }
@@ -176,7 +177,7 @@ public class BoardView extends Group implements BoardViewInterface {
     public void showLegalMoves(Location location) {
         List<Location> legalMoves = controller.getLegalMoves(location);
         System.out.println("called for legal moves");
-        for(Location squareLoc : legalMoves) {
+        for (Location squareLoc : legalMoves) {
             System.out.println("legal moves:" + squareLoc.getRow() + " " + squareLoc.getCol());
             BoardSquare square = background[squareLoc.getRow()][squareLoc.getCol()];
             square.highlight();

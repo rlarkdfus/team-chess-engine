@@ -1,19 +1,15 @@
 package ooga.view;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import ooga.controller.Controller;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.service.query.EmptyNodeQueryException;
 import util.DukeApplicationTest;
 
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,8 +42,10 @@ public class ViewTest extends DukeApplicationTest {
 
     @Test
     void testChangeStyle() {
-        ColorPicker colorPicker2 = lookup("#board_color_2").query();
-        Rectangle testPiece = lookup("#square_location(0,1)").query();
-
+        ComboBox styleChanger = lookup("#piece_style").query();
+        String expected = "horsey";
+        clickOn(styleChanger);
+        clickOn(expected);
+        assertDoesNotThrow(() -> lookup("#pieceView_location(0,0)_style(horsey)").query());
     }
 }
