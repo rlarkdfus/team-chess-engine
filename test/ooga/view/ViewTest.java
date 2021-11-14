@@ -1,5 +1,6 @@
 package ooga.view;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
@@ -47,5 +48,11 @@ public class ViewTest extends DukeApplicationTest {
         clickOn(styleChanger);
         clickOn(expected);
         assertDoesNotThrow(() -> lookup("#pieceView_location(0,0)_style(horsey)").query());
+    }
+
+    @Test
+    void testResetGame() {
+        Button reset = lookup("#new_game").queryButton();
+        clickOn(reset);
     }
 }

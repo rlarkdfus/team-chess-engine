@@ -15,12 +15,15 @@ public class ViewController {
         this.view = view;
     }
 
-    public void changeBoardColor(Color color1, Color color2) {
+    public void handleChangeBoardColor(Color color1, Color color2) {
         view.changeBoardColor(color1, color2);
     }
 
-    public void changePieceStyle(String style) {
+    public void handleChangePieceStyle(String style) {
         view.changePieceStyle(style);
     }
 
+    public void handleNewGame() {
+        view.resetBoard();
+    }
 }

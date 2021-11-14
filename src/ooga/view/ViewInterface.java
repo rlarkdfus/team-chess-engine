@@ -14,4 +14,6 @@ public interface ViewInterface {
     void changeBoardColor(Color color1, Color color2);
 
     void changePieceStyle(String style);
+
+    void resetBoard();
 }

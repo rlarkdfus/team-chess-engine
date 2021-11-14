@@ -35,7 +35,7 @@ public class BoardView extends Group implements BoardViewInterface {
     @Override
     public void initializeBoardView(int row, int col) {
         renderBackground(row, col);
-        renderChessPieces(DEFAULT_PIECE_STYLE);
+        renderInitialChessPieces(DEFAULT_PIECE_STYLE);
         this.setOnMouseClicked(e -> clickBoard(e));
     }
 
@@ -109,7 +109,7 @@ public class BoardView extends Group implements BoardViewInterface {
         changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
     }
 
-    private void renderChessPieces(String style) {
+    private void renderInitialChessPieces(String style) {
         String[] orientation = new String[]{"R", "N", "B", "Q", "K", "B", "N", "R"};
         for (int i = 0; i < 2; i++) {
             String side = CHESS_SIDES[i];
@@ -146,6 +146,22 @@ public class BoardView extends Group implements BoardViewInterface {
             for (int j = 0; j < 8; j++) {
                 if (pieceGrid[i][j] != null) {
                     pieceGrid[i][j].changeStyle(style);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void resetBoard() {
+        clearBoard();
+        renderInitialChessPieces(DEFAULT_PIECE_STYLE);
+    }
+
+    private void clearBoard() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (pieceGrid[i][j] != null) {
+                    removePiece(new Location(i, j));
                 }
             }
         }

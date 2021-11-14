@@ -71,4 +71,8 @@ public class View implements ViewInterface {
     public void changePieceStyle(String style) {
         boardView.changePieceStyle(style);
     }
+
+    public void resetBoard() {
+        boardView.resetBoard();
+    }
 }

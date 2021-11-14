@@ -28,6 +28,8 @@ public interface BoardViewInterface {
      */
     void changePieceStyle(String style);
 
+    void resetBoard();
+
     /**
      * Highlights squares on the board that are legal
      */
