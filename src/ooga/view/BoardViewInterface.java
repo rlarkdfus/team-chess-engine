@@ -23,6 +23,14 @@ public interface BoardViewInterface {
     void changeColors(Color color1, Color color2);
 
     /**
+     * Checkered pattern board colors
+     * @param style
+     */
+    void changePieceStyle(String style);
+
+    void resetBoard();
+
+    /**
      * Highlights squares on the board that are legal
      */
     void showLegalMoves(Location location);

@@ -13,8 +13,11 @@ public class BoardStyleUI extends GridPane implements UIInterface {
 
     private final Color LICHESS_COLOR1 = Color.web("#f3dab0");
     private final Color LICHESS_COLOR2 = Color.web("#bb885b");
-    private ViewController viewController;
+    private final List<String> PIECE_STYLES = List.of(
+            "california", "companion", "fantasy", "fresca",
+            "horsey", "pirouetti", "spatial", "staunty");
 
+    private ViewController viewController;
     private ColorPicker colorPicker1;
     private ColorPicker colorPicker2;
 
@@ -26,13 +29,13 @@ public class BoardStyleUI extends GridPane implements UIInterface {
 
     @Override
     public void createUI() {
-        colorPicker1 = ViewUtility.makeColorPicker("board_color_1", LICHESS_COLOR1, e -> viewController.changeBoardColor(colorPicker1.getValue(), colorPicker2.getValue()));
-        colorPicker2 = ViewUtility.makeColorPicker("board_color_2", LICHESS_COLOR2, e -> viewController.changeBoardColor(colorPicker1.getValue(), colorPicker2.getValue()));
+        colorPicker1 = ViewUtility.makeColorPicker("board_color_1", LICHESS_COLOR1, color -> viewController.handleChangeBoardColor(color, colorPicker2.getValue()));
+        colorPicker2 = ViewUtility.makeColorPicker("board_color_2", LICHESS_COLOR2, color -> viewController.handleChangeBoardColor(colorPicker1.getValue(), color));
 
         this.add(ViewUtility.makeLabel("board_color"), 0, 0);
         this.add(colorPicker1, 1, 0);
         this.add(colorPicker2, 1, 1);
         this.add(ViewUtility.makeLabel("piece_style_label"), 0, 3);
-        this.add(ViewUtility.makeComboBox("piece_style", List.of("lichess"), e -> System.out.println(e)), 1, 3);
+        this.add(ViewUtility.makeComboBox("piece_style", PIECE_STYLES, style -> viewController.handleChangePieceStyle(style)), 1, 3);
     }
 }

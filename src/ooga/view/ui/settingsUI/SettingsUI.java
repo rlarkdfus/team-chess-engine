@@ -31,6 +31,6 @@ public class SettingsUI extends GridPane implements UIInterface {
         this.add(gameConfigurationUI, 0, 0, 3, 2);
         this.add(timeConfigurationUI, 0, 2, 3, 3);
         this.add(boardStyleUI, 0, 5, 3, 3);
-        this.add(ViewUtility.makeButton("new_game", e -> System.out.println("new game")), 0, 8);
+        this.add(ViewUtility.makeButton("new_game", e -> viewController.handleNewGame()), 0, 8);
     }
 }
