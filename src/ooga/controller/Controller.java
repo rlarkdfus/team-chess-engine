@@ -1,26 +1,26 @@
 package ooga.controller;
 
 import java.io.File;
+import java.util.List;
 import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.view.View;
-import ooga.view.ViewController;
 import ooga.view.ViewInterface;
-
-import java.util.List;
 import org.json.JSONObject;
 
 public class Controller implements ControllerInterface {
 
   private Engine model;
   private ViewInterface view;
-  private Parser parser;
+
+  private JsonParser jsonParser;
 
   public Controller(){
     model = new Board();
     view = new View(this);
-    parser = new Parser();
+
+    jsonParser = new JsonParser();
     initializeGame();
   }
 
@@ -40,7 +40,7 @@ public class Controller implements ControllerInterface {
 
   @Override
   public void loadFile(File file) {
-    JSONObject jsonObject = parser.loadFile(file);
+    JSONObject jsonObject = jsonParser.loadFile(file);
   }
 
   @Override
