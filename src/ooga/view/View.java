@@ -33,6 +33,7 @@ public class View implements ViewInterface {
         this.viewController = new ViewController();
         //TODO: this is probably bad design idk
         viewController.setView(this);
+        initializeDisplay();
         //this.viewController = controller.getViewController();
     }
 

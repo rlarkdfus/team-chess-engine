@@ -55,38 +55,35 @@ public class BoardView extends Group implements BoardViewInterface {
         //And add logic and is the same team
 
         if(startLocation == null) {
-            if(canMovePiece(clickLocation)) {
+            if(controller.canMovePiece(clickLocation)) {
                 selectPiece(clickLocation);
             } else {
                 unselectPiece();
             }
         } else { //user selects new location with piece
             if (isLegalMove(clickLocation)) { //user clicks new location
-                System.out.println("call controller to move piece");
                 controller.movePiece(startLocation, clickLocation);
             }
-            unselectPiece(); // if user clicks the same piece then selection is reset
+            unselectPiece(); // if user clicks an illegal move
         }
     }
 
     private void selectPiece(Location location) {
-        System.out.println("Piece selected");
         startLocation = location;
         background[location.getRow()][location.getCol()].select();
         showLegalMoves(location);
     }
 
     private void unselectPiece() {
+        startLocation = null;
         for(int i = 0; i < background.length; i++) {
             for(int j = 0; j < background[0].length; j++) {
                 background[i][j].resetBoardSquare();
             }
         }
-        startLocation = null;
     }
 
     private void movePiece(Location start, Location end) {
-        System.out.println("Piece moved");
         PieceView movedPiece = pieceGrid[start.getRow()][start.getCol()];
         pieceGrid[end.getRow()][end.getCol()] = movedPiece;
         pieceGrid[start.getRow()][start.getCol()] = null;
@@ -141,14 +138,10 @@ public class BoardView extends Group implements BoardViewInterface {
             }
         }
     }
-    
-    private boolean canMovePiece(Location clickLocation) {
-        return controller.canMovePiece(clickLocation);
-    }
 
     private boolean isLegalMove(Location clickLocation) {
         for(Location legalSquare : controller.getLegalMoves(startLocation)) {
-            if(legalSquare.equals(clickLocation)) {
+            if(clickLocation.equals(legalSquare)) {
                 return true;
             }
         }
@@ -157,8 +150,6 @@ public class BoardView extends Group implements BoardViewInterface {
 
     @Override
     public void updateBoardView(Turn turn) {
-        System.out.println("update baordview");
-
         for(Location removed : turn.getRemoved()){
             removePiece(removed);
         }
@@ -171,9 +162,7 @@ public class BoardView extends Group implements BoardViewInterface {
     @Override
     public void showLegalMoves(Location location) {
         List<Location> legalMoves = controller.getLegalMoves(location);
-        System.out.println("called for legal moves");
         for(Location squareLoc : legalMoves) {
-            System.out.println("legal moves:" + squareLoc.getRow() + " " + squareLoc.getCol());
             BoardSquare square = background[squareLoc.getRow()][squareLoc.getCol()];
             square.highlight();
         }

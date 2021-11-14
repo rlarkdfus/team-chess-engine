@@ -15,9 +15,9 @@ public class Piece implements PieceInterface {
   private String name;
   private Map<String, Boolean> attributes;
 
-  public Piece(String team, String pieceName, Location location, MoveVector moveVectors, boolean limited) {
+  public Piece(String team, String name, Location location, MoveVector moveVectors, boolean limited) {
     this.team = team;
-    this.name = pieceName;
+    this.name = name;
     this.location = location;
     this.moveVectors = moveVectors;
     this.limited = limited;
