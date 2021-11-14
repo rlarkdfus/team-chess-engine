@@ -3,7 +3,7 @@ package ooga.model;
 import java.util.List;
 
 public interface MoveVectorInterface {
-    List<Piece.Vector> getMoveVectors();
+    List<Vector> getMoveVectors();
 
     int getRowVector(int index);
 

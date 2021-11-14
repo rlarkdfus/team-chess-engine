@@ -1,6 +1,6 @@
 package ooga.model;
 
-import ooga.model.Piece.MoveVector;
+import ooga.Location;
 
 public interface PieceInterface {
 //    String getType();
@@ -9,10 +9,8 @@ public interface PieceInterface {
     MoveVector getMoves();
 //    void getValue();
     boolean isLimited();
-
     int getScore();
-
     String getName();
     Location getLocation();
-    void updateLocation(Location location);
+    void moveTo(Location location);
 }
