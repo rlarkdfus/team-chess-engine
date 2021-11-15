@@ -44,8 +44,20 @@ class EngineTest {
     }
 
     @Test
+    void getNoLegalMoves() {
+        List<Location> moves = board.getLegalMoves(new Location(4, 0));
+        Assertions.assertNull(moves);
+    }
+
+    @Test
     void canMovePiece() {
         Assertions.assertTrue(board.canMovePiece(new Location(6, 0)));
+        Assertions.assertTrue(board.canMovePiece(new Location(6, 1)));
+    }
+
+    @Test
+    void canNotMovePiece() {
         Assertions.assertFalse(board.canMovePiece(new Location(1, 0)));
+        Assertions.assertFalse(board.canMovePiece(new Location(0, 0)));
     }
 }

@@ -244,7 +244,7 @@ public class Board implements Engine {
      */
     public List<Location> getLegalMoves(Location location){
         PieceInterface piece = pieceAt(location);
-        return findLegalMoves(findPlayerTurn(turnCount), piece);
+        return (piece != null) ? findLegalMoves(findPlayerTurn(turnCount), piece) : null;
     }
 
     /**
