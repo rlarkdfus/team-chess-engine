@@ -5,7 +5,7 @@ import java.util.List;
 import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
-import ooga.model.PieceInterface;
+import ooga.model.PlayerInterface;
 import ooga.view.PieceView;
 import ooga.view.View;
 import ooga.view.ViewInterface;
@@ -37,14 +37,18 @@ public class Controller implements ControllerInterface {
   }
 
   @Override
-  public PieceInterface[][] loadFile(File file) throws Exception {
+  public void loadFile(File file) throws Exception {
     JSONObject jsonObject = jsonParser.loadFile(file);
-    return boardBuilder.build(jsonObject);
+    boardBuilder.build(jsonObject);
   }
 
   @Override
   public void movePiece(Location start, Location end) {
     view.updateDisplay(model.movePiece(start, end));
+    if(model.checkGameState() != Board.GameState.RUNNING) {
+      System.out.println(model.checkGameState()); //FIXME
+    }
+
   }
 
   public List<Location> getLegalMoves(Location location){
@@ -54,6 +58,10 @@ public class Controller implements ControllerInterface {
   @Override
   public PieceView[][] sendInitialBoardView(String style) {
     return boardBuilder.getInitialBoardView(style);
+  }
+
+  public void initializeBoard() {
+    model.initializePlayers(boardBuilder.getInitialPlayers());
   }
 
 }

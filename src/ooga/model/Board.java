@@ -5,9 +5,17 @@ import ooga.Location;
 import ooga.Turn;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Board implements Engine {
+
+    public enum GameState {
+        RUNNING,
+        CHECKMATE,
+        STALEMATE
+    };
 
     private final String[] CHESS_SIDES = {"w", "b"};
     private int turnCount;
@@ -22,6 +30,15 @@ public class Board implements Engine {
         turnCount = 0;
         this.players = players;
         // loop through players passed by controller and add them to players
+        updateLegalMoves();
+    }
+
+    private void updateLegalMoves() {
+        for(PlayerInterface player : players) {
+            for(PieceInterface piece : player.getPieces()){
+                player.setLegalMoves(piece, findLegalMoves(player, piece));
+            }
+        }
     }
 
     /**
@@ -49,6 +66,9 @@ public class Board implements Engine {
 
         // increment turn
         turnCount++;
+
+        // update legal moves
+        updateLegalMoves();
 
         return currentTurn;
     }
@@ -82,26 +102,53 @@ public class Board implements Engine {
      */
     private boolean tryMove(PlayerInterface player, PieceInterface piece, Location location) {
         PlayerInterface otherPlayer = findNextPlayer(player);
-        PieceInterface king = pieceAt(player.getKingLocation());
+        PieceInterface king = player.getKing();
         Location pieceLocation = new Location(piece.getLocation().getRow(), piece.getLocation().getCol());
         PieceInterface takenPiece = null;
+        List<Location> takenPieceLegalMoves = new ArrayList<>();
 
         // theoretically move piece to location
         player.movePiece(piece, location);
-        if(pieceAt(location) != null) { //take piece if exists
+        if(otherPlayer.getPiece(location) != null) { //take piece if exists
             takenPiece = otherPlayer.getPiece(location);
+            takenPieceLegalMoves = otherPlayer.getLegalMoves(takenPiece.getLocation());
             otherPlayer.removePiece(location);
         }
 
         // if the king is in check, undo move and return false
         if(inCheck(king, otherPlayer.getPieces())) {
-            undoTryMove(player, piece, pieceLocation, takenPiece);
+            undoTryMove(player, piece, pieceLocation, takenPiece, takenPieceLegalMoves);
             return false;
         }
 
         //otherwise undo the move and return true
-        undoTryMove(player, piece, pieceLocation, takenPiece);
+        undoTryMove(player, piece, pieceLocation, takenPiece, takenPieceLegalMoves);
         return true;
+    }
+
+    /**
+     * see if the game is still running or if its over
+     * @return
+     */
+    @Override
+    public GameState checkGameState() {
+        for(PlayerInterface player : players) {
+            int legalMovesCount = 0;
+            for(PieceInterface piece : player.getPieces()) {
+                legalMovesCount += player.getLegalMoves(piece.getLocation()).size();
+            }
+
+            if(legalMovesCount == 0) {
+                //checkmate
+                if(inCheck(player.getKing(), findNextPlayer(player).getPieces())){
+                    return GameState.CHECKMATE;
+                } else { //stalemate
+                    return GameState.STALEMATE;
+                }
+            }
+        }
+        // game still going
+        return GameState.RUNNING;
     }
 
 
@@ -112,10 +159,11 @@ public class Board implements Engine {
      * @param pieceLocation is the original location the player is attempting to move the piece to
      * @param takenPiece is the piece that was taken during the turn, if a piece was taken
      */
-    private void undoTryMove(PlayerInterface player, PieceInterface piece, Location pieceLocation, PieceInterface takenPiece) {
+    private void undoTryMove(PlayerInterface player, PieceInterface piece, Location pieceLocation, PieceInterface takenPiece, List<Location> takenPieceLegalMoves) {
         player.movePiece(piece, pieceLocation);
         if (takenPiece != null) {
             findNextPlayer(player).addPiece(takenPiece);
+            findNextPlayer(player).setLegalMoves(takenPiece, takenPieceLegalMoves);
         }
     }
 
@@ -185,8 +233,7 @@ public class Board implements Engine {
      * @return
      */
     public List<Location> getLegalMoves(Location location){
-        PieceInterface piece = pieceAt(location);
-        return (piece != null) ? findLegalMoves(findPlayerTurn(turnCount), piece) : null;
+        return findPlayerTurn(turnCount).getLegalMoves(location);
     }
 
     /**

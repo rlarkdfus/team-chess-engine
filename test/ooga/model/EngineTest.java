@@ -20,10 +20,10 @@ class EngineTest {
         board = new Board();
     }
 
-    @Test
-    void initializeBoard() {
-        board.initializeBoard();
-    }
+//    @Test
+//    void initializeBoard() {
+//        board.initializeBoard();
+//    }
 
     @Test
     void movePiece() {

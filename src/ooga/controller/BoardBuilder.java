@@ -11,7 +11,8 @@ import java.util.Map;
 import ooga.Location;
 import ooga.model.MoveVector;
 import ooga.model.Piece;
-import ooga.model.PieceInterface;
+import ooga.model.Player;
+import ooga.model.PlayerInterface;
 import ooga.model.Vector;
 import ooga.view.PieceView;
 import org.json.JSONArray;
@@ -26,10 +27,11 @@ public class BoardBuilder implements Builder {
   private List<String> boardColors;
   private List<String> players;
   private String bottomColor;
+  private String style;
   private String rules;
   private String csv;
   private List<List<String>> csvData;
-  private PieceInterface[][] pieceGrid;
+  private List<PlayerInterface> playerList;
   private PieceView[][] pieceViewGrid;
 
   private LocationParser locationParser;
@@ -38,6 +40,7 @@ public class BoardBuilder implements Builder {
   public BoardBuilder() {
     locationParser = new LocationParser();
     jsonParser = new JsonParser();
+    style = DEFAULT_STYLE;
   }
 
 
@@ -49,18 +52,27 @@ public class BoardBuilder implements Builder {
    * @throws Exception - if the csv file in the JSONObject isn't valid
    */
   @Override
-  public PieceInterface[][] build(JSONObject jsonObject) throws Exception {
+  public void build(JSONObject jsonObject) throws Exception {
     extractJSONObj(jsonObject);
-    pieceGrid = new PieceInterface[boardSize.get(0)][boardSize.get(1)];
+    players = new ArrayList<>();
     pieceViewGrid = new PieceView[boardSize.get(0)][boardSize.get(1)];
-
+    for (String player : players){
+      playerList.add(new Player(player));
+      playerList.add(new Player(player));
+    }
     csvData = locationParser.getInitialLocations(csv);
     iterateCSVData(csvData);
-    return pieceGrid;
   }
 
   public PieceView[][] getInitialBoardView(String style){
+    if (!this.style.equals(style)){
+      //make new piecegrid w style
+    }
     return pieceViewGrid;
+  }
+
+  public List<PlayerInterface> getInitialPlayers(){
+    return playerList;
   }
 
   /**
@@ -68,11 +80,12 @@ public class BoardBuilder implements Builder {
    * pieceGrid
    * @param csvData - list of list representing the locations of the pieces
    */
-  private void iterateCSVData(List<List<String>> csvData) {
+  private void iterateCSVData(List<List<String>> csvData) throws Exception {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
         String[] square = this.csvData.get(r).get(c).split("_");
         if (square.length < 2){
+          //signifies that this square is empty
           continue;
         }
 
@@ -80,20 +93,28 @@ public class BoardBuilder implements Builder {
         String pieceName = square[1];
         Location location = new Location(r,c);
 
+        int playerListIdx = -1;
+        for (PlayerInterface p : playerList){
+          if (p.getTeam().equals(team)){
+            playerListIdx = playerList.indexOf(p);
+          }
+        }
+        if (playerListIdx < 0){
+          //todo: handle exception
+          throw new Exception();
+        }
+
         String pieceJsonPath = "data/"+gameType+"/pieces/"+pieceName+".json";
         JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
 
         MoveVector moveVector = getMoveVector(pieceJSON, team);
         Map<String, Boolean> attributes = getAttributes(pieceJSON);
 
-
-        String pieceImagePath = "src/images/"+DEFAULT_STYLE+"/"+ team + pieceName + ".png";
-
         Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
-        PieceView pieceView = new PieceView(team, pieceName,DEFAULT_STYLE, location);
+        PieceView pieceView = new PieceView(team, pieceName, style, location);
 
         pieceViewGrid[r][c] = pieceView;
-        pieceGrid[r][c] = piece;
+        playerList.get(playerListIdx).addPiece(piece);
       }
 
     }
