@@ -8,7 +8,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import ooga.model.MoveVector;
-import ooga.model.PieceInterface;
 import ooga.model.Vector;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,24 +39,7 @@ class BoardBuilderTest {
   }
 
   @Test
-  void testBuild() {
-    PieceInterface[][] ret;
-    PieceInterface piece;
-    try {
-      ret = boardBuilder.build(parsedFile);
-      piece = ret[0][0];
-      assertEquals("b", piece.getTeam(), "team should be black");
-      for (int r = 0; r < ret.length; r++) {
-        for (int c = 0; c < ret.length; c++) {
-          if (r == 0 && c == 0) {
-            continue;
-          }
-          assertEquals(null, ret[r][c]);
-        }
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+  void testPlayerList() {
 
   }
 
