@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Player implements PlayerInterface {
-    private List<PieceInterface> remainingPieces;
-    private List<PieceInterface> removedPieces;
+    private Map<PieceInterface, List<Location>> remainingPieces;
     private final String team;
     private int score;
 
@@ -17,8 +16,7 @@ public class Player implements PlayerInterface {
 
     public Player(String team) {
         this.team = team;
-        remainingPieces = new ArrayList<>();
-        removedPieces = new ArrayList<>();
+        remainingPieces = new HashMap<>();
 //        inCheck = false;
         score = 0;
     }
@@ -28,10 +26,9 @@ public class Player implements PlayerInterface {
      * @param location
      */
     public void removePiece(Location location){
-        for(PieceInterface piece : remainingPieces) {
+        for(PieceInterface piece : remainingPieces.keySet()) {
             if(piece.getLocation().equals(location)) {
                 remainingPieces.remove(piece);
-                removedPieces.add(piece);
                 score -= piece.getScore();
                 return;
             }
@@ -43,7 +40,7 @@ public class Player implements PlayerInterface {
      * @return
      */
     public List<PieceInterface> getPieces(){
-        return remainingPieces;
+        return new ArrayList<>(remainingPieces.keySet());
     }
 
     /**
@@ -52,7 +49,7 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void addPiece(PieceInterface piece){
-        remainingPieces.add(piece);
+        remainingPieces.put(piece, new ArrayList<>());
         score += piece.getScore();
     }
 
@@ -65,10 +62,10 @@ public class Player implements PlayerInterface {
         return team;
     }
 
-    public Location getKingLocation(){
-        for(PieceInterface piece : remainingPieces) {
+    public PieceInterface getKing(){
+        for(PieceInterface piece : remainingPieces.keySet()) {
             if(piece.getName().equals("K")) {
-                return piece.getLocation();
+                return piece;
             }
         }
         return null;
@@ -81,7 +78,7 @@ public class Player implements PlayerInterface {
 
     @Override
     public PieceInterface getPiece(Location location) {
-        for(PieceInterface piece : remainingPieces) {
+        for(PieceInterface piece : remainingPieces.keySet()) {
             if(piece.getLocation().equals(location)) {
                 return piece;
             }
@@ -89,8 +86,16 @@ public class Player implements PlayerInterface {
         return null;
     }
 
+    public List<Location> getLegalMoves(Location location){
+        return remainingPieces.get(getPiece(location));
+    }
+
+    public void setLegalMoves(PieceInterface piece, List<Location> moves){
+        remainingPieces.put(piece, moves);
+    }
+
     private void calculateScore(){
-        for(PieceInterface piece: remainingPieces){
+        for(PieceInterface piece: remainingPieces.keySet()){
             score += piece.getScore();
         }
     }

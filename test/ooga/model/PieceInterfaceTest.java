@@ -1,8 +1,11 @@
 package ooga.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.*;
+
 import ooga.Location;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +28,9 @@ class PieceInterfaceTest {
 
         Location loc = new Location(6, 0);
         MoveVector vec = new MoveVector(vectors, vectors, vectors);
-        piece = new Piece("w", "P", loc, vec, Map.of("limited",true));
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("limited", false);
+        piece = new Piece("w", "P", loc, vec, map);
     }
 
     @Test
