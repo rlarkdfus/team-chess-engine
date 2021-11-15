@@ -1,5 +1,6 @@
 package ooga.model;
 
+import java.util.Map;
 import ooga.Location;
 import ooga.Turn;
 

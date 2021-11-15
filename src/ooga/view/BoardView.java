@@ -5,6 +5,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
+import ooga.controller.BoardBuilder;
 import ooga.controller.Controller;
 import ooga.Turn;
 import ooga.controller.ControllerInterface;
@@ -112,24 +113,7 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void renderInitialChessPieces(String style) {
-        String[] orientation = new String[]{"R", "N", "B", "Q", "K", "B", "N", "R"};
-        for (int i = 0; i < 2; i++) {
-            String side = CHESS_SIDES[i];
-            int pawnRow = i == 0 ? 6 : 1;
-            int pieceRow = i == 0 ? 7 : 0;
-            for (int j = 0; j < 8; j++) {
-                Location pawnLoc = new Location(pawnRow, j);
-                PieceView pawn = new PieceView(side, "P", style, pawnLoc);
-
-                Location pieceLoc = new Location(pieceRow, j);
-                PieceView piece = new PieceView(side, orientation[j], style, pieceLoc);
-
-                pieceGrid[pawnRow][j] = pawn;
-                pieceGrid[pieceRow][j] = piece;
-
-                this.getChildren().addAll(pawn, piece);
-            }
-        }
+        pieceGrid = controller.sendInitialBoardView(style);
     }
 
     @Override
