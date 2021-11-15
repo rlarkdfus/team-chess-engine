@@ -8,7 +8,7 @@ public class MoveVector implements MoveVectorInterface {
     private List<Vector> moveVectors;
     private List<Vector> takeVectors;
 
-    public MoveVector(List<Vector> initialVectors , List<Vector> moveVectors, List<Vector> takeVectors) {
+    public MoveVector(List<Vector> moveVectors, List<Vector> takeVectors, List<Vector> initialVectors) {
         this.initialVectors = initialVectors;
         this.moveVectors = moveVectors;
         this.takeVectors = takeVectors;

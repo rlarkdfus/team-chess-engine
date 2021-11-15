@@ -90,17 +90,13 @@ public class BoardBuilder implements Builder {
         String pieceImagePath = "src/images/"+DEFAULT_STYLE+"/"+ team + pieceName + ".png";
 
         Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
-        getDrawPieceViewGrid(r, c, team, pieceName, location);
+        PieceView pieceView = new PieceView(team, pieceName,DEFAULT_STYLE, location);
+
+        pieceViewGrid[r][c] = pieceView;
         pieceGrid[r][c] = piece;
       }
 
     }
-  }
-
-  private void getDrawPieceViewGrid(int r, int c, String team, String pieceName,
-      Location location) {
-    PieceView pieceView = new PieceView(team, pieceName,DEFAULT_STYLE, location);
-    pieceViewGrid[r][c] = pieceView;
   }
 
   private MoveVector getMoveVector(JSONObject pieceJSON, String teamColor) {
@@ -154,7 +150,6 @@ public class BoardBuilder implements Builder {
       if (color.equals(bottomColor)){
         row = row * -1;
       }
-
       ret.add(new Vector(row,col));
     }
     return ret;
