@@ -50,7 +50,7 @@ public class View implements ViewInterface {
 
     @Override
     public void initializeDisplay() {
-        this.boardView = new BoardView(controller, viewController, 8, 8);
+        this.boardView = new BoardView(controller, 8, 8);
         this.settingsUI = new SettingsUI(viewController);
         this.gameInfoUI = new GameInfoUI();
         this.gameSettingsInfoUI = new GameSettingsUI(viewController);

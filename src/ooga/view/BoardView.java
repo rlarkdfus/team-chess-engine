@@ -1,5 +1,6 @@
 package ooga.view;
 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
@@ -9,6 +10,8 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
+import ooga.model.Piece;
+import ooga.model.PieceInterface;
 
 public class BoardView extends Group implements BoardViewInterface {
 
@@ -19,25 +22,21 @@ public class BoardView extends Group implements BoardViewInterface {
     private final String DEFAULT_PIECE_STYLE = "companion";
 
     private ControllerInterface controller;
-    private ViewController viewController;
     private Location startLocation;
     private BoardSquare[][] background;
-    private PieceView[][] pieceGrid;
     private List<PieceView> pieceList;
 
-    public BoardView(Controller controller, ViewController viewController, int row, int col) {
+    public BoardView(Controller controller, int row, int col) {
         this.controller = controller;
-        this.viewController = viewController;
         startLocation = null;
-        pieceGrid = new PieceView[row][col];
-        pieceList = controller.getInitialPieces();
-        initializeBoardView(row, col);
+        pieceList = new ArrayList<>();
+        initializeBoardView(controller.getInitialPieces(), row, col);
     }
 
     @Override
-    public void initializeBoardView(int row, int col) {
+    public void initializeBoardView(List<PieceInterface> initialPieceViews, int row, int col) {
         renderBackground(row, col);
-        renderInitialChessPieces(DEFAULT_PIECE_STYLE);
+        renderInitialChessPieces(initialPieceViews, DEFAULT_PIECE_STYLE);
         this.setOnMouseClicked(e -> clickBoard(e));
     }
 
@@ -122,10 +121,12 @@ public class BoardView extends Group implements BoardViewInterface {
         changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
     }
 
-    private void renderInitialChessPieces(String style) {
+    private void renderInitialChessPieces(List<PieceInterface> pieces, String style) {
         //pieceGrid = controller.sendInitialBoardView(style);
-        for(PieceView pieceView : pieceList) {
-            this.getChildren().add(pieceView);
+        for(PieceInterface piece : pieces) {
+            PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
+            pieceList.add(newPiece);
+            this.getChildren().add(newPiece);
         }
     }
 
@@ -158,7 +159,7 @@ public class BoardView extends Group implements BoardViewInterface {
     @Override
     public void resetBoard() {
         clearBoard();
-        renderInitialChessPieces(DEFAULT_PIECE_STYLE);
+        // renderInitialChessPieces(DEFAULT_PIECE_STYLE);
     }
 
     private void clearBoard() {
