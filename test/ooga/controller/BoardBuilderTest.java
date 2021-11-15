@@ -60,6 +60,20 @@ class BoardBuilderTest {
   }
 
   @Test
+  void testPieceList() throws Exception {
+    boardBuilder.build(parsedFile);
+    List<PieceInterface> pieces = boardBuilder.getInitialPieces("style");
+    assertEquals(1, pieces.size(), "incorrect number of pieces. expected 1. got: " + pieces.size());
+    for (PieceInterface p : pieces){
+      assertEquals("P",p.getName(),"name should be P. got: " + p.getName());
+      assertEquals("b",p.getTeam(),"team should be b. got: " + p.getTeam());
+      assertEquals(0,p.getLocation().getRow(),"location row should be 0. got: " + p.getLocation().getRow());
+      assertEquals(0,p.getLocation().getCol(),"location col should be 0. got: " + p.getLocation().getCol());
+
+    }
+  }
+
+  @Test
   void testCorrectImagePath() {
     String[] square = parsedCSV.get(0).get(0).split("_");
     String pieceColor = square[0];
