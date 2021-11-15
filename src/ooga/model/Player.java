@@ -1,40 +1,41 @@
 package ooga.model;
 
+import ooga.Location;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Map;
 
 public class Player implements PlayerInterface {
-    List<PieceInterface> remainingPieces;
-    private String team;
-    private int secondsLeft;
-//FIXME:
-   int score = 0;
+    private List<PieceInterface> remainingPieces;
+    private List<PieceInterface> removedPieces;
+    private final String team;
+    private int score;
+
+    //TODO: Chess timer
 
     public Player(String team) {
         this.team = team;
         remainingPieces = new ArrayList<>();
-        calculateScore();
-    }
-
-//    public void holdPiece(Piece piece) {
-//        remainingPieces.add(piece);
-//    }
-
-    private void calculateScore(){
-        for(PieceInterface piece: remainingPieces){
-            score += piece.getScore();
-        }
+        removedPieces = new ArrayList<>();
+//        inCheck = false;
+        score = 0;
     }
 
     /**
      * remove a pice from the player's posession
-     * @param piece
+     * @param location
      */
-    public void removePiece(Piece piece){
-        remainingPieces.remove(piece);
-        score -= piece.getScore();
+    public void removePiece(Location location){
+        for(PieceInterface piece : remainingPieces) {
+            if(piece.getLocation().equals(location)) {
+                remainingPieces.remove(piece);
+                removedPieces.add(piece);
+                score -= piece.getScore();
+                return;
+            }
+        }
     }
 
     /**
@@ -51,10 +52,8 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void addPiece(PieceInterface piece){
-        if(piece.getTeam().equals(this.getTeam())){
-            remainingPieces.add(piece);
-            score += piece.getScore();
-        }
+        remainingPieces.add(piece);
+        score += piece.getScore();
     }
 
     /**
@@ -66,8 +65,35 @@ public class Player implements PlayerInterface {
         return team;
     }
 
-    //Check opponent player if they have a king
-    //If it doesn't have king -> other player wins, if it has king, but can't make moves stalemate,
+    public Location getKingLocation(){
+        for(PieceInterface piece : remainingPieces) {
+            if(piece.getName().equals("K")) {
+                return piece.getLocation();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void movePiece(PieceInterface piece, Location end) {
+        piece.moveTo(end);
+    }
+
+    @Override
+    public PieceInterface getPiece(Location location) {
+        for(PieceInterface piece : remainingPieces) {
+            if(piece.getLocation().equals(location)) {
+                return piece;
+            }
+        }
+        return null;
+    }
+
+    private void calculateScore(){
+        for(PieceInterface piece: remainingPieces){
+            score += piece.getScore();
+        }
+    }
 
   public void startTimer() {
     secondsLeft = 30;
