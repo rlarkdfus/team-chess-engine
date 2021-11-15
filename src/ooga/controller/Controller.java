@@ -5,8 +5,7 @@ import java.util.List;
 import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
-import ooga.model.PlayerInterface;
-import ooga.view.PieceView;
+import ooga.model.PieceInterface;
 import ooga.view.View;
 import ooga.view.ViewInterface;
 import org.json.JSONObject;
@@ -56,8 +55,8 @@ public class Controller implements ControllerInterface {
   }
 
   @Override
-  public PieceView[][] sendInitialBoardView(String style) {
-    return boardBuilder.getInitialBoardView(style);
+  public List<PieceInterface> sendInitialBoardView(String style) {
+    return boardBuilder.getInitialPieces(style);
   }
 
   public void initializeBoard() {

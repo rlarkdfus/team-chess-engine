@@ -1,16 +1,14 @@
 package ooga.view;
 
+import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
-import ooga.controller.BoardBuilder;
-import ooga.controller.Controller;
 import ooga.Turn;
+import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
-
-import java.util.List;
 
 public class BoardView extends Group implements BoardViewInterface {
 
@@ -113,7 +111,7 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void renderInitialChessPieces(String style) {
-        pieceGrid = controller.sendInitialBoardView(style);
+//        pieceGrid = controller.sendInitialBoardView(style);
         for(PieceView[] pieceViews : pieceGrid) {
             for (PieceView pieceView : pieceViews) {
                 this.getChildren().add(pieceView);
