@@ -58,7 +58,6 @@ public class BoardBuilder implements Builder {
     playerList = new ArrayList<>();
     for (String player : players){
       playerList.add(new Player(player));
-      playerList.add(new Player(player));
     }
     csvData = locationParser.getInitialLocations(csv);
     iterateCSVData();
