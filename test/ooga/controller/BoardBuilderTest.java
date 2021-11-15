@@ -8,6 +8,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import ooga.model.MoveVector;
+import ooga.model.PieceInterface;
+import ooga.model.PlayerInterface;
 import ooga.model.Vector;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,8 +41,22 @@ class BoardBuilderTest {
   }
 
   @Test
-  void testPlayerList() {
-
+  void testPlayerList() throws Exception {
+    boardBuilder.build(parsedFile);
+    List<PlayerInterface> players = boardBuilder.getInitialPlayers();
+    assertEquals(2, players.size(), "incorrect number of players. expected 2. got: " + players.size());
+    for (PlayerInterface p : players){
+      if (p.getTeam().equals("b")){
+        List<PieceInterface> pieces = p.getPieces();
+        assertEquals(1, pieces.size(), "black team should only have 1 piece. got: " + pieces.size());
+        PieceInterface piece = pieces.get(0);
+        assertEquals("P",piece.getName(),"should be a pawn. got: " + piece.getName());
+      }else{
+        assertEquals("w", p.getTeam(), "other team should be white. got: " + p.getTeam());
+        List<PieceInterface> pieces = p.getPieces();
+        assertEquals(0, pieces.size(), "white team should have 0 pieces. got: " + pieces.size());
+      }
+    }
   }
 
   @Test

@@ -11,10 +11,10 @@ import java.util.Map;
 import ooga.Location;
 import ooga.model.MoveVector;
 import ooga.model.Piece;
+import ooga.model.PieceInterface;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
 import ooga.model.Vector;
-import ooga.view.PieceView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -32,7 +32,7 @@ public class BoardBuilder implements Builder {
   private String csv;
   private List<List<String>> csvData;
   private List<PlayerInterface> playerList;
-  private PieceView[][] pieceViewGrid;
+  private List<PieceInterface> pieceList;
 
   private LocationParser locationParser;
   private JsonParser jsonParser;
@@ -54,22 +54,22 @@ public class BoardBuilder implements Builder {
   @Override
   public void build(JSONObject jsonObject) throws Exception {
     extractJSONObj(jsonObject);
-    players = new ArrayList<>();
-    pieceViewGrid = new PieceView[boardSize.get(0)][boardSize.get(1)];
+    pieceList = new ArrayList<>();
+    playerList = new ArrayList<>();
     for (String player : players){
       playerList.add(new Player(player));
       playerList.add(new Player(player));
     }
     csvData = locationParser.getInitialLocations(csv);
-    iterateCSVData(csvData);
+    iterateCSVData();
   }
 
   @Override
-  public PieceView[][] getInitialBoardView(String style){
+  public List<PieceInterface> getInitialPieces(String style){
     if (!this.style.equals(style)){
-      //make new piecegrid w style
+      //make new piece list w style
     }
-    return pieceViewGrid;
+    return pieceList;
   }
 
   @Override
@@ -80,12 +80,11 @@ public class BoardBuilder implements Builder {
   /**
    * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
    * pieceGrid
-   * @param csvData - list of list representing the locations of the pieces
    */
-  private void iterateCSVData(List<List<String>> csvData) throws Exception {
+  private void iterateCSVData() throws Exception {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
-        String[] square = this.csvData.get(r).get(c).split("_");
+        String[] square = csvData.get(r).get(c).split("_");
         if (square.length < 2){
           //signifies that this square is empty
           continue;
@@ -112,10 +111,10 @@ public class BoardBuilder implements Builder {
         MoveVector moveVector = getMoveVector(pieceJSON, team);
         Map<String, Boolean> attributes = getAttributes(pieceJSON);
 
-        Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
-        PieceView pieceView = new PieceView(team, pieceName, style, location);
+//        PieceView pieceView = new PieceView(team, pieceName, style, location);
 
-        pieceViewGrid[r][c] = pieceView;
+        Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
+        pieceList.add(piece);
         playerList.get(playerListIdx).addPiece(piece);
       }
 
