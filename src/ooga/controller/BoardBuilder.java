@@ -64,6 +64,7 @@ public class BoardBuilder implements Builder {
     iterateCSVData(csvData);
   }
 
+  @Override
   public PieceView[][] getInitialBoardView(String style){
     if (!this.style.equals(style)){
       //make new piecegrid w style
@@ -71,6 +72,7 @@ public class BoardBuilder implements Builder {
     return pieceViewGrid;
   }
 
+  @Override
   public List<PlayerInterface> getInitialPlayers(){
     return playerList;
   }
