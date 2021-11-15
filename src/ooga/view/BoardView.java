@@ -23,12 +23,14 @@ public class BoardView extends Group implements BoardViewInterface {
     private Location startLocation;
     private BoardSquare[][] background;
     private PieceView[][] pieceGrid;
+    private List<PieceView> pieceList;
 
     public BoardView(Controller controller, ViewController viewController, int row, int col) {
         this.controller = controller;
         this.viewController = viewController;
         startLocation = null;
         pieceGrid = new PieceView[row][col];
+        pieceList = controller.getInitialPieces();
         initializeBoardView(row, col);
     }
 
@@ -86,15 +88,25 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void movePiece(Location start, Location end) {
-        PieceView movedPiece = pieceGrid[start.getRow()][start.getCol()];
-        pieceGrid[end.getRow()][end.getCol()] = movedPiece;
-        pieceGrid[start.getRow()][start.getCol()] = null;
-        movedPiece.moveTo(end);
+        for(PieceView pieceView : pieceList) {
+            if(start.equals(pieceView.location)) {
+                pieceView.moveTo(end);
+            }
+        }
+//        PieceView movedPiece = pieceGrid[start.getRow()][start.getCol()];
+//        pieceGrid[end.getRow()][end.getCol()] = movedPiece;
+//        pieceGrid[start.getRow()][start.getCol()] = null;
+//        movedPiece.moveTo(end);
     }
 
     private void removePiece(Location location) {
-        this.getChildren().remove(pieceGrid[location.getRow()][location.getCol()]);
-        pieceGrid[location.getRow()][location.getCol()] = null;
+        for(PieceView pieceView : pieceList)
+            if(pieceView.location.equals(location) ){
+                this.getChildren().remove(pieceView);
+            }
+//        this.getChildren().remove(pieceGrid[location.getRow()][location.getCol()]);
+//        pieceGrid[location.getRow()][location.getCol()] = null;
+
     }
 
     private void renderBackground(int row, int col) {
@@ -111,11 +123,9 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void renderInitialChessPieces(String style) {
-//        pieceGrid = controller.sendInitialBoardView(style);
-        for(PieceView[] pieceViews : pieceGrid) {
-            for (PieceView pieceView : pieceViews) {
-                this.getChildren().add(pieceView);
-            }
+        //pieceGrid = controller.sendInitialBoardView(style);
+        for(PieceView pieceView : pieceList) {
+            this.getChildren().add(pieceView);
         }
     }
 
@@ -131,11 +141,16 @@ public class BoardView extends Group implements BoardViewInterface {
 
     @Override
     public void changePieceStyle(String style) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (pieceGrid[i][j] != null) {
-                    pieceGrid[i][j].changeStyle(style);
-                }
+//        for (int i = 0; i < 8; i++) {
+//            for (int j = 0; j < 8; j++) {
+//                if (pieceGrid[i][j] != null) {
+//                    pieceGrid[i][j].changeStyle(style);
+//                }
+//            }
+//        }
+        for (PieceView pieceView : pieceList) {
+            if(pieceView != null) {
+                pieceView.changeStyle(style);
             }
         }
     }
@@ -147,11 +162,16 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void clearBoard() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (pieceGrid[i][j] != null) {
-                    removePiece(new Location(i, j));
-                }
+//        for (int i = 0; i < 8; i++) {
+//            for (int j = 0; j < 8; j++) {
+//                if (pieceGrid[i][j] != null) {
+//                    removePiece(new Location(i, j));
+//                }
+//            }
+//        }
+        for(PieceView pieceView : pieceList) {
+            if(pieceView != null) {
+                removePiece(pieceView.location);
             }
         }
     }
