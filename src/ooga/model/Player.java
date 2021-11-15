@@ -15,7 +15,6 @@ public class Player implements PlayerInterface {
 
     //TODO: Chess timer
 
-
     public Player(String team) {
         this.team = team;
         remainingPieces = new ArrayList<>();
@@ -95,5 +94,4 @@ public class Player implements PlayerInterface {
             score += piece.getScore();
         }
     }
-
 }
