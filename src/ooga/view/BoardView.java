@@ -114,6 +114,11 @@ public class BoardView extends Group implements BoardViewInterface {
 
     private void renderInitialChessPieces(String style) {
         pieceGrid = controller.sendInitialBoardView(style);
+        for(PieceView[] pieceViews : pieceGrid) {
+            for (PieceView pieceView : pieceViews) {
+                this.getChildren().add(pieceView);
+            }
+        }
     }
 
     @Override

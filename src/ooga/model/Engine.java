@@ -9,7 +9,7 @@ public interface Engine {
     /**
      * Create default board of pieces
      */
-    void initializeBoard();
+    void initializePlayers(List<PlayerInterface> players);
 
     /**
      * Moves piece from start to end and updates the board

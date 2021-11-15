@@ -13,73 +13,15 @@ public class Board implements Engine {
     private int turnCount;
     private List<PlayerInterface> players;
 
-
     public Board() {
-        initializePlayers();
-        initializeBoard();
+
     }
 
-    public Board(PieceInterface[][] pieceGrid) {
-//        this.pieceGrid = pieceGrid;
-    }
-
-    private void initializePlayers() {
+    @Override
+    public void initializePlayers(List<PlayerInterface> players) {
         turnCount = 0;
-        players = new ArrayList<>();
-        players.add(new Player("w"));
-        players.add(new Player("b"));
+        this.players = players;
         // loop through players passed by controller and add them to players
-    }
-
-    /**
-     * Create default board of pieces
-     */
-    public void initializeBoard(){
-//        pieceGrid = new PieceInterface[8][8];
-        String[] orientation = new String[]{"R", "N", "B", "Q", "K", "B", "N", "R"};
-
-        for(int i=0; i<2; i++) {
-            int pawnRow = i == 0 ? 6 : 1;
-            int pieceRow = i == 0 ? 7 : 0;
-            for(int j = 0; j < 8; j++) {
-
-                List<Vector> vectors = new ArrayList<>();
-
-                //queen
-                vectors.add(new Vector(-1, 0));
-                vectors.add(new Vector(1, 0));
-                vectors.add(new Vector(0, 1));
-                vectors.add(new Vector(0, -1));
-                vectors.add(new Vector(-1, -1));
-                vectors.add(new Vector(1, 1));
-                vectors.add(new Vector(-1, 1));
-                vectors.add(new Vector(1, -1));
-
-                //knight
-//                vectors.add(new Vector(2, 1));
-//                vectors.add(new Vector(2, -1));
-//                vectors.add(new Vector(-2, 1));
-//                vectors.add(new Vector(-2, -1));
-//                vectors.add(new Vector(1, 2));
-//                vectors.add(new Vector(1, -2));
-//                vectors.add(new Vector(-1, 2));
-//                vectors.add(new Vector(-1, -2));
-                MoveVector moveVectors = new MoveVector(vectors, vectors, vectors);
-
-                Location pawnLocation = new Location(pawnRow, j);
-                Location pieceLocation = new Location(pieceRow, j);
-
-                PieceInterface pawn = new Piece(CHESS_SIDES[i], "P", pawnLocation, moveVectors, Map.of("limited",true));
-                PieceInterface piece = new Piece(CHESS_SIDES[i], orientation[j], pieceLocation, moveVectors, Map.of("limited",false));
-
-                for(PlayerInterface player : players) {
-                    if(player.getTeam().equals(piece.getTeam())) {
-                        player.addPiece(pawn);
-                        player.addPiece(piece);
-                    }
-                }
-            }
-        }
     }
 
     /**

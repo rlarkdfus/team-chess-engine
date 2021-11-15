@@ -19,10 +19,9 @@ public class Controller implements ControllerInterface {
   private JsonParser jsonParser;
 
   public Controller(){
+    boardBuilder = new BoardBuilder();
     model = new Board();
     view = new View(this);
-
-    boardBuilder = new BoardBuilder();
     jsonParser = new JsonParser();
   }
 
