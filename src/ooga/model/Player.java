@@ -94,23 +94,4 @@ public class Player implements PlayerInterface {
             score += piece.getScore();
         }
     }
-
-  public void startTimer() {
-    secondsLeft = 30;
-    setTimer();
-  }
-  public int getSecondsLeft() {
-    return secondsLeft;
-  }
-
-  private void setTimer() {
-      Timer timer = new Timer();
-      TimerTask task = new TimerTask() {
-        @Override
-        public void run() {
-          secondsLeft--;
-        }
-      };
-      timer.scheduleAtFixedRate(task, 1000, 1000);
-    }
 }
