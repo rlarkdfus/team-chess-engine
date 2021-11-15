@@ -27,6 +27,7 @@ public class BoardBuilder implements Builder {
   private List<String> boardColors;
   private List<String> players;
   private String bottomColor;
+  private String style;
   private String rules;
   private String csv;
   private List<List<String>> csvData;
@@ -39,6 +40,7 @@ public class BoardBuilder implements Builder {
   public BoardBuilder() {
     locationParser = new LocationParser();
     jsonParser = new JsonParser();
+    style = DEFAULT_STYLE;
   }
 
 
@@ -63,6 +65,9 @@ public class BoardBuilder implements Builder {
   }
 
   public PieceView[][] getInitialBoardView(String style){
+    if (!this.style.equals(style)){
+      //make new piecegrid w style
+    }
     return pieceViewGrid;
   }
 
@@ -105,11 +110,8 @@ public class BoardBuilder implements Builder {
         MoveVector moveVector = getMoveVector(pieceJSON, team);
         Map<String, Boolean> attributes = getAttributes(pieceJSON);
 
-
-//        String pieceImagePath = "src/images/"+DEFAULT_STYLE+"/"+ team + pieceName + ".png";
-
         Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
-        PieceView pieceView = new PieceView(team, pieceName,DEFAULT_STYLE, location);
+        PieceView pieceView = new PieceView(team, pieceName, style, location);
 
         pieceViewGrid[r][c] = pieceView;
         playerList.get(playerListIdx).addPiece(piece);
