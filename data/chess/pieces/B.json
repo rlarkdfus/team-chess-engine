@@ -5,7 +5,6 @@
     "initialMoves": []
   },
   "attributes": {
-    "pieceName": "b",
     "limited": false,
     "canEnPassant": false,
     "canTransform": false,

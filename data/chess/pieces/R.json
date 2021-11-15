@@ -18,7 +18,6 @@
     ]
   },
   "attributes": {
-    "pieceName": "r",
     "limited": false,
     "canEnPassant": false,
     "canTransform": false,

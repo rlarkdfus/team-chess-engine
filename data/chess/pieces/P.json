@@ -13,7 +13,6 @@
     ]
   },
   "attributes": {
-    "pieceName": "p",
     "limited": true,
     "canEnPassant": true,
     "canTransform": true,
