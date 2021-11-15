@@ -1,16 +1,12 @@
 package ooga.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import ooga.Location;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import ooga.Location;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class PieceInterfaceTest {
     private PieceInterface piece;
@@ -29,7 +25,7 @@ class PieceInterfaceTest {
 
         Location loc = new Location(6, 0);
         MoveVector vec = new MoveVector(vectors, vectors, vectors);
-        piece = new Piece("w", "P", loc, vec, false);
+        piece = new Piece("w", "P", loc, vec, Map.of("limited",true));
     }
 
     @Test

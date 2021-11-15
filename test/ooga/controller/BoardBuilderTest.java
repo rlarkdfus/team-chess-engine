@@ -46,7 +46,6 @@ class BoardBuilderTest {
       ret = boardBuilder.build(parsedFile);
       piece = ret[0][0];
       assertEquals("b", piece.getTeam(),"team should be black");
-//      assertEquals("pawn", piece.getPieceName(),"name should be pawn");
       for (int r = 0; r<ret.length;r++){
         for (int c = 0; c<ret.length;c++){
           if (r==0&&c==0){
