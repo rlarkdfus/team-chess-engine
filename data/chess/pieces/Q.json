@@ -27,5 +27,6 @@
     "canEnPassant": false,
     "canTransform": false,
     "canCastle": false
-  }
+  },
+  "value": 9
 }
