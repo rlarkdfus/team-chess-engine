@@ -1,17 +1,14 @@
 package ooga.view;
 
-import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
-import ooga.controller.BoardBuilder;
-import ooga.controller.Controller;
 import ooga.Turn;
+import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
-
-import java.util.List;
 
 public class BoardView extends Group implements BoardViewInterface {
 

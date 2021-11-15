@@ -2,9 +2,8 @@ package ooga.controller;
 
 import java.io.File;
 import java.util.List;
-
 import ooga.Location;
-import ooga.view.PieceView;
+import ooga.model.PieceInterface;
 
 public interface ControllerInterface {
 
@@ -34,5 +33,5 @@ public interface ControllerInterface {
 
     List<Location> getLegalMoves(Location location);
 
-    PieceView[][] sendInitialBoardView(String style);
+    List<PieceInterface> sendInitialBoardView(String style);
 }
