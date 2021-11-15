@@ -64,7 +64,7 @@ public class BoardBuilder implements Builder {
   }
 
   @Override
-  public List<PieceInterface> getInitialPieces(String style){
+  public List<PieceInterface> getInitialPieces(){
     if (!this.style.equals(style)){
       //make new piece list w style
     }
@@ -84,8 +84,7 @@ public class BoardBuilder implements Builder {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
         String[] square = csvData.get(r).get(c).split("_");
-        if (square.length < 2){
-          //signifies that this square is empty
+        if (square.length < 2){           //signifies that this square is empty
           continue;
         }
 
@@ -93,16 +92,7 @@ public class BoardBuilder implements Builder {
         String pieceName = square[1];
         Location location = new Location(r,c);
 
-        int playerListIdx = -1;
-        for (PlayerInterface p : playerList){
-          if (p.getTeam().equals(team)){
-            playerListIdx = playerList.indexOf(p);
-          }
-        }
-        if (playerListIdx < 0){
-          //todo: handle exception
-          throw new Exception();
-        }
+        int playerListIdx = determinePlayer(team);
 
         String pieceJsonPath = "data/"+gameType+"/pieces/"+pieceName+".json";
         JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
@@ -110,14 +100,26 @@ public class BoardBuilder implements Builder {
         MoveVector moveVector = getMoveVector(pieceJSON, team);
         Map<String, Boolean> attributes = getAttributes(pieceJSON);
 
-//        PieceView pieceView = new PieceView(team, pieceName, style, location);
-
         Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
         pieceList.add(piece);
         playerList.get(playerListIdx).addPiece(piece);
       }
 
     }
+  }
+
+  private int determinePlayer(String team) throws Exception {
+    int playerListIdx = -1;
+    for (PlayerInterface p : playerList){
+      if (p.getTeam().equals(team)){
+        playerListIdx = playerList.indexOf(p);
+      }
+    }
+    if (playerListIdx < 0){
+      //todo: handle exception
+      throw new Exception();
+    }
+    return playerListIdx;
   }
 
   private MoveVector getMoveVector(JSONObject pieceJSON, String teamColor) {
@@ -183,6 +185,7 @@ public class BoardBuilder implements Builder {
   private void extractJSONObj(JSONObject jsonObject) {
     gameType = jsonObject.getString("type");
     boardShape = jsonObject.getString("board");
+    style = jsonObject.getString("style");
     boardSize = new ArrayList<>();
     List<String> a = Arrays.asList(jsonObject.getString("boardSize").split("x"));
     a.forEach((num) -> boardSize.add(parseInt(num)));

@@ -55,8 +55,8 @@ public class Controller implements ControllerInterface {
   }
 
   @Override
-  public List<PieceInterface> sendInitialBoardView(String style) {
-    return boardBuilder.getInitialPieces(style);
+  public List<PieceInterface> getInitialPieces() {
+    return boardBuilder.getInitialPieces();
   }
 
   public void initializeBoard() {

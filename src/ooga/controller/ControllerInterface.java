@@ -33,5 +33,5 @@ public interface ControllerInterface {
 
     List<Location> getLegalMoves(Location location);
 
-    List<PieceInterface> sendInitialBoardView(String style);
+    List<PieceInterface> getInitialPieces();
 }

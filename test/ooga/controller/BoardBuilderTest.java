@@ -62,7 +62,7 @@ class BoardBuilderTest {
   @Test
   void testPieceList() throws Exception {
     boardBuilder.build(parsedFile);
-    List<PieceInterface> pieces = boardBuilder.getInitialPieces("style");
+    List<PieceInterface> pieces = boardBuilder.getInitialPieces();
     assertEquals(1, pieces.size(), "incorrect number of pieces. expected 1. got: " + pieces.size());
     for (PieceInterface p : pieces){
       assertEquals("P",p.getName(),"name should be P. got: " + p.getName());
