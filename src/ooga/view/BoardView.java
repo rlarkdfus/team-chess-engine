@@ -113,8 +113,7 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void renderInitialChessPieces(String style) {
-        BoardBuilder boardBuilder = new BoardBuilder();
-        pieceGrid = boardBuilder.getInitialBoardView(style);
+        pieceGrid = controller.sendInitialBoardView(style);
     }
 
     @Override

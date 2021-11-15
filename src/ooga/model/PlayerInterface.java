@@ -11,8 +11,10 @@ public interface PlayerInterface {
    List<PieceInterface> getPieces();
    void addPiece(PieceInterface piece);
    String getTeam();
-
-    Location getKingLocation();
+    PieceInterface getKing();
     void movePiece(PieceInterface piece, Location end);
     PieceInterface getPiece(Location location);
+
+    List<Location> getLegalMoves(Location location);
+    void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
 }

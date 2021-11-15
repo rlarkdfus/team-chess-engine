@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import ooga.Location;
+import ooga.model.PieceInterface;
+import ooga.view.PieceView;
 
 public interface ControllerInterface {
 
@@ -14,8 +16,9 @@ public interface ControllerInterface {
 
     /**
      * View calls loadFile to choose a file to load a game
+     * @return
      */
-    void loadFile(File file);
+    PieceInterface[][] loadFile(File file) throws Exception;
 
     /**
      * View calls movePiece when user moves piece on GUI, which moves piece in model
@@ -32,4 +35,6 @@ public interface ControllerInterface {
     boolean canMovePiece(Location location);
 
     List<Location> getLegalMoves(Location location);
+
+    PieceView[][] sendInitialBoardView(String style);
 }
