@@ -1,8 +1,10 @@
 package ooga.view;
 
+import java.util.List;
 import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.Turn;
+import ooga.model.PieceInterface;
 
 public interface BoardViewInterface {
     /**
@@ -10,10 +12,12 @@ public interface BoardViewInterface {
      */
     void updateBoardView(Turn turn);
 
-    /**
-     * Initializes the Board View
-      */
-    void initializeBoardView(int row, int col);
+//    /**
+//     * Initializes the Board View
+//      */
+//    void initializeBoardView(int row, int col);
+
+    void initializeBoardView(List<PieceInterface> initialPieceViews, int row, int col);
 
     /**
      * Checkered pattern board colors
