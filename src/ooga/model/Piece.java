@@ -9,18 +9,17 @@ public class Piece implements PieceInterface {
     private Location location;
   private MoveVector moveVectors;
   private String team;
-  private boolean limited;
   private boolean hasMoved;
   private int score;
   private String name;
   private Map<String, Boolean> attributes;
 
-  public Piece(String team, String name, Location location, MoveVector moveVectors, boolean limited) {
+  public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes) {
     this.team = team;
     this.name = name;
     this.location = location;
     this.moveVectors = moveVectors;
-    this.limited = limited;
+    this.attributes = attributes;
     hasMoved = false;
   }
 
@@ -36,6 +35,7 @@ public class Piece implements PieceInterface {
 //   * 2) BoardBuilder(a lot): getMoveVectors(), and add ^ attributes in getAttributes()
 //   * 3) Board.initializeboard. well actually maybe not since this will be replaced by boardbuilder.
 //   */
+
 //  public Piece(String team, Map<String, List<Vector>> vectors,
 //      Map<String, Boolean> attributes, String imagePath) {
 //    this.team = team;
@@ -80,7 +80,7 @@ public class Piece implements PieceInterface {
    */
   @Override
   public boolean isLimited() {
-    return limited;
+    return attributes.get("limited");
   }
 
   /**
