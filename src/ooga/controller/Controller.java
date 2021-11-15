@@ -42,6 +42,10 @@ public class Controller implements ControllerInterface {
   @Override
   public void movePiece(Location start, Location end) {
     view.updateDisplay(model.movePiece(start, end));
+    if(model.checkGameState() != Board.GameState.RUNNING) {
+      System.out.println(model.checkGameState()); //FIXME
+    }
+
   }
 
   public List<Location> getLegalMoves(Location location){

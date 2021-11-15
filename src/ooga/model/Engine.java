@@ -21,7 +21,7 @@ public interface Engine {
     /**
      * Determine whether the win condition of the game is satisfied, and declare a winner.
      */
-    boolean gameFinished();
+    Board.GameState checkGameState();
 
     List<Location> getLegalMoves(Location location);
     

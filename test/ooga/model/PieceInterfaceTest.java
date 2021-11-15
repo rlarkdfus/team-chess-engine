@@ -4,9 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import ooga.Location;
 
@@ -29,7 +27,9 @@ class PieceInterfaceTest {
 
         Location loc = new Location(6, 0);
         MoveVector vec = new MoveVector(vectors, vectors, vectors);
-        piece = new Piece("w", "P", loc, vec, false);
+        Map<String, Boolean> map = new HashMap<>();
+        map.put("limited", false);
+        piece = new Piece("w", "P", loc, vec, map);
     }
 
     @Test
