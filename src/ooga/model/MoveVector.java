@@ -19,12 +19,29 @@ public class MoveVector implements MoveVectorInterface {
      *
      * @return
      */
-
     @Override
     public List<Vector> getMoveVectors() {
         return moveVectors;
     }
 
+    /**
+     * return the possible take vectors
+     *
+     * @return
+     */
+    @Override
+    public List<Vector> getTakeVectors() {
+        return takeVectors;
+    }
+    /**
+     * return the possible initial vectors
+     *
+     * @return
+     */
+    @Override
+    public List<Vector> getInitialVectors() {
+        return initialVectors;
+    }
     /**
      * reuturn the row vector of a move
      *

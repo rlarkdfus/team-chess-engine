@@ -1,5 +1,6 @@
 package ooga.model;
 
+import java.util.Map;
 import ooga.Location;
 import ooga.Turn;
 
@@ -68,8 +69,8 @@ public class Board implements Engine {
                 Location pawnLocation = new Location(pawnRow, j);
                 Location pieceLocation = new Location(pieceRow, j);
 
-                PieceInterface pawn = new Piece(CHESS_SIDES[i], "P", pawnLocation, moveVectors, true);
-                PieceInterface piece = new Piece(CHESS_SIDES[i], orientation[j], pieceLocation, moveVectors, false);
+                PieceInterface pawn = new Piece(CHESS_SIDES[i], "P", pawnLocation, moveVectors, Map.of("limited",true));
+                PieceInterface piece = new Piece(CHESS_SIDES[i], orientation[j], pieceLocation, moveVectors, Map.of("limited",false));
 
                 for(PlayerInterface player : players) {
                     if(player.getTeam().equals(piece.getTeam())) {

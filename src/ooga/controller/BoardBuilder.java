@@ -8,8 +8,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ooga.model.Vector;
+import ooga.Location;
+import ooga.model.MoveVector;
+import ooga.model.Piece;
 import ooga.model.PieceInterface;
+import ooga.model.Vector;
+import ooga.view.PieceView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,6 +30,7 @@ public class BoardBuilder implements Builder {
   private String csv;
   private List<List<String>> csvData;
   private PieceInterface[][] pieceGrid;
+  private PieceView[][] pieceViewGrid;
 
   private LocationParser locationParser;
   private JsonParser jsonParser;
@@ -47,9 +52,15 @@ public class BoardBuilder implements Builder {
   public PieceInterface[][] build(JSONObject jsonObject) throws Exception {
     extractJSONObj(jsonObject);
     pieceGrid = new PieceInterface[boardSize.get(0)][boardSize.get(1)];
+    pieceViewGrid = new PieceView[boardSize.get(0)][boardSize.get(1)];
+
     csvData = locationParser.getInitialLocations(csv);
     iterateCSVData(csvData);
     return pieceGrid;
+  }
+
+  public PieceView[][] getInitialBoardView(String style){
+    return pieceViewGrid;
   }
 
   /**
@@ -64,26 +75,49 @@ public class BoardBuilder implements Builder {
         if (square.length < 2){
           continue;
         }
-        String pieceColor = square[0];
-        String pieceType = square[1];
-        String pieceImagePath = "src/images/"+DEFAULT_STYLE+"/"+ pieceColor + pieceType + ".png";
-        String pieceJsonPath = "data/"+gameType+"/pieces/"+pieceType+".json";
-        JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
-        JSONObject attributes = pieceJSON.getJSONObject("attributes");
-        JSONObject moveVectors = pieceJSON.getJSONObject("moveVectors");
 
-//        Piece piece = new Piece(pieceColor, getMoveVectors(moveVectors,pieceColor), getAttributes(attributes), pieceImagePath);
-//        pieceGrid[r][c] = piece;
+        String team = square[0];
+        String pieceName = square[1];
+        Location location = new Location(r,c);
+
+        String pieceJsonPath = "data/"+gameType+"/pieces/"+pieceName+".json";
+        JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
+
+        MoveVector moveVector = getMoveVector(pieceJSON, team);
+        Map<String, Boolean> attributes = getAttributes(pieceJSON);
+
+
+        String pieceImagePath = "src/images/"+DEFAULT_STYLE+"/"+ team + pieceName + ".png";
+
+        Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
+        getDrawPieceViewGrid(r, c, team, pieceName, location);
+        pieceGrid[r][c] = piece;
       }
 
     }
   }
 
+  private void getDrawPieceViewGrid(int r, int c, String team, String pieceName,
+      Location location) {
+    PieceView pieceView = new PieceView(team, pieceName,DEFAULT_STYLE, location);
+    pieceViewGrid[r][c] = pieceView;
+  }
+
+  private MoveVector getMoveVector(JSONObject pieceJSON, String teamColor) {
+    Map<String, List<Vector>> map = mapOfMoveVectors(pieceJSON.getJSONObject("moveVectors"),teamColor);
+    List<Vector> moves = map.get("moves");
+    List<Vector> takeMoves = map.get("takeMoves");
+    List<Vector> initialMoves = map.get("initialMoves");
+
+    return new MoveVector(moves,takeMoves,initialMoves);
+  }
+
   /**
-   * @param attributes - JSON object that contains a bunch of attribute field values
+   * @param pieceJSON - JSON object of the piece
    * @return a map of all the attributes and their values
    */
-  private Map<String, Boolean> getAttributes(JSONObject attributes) {
+  private Map<String, Boolean> getAttributes(JSONObject pieceJSON) {
+    JSONObject attributes = pieceJSON.getJSONObject("attributes");
     Map<String, Boolean> map = new HashMap<>();
     for (String attribute : attributes.keySet()){
       map.put(attribute, attributes.getBoolean(attribute));
@@ -96,11 +130,11 @@ public class BoardBuilder implements Builder {
    * @param moveVectors - JSONObject which contains a bunch Lists<lists> that represent movement vectors
    * @return a map of the movement vector type (ie takeMoveVectors) to a list<list>
    */
-  private Map<String,List<Vector>> getMoveVectors(JSONObject moveVectors, String color) {
+  private Map<String,List<Vector>> mapOfMoveVectors(JSONObject moveVectors, String color) {
     Map<String,List<Vector>> map = new HashMap<>();
     for (String vectorType : moveVectors.keySet()){
       JSONArray jsonArray = moveVectors.getJSONArray(vectorType);
-      List<Vector> vectors = extractMoveVectors(jsonArray, color);
+      List<Vector> vectors = jsonarrayToVectorList(jsonArray, color);
       map.put(vectorType,vectors);
     }
     return map;
@@ -110,7 +144,7 @@ public class BoardBuilder implements Builder {
    * @param jsonArray Takes a jsonArray of strings that represent 1 type of movement vector (ie takeMove).
    * @return ret - List<List<Integer>> version of the jsonArrays
    */
-  private List<Vector> extractMoveVectors(JSONArray jsonArray, String color) {
+  private List<Vector> jsonarrayToVectorList(JSONArray jsonArray, String color) {
     List<Vector> ret = new ArrayList<>();
 
     for (int i = 0; i<jsonArray.length();i++){

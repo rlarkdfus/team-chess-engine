@@ -20,7 +20,7 @@ class LocationParserTest {
   @Test
   void testLocationParserWritesCorrectly() throws Exception {
     List<List<String>> initialPositions = locationParser.getInitialLocations(filePath);
-    String expected = "b_bishop";
+    String expected = "b_B";
     String test =  initialPositions.get(0).get(2);
     assertEquals(expected, test);
   }
