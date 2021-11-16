@@ -8,7 +8,8 @@ public interface PieceInterface {
 //    String getType();
     String getTeam();
 //    List<Location> getMoves(Location location);
-    List<Vector> getMoves();
+    List<Vector> getMoveVectors();
+    List<Vector> getTakeVectors();
 //    void getValue();
     boolean isLimited();
     int getScore();
