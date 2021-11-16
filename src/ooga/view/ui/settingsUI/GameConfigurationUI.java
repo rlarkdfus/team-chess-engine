@@ -25,7 +25,8 @@ public class GameConfigurationUI extends GridPane implements UIInterface {
         this.add(ViewUtility.makeButton("upload_configuration", e -> {
             System.out.println("button pressed");
             try {
-                controller.loadFile(new File("data/chess/oneBlackPawn.json"));
+                controller.loadFile(new File("data/chess/defaultChess.json"));
+                controller.initializeBoard();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
