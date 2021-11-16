@@ -175,11 +175,11 @@ public class Board implements Engine {
         Location location = piece.getLocation();
 
         // get moves from piece
-        MoveVector vectors = piece.getMoves();
+        List<Vector> vectors = piece.getMoves();
 
-        for(int i = 0; i < vectors.getMoveVectors().size(); i++) {
-            int pieceRow = location.getRow() + vectors.getRowVector(i);
-            int pieceCol = location.getCol() + vectors.getColVector(i);
+        for(int i = 0; i < vectors.size(); i++) {
+            int pieceRow = location.getRow() + vectors.get(i).getdRow();
+            int pieceCol = location.getCol() + vectors.get(i).getdCol();
 
             // while the new locations are in bounds
             while(inBounds(pieceRow, pieceCol)){
@@ -199,8 +199,8 @@ public class Board implements Engine {
                     break;
                 }
 
-                pieceRow += vectors.getRowVector(i);
-                pieceCol += vectors.getColVector(i);
+                pieceRow += vectors.get(i).getdRow();
+                pieceCol += vectors.get(i).getdCol();
             }
         }
         return moves;
@@ -231,6 +231,9 @@ public class Board implements Engine {
      * @return
      */
     public List<Location> getLegalMoves(Location location){
+        for(Location location1 : findPlayerTurn(turnCount).getLegalMoves(location)) {
+            System.out.println(location1.getRow() + " " + location1.getCol());
+        }
         return findPlayerTurn(turnCount).getLegalMoves(location);
     }
 

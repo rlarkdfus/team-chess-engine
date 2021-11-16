@@ -2,6 +2,7 @@ package ooga.model;
 
 import ooga.Location;
 
+import java.util.List;
 import java.util.Map;
 
 public class Piece implements PieceInterface {
@@ -52,8 +53,12 @@ public class Piece implements PieceInterface {
    * @return
    */
   @Override
-  public MoveVector getMoves() {
-    return moveVectors;
+  public List<Vector> getMoves() {
+    List<Vector> moves = moveVectors.getMoveVectors();
+    if(!hasMoved) {
+      moves.addAll(moveVectors.getInitialVectors());
+    }
+    return moveVectors.getInitialVectors();
   }
 
   /**
