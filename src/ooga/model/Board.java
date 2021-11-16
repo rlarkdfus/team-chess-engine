@@ -1,13 +1,10 @@
 package ooga.model;
 
-import java.util.Map;
 import ooga.Location;
 import ooga.Turn;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Board implements Engine {
 
@@ -84,7 +81,6 @@ public class Board implements Engine {
      */
     private List<Location> findLegalMoves(PlayerInterface player, PieceInterface piece) {
         List<Location> legalMoves = new ArrayList<>();
-
         // try all moves see if king in check
         for(Location location : findAllMoves(piece)) {
             if(tryMove(player, piece, location)) {
@@ -171,36 +167,53 @@ public class Board implements Engine {
      * @return
      */
     private List<Location> findAllMoves(PieceInterface piece) {
-        List<Location> moves = new ArrayList<>();
         Location location = piece.getLocation();
+        List<Location> moves = findMoves(piece, piece.getTakeVectors(), location, true);
+        moves.addAll(findMoves(piece, piece.getMoveVectors(), location, false));
+        return moves;
+    }
 
-        // get moves from piece
-        MoveVector vectors = piece.getMoves();
+    /**
+     * Returns list of possible locations based on piece movement vector or take vector
+     * @param piece
+     * @param vectors
+     * @param location
+     * @param take
+     * @return
+     */
+    private List<Location> findMoves(PieceInterface piece, List<Vector> vectors, Location location, boolean take) {
+        List<Location> moves = new ArrayList<>();
 
-        for(int i = 0; i < vectors.getMoveVectors().size(); i++) {
-            int pieceRow = location.getRow() + vectors.getRowVector(i);
-            int pieceCol = location.getCol() + vectors.getColVector(i);
+        for (Vector vector : vectors) {
+            int pieceRow = location.getRow() + vector.getdRow();
+            int pieceCol = location.getCol() + vector.getdCol();
 
             // while the new locations are in bounds
-            while(inBounds(pieceRow, pieceCol)){
+            while (inBounds(pieceRow, pieceCol)) {
                 Location potentialLocation = new Location(pieceRow, pieceCol);
                 PieceInterface potentialPiece = pieceAt(potentialLocation);
 
-                // new spot has same team
-                if(potentialPiece != null && potentialPiece.getTeam().equals(piece.getTeam())){
+                //new spot has piece
+                if (potentialPiece != null) {
+                    if (potentialPiece.getTeam().equals(piece.getTeam())) { // same team break
+                        break;
+                    }
+                    if(take) { // if u can take that piece
+                        moves.add(new Location(pieceRow, pieceCol));
+                    }
+                    break;
+                } else { // new spot is empty and only calculating movement
+                    if(!take) {
+                        moves.add(new Location(pieceRow, pieceCol));
+                    }
+                }
+
+                if (piece.isLimited()) {
                     break;
                 }
 
-                moves.add(new Location(pieceRow, pieceCol));
-                if(potentialPiece != null && !potentialPiece.getTeam().equals(piece.getTeam())) {
-                    break;
-                }
-                if (piece.isLimited()){
-                    break;
-                }
-
-                pieceRow += vectors.getRowVector(i);
-                pieceCol += vectors.getColVector(i);
+                pieceRow += vector.getdRow();
+                pieceCol += vector.getdCol();
             }
         }
         return moves;
@@ -231,6 +244,9 @@ public class Board implements Engine {
      * @return
      */
     public List<Location> getLegalMoves(Location location){
+        for(Location location1 : findPlayerTurn(turnCount).getLegalMoves(location)) {
+            System.out.println(location1.getRow() + " " + location1.getCol());
+        }
         return findPlayerTurn(turnCount).getLegalMoves(location);
     }
 

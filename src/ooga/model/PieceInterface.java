@@ -2,11 +2,14 @@ package ooga.model;
 
 import ooga.Location;
 
+import java.util.List;
+
 public interface PieceInterface {
 //    String getType();
     String getTeam();
 //    List<Location> getMoves(Location location);
-    MoveVector getMoves();
+    List<Vector> getMoveVectors();
+    List<Vector> getTakeVectors();
 //    void getValue();
     boolean isLimited();
     int getScore();
