@@ -21,6 +21,7 @@ public class View implements ViewInterface {
 
     private Controller controller;
     private ViewController viewController;
+    private Stage stage;
 
     private GridPane root;
     private BoardView boardView;
@@ -31,6 +32,7 @@ public class View implements ViewInterface {
     public View(Controller controller) {
         this.controller = controller;
         this.viewController = new ViewController();
+        this.stage = new Stage();
         //TODO: this is probably bad design idk
         viewController.setView(this);
         initializeDisplay();
@@ -51,11 +53,10 @@ public class View implements ViewInterface {
     @Override
     public void initializeDisplay() {
         this.boardView = new BoardView(controller, 8, 8);
-        this.settingsUI = new SettingsUI(viewController);
+        this.settingsUI = new SettingsUI(controller, viewController);
         this.gameInfoUI = new GameInfoUI();
         this.gameSettingsInfoUI = new GameSettingsUI(viewController);
 
-        Stage stage = new Stage();
         stage.setScene(setupDisplay());
         stage.show();
     }

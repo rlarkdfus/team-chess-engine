@@ -51,5 +51,4 @@ public class JsonParser implements ParserInterface {
     JSONObject obj = new JSONObject(currFileString);
     return obj;
   }
-
 }
