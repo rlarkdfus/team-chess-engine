@@ -58,7 +58,7 @@ public class Piece implements PieceInterface {
     if(!hasMoved) {
       moves.addAll(moveVectors.getInitialVectors());
     }
-    return moveVectors.getInitialVectors();
+    return moves;
   }
 
   /**
