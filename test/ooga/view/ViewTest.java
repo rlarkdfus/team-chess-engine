@@ -19,6 +19,8 @@ public class ViewTest extends DukeApplicationTest {
     @Override
     public void start(Stage stage) {
         new Controller();
+        Button uploadConfig = lookup("#upload_configuration").queryButton();
+        clickOn(uploadConfig);
     }
 
     @Test
@@ -83,18 +85,17 @@ public class ViewTest extends DukeApplicationTest {
     @Test
     void testNewGame() {
         String whiteStart = "(6,0)";
-        String whiteEnd = "(4,0)";
+        String whiteEnd = "(5,0)";
         testMovePiece(whiteStart, whiteEnd);
         Button reset = lookup("#new_game").queryButton();
         clickOn(reset);
-        assertDoesNotThrow(() -> lookup(String.format("#pieceView_location%s_style(companion)", whiteStart)).query());
+        assertThrows(EmptyNodeQueryException.class, () -> lookup(String.format("#pieceView_location%s_style(companion)", whiteStart)).query());
     }
 
     @Test
     void testMoveWhitePawnLegal() {
-
         String whiteStart = "(6,3)";
-        String whiteEnd = "(4,3)";
+        String whiteEnd = "(5,3)";
         assertTrue(testMovePiece(whiteStart, whiteEnd));
     }
 
@@ -108,9 +109,9 @@ public class ViewTest extends DukeApplicationTest {
     @Test
     void testMoveBlackPawnLegal() {
         String whiteStart = "(6,3)";
-        String whiteEnd = "(4,3)";
+        String whiteEnd = "(5,3)";
         String blackStart = "(1,2)";
-        String blackEnd = "(4,2)";
+        String blackEnd = "(2,2)";
         testMovePiece(whiteStart, whiteEnd);
         assertTrue(testMovePiece(blackStart, blackEnd));
     }
