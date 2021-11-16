@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Piece implements PieceInterface {
 
-    private Location location;
+  private Location location;
   private MoveVector moveVectors;
   private String team;
   private boolean hasMoved;
@@ -14,6 +14,7 @@ public class Piece implements PieceInterface {
   private String name;
   private Map<String, Boolean> attributes;
 
+  //FIXMe: Add attribute for score
   public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes) {
     this.team = team;
     this.name = name;
@@ -21,6 +22,17 @@ public class Piece implements PieceInterface {
     this.moveVectors = moveVectors;
     this.attributes = attributes;
     hasMoved = false;
+  }
+
+  
+  public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
+    this.location = location;
+    this.moveVectors = moveVectors;
+    this.team = team;
+    this.hasMoved = hasMoved;
+    this.score = score;
+    this.name = name;
+    this.attributes = attributes;
   }
 
   /**
@@ -76,7 +88,13 @@ public class Piece implements PieceInterface {
 
     @Override
     public void moveTo(Location location) {
-        this.location = location;
+      tryMove(location);
+      hasMoved = true;
+    }
+    
+    @Override
+    public void tryMove(Location location) {
+      this.location = location;
     }
 
     /**

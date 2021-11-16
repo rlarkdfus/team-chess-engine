@@ -13,6 +13,7 @@ public interface PlayerInterface {
    String getTeam();
     PieceInterface getKing();
     void movePiece(PieceInterface piece, Location end);
+    void tryMove(PieceInterface piece, Location end);
     PieceInterface getPiece(Location location);
 
     List<Location> getLegalMoves(Location location);

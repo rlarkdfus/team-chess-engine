@@ -66,6 +66,8 @@ public class Board implements Engine {
 
         // increment turn
         turnCount++;
+        // pause current player timer, start next player time
+        
 
         // update legal moves
         updateLegalMoves();
@@ -108,7 +110,7 @@ public class Board implements Engine {
         List<Location> takenPieceLegalMoves = new ArrayList<>();
 
         // theoretically move piece to location
-        player.movePiece(piece, location);
+        player.tryMove(piece, location);
         if(otherPlayer.getPiece(location) != null) { //take piece if exists
             takenPiece = otherPlayer.getPiece(location);
             takenPieceLegalMoves = otherPlayer.getLegalMoves(takenPiece.getLocation());
@@ -140,11 +142,7 @@ public class Board implements Engine {
 
             if(legalMovesCount == 0) {
                 //checkmate
-                if(inCheck(player.getKing(), findNextPlayer(player).getPieces())){
-                    return GameState.CHECKMATE;
-                } else { //stalemate
-                    return GameState.STALEMATE;
-                }
+                return (inCheck(player.getKing(), findNextPlayer(player).getPieces())) ? GameState.CHECKMATE : GameState.STALEMATE;
             }
         }
         // game still going
@@ -160,7 +158,7 @@ public class Board implements Engine {
      * @param takenPiece is the piece that was taken during the turn, if a piece was taken
      */
     private void undoTryMove(PlayerInterface player, PieceInterface piece, Location pieceLocation, PieceInterface takenPiece, List<Location> takenPieceLegalMoves) {
-        player.movePiece(piece, pieceLocation);
+        player.tryMove(piece, pieceLocation);
         if (takenPiece != null) {
             findNextPlayer(player).addPiece(takenPiece);
             findNextPlayer(player).setLegalMoves(takenPiece, takenPieceLegalMoves);
