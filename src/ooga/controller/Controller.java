@@ -32,13 +32,14 @@ public class Controller implements ControllerInterface {
 
   @Override
   public void updateView() {
-
+    view.initializeDisplay();
   }
 
   @Override
   public void loadFile(File file) throws Exception {
     JSONObject jsonObject = jsonParser.loadFile(file);
     boardBuilder.build(jsonObject);
+    updateView();
   }
 
   @Override

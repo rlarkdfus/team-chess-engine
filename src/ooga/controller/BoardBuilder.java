@@ -40,6 +40,8 @@ public class BoardBuilder implements Builder {
   public BoardBuilder() {
     locationParser = new LocationParser();
     jsonParser = new JsonParser();
+    pieceList = new ArrayList<>();
+    playerList = new ArrayList<>();
     style = DEFAULT_STYLE;
   }
 
@@ -54,8 +56,6 @@ public class BoardBuilder implements Builder {
   @Override
   public void build(JSONObject jsonObject) throws Exception {
     extractJSONObj(jsonObject);
-    pieceList = new ArrayList<>();
-    playerList = new ArrayList<>();
     for (String player : players){
       playerList.add(new Player(player));
     }
@@ -104,7 +104,6 @@ public class BoardBuilder implements Builder {
         pieceList.add(piece);
         playerList.get(playerListIdx).addPiece(piece);
       }
-
     }
   }
 

@@ -122,6 +122,7 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void renderInitialChessPieces(List<PieceInterface> pieces, String style) {
+        System.out.println("pieces: " + pieces);
         //pieceGrid = controller.sendInitialBoardView(style);
         for(PieceInterface piece : pieces) {
             PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
