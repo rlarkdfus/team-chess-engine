@@ -1,6 +1,6 @@
 package ooga.model;
 
-public class Vector {
+public class Vector implements VectorInterface {
 
     int dRow;
     int dCol;
@@ -10,10 +10,12 @@ public class Vector {
         this.dCol = dCol;
     }
 
+    @Override
     public int getdRow() {
         return dRow;
     }
 
+    @Override
     public int getdCol() {
         return dCol;
     }

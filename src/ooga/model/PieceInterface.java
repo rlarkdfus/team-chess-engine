@@ -13,4 +13,5 @@ public interface PieceInterface {
     String getName();
     Location getLocation();
     void moveTo(Location location);
+    void tryMove(Location location);
 }

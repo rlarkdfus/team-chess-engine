@@ -75,6 +75,11 @@ public class Player implements PlayerInterface {
     public void movePiece(PieceInterface piece, Location end) {
         piece.moveTo(end);
     }
+    
+    @Override
+    public void tryMove(PieceInterface piece, Location end) {
+        piece.tryMove(end);
+    }
 
     @Override
     public PieceInterface getPiece(Location location) {
