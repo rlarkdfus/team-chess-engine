@@ -7,15 +7,15 @@ import ooga.model.PieceInterface;
 
 public interface ControllerInterface {
 
-    /**
-     * View updates pieces on the board
-     */
-    void updateView();
+//    /**
+//     * View updates pieces on the board
+//     */
+//    void updateView();
 
     /**
      * View calls loadFile to choose a file to load a game
      */
-    void loadFile(File file) throws Exception;
+    void uploadConfiguration(File file) throws Exception;
 
     /**
      * View calls movePiece when user moves piece on GUI, which moves piece in model
@@ -33,5 +33,5 @@ public interface ControllerInterface {
 
     List<Location> getLegalMoves(Location location);
 
-    List<PieceInterface> getInitialPieces();
+//    List<PieceInterface> getInitialPieces();
 }

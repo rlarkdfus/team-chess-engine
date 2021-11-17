@@ -18,17 +18,19 @@ public class Board implements Engine {
     private int turnCount;
     private List<PlayerInterface> players;
 
-    public Board() {
-
-    }
-
-    @Override
-    public void initializePlayers(List<PlayerInterface> players) {
-        turnCount = 0;
+    public Board(List<PlayerInterface> players) {
         this.players = players;
-        // loop through players passed by controller and add them to players
+        turnCount = 0;
         updateLegalMoves();
     }
+
+//    @Override
+//    public void initializePlayers(List<PlayerInterface> players) {
+//        turnCount = 0;
+//        this.players = players;
+//        // loop through players passed by controller and add them to players
+//        updateLegalMoves();
+//    }
 
     private void updateLegalMoves() {
         for(PlayerInterface player : players) {
