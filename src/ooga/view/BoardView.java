@@ -99,6 +99,8 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void removePiece(Location location) {
+        System.out.println("removing pieces");
+
         for(PieceView pieceView : pieceList)
             if(pieceView.location.equals(location) ){
                 this.getChildren().remove(pieceView);
@@ -164,15 +166,9 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void clearBoard() {
-//        for (int i = 0; i < 8; i++) {
-//            for (int j = 0; j < 8; j++) {
-//                if (pieceGrid[i][j] != null) {
-//                    removePiece(new Location(i, j));
-//                }
-//            }
-//        }
+        System.out.println("clear board");
         for(PieceView pieceView : pieceList) {
-            if(pieceView != null) {
+            if (pieceView != null) {
                 removePiece(pieceView.location);
             }
         }
@@ -192,7 +188,6 @@ public class BoardView extends Group implements BoardViewInterface {
         for(Location removed : turn.getRemoved()){
             removePiece(removed);
         }
-
         for(Turn.PieceMove move : turn.getMoves()) {
             movePiece(move.getStartLocation(), move.getEndLocation());
         }

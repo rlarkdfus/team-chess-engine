@@ -40,6 +40,6 @@ public class PieceView extends ImageView {
     }
 
     private void setId() {
-        this.setId(String.format("pieceView_location(%d,%d)_style(%s)", location.getRow(), location.getCol(), style));
+        this.setId(String.format("pieceView_side(%s)_piece(%s)_location(%d,%d)_style(%s)", side, piece, location.getRow(), location.getCol(), style));
     }
 }
