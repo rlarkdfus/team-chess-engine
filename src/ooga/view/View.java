@@ -5,10 +5,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ooga.Turn;
+import ooga.controller.BoardBuilder;
 import ooga.controller.Controller;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
 import ooga.view.ui.gameSettingsUI.GameSettingsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
+
+import java.util.List;
 
 public class View implements ViewInterface {
 
@@ -35,7 +38,6 @@ public class View implements ViewInterface {
         this.stage = new Stage();
         //TODO: this is probably bad design idk
         viewController.setView(this);
-        initializeDisplay();
         //this.viewController = controller.getViewController();
     }
 
@@ -51,8 +53,8 @@ public class View implements ViewInterface {
     }
 
     @Override
-    public void initializeDisplay() {
-        this.boardView = new BoardView(controller, 8, 8);
+    public void initializeDisplay(List<BoardBuilder.PieceViewBuilder> pieceViewList) {
+        this.boardView = new BoardView(controller, pieceViewList, 8, 8);
         this.settingsUI = new SettingsUI(controller, viewController);
         this.gameInfoUI = new GameInfoUI();
         this.gameSettingsInfoUI = new GameSettingsUI(viewController);

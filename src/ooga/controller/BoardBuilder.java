@@ -32,17 +32,23 @@ public class BoardBuilder implements Builder {
   private String csv;
   private List<List<String>> csvData;
   private List<PlayerInterface> playerList;
-  private List<PieceInterface> pieceList;
+  private List<PieceViewBuilder> pieceList;
 
   private LocationParser locationParser;
   private JsonParser jsonParser;
 
-  public BoardBuilder() {
-    locationParser = new LocationParser();
+  public BoardBuilder(File file) {
     jsonParser = new JsonParser();
+    locationParser = new LocationParser();
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
     style = DEFAULT_STYLE;
+
+    try {
+      build(jsonParser.loadFile(file));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
 
@@ -64,7 +70,7 @@ public class BoardBuilder implements Builder {
   }
 
   @Override
-  public List<PieceInterface> getInitialPieces(){
+  public List<PieceViewBuilder> getInitialPieceViews(){
     if (!this.style.equals(style)){
       //make new piece list w style
     }
@@ -101,7 +107,7 @@ public class BoardBuilder implements Builder {
         Map<String, Boolean> attributes = getAttributes(pieceJSON);
 
         Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
-        pieceList.add(piece);
+        pieceList.add(new PieceViewBuilder(piece));
         playerList.get(playerListIdx).addPiece(piece);
       }
     }
@@ -205,5 +211,30 @@ public class BoardBuilder implements Builder {
       ret.add(jsonArray.getString(i));
     }
     return ret;
+  }
+
+  public class PieceViewBuilder {
+
+    private String team;
+    private String name;
+    private Location location;
+
+    public PieceViewBuilder(Piece piece) {
+      this.team = piece.getTeam();
+      this.name = piece.getName();
+      this.location = piece.getLocation();
+    }
+
+    public String getTeam() {
+      return team;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public Location getLocation() {
+      return location;
+    }
   }
 }

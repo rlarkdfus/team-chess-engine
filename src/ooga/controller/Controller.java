@@ -12,16 +12,15 @@ import org.json.JSONObject;
 
 public class Controller implements ControllerInterface {
 
+  private final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
+
   private Engine model;
   private ViewInterface view;
-  private BoardBuilder boardBuilder;
-  private JsonParser jsonParser;
 
   public Controller(){
-    boardBuilder = new BoardBuilder();
-    model = new Board();
-    view = new View(this);
-    jsonParser = new JsonParser();
+    BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+    this.view = new View(this);
+    buildGame(boardBuilder);
   }
 
 
@@ -30,16 +29,15 @@ public class Controller implements ControllerInterface {
     return model.canMovePiece(location);
   }
 
-  @Override
-  public void updateView() {
-    view.initializeDisplay();
-  }
+//  @Override
+//  public void updateView() {
+//    view.initializeDisplay();
+//  }
 
   @Override
-  public void loadFile(File file) throws Exception {
-    JSONObject jsonObject = jsonParser.loadFile(file);
-    boardBuilder.build(jsonObject);
-    updateView();
+  public void uploadConfiguration(File file) {
+    BoardBuilder boardBuilder = new BoardBuilder(file);
+    buildGame(boardBuilder);
   }
 
   @Override
@@ -55,13 +53,13 @@ public class Controller implements ControllerInterface {
     return model.getLegalMoves(location);
   }
 
-  @Override
-  public List<PieceInterface> getInitialPieces() {
-    return boardBuilder.getInitialPieces();
-  }
+//  @Override
+//  public List<PieceInterface> getInitialPieces() {
+//    return boardBuilder.getInitialPieces();
+//  }
 
-  public void initializeBoard() {
-    model.initializePlayers(boardBuilder.getInitialPlayers());
+  private void buildGame(BoardBuilder boardBuilder) {
+    this.model = new Board(boardBuilder.getInitialPlayers());
+    this.view.initializeDisplay(boardBuilder.getInitialPieceViews());
   }
-
 }
