@@ -8,12 +8,14 @@ import ooga.Turn.PieceMove;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 class BoardTest {
   private Board board;
 
   @BeforeEach
   void setUp() {
-    board = new Board();
+    board = new Board(new ArrayList<>());
   }
 
   @Test

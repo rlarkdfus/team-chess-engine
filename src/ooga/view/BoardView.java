@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.Turn;
+import ooga.controller.BoardBuilder;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
 import ooga.model.Piece;
@@ -26,17 +27,17 @@ public class BoardView extends Group implements BoardViewInterface {
     private BoardSquare[][] background;
     private List<PieceView> pieceList;
 
-    public BoardView(Controller controller, int row, int col) {
+    public BoardView(Controller controller, List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
         this.controller = controller;
         startLocation = null;
         pieceList = new ArrayList<>();
-        initializeBoardView(controller.getInitialPieces(), row, col);
+        initializeBoardView(pieceViews, row, col);
     }
 
     @Override
-    public void initializeBoardView(List<PieceInterface> initialPieceViews, int row, int col) {
+    public void initializeBoardView(List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
         renderBackground(row, col);
-        renderInitialChessPieces(initialPieceViews, DEFAULT_PIECE_STYLE);
+        renderInitialChessPieces(pieceViews, DEFAULT_PIECE_STYLE);
         this.setOnMouseClicked(e -> clickBoard(e));
     }
 
@@ -68,7 +69,6 @@ public class BoardView extends Group implements BoardViewInterface {
             }
             unselectPiece(); // if user clicks an illegal move
         }
-
     }
 
     private void selectPiece(Location location) {
@@ -123,10 +123,8 @@ public class BoardView extends Group implements BoardViewInterface {
         changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
     }
 
-    private void renderInitialChessPieces(List<PieceInterface> pieces, String style) {
-        System.out.println("pieces: " + pieces);
-        //pieceGrid = controller.sendInitialBoardView(style);
-        for(PieceInterface piece : pieces) {
+    private void renderInitialChessPieces(List<BoardBuilder.PieceViewBuilder> pieceViews, String style) {
+        for(BoardBuilder.PieceViewBuilder piece : pieceViews) {
             PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
             pieceList.add(newPiece);
             this.getChildren().add(newPiece);
