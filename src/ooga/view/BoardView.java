@@ -66,8 +66,12 @@ public class BoardView extends Group implements BoardViewInterface {
         } else { //user selects new location with piece
             if (isLegalMove(clickLocation)) { //user clicks new location
                 controller.movePiece(startLocation, clickLocation);
+                unselectPiece();
+            } else if(controller.canMovePiece(clickLocation)) {
+                unselectPiece();
+                selectPiece(clickLocation);
             }
-            unselectPiece(); // if user clicks an illegal move
+             // if user clicks an illegal move
         }
     }
 

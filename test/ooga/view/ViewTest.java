@@ -29,14 +29,15 @@ public class ViewTest extends DukeApplicationTest {
     @Override
     public void start(Stage stage) {
         new Controller();
-        Button uploadConfig = lookup("#upload_configuration").queryButton();
-        clickOn(uploadConfig);
+//        Button uploadConfig = lookup("#upload_configuration").queryButton();
+//        clickOn(uploadConfig);
     }
 
     @Test
     void testChangeColor1() {
         ColorPicker colorPicker1 = lookup("#board_color_1").query();
-        Rectangle testSquare = lookup("#square_location(0,0)").query();
+        String location = "(0,0)";
+        Rectangle testSquare = queryBoardSquare(location);
         Color expected = Color.RED;
         setValue(colorPicker1, expected);
         assertEquals(expected, testSquare.getFill());
@@ -45,7 +46,8 @@ public class ViewTest extends DukeApplicationTest {
     @Test
     void testChangeColor2() {
         ColorPicker colorPicker2 = lookup("#board_color_2").query();
-        Rectangle testSquare = lookup("#square_location(0,1)").query();
+        String location = "(0,1)";
+        Rectangle testSquare = queryBoardSquare(location);
         Color expected = Color.GREEN;
         setValue(colorPicker2, expected);
         assertEquals(expected, testSquare.getFill());
@@ -99,7 +101,7 @@ public class ViewTest extends DukeApplicationTest {
         testMovePiece(WHITE, PAWN, whiteStart, whiteEnd);
         Button reset = lookup("#new_game").queryButton();
         clickOn(reset);
-        assertThrows(EmptyNodeQueryException.class, () -> lookup(String.format("#pieceView_location%s_style(companion)", whiteStart)).query());
+        assertThrows(EmptyNodeQueryException.class, () -> queryPieceView(WHITE, PAWN, whiteStart, STYLE_COMPANION));
     }
 
     @Test
@@ -213,8 +215,7 @@ public class ViewTest extends DukeApplicationTest {
      */
     private boolean testMovePiece(String side, String piece, String start, String end) {
         PieceView testPiece = queryPieceView(side, piece, start, STYLE_COMPANION);
-        //PieceView testPiece = lookup(String.format("#pieceView_side(%s)_piece(%s)_location%s_style(companion)", side, piece, start)).query();
-        Rectangle destinationSpot = lookup(String.format("#square_location%s", end)).query();
+        Rectangle destinationSpot = queryBoardSquare(end);
         clickOn(testPiece);
         moveTo(destinationSpot);
         clickOn(destinationSpot);
