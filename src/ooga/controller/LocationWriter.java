@@ -18,17 +18,13 @@ public class LocationWriter {
     try {
       FileWriter fileWriter = new FileWriter(filePath);
       BufferedWriter writer = new BufferedWriter(fileWriter);
-      csvGrid.forEach(row -> {
-        try {
+      for (String row : csvGrid) {
           writer.write(row);
           writer.newLine();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      });
+      }
       writer.close();
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new Exception("Unable to find file to save csv");
     }
 
   }
