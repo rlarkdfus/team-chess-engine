@@ -8,7 +8,7 @@
     "limited": false,
     "canEnPassant": false,
     "canTransform": false,
-    "canCastle": false
+    "canCastle": false,
   },
   "value": 3
 }
