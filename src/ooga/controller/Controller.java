@@ -46,7 +46,6 @@ public class Controller implements ControllerInterface {
     if(model.checkGameState() != Board.GameState.RUNNING) {
       System.out.println(model.checkGameState()); //FIXME
     }
-
   }
 
   public List<Location> getLegalMoves(Location location){
