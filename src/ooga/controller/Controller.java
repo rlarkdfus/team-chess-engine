@@ -5,10 +5,8 @@ import java.util.List;
 import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
-import ooga.model.PieceInterface;
 import ooga.view.View;
 import ooga.view.ViewInterface;
-import org.json.JSONObject;
 
 public class Controller implements ControllerInterface {
 
@@ -16,9 +14,9 @@ public class Controller implements ControllerInterface {
 
   private Engine model;
   private ViewInterface view;
-
+  Builder boardBuilder;
   public Controller(){
-    BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+    boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
     this.view = new View(this);
     buildGame(boardBuilder);
   }
@@ -57,7 +55,7 @@ public class Controller implements ControllerInterface {
 //    return boardBuilder.getInitialPieces();
 //  }
 
-  private void buildGame(BoardBuilder boardBuilder) {
+  private void buildGame(Builder boardBuilder) {
     this.model = new Board(boardBuilder.getInitialPlayers());
     this.view.initializeDisplay(boardBuilder.getInitialPieceViews());
   }

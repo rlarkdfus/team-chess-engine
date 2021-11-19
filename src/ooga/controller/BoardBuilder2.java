@@ -17,7 +17,7 @@ import ooga.model.Vector;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class BoardBuilder implements Builder {
+public class BoardBuilder2 implements Builder {
   public static final String DEFAULT_STYLE = "companion";
 
   private String gameType;
@@ -31,12 +31,12 @@ public class BoardBuilder implements Builder {
   private String csv;
   private List<List<String>> csvData;
   private List<PlayerInterface> playerList;
-  private List<PieceViewBuilder> pieceList;
+  private List<BoardBuilder.PieceViewBuilder> pieceList;
 
   private LocationParser locationParser;
   private JsonParser jsonParser;
 
-  public BoardBuilder(File file) {
+  public BoardBuilder2(File file) {
     jsonParser = new JsonParser();
     locationParser = new LocationParser();
     pieceList = new ArrayList<>();
@@ -70,7 +70,7 @@ public class BoardBuilder implements Builder {
   }
 
   @Override
-  public List<PieceViewBuilder> getInitialPieceViews(){return pieceList;}
+  public List<BoardBuilder.PieceViewBuilder> getInitialPieceViews(){return pieceList;}
 
   @Override
   public List<PlayerInterface> getInitialPlayers(){
@@ -103,7 +103,7 @@ public class BoardBuilder implements Builder {
         int score = pieceJSON.getInt("value");
 
         Piece piece = new Piece(team, pieceName, location, moveVector, attributes, score);
-        pieceList.add(new PieceViewBuilder(piece));
+        pieceList.add(new BoardBuilder.PieceViewBuilder(piece));
         playerList.get(playerListIdx).addPiece(piece);
       }
     }
@@ -209,28 +209,28 @@ public class BoardBuilder implements Builder {
     return ret;
   }
 
-  public static class PieceViewBuilder {
-
-    private String team;
-    private String name;
-    private Location location;
-
-    public PieceViewBuilder(Piece piece) {
-      this.team = piece.getTeam();
-      this.name = piece.getName();
-      this.location = piece.getLocation();
-    }
-
-    public String getTeam() {
-      return team;
-    }
-
-    public String getName() {
-      return name;
-    }
-
-    public Location getLocation() {
-      return location;
-    }
-  }
+//  public class PieceViewBuilder {
+//
+//    private String team;
+//    private String name;
+//    private Location location;
+//
+//    public PieceViewBuilder(Piece piece) {
+//      this.team = piece.getTeam();
+//      this.name = piece.getName();
+//      this.location = piece.getLocation();
+//    }
+//
+//    public String getTeam() {
+//      return team;
+//    }
+//
+//    public String getName() {
+//      return name;
+//    }
+//
+//    public Location getLocation() {
+//      return location;
+//    }
+//  }
 }
