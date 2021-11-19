@@ -5,6 +5,7 @@ import ooga.Location;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Piece implements PieceInterface {
 
@@ -15,15 +16,26 @@ public class Piece implements PieceInterface {
   private int score;
   private String name;
   private Map<String, Boolean> attributes;
+  private boolean inCheckMate;
+  private boolean isEliminated;
+  private boolean endConditionSatisified;
+  private int uniqueID;
+  //Used to create a unique hash/id for each piece;
+  private Location initialLocation;
+
+
 
   //FIXMe: Add attribute for score
   public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes) {
     this.team = team;
     this.name = name;
     this.location = location;
+    this.initialLocation = location;
     this.moveVectors = moveVectors;
     this.attributes = attributes;
     hasMoved = false;
+    isEliminated = false;
+    uniqueID = this.hashCode();
   }
 
   
@@ -108,7 +120,22 @@ public class Piece implements PieceInterface {
       this.location = location;
     }
 
-    /**
+  @Override
+  public int getUniqueId() {
+    return this.uniqueID;
+  }
+
+  @Override
+  public void setEliminated(boolean state) {
+    isEliminated = state;
+  }
+
+  @Override
+  public boolean getEliminatedState() {
+    return isEliminated;
+  }
+
+  /**
    * override toString to print out piece information
    *
    * @return
@@ -117,6 +144,22 @@ public class Piece implements PieceInterface {
   public String toString() {
     return moveVectors.toString();
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Piece piece = (Piece) o;
+    return score == piece.score && Objects.equals(location, piece.location) && Objects.equals(team, piece.team) && Objects.equals(name, piece.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(initialLocation, team, score, name);
+  }
+
+
+
 
   /**
    * holds the vector of move directions for each piece
