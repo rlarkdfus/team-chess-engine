@@ -1,4 +1,4 @@
 package ooga.model.Moves;
 
-public class PawnMove {
+public class PawnMove extends Move{
 }

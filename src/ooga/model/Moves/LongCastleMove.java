@@ -1,4 +1,4 @@
 package ooga.model.Moves;
 
-public class LongCastleMove {
+public class LongCastleMove extends Move{
 }

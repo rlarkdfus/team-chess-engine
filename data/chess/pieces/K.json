@@ -1,18 +1,22 @@
 {
   "moveObjects": {
-    "move":{
+    "move": {
       "TranslationMove": [
         "1, -1",
         "1, 1",
         "-1, -1",
         "-1, 1",
-        "1,0",
-        "0,1",
-        "-1,0",
-        "0,-1"
+        "1, 0",
+        "0, 1",
+        "-1, 0",
+        "0, -1"
       ],
-      "ShortCastleMove" : ["null"],
-      "LongCastleMove": ["null"]
+      "ShortCastleMove": [
+        "null"
+      ],
+      "LongCastleMove": [
+        "null"
+      ]
     },
     "take": {
       "TranslationMove": [
@@ -20,14 +24,14 @@
         "1, 1",
         "-1, -1",
         "-1, 1",
-        "1,0",
-        "0,1",
+        "1, 0",
+        "0, 1",
         "-1,0",
         "0,-1"
       ]
     }
   },
-  "attributes":{
+  "attributes": {
     "limited": true,
     "canTransform": false
   },

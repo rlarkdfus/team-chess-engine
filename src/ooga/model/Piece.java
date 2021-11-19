@@ -5,6 +5,7 @@ import ooga.Location;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import ooga.model.Moves.Move;
 
 public class Piece implements PieceInterface {
 
@@ -15,12 +16,25 @@ public class Piece implements PieceInterface {
   private int score;
   private String name;
   private Map<String, Boolean> attributes;
+  private List<Move> moves;
+  private List<Move> takeMoves;
 
   public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
     this.location = location;
     this.moveVectors = moveVectors;
     this.team = team;
-    this.hasMoved = hasMoved;
+    this.hasMoved = false;
+    this.score = score;
+    this.name = name;
+    this.attributes = attributes;
+  }
+  //Todo: make this the default constructor
+  public Piece(String team, String name, Location location, List<Move> moves, List<Move> takeMoves, Map<String, Boolean> attributes, int score) {
+    this.location = location;
+    this.team = team;
+    this.hasMoved = false;
+    this.moves = moves;
+    this.takeMoves = takeMoves;
     this.score = score;
     this.name = name;
     this.attributes = attributes;
