@@ -12,7 +12,8 @@ public class Piece implements PieceInterface {
   private Location location;
   private MoveVector moveVectors;
   private String team;
-  private boolean hasMoved;
+  private boolean moved;
+  private boolean firstMove = false;
   private int score;
   private String name;
   private Map<String, Boolean> attributes;
@@ -23,7 +24,7 @@ public class Piece implements PieceInterface {
     this.location = location;
     this.moveVectors = moveVectors;
     this.team = team;
-    this.hasMoved = false;
+    this.moved = false;
     this.score = score;
     this.name = name;
     this.attributes = attributes;
@@ -32,7 +33,7 @@ public class Piece implements PieceInterface {
   public Piece(String team, String name, Location location, List<Move> moves, List<Move> takeMoves, Map<String, Boolean> attributes, int score) {
     this.location = location;
     this.team = team;
-    this.hasMoved = false;
+    this.moved = false;
     this.moves = moves;
     this.takeMoves = takeMoves;
     this.score = score;
@@ -59,7 +60,7 @@ public class Piece implements PieceInterface {
   @Override
   public List<Vector> getMoveVectors() {
     List<Vector> moves = new ArrayList<>(moveVectors.getMoveVectors());
-    if(!hasMoved) {
+    if(!moved) {
       moves.addAll(moveVectors.getInitialVectors());
     }
     return moves;
@@ -103,7 +104,8 @@ public class Piece implements PieceInterface {
     @Override
     public void moveTo(Location location) {
       tryMove(location);
-      hasMoved = true;
+      firstMove = !firstMove && !moved;
+      moved = true;
     }
     
     @Override
@@ -122,6 +124,30 @@ public class Piece implements PieceInterface {
   }
 
   /**
-   * holds the vector of move directions for each piece
+   * get all the locations a piece can move to
+   * @return
    */
+  @Override
+  public List<Location> getEndLocations() {
+    List<Location> locations = new ArrayList<>();
+    for(Move move : moves) {
+      locations.addAll(move.getEndLocations());
+    }
+    return locations;
+  }
+
+  @Override
+  public boolean hasMoved() {
+    return moved;
+  }
+
+  @Override
+  public boolean isFirstMove() {
+    return firstMove;
+  }
+
+  @Override
+  public Piece copy() {
+    return new Piece(this.team, this.name, this.location, this.moves, this.takeMoves, this.attributes, this.score);
+  }
 }

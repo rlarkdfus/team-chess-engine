@@ -17,4 +17,8 @@ public interface PieceInterface {
     Location getLocation();
     void moveTo(Location location);
     void tryMove(Location location);
+    List<Location> getEndLocations();
+    boolean hasMoved();
+    boolean isFirstMove();
+    Piece copy();
 }
