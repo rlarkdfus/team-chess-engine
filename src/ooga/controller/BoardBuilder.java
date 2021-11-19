@@ -105,8 +105,9 @@ public class BoardBuilder implements Builder {
 
         MoveVector moveVector = getMoveVector(pieceJSON, team);
         Map<String, Boolean> attributes = getAttributes(pieceJSON);
+        int score = pieceJSON.getInt("value");
 
-        Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
+        Piece piece = new Piece(team, pieceName, location, moveVector, attributes, score);
         pieceList.add(new PieceViewBuilder(piece));
         playerList.get(playerListIdx).addPiece(piece);
       }

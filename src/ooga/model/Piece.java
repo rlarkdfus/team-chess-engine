@@ -16,17 +16,6 @@ public class Piece implements PieceInterface {
   private String name;
   private Map<String, Boolean> attributes;
 
-  //FIXMe: Add attribute for score
-  public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes) {
-    this.team = team;
-    this.name = name;
-    this.location = location;
-    this.moveVectors = moveVectors;
-    this.attributes = attributes;
-    hasMoved = false;
-  }
-
-  
   public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
     this.location = location;
     this.moveVectors = moveVectors;
