@@ -1,34 +1,35 @@
 {
-  "moveVectors": {
-    "takeMoves": [
-      "1,-1",
-      "1,1",
-      "-1,1",
-      "-1,-1",
-      "0,1",
-      "0,-1",
-      "1,0",
-      "-1,0"
-    ],
-    "moves": [
-      "1,-1",
-      "1,1",
-      "-1,1",
-      "-1,-1",
-      "0,1",
-      "0,-1",
-      "1,0",
-      "-1,0"
-    ],
-    "initialMoves": [
-      "0,-2",
-      "0,2"
-    ]
+  "moveObjects": {
+    "move":{
+      "TranslationMove": [
+        "1, -1",
+        "1, 1",
+        "-1, -1",
+        "-1, 1",
+        "1,0",
+        "0,1",
+        "-1,0",
+        "0,-1"
+      ],
+      "ShortCastleMove" : ["null"],
+      "LongCastleMove": ["null"]
+    },
+    "take": {
+      "TranslationMove": [
+        "1, -1",
+        "1, 1",
+        "-1, -1",
+        "-1, 1",
+        "1,0",
+        "0,1",
+        "-1,0",
+        "0,-1"
+      ]
+    }
   },
-  "attributes": {
+  "attributes":{
     "limited": true,
-    "canEnPassant": false,
-    "canTransform": false,
-    "canCastle": true
-  }
+    "canTransform": false
+  },
+  "value": 0
 }
