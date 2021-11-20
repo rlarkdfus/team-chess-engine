@@ -2,6 +2,7 @@ package ooga.model;
 
 import ooga.Location;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public interface PieceInterface {
@@ -20,4 +21,5 @@ public interface PieceInterface {
     int getUniqueId();
     void setEliminated(boolean state);
     boolean getEliminatedState();
+    boolean getEndState() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException;
 }

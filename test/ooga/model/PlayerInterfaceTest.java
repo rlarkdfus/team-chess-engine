@@ -1,5 +1,6 @@
 package ooga.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +14,7 @@ class PlayerInterfaceTest {
     private PlayerInterface player;
     private PieceInterface piece;
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         player = new Player("white");
         List<Vector> vectors = new ArrayList<>();
         vectors.add(new Vector(-1, 0));
@@ -30,7 +31,7 @@ class PlayerInterfaceTest {
     }
 
     @Test
-    void removePiece() {
+    void removePiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         player.removePiece(piece.getLocation());
         Assertions.assertEquals(player.getPieces().size(), 0);
     }
@@ -41,7 +42,7 @@ class PlayerInterfaceTest {
     }
 
     @Test
-    void addPiece() {
+    void addPiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         player.addPiece(piece);
         Assertions.assertEquals(player.getPieces().size(), 2);
     }

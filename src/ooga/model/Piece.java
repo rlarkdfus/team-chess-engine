@@ -2,6 +2,8 @@ package ooga.model;
 
 import ooga.Location;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +18,12 @@ public class Piece implements PieceInterface {
   private int score;
   private String name;
   private Map<String, Boolean> attributes;
-  private boolean inCheckMate;
   private boolean isEliminated;
   private boolean endConditionSatisified;
   private int uniqueID;
   //Used to create a unique hash/id for each piece;
   private Location initialLocation;
+  String endStateString = "eliminated";
 
 
 
@@ -33,6 +35,18 @@ public class Piece implements PieceInterface {
     this.score = score;
     this.name = name;
     this.attributes = attributes;
+  }
+
+
+  public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score, String endStateString) {
+    this.location = location;
+    this.moveVectors = moveVectors;
+    this.team = team;
+    this.hasMoved = hasMoved;
+    this.score = score;
+    this.name = name;
+    this.attributes = attributes;
+    this.endStateString = endStateString;
   }
 
   /**
@@ -119,6 +133,23 @@ public class Piece implements PieceInterface {
   @Override
   public boolean getEliminatedState() {
     return isEliminated;
+  }
+
+  //Fixme: Fix the end state
+  @Override
+  public boolean getEndState() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    Method method= this.getClass().getDeclaredMethod(endStateString);
+    //endState string can be standard(no end state, or eliminated, meaning it is killed)
+    Object value = method.invoke(this);
+    return (boolean) value;
+  }
+
+  //Used for reflection.
+  private boolean standard(){
+    return true;
+  }
+  private boolean eliminated(){
+    return this.isEliminated;
   }
 
   /**

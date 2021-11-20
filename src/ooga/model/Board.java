@@ -3,6 +3,7 @@ package ooga.model;
 import ooga.Location;
 import ooga.Turn;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class Board implements Engine {
@@ -17,14 +18,14 @@ public class Board implements Engine {
     private List<PlayerInterface> players;
     private int turnCount;
 
-    public Board(List<PlayerInterface> players) {
+    public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
         moveFactory = new MoveFactory(players, 8, 8); //FIXME
         turnCount = 0;
         updateLegalMoves();
     }
 
-    private void updateLegalMoves() {
+    private void updateLegalMoves() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         for(PlayerInterface player : players) {
             for(PieceInterface piece : player.getPieces()){
                 player.setLegalMoves(piece, moveFactory.findLegalMoves(player, piece));
@@ -37,7 +38,7 @@ public class Board implements Engine {
      * @param start is piece initial location
      * @param end is piece new location
      */
-    public Turn movePiece(Location start, Location end){
+    public Turn movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         Turn currentTurn = new Turn();
         PlayerInterface currentPlayer = findPlayerTurn(turnCount);
         PlayerInterface otherPlayer = findPlayerTurn(turnCount + 1);

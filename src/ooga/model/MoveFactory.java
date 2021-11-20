@@ -2,6 +2,7 @@ package ooga.model;
 
 import ooga.Location;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class MoveFactory {
         this.col = col;
     }
 
-    public List<Location> findLegalMoves(PlayerInterface player, PieceInterface piece) {
+    public List<Location> findLegalMoves(PlayerInterface player, PieceInterface piece) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         List<Location> legalMoves = new ArrayList<>();
         // try all moves see if king in check
         for(Location location : findAllMoves(piece)) {
@@ -94,7 +95,7 @@ public class MoveFactory {
      * @param location is the location the player is attempting to move the piece to
      * @return if the move is legal or not
      */
-    private boolean tryMove(PlayerInterface player, PieceInterface piece, Location location) {
+    private boolean tryMove(PlayerInterface player, PieceInterface piece, Location location) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         PlayerInterface otherPlayer = findNextPlayer(player);
         PieceInterface king = player.getKing();
         Location pieceLocation = new Location(piece.getLocation().getRow(), piece.getLocation().getCol());
@@ -127,7 +128,7 @@ public class MoveFactory {
      * @param pieceLocation is the original location the player is attempting to move the piece to
      * @param takenPiece is the piece that was taken during the turn, if a piece was taken
      */
-    private void undoTryMove(PlayerInterface player, PieceInterface piece, Location pieceLocation, PieceInterface takenPiece, List<Location> takenPieceLegalMoves) {
+    private void undoTryMove(PlayerInterface player, PieceInterface piece, Location pieceLocation, PieceInterface takenPiece, List<Location> takenPieceLegalMoves) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         player.tryMove(piece, pieceLocation);
         if (takenPiece != null) {
             findNextPlayer(player).addPiece(takenPiece);

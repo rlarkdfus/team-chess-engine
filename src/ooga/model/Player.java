@@ -2,6 +2,7 @@ package ooga.model;
 
 import ooga.Location;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,13 +31,18 @@ public class Player implements PlayerInterface {
      * remove a pice from the player's posession
      * @param location
      */
-    public void removePiece(Location location){
+    public void removePiece(Location location) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         for(PieceInterface piece : remainingPieces.keySet()) {
             if(piece.getLocation().equals(location)) {
+                //Fixme: added for testing purposes
+//                System.out.println("A Piece Has been Killed (you have reached the inside of the if conditional)");
+//                System.out.println(piece.getEndState());
                 piece.setEliminated(true);
-                pieceIDandState.put(piece.getUniqueId(), piece.getEliminatedState());
+                //Fixme: added for testing purposes
+//                System.out.println(piece.getEndState());
                 killedPieces.add(piece);
-//                System.out.println(piece.getTeam() + " " +  piece.getUniqueId() + piece.getEliminatedState());
+                //Fixme: added for testing purposes
+//                System.out.println(piece.getName() + " " + piece.getTeam() + " " +  piece.getUniqueId() + "" + piece.getEliminatedState());
                 remainingPieces.remove(piece);
                 score -= piece.getScore();
 
@@ -58,9 +64,9 @@ public class Player implements PlayerInterface {
      * @param piece
      */
     @Override
-    public void addPiece(PieceInterface piece){
+    public void addPiece(PieceInterface piece) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         remainingPieces.put(piece, new ArrayList<>());
-        pieceIDandState.put(piece.getUniqueId(),piece.getEliminatedState());
+        pieceIDandState.put(piece.getUniqueId(),piece.getEndState());
         score += piece.getScore();
     }
 

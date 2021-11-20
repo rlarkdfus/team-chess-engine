@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EngineTest {
     private Engine board;
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         board = new Board(new ArrayList<>());
     }
 
@@ -27,7 +28,7 @@ class EngineTest {
 //    }
 
     @Test
-    void movePiece() {
+    void movePiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         Location start = new Location(6, 0);
         Location end = new Location(5, 0);
         Turn turn = board.movePiece(start, end);
