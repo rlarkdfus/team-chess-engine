@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Locale;
@@ -17,7 +18,7 @@ class EngineTest {
     private Engine board;
     @BeforeEach
     void setUp() {
-        board = new Board();
+        board = new Board(new ArrayList<>());
     }
 
 //    @Test

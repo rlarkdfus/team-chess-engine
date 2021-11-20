@@ -3,10 +3,12 @@ package ooga.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import ooga.controller.BoardBuilder.PieceViewBuilder;
 import ooga.model.MoveVector;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
@@ -21,28 +23,19 @@ class BoardBuilderTest {
   BoardBuilder boardBuilder;
   JsonParser jp;
   LocationParser lp;
-  JSONObject parsedFile;
-  List<List<String>> parsedCSV;
   String gameType;
 
   @BeforeEach
   void setUp() {
-    boardBuilder = new BoardBuilder();
-    lp = new LocationParser();
-    jp = new JsonParser();
     String testFile = "data/chess/oneBlackPawn.json";
-    parsedFile = jp.loadFile(new File(testFile));
-    gameType = parsedFile.getString("type");
-    try {
-      parsedCSV = lp.getInitialLocations(parsedFile.getString("csv"));
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    boardBuilder = new BoardBuilder(new File(testFile));
+    gameType = "chess";
+    jp = new JsonParser();
+
   }
 
   @Test
-  void testPlayerList() throws Exception {
-    boardBuilder.build(parsedFile);
+  void testPlayerList() {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
     assertEquals(2, players.size(), "incorrect number of players. expected 2. got: " + players.size());
     for (PlayerInterface p : players){
@@ -51,6 +44,8 @@ class BoardBuilderTest {
         assertEquals(1, pieces.size(), "black team should only have 1 piece. got: " + pieces.size());
         PieceInterface piece = pieces.get(0);
         assertEquals("P",piece.getName(),"should be a pawn. got: " + piece.getName());
+        assertEquals(1, piece.getScore(),"score should be 1. got: " + piece.getScore());
+
       }else{
         assertEquals("w", p.getTeam(), "other team should be white. got: " + p.getTeam());
         List<PieceInterface> pieces = p.getPieces();
@@ -60,21 +55,22 @@ class BoardBuilderTest {
   }
 
   @Test
-  void testPieceList() throws Exception {
-    boardBuilder.build(parsedFile);
-    List<PieceInterface> pieces = boardBuilder.getInitialPieces();
+  void testPieceList() {
+    List<PieceViewBuilder> pieces = boardBuilder.getInitialPieceViews();
     assertEquals(1, pieces.size(), "incorrect number of pieces. expected 1. got: " + pieces.size());
-    for (PieceInterface p : pieces){
+    for (PieceViewBuilder p : pieces){
       assertEquals("P",p.getName(),"name should be P. got: " + p.getName());
       assertEquals("b",p.getTeam(),"team should be b. got: " + p.getTeam());
       assertEquals(0,p.getLocation().getRow(),"location row should be 0. got: " + p.getLocation().getRow());
       assertEquals(0,p.getLocation().getCol(),"location col should be 0. got: " + p.getLocation().getCol());
-
     }
   }
 
   @Test
-  void testCorrectImagePath() {
+  void testCorrectImagePath() throws NoSuchFieldException, IllegalAccessException {
+    Field f = boardBuilder.getClass().getDeclaredField("csvData");
+    f.setAccessible(true);
+    List<List<String>> parsedCSV = (List<List<String>>) f.get(boardBuilder);
     String[] square = parsedCSV.get(0).get(0).split("_");
     String pieceColor = square[0];
     String pieceType = square[1];
@@ -85,7 +81,7 @@ class BoardBuilderTest {
 
   @Test
   void testGetAttributes()
-      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
 
     Method getAttributes = boardBuilder.getClass()
         .getDeclaredMethod("getAttributes", JSONObject.class);
@@ -102,7 +98,7 @@ class BoardBuilderTest {
 
   @Test
   void testGetMovevector()
-      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
 
     Method getMoveVector = boardBuilder.getClass()
         .getDeclaredMethod("getMoveVector", JSONObject.class, String.class);
@@ -134,7 +130,10 @@ class BoardBuilderTest {
     }
   }
 
-  private JSONObject getPiece() {
+  private JSONObject getPiece() throws NoSuchFieldException, IllegalAccessException {
+    Field f = boardBuilder.getClass().getDeclaredField("csvData");
+    f.setAccessible(true);
+    List<List<String>> parsedCSV = (List<List<String>>) f.get(boardBuilder);
     String[] square = parsedCSV.get(0).get(0).split("_");
     String pieceType = square[1];
     String pieceJsonPath = "data/" + gameType + "/pieces/" + pieceType + ".json";

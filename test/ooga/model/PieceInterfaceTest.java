@@ -27,7 +27,7 @@ class PieceInterfaceTest {
         MoveVector vec = new MoveVector(vectors, vectors, vectors);
         Map<String, Boolean> map = new HashMap<>();
         map.put("limited", false);
-        piece = new Piece("w", "P", loc, vec, map);
+        piece = new Piece("w", "P", loc, vec, map, 1);
     }
 
     @Test

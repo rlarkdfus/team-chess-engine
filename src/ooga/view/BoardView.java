@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.Turn;
+import ooga.controller.BoardBuilder;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
 import ooga.model.Piece;
@@ -26,17 +27,17 @@ public class BoardView extends Group implements BoardViewInterface {
     private BoardSquare[][] background;
     private List<PieceView> pieceList;
 
-    public BoardView(Controller controller, int row, int col) {
+    public BoardView(Controller controller, List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
         this.controller = controller;
         startLocation = null;
         pieceList = new ArrayList<>();
-        initializeBoardView(controller.getInitialPieces(), row, col);
+        initializeBoardView(pieceViews, row, col);
     }
 
     @Override
-    public void initializeBoardView(List<PieceInterface> initialPieceViews, int row, int col) {
+    public void initializeBoardView(List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
         renderBackground(row, col);
-        renderInitialChessPieces(initialPieceViews, DEFAULT_PIECE_STYLE);
+        renderInitialChessPieces(pieceViews, DEFAULT_PIECE_STYLE);
         this.setOnMouseClicked(e -> clickBoard(e));
     }
 
@@ -65,10 +66,13 @@ public class BoardView extends Group implements BoardViewInterface {
         } else { //user selects new location with piece
             if (isLegalMove(clickLocation)) { //user clicks new location
                 controller.movePiece(startLocation, clickLocation);
+                unselectPiece();
+            } else if(controller.canMovePiece(clickLocation)) {
+                unselectPiece();
+                selectPiece(clickLocation);
             }
-            unselectPiece(); // if user clicks an illegal move
+             // if user clicks an illegal move
         }
-
     }
 
     private void selectPiece(Location location) {
@@ -99,6 +103,8 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void removePiece(Location location) {
+        System.out.println("removing pieces");
+
         for(PieceView pieceView : pieceList)
             if(pieceView.location.equals(location) ){
                 this.getChildren().remove(pieceView);
@@ -121,10 +127,8 @@ public class BoardView extends Group implements BoardViewInterface {
         changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
     }
 
-    private void renderInitialChessPieces(List<PieceInterface> pieces, String style) {
-        System.out.println("pieces: " + pieces);
-        //pieceGrid = controller.sendInitialBoardView(style);
-        for(PieceInterface piece : pieces) {
+    private void renderInitialChessPieces(List<BoardBuilder.PieceViewBuilder> pieceViews, String style) {
+        for(BoardBuilder.PieceViewBuilder piece : pieceViews) {
             PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
             pieceList.add(newPiece);
             this.getChildren().add(newPiece);
@@ -164,15 +168,9 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void clearBoard() {
-//        for (int i = 0; i < 8; i++) {
-//            for (int j = 0; j < 8; j++) {
-//                if (pieceGrid[i][j] != null) {
-//                    removePiece(new Location(i, j));
-//                }
-//            }
-//        }
+        System.out.println("clear board");
         for(PieceView pieceView : pieceList) {
-            if(pieceView != null) {
+            if (pieceView != null) {
                 removePiece(pieceView.location);
             }
         }
@@ -192,7 +190,6 @@ public class BoardView extends Group implements BoardViewInterface {
         for(Location removed : turn.getRemoved()){
             removePiece(removed);
         }
-
         for(Turn.PieceMove move : turn.getMoves()) {
             movePiece(move.getStartLocation(), move.getEndLocation());
         }

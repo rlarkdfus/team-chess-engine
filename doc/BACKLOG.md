@@ -1,5 +1,40 @@
 ## Backlog
 
+### NEW USE CASES
+
+#### New use case 1: user downloads move history
+```java
+void newUseCase1() {
+    Button downloadHistory = makeButton("download_game", e -> controller.handleDownloadHistory());
+}
+```
+
+#### New use case 2: user changes the game variation
+```java
+void newUseCase2() {
+    Button variation = makeButton(e -> controller.handleChangeGameVariation());
+}
+```
+
+#### New use case 3: King is in check, so highlight the square to indicate
+```java
+void newUseCase1() {
+    updateLegalMoves();
+    model.checkGameState();
+    view.displayCheck();
+}
+```
+
+#### New use case 4: A powerup is randomly spawned
+```java
+void newUseCase4() {
+    controller.spawnPowerUp();
+    view.displayPowerUp();
+}
+```
+
+### OLD USE CASES
+
 #### use case 1: move a piece to empty square
 ```java
 // occurs inside BoardView
@@ -335,7 +370,7 @@ void useCase35() {
 ```
 #### use case 36: user changes language
 ```java
-Void useCase36() {
+void useCase36() {
     resourceBundle = “path/Spanish.properties”;
 }
 ```
