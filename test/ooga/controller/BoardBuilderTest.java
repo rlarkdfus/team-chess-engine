@@ -44,6 +44,8 @@ class BoardBuilderTest {
         assertEquals(1, pieces.size(), "black team should only have 1 piece. got: " + pieces.size());
         PieceInterface piece = pieces.get(0);
         assertEquals("P",piece.getName(),"should be a pawn. got: " + piece.getName());
+        assertEquals(1, piece.getScore(),"score should be 1. got: " + piece.getScore());
+
       }else{
         assertEquals("w", p.getTeam(), "other team should be white. got: " + p.getTeam());
         List<PieceInterface> pieces = p.getPieces();
@@ -61,7 +63,6 @@ class BoardBuilderTest {
       assertEquals("b",p.getTeam(),"team should be b. got: " + p.getTeam());
       assertEquals(0,p.getLocation().getRow(),"location row should be 0. got: " + p.getLocation().getRow());
       assertEquals(0,p.getLocation().getCol(),"location col should be 0. got: " + p.getLocation().getCol());
-
     }
   }
 
