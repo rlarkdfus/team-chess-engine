@@ -17,4 +17,7 @@ public interface PieceInterface {
     Location getLocation();
     void moveTo(Location location);
     void tryMove(Location location);
+    int getUniqueId();
+    void setEliminated(boolean state);
+    boolean getEliminatedState();
 }

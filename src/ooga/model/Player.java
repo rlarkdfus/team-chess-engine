@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 public class Player implements PlayerInterface {
+    private Map<Integer, Boolean> pieceIDandState;
     private Map<PieceInterface, List<Location>> remainingPieces;
+    //Keep track of all their killed pieces
+    private List<PieceInterface> killedPieces;
     private final String team;
     private int score;
 
@@ -19,6 +22,8 @@ public class Player implements PlayerInterface {
         remainingPieces = new HashMap<>();
 //        inCheck = false;
         score = 0;
+        pieceIDandState = new HashMap<>();
+        this.killedPieces = new ArrayList<>();
     }
 
     /**
@@ -28,8 +33,13 @@ public class Player implements PlayerInterface {
     public void removePiece(Location location){
         for(PieceInterface piece : remainingPieces.keySet()) {
             if(piece.getLocation().equals(location)) {
+                piece.setEliminated(true);
+                pieceIDandState.put(piece.getUniqueId(), piece.getEliminatedState());
+                killedPieces.add(piece);
+//                System.out.println(piece.getTeam() + " " +  piece.getUniqueId() + piece.getEliminatedState());
                 remainingPieces.remove(piece);
                 score -= piece.getScore();
+
                 return;
             }
         }
@@ -50,6 +60,7 @@ public class Player implements PlayerInterface {
     @Override
     public void addPiece(PieceInterface piece){
         remainingPieces.put(piece, new ArrayList<>());
+        pieceIDandState.put(piece.getUniqueId(),piece.getEliminatedState());
         score += piece.getScore();
     }
 
