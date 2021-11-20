@@ -1,17 +1,16 @@
 package ooga.view;
 
+import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ooga.Turn;
-import ooga.controller.BoardBuilder;
 import ooga.controller.Controller;
+import ooga.controller.PieceViewBuilder;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
 import ooga.view.ui.gameSettingsUI.GameSettingsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
-
-import java.util.List;
 
 public class View implements ViewInterface {
 
@@ -53,7 +52,7 @@ public class View implements ViewInterface {
     }
 
     @Override
-    public void initializeDisplay(List<BoardBuilder.PieceViewBuilder> pieceViewList) {
+    public void initializeDisplay(List<PieceViewBuilder> pieceViewList) {
         this.boardView = new BoardView(controller, pieceViewList, 8, 8);
         this.settingsUI = new SettingsUI(controller, viewController);
         this.gameInfoUI = new GameInfoUI();

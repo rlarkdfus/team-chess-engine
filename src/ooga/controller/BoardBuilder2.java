@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import ooga.Location;
-import ooga.controller.BoardBuilder.PieceViewBuilder;
 import ooga.model.Moves.Move;
 import ooga.model.Piece;
 import ooga.model.Player;

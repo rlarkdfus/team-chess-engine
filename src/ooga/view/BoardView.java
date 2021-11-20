@@ -11,8 +11,7 @@ import ooga.Turn;
 import ooga.controller.BoardBuilder;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
-import ooga.model.Piece;
-import ooga.model.PieceInterface;
+import ooga.controller.PieceViewBuilder;
 
 public class BoardView extends Group implements BoardViewInterface {
 
@@ -27,7 +26,7 @@ public class BoardView extends Group implements BoardViewInterface {
     private BoardSquare[][] background;
     private List<PieceView> pieceList;
 
-    public BoardView(Controller controller, List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
+    public BoardView(Controller controller, List<PieceViewBuilder> pieceViews, int row, int col) {
         this.controller = controller;
         startLocation = null;
         pieceList = new ArrayList<>();
@@ -35,7 +34,7 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     @Override
-    public void initializeBoardView(List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
+    public void initializeBoardView(List<PieceViewBuilder> pieceViews, int row, int col) {
         renderBackground(row, col);
         renderInitialChessPieces(pieceViews, DEFAULT_PIECE_STYLE);
         this.setOnMouseClicked(e -> clickBoard(e));
@@ -127,8 +126,8 @@ public class BoardView extends Group implements BoardViewInterface {
         changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
     }
 
-    private void renderInitialChessPieces(List<BoardBuilder.PieceViewBuilder> pieceViews, String style) {
-        for(BoardBuilder.PieceViewBuilder piece : pieceViews) {
+    private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style) {
+        for(PieceViewBuilder piece : pieceViews) {
             PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
             pieceList.add(newPiece);
             this.getChildren().add(newPiece);

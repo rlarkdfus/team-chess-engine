@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-import ooga.controller.BoardBuilder.PieceViewBuilder;
 import ooga.model.MoveVector;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;

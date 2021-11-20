@@ -1,10 +1,9 @@
 package ooga.view;
 
+import java.util.List;
 import javafx.scene.paint.Color;
 import ooga.Turn;
-import ooga.controller.BoardBuilder;
-
-import java.util.List;
+import ooga.controller.PieceViewBuilder;
 
 public interface ViewInterface {
     /**
@@ -12,7 +11,7 @@ public interface ViewInterface {
      */
     void updateDisplay(Turn turn);
 
-    void initializeDisplay(List<BoardBuilder.PieceViewBuilder> pieceViewList);
+    void initializeDisplay(List<PieceViewBuilder> pieceViewList);
 
     void changeBoardColor(Color color1, Color color2);
 
