@@ -1,5 +1,6 @@
 package ooga.view;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Group;
@@ -38,7 +39,17 @@ public class BoardView extends Group implements BoardViewInterface {
     public void initializeBoardView(List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
         renderBackground(row, col);
         renderInitialChessPieces(pieceViews, DEFAULT_PIECE_STYLE);
-        this.setOnMouseClicked(e -> clickBoard(e));
+        this.setOnMouseClicked(e -> {
+            try {
+                clickBoard(e);
+            } catch (InvocationTargetException ex) {
+                ex.printStackTrace();
+            } catch (NoSuchMethodException ex) {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     //TODO: maybe refactor this cuz getters are bad
@@ -46,7 +57,7 @@ public class BoardView extends Group implements BoardViewInterface {
         return background;
     }
 
-    private void clickBoard(MouseEvent mouse) {
+    private void clickBoard(MouseEvent mouse) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         Location clickLocation = new Location((int) mouse.getY() / 60, (int) mouse.getX() / 60);
 
         if (mouse.getButton() == MouseButton.SECONDARY) {

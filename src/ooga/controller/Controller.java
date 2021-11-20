@@ -1,6 +1,7 @@
 package ooga.controller;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import ooga.Location;
 import ooga.model.Board;
@@ -17,7 +18,7 @@ public class Controller implements ControllerInterface {
   private Engine model;
   private ViewInterface view;
 
-  public Controller(){
+  public Controller() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
     this.view = new View(this);
     buildGame(boardBuilder);
@@ -35,13 +36,13 @@ public class Controller implements ControllerInterface {
 //  }
 
   @Override
-  public void uploadConfiguration(File file) {
+  public void uploadConfiguration(File file) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     BoardBuilder boardBuilder = new BoardBuilder(file);
     buildGame(boardBuilder);
   }
 
   @Override
-  public void movePiece(Location start, Location end) {
+  public void movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     view.updateDisplay(model.movePiece(start, end));
     if(model.checkGameState() != Board.GameState.RUNNING) {
       System.out.println(model.checkGameState()); //FIXME
@@ -57,7 +58,7 @@ public class Controller implements ControllerInterface {
 //    return boardBuilder.getInitialPieces();
 //  }
 
-  private void buildGame(BoardBuilder boardBuilder) {
+  private void buildGame(BoardBuilder boardBuilder) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     this.model = new Board(boardBuilder.getInitialPlayers());
     this.view.initializeDisplay(boardBuilder.getInitialPieceViews());
   }

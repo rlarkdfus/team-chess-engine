@@ -10,6 +10,9 @@ import ooga.controller.Controller;
 import org.junit.jupiter.api.Test;
 import org.testfx.service.query.EmptyNodeQueryException;
 import util.DukeApplicationTest;
+
+import java.lang.reflect.InvocationTargetException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,7 +30,7 @@ public class ViewTest extends DukeApplicationTest {
 
     // this method is run BEFORE EACH test to set up application in a fresh state
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         new Controller();
 //        Button uploadConfig = lookup("#upload_configuration").queryButton();
 //        clickOn(uploadConfig);
