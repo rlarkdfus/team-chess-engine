@@ -18,7 +18,7 @@ public class EnPassantMove extends Move {
     }
 
     @Override
-    void updateMoveLocations(PieceInterface pawn, List<PieceInterface> pieces) {
+    public void updateMoveLocations(PieceInterface pawn, List<PieceInterface> pieces) {
         resetEndLocations();
         int row = pawn.getLocation().getRow() + getdRow();
         int col = pawn.getLocation().getCol() + getdCol();

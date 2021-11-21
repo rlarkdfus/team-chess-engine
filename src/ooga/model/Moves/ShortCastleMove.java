@@ -23,7 +23,7 @@ public class ShortCastleMove extends Move {
     }
 
     @Override
-    void updateMoveLocations(PieceInterface king, List<PieceInterface> pieces) {
+    public void updateMoveLocations(PieceInterface king, List<PieceInterface> pieces) {
         resetEndLocations();
         int row = king.getLocation().getRow() + getdRow();
         int col = king.getLocation().getCol() + getdCol();

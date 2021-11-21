@@ -25,7 +25,7 @@ public class JumpMove extends Move {
     }
 
     @Override
-    void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
+    public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
         resetEndLocations();
         int row = piece.getLocation().getRow() + getdRow();
         int col = piece.getLocation().getCol() + getdCol();

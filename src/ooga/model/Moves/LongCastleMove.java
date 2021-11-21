@@ -13,7 +13,7 @@ public class LongCastleMove extends Move {
     }
 
     @Override
-    void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
+    public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
 
     }
 
