@@ -1,10 +1,9 @@
 package ooga.model.Moves;
 
 import java.util.ArrayList;
+import java.util.List;
 import ooga.Location;
 import ooga.model.PieceInterface;
-
-import java.util.List;
 
 public class JumpMove extends Move {
 
@@ -33,7 +32,6 @@ public class JumpMove extends Move {
         Location potentialLocation = new Location(row, col);
 
         while(isLegal(piece, potentialLocation, pieces)){
-
             addEndLocation(potentialLocation);
 
             if(isLimited()) {
@@ -63,7 +61,6 @@ public class JumpMove extends Move {
         if(potentialPiece != null && potentialPiece.getTeam().equals(piece.getTeam())) {
             return false;
         }
-
         return tryMove(piece, potentialLocation, pieces);
     }
 }

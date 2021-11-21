@@ -112,6 +112,7 @@ public abstract class Move {
         }
 
         //otherwise undo the move and return true
+
         undoTryMove(piece, pieceLocation, takenPiece, pieces);
         return true;
     }
@@ -149,7 +150,7 @@ public abstract class Move {
     }
 
     protected void addEndLocation(Location location) {
-        System.out.println(location);
+//        System.out.println("added " + location);
         endLocations.add(location);
     }
 
