@@ -1,6 +1,5 @@
 package ooga.controller;
 
-import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 
 import java.io.File;
@@ -10,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import ooga.Location;
 import ooga.model.Moves.Move;
 import ooga.model.Piece;
@@ -22,6 +22,9 @@ public class BoardBuilder2 implements Builder {
 
   public static final String DEFAULT_STYLE = "companion";
   public static final int ARG_LENGTH = 4;
+  public static final String PROPERTIES_FILE = "JSONMappings";
+  private ResourceBundle mappings;
+
 
   private String gameType;
   private String boardShape;
@@ -40,6 +43,7 @@ public class BoardBuilder2 implements Builder {
   private JsonParser jsonParser;
 
   public BoardBuilder2(File defaultFile) {
+    mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
     jsonParser = new JsonParser();
     locationParser = new LocationParser();
     pieceList = new ArrayList<>();
@@ -98,7 +102,7 @@ public class BoardBuilder2 implements Builder {
       throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
-        String[] square = csvData.get(r).get(c).split("_");
+        String[] square = csvData.get(r).get(c).split(mappings.getString("csvDelimiter"));
         if (square.length < 2) {
           //signifies that this square is empty
           continue;
@@ -113,7 +117,7 @@ public class BoardBuilder2 implements Builder {
   }
 
   private Piece buildPiece(int r, int c) throws FileNotFoundException, InvalidPieceConfigException {
-    String[] square = csvData.get(r).get(c).split("_");
+    String[] square = csvData.get(r).get(c).split(mappings.getString("csvDelimiter"));
     String team = square[0];
     String pieceName = square[1];
     Location location = new Location(r, c);
@@ -126,12 +130,12 @@ public class BoardBuilder2 implements Builder {
     int value;
     String errorKey = null;
     try {
-      errorKey = "moves";
+      errorKey = mappings.getString("moves");
       moves = getMoves(pieceJSON, team);
-      errorKey = "attributes";
+      errorKey = mappings.getString("attributes");
       attributes = getAttributes(pieceJSON);
-      errorKey = "value";
-      value = pieceJSON.getInt("value");
+      errorKey = mappings.getString("value");
+      value = pieceJSON.getInt(mappings.getString("value"));
     } catch (Throwable e) {
       throw new InvalidPieceConfigException(r, c, pieceJsonPath, errorKey);
     }
@@ -141,7 +145,7 @@ public class BoardBuilder2 implements Builder {
 
 
   private List<Move> getMoves(JSONObject pieceObj, String team) throws Throwable {
-    JSONObject moveTypes = pieceObj.getJSONObject("moves");
+    JSONObject moveTypes = pieceObj.getJSONObject(mappings.getString("moves"));
     List<Move> moveList = new ArrayList<>();
     for (String moveType : moveTypes.keySet()) {
       List<Move> newMoves = makeTypeOfMove(moveType, (JSONArray) moveTypes.get(moveType), team);
@@ -171,12 +175,12 @@ public class BoardBuilder2 implements Builder {
   }
 
   private void setMoveArgs(String team, Move newMove, String arg) throws Exception {
-    String[] args = arg.split(",");
+    String[] args = arg.split(mappings.getString("jsonDelimiter"));
     if (args.length == ARG_LENGTH) {
       int dRow = team.equals(bottomColor) ? -parseInt(args[0]) : parseInt(args[0]);
       int dCol = parseInt(args[1].strip());
-      boolean takes = args[3].strip().equals("takes");
-      boolean limited = args[3].strip().equals("limited");
+      boolean takes = args[3].strip().equals(mappings.getString("takes"));
+      boolean limited = args[3].strip().equals(mappings.getString("limited"));
       newMove.setMove(dRow, dCol, takes, limited);
     } else {
       throw new Exception();
@@ -202,7 +206,7 @@ public class BoardBuilder2 implements Builder {
    * @return a map of all the attributes and their values
    */
   private Map<String, Boolean> getAttributes(JSONObject pieceJSON) {
-    JSONObject attributes = pieceJSON.getJSONObject("attributes");
+    JSONObject attributes = pieceJSON.getJSONObject(mappings.getString("attributes"));
     Map<String, Boolean> map = new HashMap<>();
     for (String attribute : attributes.keySet()) {
       map.put(attribute, attributes.getBoolean(attribute));
@@ -217,17 +221,17 @@ public class BoardBuilder2 implements Builder {
    * @param jsonObject - jsonobject representation of the .json file
    */
   private void extractJSONObj(JSONObject jsonObject) {
-    gameType = jsonObject.getString("type");
-    boardShape = jsonObject.getString("board");
-    style = jsonObject.getString("style");
+    gameType = jsonObject.getString(mappings.getString("type"));
+    boardShape = jsonObject.getString(mappings.getString("board"));
+    style = jsonObject.getString(mappings.getString("style"));
     boardSize = new ArrayList<>();
-    List<String> a = Arrays.asList(jsonObject.getString("boardSize").split("x"));
+    List<String> a = Arrays.asList(jsonObject.getString(mappings.getString("boardSize")).split("x"));
     a.forEach((num) -> boardSize.add(parseInt(num)));
-    boardColors = extractColors(jsonObject.getJSONArray("boardColors"));
-    players = extractColors(jsonObject.getJSONArray("players"));
+    boardColors = extractColors(jsonObject.getJSONArray(mappings.getString("boardColors")));
+    players = extractColors(jsonObject.getJSONArray(mappings.getString("players")));
     bottomColor = players.get(0); //assumes that bottom player is the first given player color
-    rules = jsonObject.getString("rules");
-    csv = jsonObject.getString("csv");
+    rules = jsonObject.getString(mappings.getString("rules"));
+    csv = jsonObject.getString(mappings.getString("csv"));
   }
 
   /**
