@@ -25,6 +25,7 @@ public class View implements ViewInterface {
 
     private Controller controller;
     private ViewController viewController;
+    private ViewUtility viewUtility;
     private Stage stage;
 
     private GridPane root;
@@ -36,6 +37,7 @@ public class View implements ViewInterface {
     public View(Controller controller) {
         this.controller = controller;
         this.viewController = new ViewController();
+        this.viewUtility = new ViewUtility();
         this.stage = new Stage();
         //TODO: this is probably bad design idk
         viewController.setView(this);
@@ -80,5 +82,5 @@ public class View implements ViewInterface {
         boardView.resetBoard();
     }
 
-    public void showError(String message) {ViewUtility.showError(message);}
+    public void showError(String message) {viewUtility.showError(message);}
 }
