@@ -58,6 +58,17 @@ public class Board implements Engine {
         Turn turn = move.getTurn();
         move.executeMove(piece, allPieces, end);
 
+        // remove piece from player if needed after turn
+        for(Location removeLocation : turn.getRemoved()){
+            for(PlayerInterface player : players){
+                for(PieceInterface p : player.getPieces()){
+                    if (p.getLocation().equals(removeLocation)) {
+                        player.removePiece(p);
+                    }
+                }
+            }
+        }
+
         System.out.println("Piece size: " + allPieces.size());
 
         // increment turn
@@ -65,11 +76,14 @@ public class Board implements Engine {
 
 
         System.out.println("before");
+        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
         System.out.println(this);
+
 
         updateLegalMoves();
 
         System.out.println("after");
+        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
         System.out.println(this);
 
         return turn;

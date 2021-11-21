@@ -38,6 +38,11 @@ public class Player implements PlayerInterface {
         score += piece.getScore();
     }
 
+    public void removePiece(PieceInterface piece){
+        remainingPieces.remove(piece);
+        score -= piece.getScore();
+    }
+
     /**
      * returns the player team
      * @return

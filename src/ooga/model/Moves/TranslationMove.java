@@ -33,13 +33,21 @@ public class TranslationMove extends Move {
         int col = piece.getLocation().getCol() + getdCol();
 
         Location potentialLocation = new Location(row, col);
+        boolean firstEncounter = false;
 
         while(isLegal(piece, potentialLocation, pieces)){
+            if(firstEncounter){
+                break;
+            }
 //            System.out.println(piece.getTeam() + piece.getName() + " " + isLegal(piece, potentialLocation, pieces));
             addEndLocation(potentialLocation);
 
             if(isLimited()) {
                 break;
+            }
+
+            if(pieceAt(potentialLocation, pieces) != null && !pieceAt(potentialLocation, pieces).getTeam().equals(piece.getTeam())){
+                firstEncounter = true;
             }
 
             row += getdRow();
