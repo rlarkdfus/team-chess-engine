@@ -82,6 +82,12 @@ public class BoardBuilder2 implements Builder {
     csvData = locationParser.getInitialLocations(csv);
     pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     iterateCSVData();
+    try {
+      buildEndConditionHandler(jsonObject.getString(mappings.getString("rules")));
+    }catch (Exception e){
+      throw new InvalidGameConfigException();
+    }
+
   }
 
   @Override
@@ -154,7 +160,6 @@ public class BoardBuilder2 implements Builder {
     boardColors = convertJSONArrayOfStrings(jsonObject.getJSONArray(mappings.getString("boardColors")));
     players = convertJSONArrayOfStrings(jsonObject.getJSONArray(mappings.getString("players")));
     bottomColor = players.get(0); //assumes that bottom player is the first given player color
-    buildEndConditionHandler(jsonObject.getString(mappings.getString("rules")));
     csv = jsonObject.getString(mappings.getString("csv"));
   }
 
