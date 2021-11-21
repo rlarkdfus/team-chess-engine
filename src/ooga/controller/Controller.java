@@ -33,8 +33,8 @@ public class Controller implements ControllerInterface {
 //  }
 
   @Override
-  public void uploadConfiguration(File file) {
-    BoardBuilder boardBuilder = new BoardBuilder(file);
+  public void uploadConfiguration(File file) throws Exception {
+    boardBuilder.build(file);
     buildGame(boardBuilder);
   }
 

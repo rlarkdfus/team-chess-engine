@@ -23,7 +23,6 @@ class BoardBuilder2Test {
 
   Builder boardBuilder;
   JsonParser jp;
-  LocationParser lp;
   String gameType;
   String team;
 

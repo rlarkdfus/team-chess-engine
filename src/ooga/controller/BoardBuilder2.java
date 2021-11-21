@@ -3,6 +3,7 @@ package ooga.controller;
 import static java.lang.Integer.parseInt;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +38,7 @@ public class BoardBuilder2 implements Builder {
   private LocationParser locationParser;
   private JsonParser jsonParser;
 
-  public BoardBuilder2(File file) {
+  public BoardBuilder2(File defaultFile) {
     jsonParser = new JsonParser();
     locationParser = new LocationParser();
     pieceList = new ArrayList<>();
@@ -45,24 +46,26 @@ public class BoardBuilder2 implements Builder {
     style = DEFAULT_STYLE;
 
     try {
-      build(jsonParser.loadFile(file));
-    } catch (Exception e) {
-      System.out.println("invalid csv");
+      build(defaultFile);
+    } catch (FileNotFoundException | CsvException | PlayerNotFoundException | InvalidPieceConfigException e) {
+      //default file shouldn't have any issues
       e.printStackTrace();
     }
+
   }
 
 
   /**
-   * Overridden interface method. builds a pieceinterface which is essentially the grid that holds
-   * the pieces of the game.
-   *
-   * @param jsonObject - parsed .json file
-   * @throws Exception - if the csv file in the JSONObject isn't valid
+   * Overridden interface method. builds a pieceinterface which is essentially the grid
+   * that holds the pieces of the game.
+   * @param file - the file to be parsed and used to build the json object
    * @returns - a pieceinterface grid
+   * @throws Exception - if the csv file in the JSONObject isn't valid
    */
   @Override
-  public void build(JSONObject jsonObject) throws Exception {
+  public void build(File file)
+      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException {
+    JSONObject jsonObject = jsonParser.loadFile(file);
     extractJSONObj(jsonObject);
     for (String player : players) {
       playerList.add(new Player(player));
@@ -85,36 +88,55 @@ public class BoardBuilder2 implements Builder {
    * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
    * pieceGrid
    */
-  private void iterateCSVData() throws Exception {
+  private void iterateCSVData()
+      throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
         String[] square = csvData.get(r).get(c).split("_");
-        if (square.length < 2) {           //signifies that this square is empty
+        if (square.length < 2) {
+          //signifies that this square is empty
           continue;
         }
 
-        String team = square[0];
-        String pieceName = square[1];
-        Location location = new Location(r, c);
-
-        int playerListIdx = determinePlayer(team);
-
-        String pieceJsonPath = "data/" + gameType + "/pieces/" + pieceName + ".json";
-        JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
-
-        JSONObject moveObjects = pieceJSON.getJSONObject("moveObjects");
-        List<Move> moves = makeMoveList(moveObjects.getJSONObject("move"), team);
-        List<Move> takeMoves = makeMoveList(moveObjects.getJSONObject("take"), team);
-
-        Map<String, Boolean> attributes = getAttributes(pieceJSON);
-        int score = pieceJSON.getInt("value");
-
-        Piece piece = new Piece(team, pieceName, location, moves, takeMoves, attributes, score);
+        int playerListIdx = determinePlayer(r,c,square[0]);
+        Piece piece = buildPiece(r,c);
         pieceList.add(new PieceViewBuilder(piece));
         playerList.get(playerListIdx).addPiece(piece);
       }
     }
   }
+
+  private Piece buildPiece(int r, int c) throws FileNotFoundException, InvalidPieceConfigException {
+    String[] square = csvData.get(r).get(c).split("_");
+    String team = square[0];
+    String pieceName = square[1];
+    Location location = new Location(r, c);
+
+    String pieceJsonPath = "data/" + gameType + "/pieces/" + pieceName + ".json";
+    JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
+    List<Move> moves;
+    List<Move> takeMoves;
+    Map<String, Boolean> attributes;
+    int value;
+    String errorKey = null;
+    try {
+      errorKey = "moveObjects";
+      JSONObject moveObjects = pieceJSON.getJSONObject("moveObjects");
+      errorKey = "movelist";
+      moves = makeMoveList(moveObjects.getJSONObject("move"), team);
+      errorKey = "takelist";
+      takeMoves = makeMoveList(moveObjects.getJSONObject("take"), team);
+      errorKey = "attributes";
+      attributes = getAttributes(pieceJSON);
+      errorKey = "value";
+      value = pieceJSON.getInt("value");
+    }catch (Exception e) {
+      throw new InvalidPieceConfigException(r, c, pieceJsonPath, errorKey);
+    }
+    return new Piece(team, pieceName, location, moves, takeMoves, attributes, value);
+
+  }
+
 
   private List<Move> makeMoveList(JSONObject moveTypes, String team) {
     List<Move> moveList = new ArrayList<>();
@@ -132,7 +154,7 @@ public class BoardBuilder2 implements Builder {
       if (newMove == null){
         continue;
       }
-      setArgs(team, newMove, arguments.getString(i));
+      setMoveArgs(team, newMove, arguments.getString(i));
       moves.add(newMove);
     }
     return moves;
@@ -151,7 +173,7 @@ public class BoardBuilder2 implements Builder {
     return null;
   }
 
-    private void setArgs (String team, Move newMove, String arg){
+    private void setMoveArgs(String team, Move newMove, String arg){
       String[] args = arg.split(",");
       if (args.length == 2) {
         int dRow = team.equals(bottomColor) ? -parseInt(args[0]) : parseInt(args[0]);
@@ -161,7 +183,7 @@ public class BoardBuilder2 implements Builder {
     }
 
 
-    private int determinePlayer (String team) throws Exception {
+    private int determinePlayer (int r, int c, String team) throws PlayerNotFoundException {
       int playerListIdx = -1;
       for (PlayerInterface p : playerList) {
         if (p.getTeam().equals(team)) {
@@ -169,8 +191,7 @@ public class BoardBuilder2 implements Builder {
         }
       }
       if (playerListIdx < 0) {
-        //todo: handle exception
-        throw new Exception();
+        throw new PlayerNotFoundException(r,c,team);
       }
       return playerListIdx;
     }
@@ -219,29 +240,4 @@ public class BoardBuilder2 implements Builder {
       }
       return ret;
     }
-
-//  public class PieceViewBuilder {
-//
-//    private String team;
-//    private String name;
-//    private Location location;
-//
-//    public PieceViewBuilder(Piece piece) {
-//      this.team = piece.getTeam();
-//      this.name = piece.getName();
-//      this.location = piece.getLocation();
-//    }
-//
-//    public String getTeam() {
-//      return team;
-//    }
-//
-//    public String getName() {
-//      return name;
-//    }
-//
-//    public Location getLocation() {
-//      return location;
-//    }
-//  }
-  }
+}

@@ -1,11 +1,12 @@
 package ooga.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 import ooga.model.PlayerInterface;
-import org.json.JSONObject;
 
 public interface Builder {
-  void build(JSONObject jsonObject) throws Exception;
+  void build(File file) throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException;
   public List<PieceViewBuilder> getInitialPieceViews();
 
   public List<PlayerInterface> getInitialPlayers();
