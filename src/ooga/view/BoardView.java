@@ -16,8 +16,6 @@ import ooga.model.PieceInterface;
 
 public class BoardView extends Group implements BoardViewInterface {
 
-    private final String[] CHESS_SIDES = {"w", "b"};
-
     private final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
     private final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
     private final String DEFAULT_PIECE_STYLE = "companion";
@@ -39,11 +37,7 @@ public class BoardView extends Group implements BoardViewInterface {
         renderBackground(row, col);
         renderInitialChessPieces(pieceViews, DEFAULT_PIECE_STYLE);
         this.setOnMouseClicked(e -> clickBoard(e));
-    }
-
-    //TODO: maybe refactor this cuz getters are bad
-    public BoardSquare[][] getBackground() {
-        return background;
+        background[0][0].check();
     }
 
     private void clickBoard(MouseEvent mouse) {

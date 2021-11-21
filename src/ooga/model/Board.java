@@ -11,7 +11,8 @@ public class Board implements Engine {
     public enum GameState {
         RUNNING,
         CHECKMATE,
-        STALEMATE
+        STALEMATE,
+        CHECK
     };
 
     private final String[] CHESS_SIDES = {"w", "b"};
