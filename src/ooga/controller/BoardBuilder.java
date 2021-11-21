@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 public class BoardBuilder implements Builder {
   public static final String DEFAULT_STYLE = "companion";
+  public static final String INVALID_JSON_ERROR = "Invalid JSON format";
 
   private String gameType;
   private String boardShape;
@@ -36,19 +37,13 @@ public class BoardBuilder implements Builder {
   private LocationParser locationParser;
   private JsonParser jsonParser;
 
-  public BoardBuilder(File file) {
+  public BoardBuilder(File file) throws Exception {
     jsonParser = new JsonParser();
     locationParser = new LocationParser();
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
     style = DEFAULT_STYLE;
-
-    try {
-      build(jsonParser.loadFile(file));
-    } catch (Exception e) {
-      System.out.println("invalid csv");
-      e.printStackTrace();
-    }
+    build(jsonParser.loadFile(file));
   }
 
 
@@ -122,8 +117,8 @@ public class BoardBuilder implements Builder {
       }
     }
     if (playerListIdx < 0){
-      //todo: handle exception
-      throw new Exception();
+      // TODO: what case is this an issue?
+      throw new Exception("player index out of bounds");
     }
     return playerListIdx;
   }
@@ -188,18 +183,23 @@ public class BoardBuilder implements Builder {
    * sets the instance variables to the values given by the inputted json object
    * @param jsonObject - jsonobject representation of the .json file
    */
-  private void extractJSONObj(JSONObject jsonObject) {
-    gameType = jsonObject.getString("type");
-    boardShape = jsonObject.getString("board");
-    style = jsonObject.getString("style");
-    boardSize = new ArrayList<>();
-    List<String> a = Arrays.asList(jsonObject.getString("boardSize").split("x"));
-    a.forEach((num) -> boardSize.add(parseInt(num)));
-    boardColors = extractColors(jsonObject.getJSONArray("boardColors"));
-    players = extractColors(jsonObject.getJSONArray("players"));
-    bottomColor = players.get(0); //assumes that bottom player is the first given player color
-    rules = jsonObject.getString("rules");
-    csv = jsonObject.getString("csv");
+  private void extractJSONObj(JSONObject jsonObject) throws Exception {
+    try {
+      gameType = jsonObject.getString("type");
+      boardShape = jsonObject.getString("board");
+      style = jsonObject.getString("style");
+      boardSize = new ArrayList<>();
+      List<String> a = Arrays.asList(jsonObject.getString("boardSize").split("x"));
+      a.forEach((num) -> boardSize.add(parseInt(num)));
+      boardColors = extractColors(jsonObject.getJSONArray("boardColors"));
+      players = extractColors(jsonObject.getJSONArray("players"));
+      bottomColor = players.get(0); //assumes that bottom player is the first given player color
+      rules = jsonObject.getString("rules");
+      csv = jsonObject.getString("csv");
+    }
+    catch (Exception e) {
+      throw new Exception(INVALID_JSON_ERROR);
+    }
   }
 
   /**

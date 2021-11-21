@@ -18,24 +18,26 @@ public class BoardStyleUI extends GridPane implements UIInterface {
             "horsey", "pirouetti", "spatial", "staunty");
 
     private ViewController viewController;
+    private ViewUtility viewUtility;
     private ColorPicker colorPicker1;
     private ColorPicker colorPicker2;
 
     public BoardStyleUI(ViewController viewController) {
         this.viewController = viewController;
+        this.viewUtility = new ViewUtility();
         this.getStyleClass().add("SettingsUI");
         createUI();
     }
 
     @Override
     public void createUI() {
-        colorPicker1 = ViewUtility.makeColorPicker("board_color_1", LICHESS_COLOR1, color -> viewController.handleChangeBoardColor(color, colorPicker2.getValue()));
-        colorPicker2 = ViewUtility.makeColorPicker("board_color_2", LICHESS_COLOR2, color -> viewController.handleChangeBoardColor(colorPicker1.getValue(), color));
+        colorPicker1 = viewUtility.makeColorPicker("board_color_1", LICHESS_COLOR1, color -> viewController.handleChangeBoardColor(color, colorPicker2.getValue()));
+        colorPicker2 = viewUtility.makeColorPicker("board_color_2", LICHESS_COLOR2, color -> viewController.handleChangeBoardColor(colorPicker1.getValue(), color));
 
-        this.add(ViewUtility.makeLabel("board_color"), 0, 0);
+        this.add(viewUtility.makeLabel("board_color"), 0, 0);
         this.add(colorPicker1, 1, 0);
         this.add(colorPicker2, 1, 1);
-        this.add(ViewUtility.makeLabel("piece_style_label"), 0, 3);
-        this.add(ViewUtility.makeComboBox("piece_style", PIECE_STYLES, style -> viewController.handleChangePieceStyle(style)), 1, 3);
+        this.add(viewUtility.makeLabel("piece_style_label"), 0, 3);
+        this.add(viewUtility.makeComboBox("piece_style", PIECE_STYLES, style -> viewController.handleChangePieceStyle(style)), 1, 3);
     }
 }

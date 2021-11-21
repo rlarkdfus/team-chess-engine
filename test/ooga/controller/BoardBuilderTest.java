@@ -26,12 +26,11 @@ class BoardBuilderTest {
   String gameType;
 
   @BeforeEach
-  void setUp() {
+  void setUp() throws Exception {
     String testFile = "data/chess/oneBlackPawn.json";
     boardBuilder = new BoardBuilder(new File(testFile));
     gameType = "chess";
     jp = new JsonParser();
-
   }
 
   @Test
