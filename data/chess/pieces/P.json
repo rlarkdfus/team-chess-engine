@@ -1,8 +1,8 @@
 {
   "moves": {
-    "TranslationMove": ["1, 0,false"],
-    "PawnMove": ["2,0,false"],
-    "EnPassantMove": ["1, -1,true","1, 1,true"]
+    "TranslationMove": ["1, 0,false,limited"],
+    "PawnMove": ["2,0,false,limited"],
+    "EnPassantMove": ["1, -1,true,limited","1, 1,true,limited"]
   },
   "attributes":{
     "limited": true,

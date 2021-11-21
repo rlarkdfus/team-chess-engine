@@ -14,6 +14,7 @@ public abstract class Move {
     private int dCol;
     private boolean take;
     private List<Location> endLocations;
+    private boolean limited;
 
     public abstract List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
 

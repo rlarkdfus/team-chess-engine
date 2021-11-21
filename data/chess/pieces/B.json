@@ -1,6 +1,6 @@
 {
   "moves": {
-    "TranslationMove": ["1, -1","1, 1","-1, -1","-1, 1"]
+    "TranslationMove": ["1, -1, takes, unlimited","1, 1, takes, unlimited","-1, -1, takes, unlimited","-1, 1, takes, unlimited"]
   },
   "attributes":{
     "limited": false,

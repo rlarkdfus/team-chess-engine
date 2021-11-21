@@ -1,10 +1,10 @@
 {
   "moves": {
     "TranslationMove": [
-      "1,0,true",
-      "0,1,true",
-      "-1,0,true",
-      "0,-1,true"
+      "1,0,true,unlimited",
+      "0,1,true,unlimited",
+      "-1,0,true,unlimited",
+      "0,-1,true,unlimited"
     ]
   },
   "attributes":{
