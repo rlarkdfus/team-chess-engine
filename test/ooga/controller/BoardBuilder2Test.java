@@ -76,6 +76,7 @@ class BoardBuilder2Test {
         assertEquals(1, pieces.size(), "black team should only have 1 piece. got: " + pieces.size());
         PieceInterface piece = pieces.get(0);
         assertEquals("P",piece.getName(),"should be a pawn. got: " + piece.getName());
+        assertEquals(1, piece.getScore(), "piece score should be 1. got: " + piece.getScore());
       }else{
         assertEquals("w", p.getTeam(), "other team should be white. got: " + p.getTeam());
         List<PieceInterface> pieces = p.getPieces();
@@ -93,7 +94,6 @@ class BoardBuilder2Test {
       assertEquals(team,p.getTeam(),"team should be b. got: " + p.getTeam());
       assertEquals(0,p.getLocation().getRow(),"location row should be 0. got: " + p.getLocation().getRow());
       assertEquals(0,p.getLocation().getCol(),"location col should be 0. got: " + p.getLocation().getCol());
-
     }
   }
 
@@ -132,25 +132,12 @@ class BoardBuilder2Test {
     List<Move> actual;
     List<Move> expected;
 
-    Method makeMoveList = boardBuilder.getClass()
-        .getDeclaredMethod("makeMoveList", JSONObject.class, String.class);
-    makeMoveList.setAccessible(true);
+    Method getMoves = boardBuilder.getClass()
+        .getDeclaredMethod("getMoves", JSONObject.class, String.class);
+    getMoves.setAccessible(true);
 
-    actual = (List<Move>) makeMoveList.invoke(boardBuilder, getPiece().getJSONObject("moveObjects").getJSONObject("move"), team);
-    expected =List.of(new TranslationMove(), new PawnMove());
-
-    assertEquals(expected.size(), actual.size(),"wrong number of moves.");
-
-    for (int i = 0; i<actual.size(); i++){
-      Class expectedClass = expected.get(i).getClass();
-      Class actualClass = actual.get(i).getClass();
-
-      assertEquals(expectedClass, actualClass, "wrong type of Move! expected: " + expectedClass + ". got: " + actualClass);
-
-    }
-
-    actual = (List<Move>) makeMoveList.invoke(boardBuilder, getPiece().getJSONObject("moveObjects").getJSONObject("take"), team);
-    expected =List.of(new EnPassantMove(),new TranslationMove(),new TranslationMove());
+    actual = (List<Move>) getMoves.invoke(boardBuilder, getPiece(), team);
+    expected =List.of(new EnPassantMove(),new EnPassantMove(),new TranslationMove(),new PawnMove());
 
     assertEquals(expected.size(), actual.size(),"wrong number of moves.");
 
@@ -159,7 +146,6 @@ class BoardBuilder2Test {
       Class actualClass = actual.get(i).getClass();
 
       assertEquals(expectedClass, actualClass, "wrong type of Move! expected: " + expectedClass + ". got: " + actualClass);
-
     }
   }
 

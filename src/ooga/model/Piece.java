@@ -18,7 +18,6 @@ public class Piece implements PieceInterface {
   private String name;
   private Map<String, Boolean> attributes;
   private List<Move> moves;
-  private List<Move> takeMoves;
 
   public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
     this.location = location;
@@ -30,12 +29,11 @@ public class Piece implements PieceInterface {
     this.attributes = attributes;
   }
   //Todo: make this the default constructor
-  public Piece(String team, String name, Location location, List<Move> moves, List<Move> takeMoves, Map<String, Boolean> attributes, int score) {
+  public Piece(String team, String name, Location location, List<Move> moves, Map<String, Boolean> attributes, int score) {
     this.location = location;
     this.team = team;
     this.moved = false;
     this.moves = moves;
-    this.takeMoves = takeMoves;
     this.score = score;
     this.name = name;
     this.attributes = attributes;
@@ -148,6 +146,6 @@ public class Piece implements PieceInterface {
 
   @Override
   public Piece copy() {
-    return new Piece(this.team, this.name, this.location, this.moves, this.takeMoves, this.attributes, this.score);
+    return new Piece(this.team, this.name, this.location, this.moves, this.attributes, this.score);
   }
 }

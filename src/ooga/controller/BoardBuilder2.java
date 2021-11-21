@@ -1,5 +1,6 @@
 package ooga.controller;
 
+import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 
 import java.io.File;
@@ -20,6 +21,7 @@ import org.json.JSONObject;
 public class BoardBuilder2 implements Builder {
 
   public static final String DEFAULT_STYLE = "companion";
+  public static final int ARG_LENGTH = 3;
 
   private String gameType;
   private String boardShape;
@@ -120,17 +122,12 @@ public class BoardBuilder2 implements Builder {
     JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
 
     List<Move> moves;
-    List<Move> takeMoves;
     Map<String, Boolean> attributes;
     int value;
     String errorKey = null;
     try {
-      errorKey = "moveObjects";
-      JSONObject moveObjects = pieceJSON.getJSONObject("moveObjects");
-      errorKey = "movelist";
-      moves = makeMoveList(moveObjects.getJSONObject("move"), team);
-      errorKey = "takelist";
-      takeMoves = makeMoveList(moveObjects.getJSONObject("take"), team);
+      errorKey = "moves";
+      moves = getMoves(pieceJSON,team);
       errorKey = "attributes";
       attributes = getAttributes(pieceJSON);
       errorKey = "value";
@@ -138,12 +135,13 @@ public class BoardBuilder2 implements Builder {
     } catch (Throwable e) {
       throw new InvalidPieceConfigException(r, c, pieceJsonPath, errorKey);
     }
-    return new Piece(team, pieceName, location, moves, takeMoves, attributes, value);
+    return new Piece(team, pieceName, location, moves, attributes, value);
 
   }
 
 
-  private List<Move> makeMoveList(JSONObject moveTypes, String team) throws Throwable {
+  private List<Move> getMoves(JSONObject pieceObj, String team) throws Throwable {
+    JSONObject moveTypes = pieceObj.getJSONObject("moves");
     List<Move> moveList = new ArrayList<>();
     for (String moveType : moveTypes.keySet()) {
       List<Move> newMoves = makeTypeOfMove(moveType, (JSONArray) moveTypes.get(moveType), team);
@@ -172,12 +170,15 @@ public class BoardBuilder2 implements Builder {
     return newMove;
   }
 
-  private void setMoveArgs(String team, Move newMove, String arg) {
+  private void setMoveArgs(String team, Move newMove, String arg) throws Exception {
     String[] args = arg.split(",");
-    if (args.length == 2) {
+    if (args.length == ARG_LENGTH) {
       int dRow = team.equals(bottomColor) ? -parseInt(args[0]) : parseInt(args[0]);
       int dCol = parseInt(args[1].strip());
-      newMove.setMove(dRow, dCol);
+      boolean takes = parseBoolean(args[2].strip());
+      newMove.setMove(dRow, dCol, takes);
+    }else{
+      throw new Exception();
     }
   }
 

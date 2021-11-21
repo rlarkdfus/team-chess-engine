@@ -26,10 +26,10 @@ public abstract class Move {
     abstract boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces);
 
 
-    public void setMove(int dRow, int dCol){ //TODO: boolean take
+    public void setMove(int dRow, int dCol, boolean take){ //TODO: boolean take
         this.dRow = dRow;
         this.dCol = dCol;
-        this.take = true;
+        this.take = take;
     }
     // [[(1,0), (2,0), ...],[(1,1),(2,1),...],...[...]]
 

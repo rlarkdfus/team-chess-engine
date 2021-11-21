@@ -1,35 +1,21 @@
 {
-  "moveObjects": {
-    "move": {
-      "TranslationMove": [
-        "1, -1",
-        "1, 1",
-        "-1, -1",
-        "-1, 1",
-        "1, 0",
-        "0, 1",
-        "-1, 0",
-        "0, -1"
-      ],
-      "ShortCastleMove": [
-        "null"
-      ],
-      "LongCastleMove": [
-        "null"
-      ]
-    },
-    "take": {
-      "TranslationMove": [
-        "1, -1",
-        "1, 1",
-        "-1, -1",
-        "-1, 1",
-        "1, 0",
-        "0, 1",
-        "-1,0",
-        "0,-1"
-      ]
-    }
+  "moves": {
+    "TranslationMove": [
+      "1, -1,true",
+      "1, 1,true",
+      "-1, -1,true",
+      "-1, 1,true",
+      "1, 0,true",
+      "0, 1,true",
+      "-1, 0,true",
+      "0, -1,true"
+    ],
+    "ShortCastleMove": [
+      "0,2,false"
+    ],
+    "LongCastleMove": [
+      "0,-3,false"
+    ]
   },
   "attributes": {
     "limited": true,

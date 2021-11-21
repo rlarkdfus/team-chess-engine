@@ -1,11 +1,6 @@
 {
-  "moveObjects": {
-    "move": {
-      "TranslationMove": ["1, -1","1, 1","-1, -1","-1, 1"]
-    },
-    "take": {
-      "Translationmove": ["1, -1","1, 1","-1, -1","-1, 1"]
-    }
+  "moves": {
+    "Translationmove": ["1, -1,true","1, 1,true","-1, -1,true","-1, 1,true"]
   },
   "attributes":{
     "limited": false,
