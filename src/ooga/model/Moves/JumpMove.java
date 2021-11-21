@@ -27,7 +27,6 @@ public class JumpMove extends Move {
         Location potentialLocation = new Location(row, col);
 
         while(isLegal(piece, potentialLocation, pieces)){
-
             addEndLocation(potentialLocation);
 
             if(isLimited()) {
