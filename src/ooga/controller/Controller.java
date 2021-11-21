@@ -39,8 +39,10 @@ public class Controller implements ControllerInterface {
 
   @Override
   public void uploadConfiguration(File file) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    BoardBuilder boardBuilder = new BoardBuilder(file);
-    buildGame(boardBuilder);
+    if (file != null) {
+      BoardBuilder boardBuilder = new BoardBuilder(file);
+      buildGame(boardBuilder);
+    }
   }
 
   @Override
@@ -65,9 +67,9 @@ public class Controller implements ControllerInterface {
     this.view.initializeDisplay(boardBuilder.getInitialPieceViews());
   }
 
-  public void downloadGame() {
+  public void downloadGame(String filePath) {
     try {
-      locationWriter.saveCSV(ViewUtility.saveCSVPath(), model.getPlayers());
+      locationWriter.saveCSV(filePath, model.getPlayers());
     }
     catch (IOException ignored) {
     }

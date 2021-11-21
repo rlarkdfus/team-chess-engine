@@ -94,7 +94,7 @@ public class ViewTest extends DukeApplicationTest {
         testMovePiece(WHITE, PAWN, whiteStart, whiteEnd);
         Button reset = lookup("#new_game").queryButton();
         clickOn(reset);
-        assertThrows(EmptyNodeQueryException.class, () -> queryPieceView(WHITE, PAWN, whiteStart, STYLE_COMPANION));
+        assertDoesNotThrow(() -> queryPieceView(WHITE, PAWN, whiteStart, STYLE_COMPANION));
     }
 
     @Test

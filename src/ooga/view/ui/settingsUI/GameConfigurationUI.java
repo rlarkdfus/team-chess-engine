@@ -4,8 +4,7 @@ import javafx.scene.layout.GridPane;
 import ooga.controller.Controller;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
-
-import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class GameConfigurationUI extends GridPane implements UIInterface {
@@ -21,12 +20,11 @@ public class GameConfigurationUI extends GridPane implements UIInterface {
     @Override
     public void createUI() {
         this.add(ViewUtility.makeLabel("variation"), 0, 0);
-        this.add(ViewUtility.makeComboBox("game_variation", List.of("chess", "moreChess"), e -> System.out.println(e)), 1, 0);
+        this.add(ViewUtility.makeComboBox("game_variation", List.of("chess", "moreChess"), System.out::println), 1, 0);
         this.add(ViewUtility.makeButton("upload_configuration", e -> {
-            System.out.println("button pressed");
             try {
-                controller.uploadConfiguration(new File("data/chess/defaultChess.json"));
-            } catch (Exception ex) {
+                controller.uploadConfiguration(ViewUtility.selectJSONFile());
+            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException ex) {
                 ex.printStackTrace();
             }
         }), 1, 1);

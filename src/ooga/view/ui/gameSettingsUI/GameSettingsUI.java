@@ -25,7 +25,7 @@ public class GameSettingsUI extends GridPane implements UIInterface {
         this.add(ViewUtility.makeGridPane("move_history_gridpane"), 0, 3);
         this.add(ViewUtility.makeButton("download_game", e -> {
             try {
-                controller.downloadGame();
+                controller.downloadGame(ViewUtility.saveCSVPath());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
