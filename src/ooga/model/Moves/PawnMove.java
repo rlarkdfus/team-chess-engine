@@ -1,9 +1,8 @@
 package ooga.model.Moves;
 
+import java.util.List;
 import ooga.Location;
 import ooga.model.PieceInterface;
-
-import java.util.List;
 
 public class PawnMove extends Move { //TODO: pawn move takes in +-2 depending on side
 

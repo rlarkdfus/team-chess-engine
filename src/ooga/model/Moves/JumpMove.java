@@ -16,7 +16,6 @@ public class JumpMove extends Move {
             }
         }
         movePiece(piece, end);
-
         return pieces;
     }
 

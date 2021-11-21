@@ -1,14 +1,14 @@
 {
   "moves": {
     "JumpMove": [
-      "1, -2,true,limited",
-      "1, 2,true,limited",
-      "2, -1,true,limited",
-      "2, 1,true,limited",
-      "-1,-2,true,limited",
-      "-1,2,true,limited",
-      "-2,-1,true,limited",
-      "-2,1,true,limited"
+      "1, -2,takes,limited",
+      "1, 2,takes,limited",
+      "2, -1,takes,limited",
+      "2, 1,takes,limited",
+      "-1,-2,takes,limited",
+      "-1,2,takes,limited",
+      "-2,-1,takes,limited",
+      "-2,1,takes,limited"
     ]
   },
   "attributes":{

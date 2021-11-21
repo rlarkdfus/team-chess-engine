@@ -1,14 +1,14 @@
 {
   "moves": {
     "TranslationMove": [
-      "1, -1,true,unlimited",
-      "1, 1,true,unlimited",
-      "-1, -1,true,unlimited",
-      "-1, 1,true,unlimited",
-      "1,0,true,unlimited",
-      "0,1,true,unlimited",
-      "-1,0,true,unlimited",
-      "0,-1,true,unlimited"
+      "1, -1,takes,unlimited",
+      "1, 1,takes,unlimited",
+      "-1, -1,takes,unlimited",
+      "-1, 1,takes,unlimited",
+      "1,0,takes,unlimited",
+      "0,1,takes,unlimited",
+      "-1,0,takes,unlimited",
+      "0,-1,takes,unlimited"
     ]
   },
   "attributes":{

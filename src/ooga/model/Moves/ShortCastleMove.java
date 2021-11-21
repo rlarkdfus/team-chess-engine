@@ -1,9 +1,8 @@
 package ooga.model.Moves;
 
+import java.util.List;
 import ooga.Location;
 import ooga.model.PieceInterface;
-
-import java.util.List;
 
 public class ShortCastleMove extends Move {
 
