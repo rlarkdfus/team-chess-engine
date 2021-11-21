@@ -8,8 +8,9 @@ import ooga.model.PlayerInterface;
 public interface Builder {
   void build(File file)
       throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException;
-  public List<PieceViewBuilder> getInitialPieceViews();
+  List<PieceViewBuilder> getInitialPieceViews();
 
-  public List<PlayerInterface> getInitialPlayers();
+  List<PlayerInterface> getInitialPlayers();
 
+  void getEndConditionHandler();
 }
