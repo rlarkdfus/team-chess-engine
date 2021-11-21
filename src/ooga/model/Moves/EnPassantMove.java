@@ -1,6 +1,7 @@
 package ooga.model.Moves;
 
 import ooga.Location;
+import ooga.Turn;
 import ooga.model.PieceInterface;
 
 import java.util.ArrayList;
@@ -12,6 +13,9 @@ public class EnPassantMove extends Move {
         pawn.moveTo(end);
         Location enemyPawnLocation = new Location(end.getRow() - getdRow(), end.getCol());
         pieces.remove(pieceAt(enemyPawnLocation, pieces));
+
+        turn.movePiece(pawn.getLocation(), end);
+        turn.removePiece(enemyPawnLocation);
         return pieces;
     }
 
