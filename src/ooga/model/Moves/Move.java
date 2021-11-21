@@ -15,12 +15,18 @@ public abstract class Move {
     private boolean take;
     private List<Location> endLocations;
 
+    public Move() {
+        this.turn = new Turn();
+        this.endLocations = new ArrayList<>();
+    }
+
     public abstract List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
 
-    abstract void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces);
-
+    public abstract void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces);
 
     public List<Location> getEndLocations() {
+        for(Location location : endLocations) {
+        }
         return endLocations;
     }
 
@@ -140,6 +146,7 @@ public abstract class Move {
     }
 
     protected void addEndLocation(Location location) {
+        System.out.println(location);
         endLocations.add(location);
     }
 

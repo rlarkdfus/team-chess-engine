@@ -130,7 +130,7 @@ public class Piece implements PieceInterface {
   }
 
   @Override
-  public List<Location> getAllMoves() {
+  public List<Location> getAllEndLocations() {
     List<Location> endLocations = new ArrayList<>();
     for(Move move : moves) {
       endLocations.addAll(move.getEndLocations());
@@ -146,5 +146,12 @@ public class Piece implements PieceInterface {
       }
     }
     return null;
+  }
+
+  @Override
+  public void updateMoves(List<PieceInterface> pieces) {
+    for(Move move : moves) {
+      move.updateMoveLocations(this, pieces);
+    }
   }
 }

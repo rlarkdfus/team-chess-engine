@@ -20,8 +20,7 @@ public interface PieceInterface {
     boolean hasMoved();
     boolean isFirstMove();
     Piece copy();
-    List<Location> getAllMoves();
-
+    List<Location> getAllEndLocations();
     Move getMove(Location end);
-
+    void updateMoves(List<PieceInterface> pieces);
 }

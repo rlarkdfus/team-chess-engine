@@ -8,6 +8,9 @@ import java.util.List;
 
 public class TranslationMove extends Move {
 
+    public TranslationMove() {
+    }
+
     @Override
     public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         List<PieceInterface> takenPieces = new ArrayList<>();
@@ -25,7 +28,7 @@ public class TranslationMove extends Move {
     }
 
     @Override
-    void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
+    public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
         resetEndLocations();
         int row = piece.getLocation().getRow() + getdRow();
         int col = piece.getLocation().getCol() + getdCol();
@@ -33,7 +36,7 @@ public class TranslationMove extends Move {
         Location potentialLocation = new Location(row, col);
 
         while(isLegal(piece, potentialLocation, pieces)){
-
+            System.out.println(piece.getTeam() + piece.getName() + " " + isLegal(piece, potentialLocation, pieces));
             addEndLocation(potentialLocation);
 
             if(piece.isLimited()) {

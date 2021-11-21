@@ -28,10 +28,11 @@ public class Board implements Engine {
     private void updateLegalMoves() {
         allPieces = new ArrayList<>();
         for(PlayerInterface player : players) {
-            for(PieceInterface piece : player.getPieces()){
-                player.setLegalMoves(piece, piece.getAllMoves());
-                allPieces.addAll(player.getPieces());
-            }
+            allPieces.addAll(player.getPieces());
+        }
+
+        for(PieceInterface piece : allPieces) {
+            piece.updateMoves(allPieces);
         }
     }
 
@@ -90,7 +91,12 @@ public class Board implements Engine {
      * @return
      */
     public List<Location> getLegalMoves(Location location){
-        return findPlayerTurn(turnCount).getLegalMoves(location);
+        for(PieceInterface piece : allPieces) {
+            if(piece.getLocation().equals(location)) {
+                return piece.getEndLocations();
+            }
+        }
+        return null;
     }
 
     /**

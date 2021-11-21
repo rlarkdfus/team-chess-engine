@@ -17,7 +17,7 @@ public class PawnMove extends Move { //TODO: pawn move takes in +-2 depending on
     }
 
     @Override
-    void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
+    public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
         resetEndLocations();
         int row = piece.getLocation().getRow() + getdRow();
         int col = piece.getLocation().getCol();
