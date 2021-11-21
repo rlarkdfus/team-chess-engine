@@ -22,18 +22,21 @@ public class Board implements Engine {
     public Board(List<PlayerInterface> players) {
         this.players = players;
         turnCount = 0;
-        updateLegalMoves();
-    }
-
-    private void updateLegalMoves() {
         allPieces = new ArrayList<>();
         for(PlayerInterface player : players) {
             allPieces.addAll(player.getPieces());
         }
+        updateLegalMoves();
+    }
 
+    private void updateLegalMoves() {
         for(PieceInterface piece : allPieces) {
-            piece.updateMoves(allPieces);
+            piece.updateMoves(new ArrayList<>(allPieces));
         }
+
+//        for(Iterator<PieceInterface> iterator = allPieces.iterator(); iterator.hasNext();){
+//            iterator.next().updateMoves(allPieces);
+//        }
     }
 
     /**
@@ -47,19 +50,29 @@ public class Board implements Engine {
         for(PieceInterface p : allPieces) {
             if(p.getLocation().equals(start)) {
                 piece = p;
+                break;
             }
         }
 
         Move move = piece.getMove(end);
-        allPieces = move.executeMove(piece, allPieces, end);
+        Turn turn = move.getTurn();
+        move.executeMove(piece, allPieces, end);
+
+        System.out.println("Piece size: " + allPieces.size());
 
         // increment turn
         turnCount++;
 
-        // update legal moves
+
+        System.out.println("before");
+        System.out.println(this);
+
         updateLegalMoves();
 
-        return move.getTurn();
+        System.out.println("after");
+        System.out.println(this);
+
+        return turn;
     }
 
     /**
@@ -115,5 +128,33 @@ public class Board implements Engine {
 
     private PlayerInterface findPlayerTurn(int turn) {
         return players.get(turn % players.size());
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
+        for(int i = 0; i < 8; i++) {
+            str.append(i+"\t|");
+//            str.append("|");
+            for(int j = 0; j < 8; j++) {
+                Location location = new Location(i, j);
+                boolean found = false;
+
+                for(PieceInterface piece : allPieces) {
+                    if(piece.getLocation().equals(location)) {
+                        str.append(piece.toString() + "\t");
+                        found = true;
+                    }
+                }
+                if(!found){
+                    str.append("\t");
+                }
+                str.append("|");
+            }
+            str.append("\n");
+        }
+        str.append("__________________________________\n");
+        return str.toString();
     }
 }

@@ -1,5 +1,6 @@
 package ooga.model.Moves;
 
+import java.util.ArrayList;
 import java.util.List;
 import ooga.Location;
 import ooga.model.PieceInterface;
@@ -7,22 +8,19 @@ import ooga.model.PieceInterface;
 public class PawnMove extends Move { //TODO: pawn move takes in +-2 depending on side
 
     @Override
-    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        Location location = new Location(piece.getLocation().getRow() + getdRow(), piece.getLocation().getCol());
-        getTurn().movePiece(piece.getLocation(), end);
-        piece.moveTo(location);
-        return pieces;
+    public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
+        movePiece(piece, end);
     }
 
     @Override
-    public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
-        resetEndLocations();
-        int row = piece.getLocation().getRow() + getdRow();
-        int col = piece.getLocation().getCol();
+    public void updateMoveLocations(PieceInterface pawn, List<PieceInterface> pieces) {
+        resetMove();
+        int row = pawn.getLocation().getRow() + getdRow();
+        int col = pawn.getLocation().getCol()+ getdCol();
 
         Location potentialLocation = new Location(row, col);
 
-        if(isLegal(piece, potentialLocation, pieces)) {
+        if(isLegal(pawn, potentialLocation, pieces)) {
             addEndLocation(potentialLocation);
         }
     }
@@ -35,6 +33,10 @@ public class PawnMove extends Move { //TODO: pawn move takes in +-2 depending on
             return false;
         }
 
-        return tryMove(pawn, potentialLocation, pieces);
+        if(pawn.hasMoved()) {
+            return false;
+        }
+
+        return tryMove(pawn, potentialLocation, new ArrayList<>(pieces));
     }
 }

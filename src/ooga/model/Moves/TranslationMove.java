@@ -9,27 +9,26 @@ import java.util.List;
 public class TranslationMove extends Move {
 
     public TranslationMove() {
+        super();
     }
 
     @Override
-    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        List<PieceInterface> takenPieces = new ArrayList<>();
-        for(PieceInterface occupied : pieces) {
+    public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
+        List<PieceInterface> board = new ArrayList<>(pieces);
+        for(PieceInterface occupied : new ArrayList<>(pieces)) {
             if(occupied.getLocation().equals(end)) {
-                takenPieces.add(occupied);
-                getTurn().removePiece(end);
+                removePiece(occupied, pieces);
+                board.remove(occupied);
             }
         }
-        pieces.removeAll(takenPieces);
+        movePiece(piece, end);
 
-        getTurn().movePiece(piece.getLocation(), end);
-        piece.moveTo(end);
-        return pieces;
+//        return board;
     }
 
     @Override
     public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
-        resetEndLocations();
+        resetMove();
         int row = piece.getLocation().getRow() + getdRow();
         int col = piece.getLocation().getCol() + getdCol();
 
@@ -64,12 +63,12 @@ public class TranslationMove extends Move {
             }
         }
 
-        if(potentialPiece != null && potentialPiece.getTeam().equals(piece.getTeam())) {
-            return false;
-        } else if (potentialPiece != null && !canTake()) { // piece is not the same team but cannot take
-            return false;
+        if(potentialPiece != null) { //if there is a piece
+            if(potentialPiece.getTeam().equals(piece.getTeam()) || canTake()) {
+                return false;
+            }
         }
 
-        return tryMove(piece, potentialLocation, pieces);
+        return tryMove(piece, potentialLocation, new ArrayList<>(pieces));
     }
 }
