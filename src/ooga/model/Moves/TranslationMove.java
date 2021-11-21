@@ -36,7 +36,7 @@ public class TranslationMove extends Move {
 
             addEndLocation(potentialLocation);
 
-            if(piece.isLimited()) {
+            if(isLimited()) {
                 break;
             }
 

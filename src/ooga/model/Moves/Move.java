@@ -29,10 +29,11 @@ public abstract class Move {
     abstract boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces);
 
 
-    public void setMove(int dRow, int dCol, boolean take){ //TODO: boolean take
+    public void setMove(int dRow, int dCol, boolean take, boolean limited){ //TODO: boolean take
         this.dRow = dRow;
         this.dCol = dCol;
         this.take = take;
+        this.limited = limited;
     }
     // [[(1,0), (2,0), ...],[(1,1),(2,1),...],...[...]]
 
@@ -155,6 +156,10 @@ public abstract class Move {
 
     protected boolean canTake() {
         return take;
+    }
+
+    protected boolean isLimited(){
+        return limited;
     }
 
     public Turn getTurn() {
