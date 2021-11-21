@@ -17,7 +17,7 @@ class LocationWriterTest {
   private LocationWriter locWriter;
   private LocationParser locationParser;
   private JsonParser jsonParser;
-  private BoardBuilder boardBuilder;
+  private Builder boardBuilder;
   private File file;
   private Path directory;
   @TempDir
@@ -29,7 +29,7 @@ class LocationWriterTest {
     locationParser = new LocationParser();
     jsonParser = new JsonParser();
     file = new File("data/chess/defaultChess.json");
-    boardBuilder = new BoardBuilder(file);
+    boardBuilder = new BoardBuilder2(file);
 
     directory = predirectory.resolve("testfile1.csv");
   }

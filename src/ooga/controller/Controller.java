@@ -16,7 +16,7 @@ public class Controller implements ControllerInterface {
   private ViewInterface view;
   Builder boardBuilder;
   public Controller(){
-    boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+    boardBuilder = new BoardBuilder2(DEFAULT_CHESS_CONFIGURATION);
     this.view = new View(this);
     buildGame(boardBuilder);
   }

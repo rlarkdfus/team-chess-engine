@@ -1,0 +1,9 @@
+{
+  "type": "chess",
+  "board": "square",
+  "boardSize": "8x8",
+  "players": ["w", "b"],
+  "rules": "default",
+  "style": "companion",
+  "csv": "data/chess/locations/oneBlackPawn.csv"
+}

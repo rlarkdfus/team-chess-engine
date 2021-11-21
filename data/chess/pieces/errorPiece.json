@@ -1,0 +1,15 @@
+{
+  "moveObjects": {
+    "move": {
+      "TranslationMove": ["1, -1","1, 1","-1, -1","-1, 1"]
+    },
+    "take": {
+      "Translationmove": ["1, -1","1, 1","-1, -1","-1, 1"]
+    }
+  },
+  "attributes":{
+    "limited": false,
+    "canTransform": false
+  },
+  "value": 3
+}

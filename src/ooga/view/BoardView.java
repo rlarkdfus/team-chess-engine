@@ -8,7 +8,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.Turn;
-import ooga.controller.BoardBuilder;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
 import ooga.controller.PieceViewBuilder;

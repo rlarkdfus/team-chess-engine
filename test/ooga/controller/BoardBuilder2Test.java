@@ -3,6 +3,7 @@ package ooga.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,9 +34,38 @@ class BoardBuilder2Test {
     gameType = "chess";
     team = "b";
     jp = new JsonParser();
-
   }
 
+  @Test
+  void testExceptions(){
+    String filepath = "data/chess/errorGameJson.json";
+    try {
+      boardBuilder.build(new File(filepath));
+    } catch (Exception e) {
+      assertEquals(InvalidGameConfigException.class, e.getClass(),"should throw InvalidGameConfigException");
+    }
+
+    filepath = "data/chess/errorCSVJson.json";
+    try {
+      boardBuilder.build(new File(filepath));
+    } catch (Exception e) {
+      assertEquals(CsvException.class, e.getClass(),"should throw CsvException");
+    }
+
+    filepath = "data/chess/errorPieceJson.json";
+    try {
+      boardBuilder.build(new File(filepath));
+    } catch (Exception e) {
+      assertEquals(InvalidPieceConfigException.class, e.getClass(),"should throw InvalidPieceConfigException");
+    }
+
+    filepath = "data/chess/errorPlayerJson.json";
+    try {
+      boardBuilder.build(new File(filepath));
+    } catch (Exception e) {
+      assertEquals(PlayerNotFoundException.class, e.getClass(),"should throw PlayerNotFoundException");
+    }
+  }
   @Test
   void testPlayerList() {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
@@ -82,7 +112,7 @@ class BoardBuilder2Test {
 
   @Test
   void testGetAttributes()
-      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, FileNotFoundException {
 
     Method getAttributes = boardBuilder.getClass()
         .getDeclaredMethod("getAttributes", JSONObject.class);
@@ -97,7 +127,7 @@ class BoardBuilder2Test {
 
   @Test
   void testMakeMoveLists()
-      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, FileNotFoundException {
 
     List<Move> actual;
     List<Move> expected;
@@ -133,7 +163,8 @@ class BoardBuilder2Test {
     }
   }
 
-  private JSONObject getPiece() throws NoSuchFieldException, IllegalAccessException {
+  private JSONObject getPiece()
+      throws NoSuchFieldException, IllegalAccessException, FileNotFoundException {
     Field f = boardBuilder.getClass().getDeclaredField("csvData");
     f.setAccessible(true);
     List<List<String>> parsedCSV = (List<List<String>>) f.get(boardBuilder);

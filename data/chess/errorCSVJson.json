@@ -1,0 +1,10 @@
+{
+  "type": "chess",
+  "board": "square",
+  "boardSize": "8x8",
+  "players": ["w", "b"],
+  "rules": "default",
+  "style": "companion",
+  "boardColors": ["#f3dab0", "#bb885b"],
+  "csv": "data/chess/locations/errorCSV.csv"
+}
