@@ -16,7 +16,7 @@ public class Controller implements ControllerInterface {
   private ViewInterface view;
   Builder boardBuilder;
   public Controller(){
-    boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+    boardBuilder = new BoardBuilder2(DEFAULT_CHESS_CONFIGURATION);
     this.view = new View(this);
     buildGame(boardBuilder);
   }
@@ -33,8 +33,8 @@ public class Controller implements ControllerInterface {
 //  }
 
   @Override
-  public void uploadConfiguration(File file) {
-    BoardBuilder boardBuilder = new BoardBuilder(file);
+  public void uploadConfiguration(File file) throws Exception {
+    boardBuilder.build(file);
     buildGame(boardBuilder);
   }
 

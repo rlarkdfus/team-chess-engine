@@ -1,14 +1,10 @@
 package ooga.controller;
 
-import com.opencsv.exceptions.CsvValidationException;
-import java.io.FileNotFoundException;
+import com.opencsv.CSVReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import ooga.model.Piece;
-import com.opencsv.CSVReader;
 
 public class LocationParser {
   private List<List<String>> initialLocations;
@@ -17,12 +13,12 @@ public class LocationParser {
     initialLocations = new ArrayList<>();
   }
 
-  public List<List<String>> getInitialLocations(String filePath) throws Exception {
+  public List<List<String>> getInitialLocations(String filePath) throws CsvException {
     parseLocations(filePath);
     return initialLocations;
   }
 
-  private void parseLocations(String filePath) throws Exception {
+  private void parseLocations(String filePath) throws CsvException {
     clearLocations();
     try {
       FileReader fileReader = new FileReader(filePath);
@@ -35,7 +31,7 @@ public class LocationParser {
       }
     }
     catch (Exception e) {
-      throw new Exception("Invalid CSV file passed in");
+      throw new CsvException(initialLocations.size());
     }
   }
   private void clearLocations() {

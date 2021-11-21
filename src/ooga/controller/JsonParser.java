@@ -12,22 +12,16 @@ public class JsonParser implements ParserInterface {
   }
 
   @Override
-  public JSONObject loadFile(File file){
+  public JSONObject loadFile(File file) throws FileNotFoundException {
     String currFileString = readFile(file);
     JSONObject jsonObject = buildJSON(currFileString);
     return jsonObject;
   }
 
-  private String readFile(File currFile) {
-    Scanner scan = null;
-    String currFileString;
-    try {
-      scan = new Scanner(currFile);
-    } catch (FileNotFoundException e) {
-      return null;
-    }
+  private String readFile(File currFile) throws FileNotFoundException {
+    Scanner scan = new Scanner(currFile);
+    String currFileString = new String();
 
-    currFileString = new String();
     while (scan.hasNext()) {
       currFileString += scan.nextLine();
     }
