@@ -86,6 +86,7 @@ public abstract class Move {
             takenPiece = pieceAt(potentialLocation, pieces);
             pieces.remove(takenPiece);
         }
+        //move piece to new location
         piece.tryMove(potentialLocation);
 
         // look for checks
