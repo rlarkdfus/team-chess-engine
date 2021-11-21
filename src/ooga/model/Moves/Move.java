@@ -2,6 +2,7 @@ package ooga.model.Moves;
 
 import ooga.Location;
 import ooga.Turn;
+import ooga.model.Piece;
 import ooga.model.PieceInterface;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.List;
 
 public abstract class Move {
 
-    Turn turn;
+    private Turn turn;
     private int dRow;
     private int dCol;
     private boolean take;
@@ -17,8 +18,7 @@ public abstract class Move {
     private boolean limited;
 
     public Move() {
-        this.turn = new Turn();
-        this.endLocations = new ArrayList<>();
+        resetMove();
     }
 
     public abstract List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
@@ -26,14 +26,10 @@ public abstract class Move {
     public abstract void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces);
 
     public List<Location> getEndLocations() {
-        for(Location location : endLocations) {
-        }
         return endLocations;
     }
 
-
     abstract boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces);
-
 
     public void setMove(int dRow, int dCol, boolean take, boolean limited){ //TODO: boolean take
         this.dRow = dRow;
@@ -68,6 +64,16 @@ public abstract class Move {
             }
         }
         return true;
+    }
+
+    protected void movePiece(PieceInterface piece, Location end) {
+        turn.movePiece(piece.getLocation(), end);
+        piece.moveTo(end);
+    }
+
+    protected void removePiece(PieceInterface removedPiece, List<PieceInterface> pieces) {
+        turn.removePiece(removedPiece.getLocation());
+        pieces.remove(removedPiece);
     }
 
     public PieceInterface pieceAt(Location location, List<PieceInterface> pieces) {
@@ -125,7 +131,6 @@ public abstract class Move {
         return null;
     }
 
-
     /**
      * Undo the tried move after trying the move
      * @param piece is the piece player moved
@@ -143,13 +148,12 @@ public abstract class Move {
         return (newRow < 8 && newCol < 8 && newRow >= 0 && newCol >= 0); //FIXME: hardcoded row col
     }
 
-    protected void resetEndLocations() {
+    protected void resetMove() {
         endLocations = new ArrayList<>();
         turn = new Turn();
     }
 
     protected void addEndLocation(Location location) {
-        System.out.println(location);
         endLocations.add(location);
     }
 

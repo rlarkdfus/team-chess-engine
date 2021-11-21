@@ -1,27 +1,26 @@
 package ooga.model.Moves;
 
 import ooga.Location;
-import ooga.Turn;
 import ooga.model.PieceInterface;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EnPassantMove extends Move {
+
     @Override
     public List<PieceInterface> executeMove(PieceInterface pawn, List<PieceInterface> pieces, Location end) {
-        pawn.moveTo(end);
         Location enemyPawnLocation = new Location(end.getRow() - getdRow(), end.getCol());
-        pieces.remove(pieceAt(enemyPawnLocation, pieces));
 
-        turn.movePiece(pawn.getLocation(), end);
-        turn.removePiece(enemyPawnLocation);
+        movePiece(pawn, end);
+        removePiece(pieceAt(enemyPawnLocation, pieces), pieces);
+
         return pieces;
     }
 
     @Override
     public void updateMoveLocations(PieceInterface pawn, List<PieceInterface> pieces) {
-        resetEndLocations();
+        resetMove();
         int row = pawn.getLocation().getRow() + getdRow();
         int col = pawn.getLocation().getCol() + getdCol();
 

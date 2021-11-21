@@ -17,22 +17,7 @@ public class Player implements PlayerInterface {
     public Player(String team) {
         this.team = team;
         remainingPieces = new HashMap<>();
-//        inCheck = false;
         score = 0;
-    }
-
-    /**
-     * remove a pice from the player's posession
-     * @param location
-     */
-    public void removePiece(Location location){
-        for(PieceInterface piece : remainingPieces.keySet()) {
-            if(piece.getLocation().equals(location)) {
-                remainingPieces.remove(piece);
-                score -= piece.getScore();
-                return;
-            }
-        }
     }
 
     /**
@@ -60,25 +45,6 @@ public class Player implements PlayerInterface {
     @Override
     public String getTeam(){
         return team;
-    }
-
-    public PieceInterface getKing(){
-        for(PieceInterface piece : remainingPieces.keySet()) {
-            if(piece.getName().equals("K")) {
-                return piece;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void movePiece(PieceInterface piece, Location end) {
-        piece.moveTo(end);
-    }
-    
-    @Override
-    public void tryMove(PieceInterface piece, Location end) {
-        piece.tryMove(end);
     }
 
     @Override

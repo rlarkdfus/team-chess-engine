@@ -42,7 +42,7 @@ public class Controller implements ControllerInterface {
   public void movePiece(Location start, Location end) {
     view.updateDisplay(model.movePiece(start, end));
     if(model.checkGameState() != Board.GameState.RUNNING) {
-      System.out.println(model.checkGameState()); //FIXME
+//      System.out.println(model.checkGameState()); //FIXME
     }
   }
 

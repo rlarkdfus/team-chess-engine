@@ -22,16 +22,16 @@ public class Board implements Engine {
     public Board(List<PlayerInterface> players) {
         this.players = players;
         turnCount = 0;
-        updateLegalMoves();
-    }
-
-    private void updateLegalMoves() {
         allPieces = new ArrayList<>();
         for(PlayerInterface player : players) {
             allPieces.addAll(player.getPieces());
         }
+        updateLegalMoves();
+    }
 
-        for(PieceInterface piece : allPieces) {
+    private void updateLegalMoves() {
+        List<PieceInterface> allPiecesCopy = new ArrayList<>(allPieces);
+        for(PieceInterface piece : allPiecesCopy) {
             piece.updateMoves(allPieces);
         }
     }
@@ -47,19 +47,20 @@ public class Board implements Engine {
         for(PieceInterface p : allPieces) {
             if(p.getLocation().equals(start)) {
                 piece = p;
+                break;
             }
         }
 
         Move move = piece.getMove(end);
-        allPieces = move.executeMove(piece, allPieces, end);
+        Turn turn = move.getTurn();
+        allPieces = new ArrayList<>(move.executeMove(piece, allPieces, end));
 
         // increment turn
         turnCount++;
 
-        // update legal moves
         updateLegalMoves();
 
-        return move.getTurn();
+        return turn;
     }
 
     /**

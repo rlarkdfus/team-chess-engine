@@ -31,7 +31,6 @@ class PlayerInterfaceTest {
 
     @Test
     void removePiece() {
-        player.removePiece(piece.getLocation());
         Assertions.assertEquals(player.getPieces().size(), 0);
     }
 

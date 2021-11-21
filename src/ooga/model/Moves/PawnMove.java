@@ -3,22 +3,19 @@ package ooga.model.Moves;
 import ooga.Location;
 import ooga.model.PieceInterface;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PawnMove extends Move { //TODO: pawn move takes in +-2 depending on side
 
     @Override
     public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        Location location = new Location(piece.getLocation().getRow() + getdRow(), piece.getLocation().getCol());
-        turn.movePiece(piece.getLocation(), end);
-        piece.moveTo(location);
+        movePiece(piece, end);
         return pieces;
     }
 
     @Override
     public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
-        resetEndLocations();
+        resetMove();
         int row = piece.getLocation().getRow() + getdRow();
         int col = piece.getLocation().getCol();
 

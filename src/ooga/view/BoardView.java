@@ -14,8 +14,6 @@ import ooga.controller.PieceViewBuilder;
 
 public class BoardView extends Group implements BoardViewInterface {
 
-    private final String[] CHESS_SIDES = {"w", "b"};
-
     private final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
     private final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
     private final String DEFAULT_PIECE_STYLE = "companion";
@@ -94,14 +92,9 @@ public class BoardView extends Group implements BoardViewInterface {
                 pieceView.moveTo(end);
             }
         }
-//        PieceView movedPiece = pieceGrid[start.getRow()][start.getCol()];
-//        pieceGrid[end.getRow()][end.getCol()] = movedPiece;
-//        pieceGrid[start.getRow()][start.getCol()] = null;
-//        movedPiece.moveTo(end);
     }
 
     private void removePiece(Location location) {
-        System.out.println("removing pieces");
 
         for(PieceView pieceView : pieceList)
             if(pieceView.location.equals(location) ){
@@ -166,7 +159,6 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void clearBoard() {
-        System.out.println("clear board");
         for(PieceView pieceView : pieceList) {
             if (pieceView != null) {
                 removePiece(pieceView.location);

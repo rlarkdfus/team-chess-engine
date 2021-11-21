@@ -1,32 +1,28 @@
 package ooga.model.Moves;
 
-import java.util.ArrayList;
 import ooga.Location;
 import ooga.model.PieceInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JumpMove extends Move {
 
     @Override
     public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        List<PieceInterface> takenPieces = new ArrayList<>();
-        for(PieceInterface occupied : pieces) {
+        for(PieceInterface occupied : new ArrayList<>(pieces)) {
             if(occupied.getLocation().equals(end)) {
-                takenPieces.add(occupied);
-                turn.removePiece(end);
+                removePiece(occupied, pieces);
             }
         }
-        pieces.removeAll(takenPieces);
+        movePiece(piece, end);
 
-        turn.movePiece(piece.getLocation(), end);
-        piece.moveTo(end);
         return pieces;
     }
 
     @Override
     public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
-        resetEndLocations();
+        resetMove();
         int row = piece.getLocation().getRow() + getdRow();
         int col = piece.getLocation().getCol() + getdCol();
 

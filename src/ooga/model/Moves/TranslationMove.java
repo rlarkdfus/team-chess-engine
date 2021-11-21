@@ -9,34 +9,30 @@ import java.util.List;
 public class TranslationMove extends Move {
 
     public TranslationMove() {
+        super();
     }
 
     @Override
     public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        List<PieceInterface> takenPieces = new ArrayList<>();
-        for(PieceInterface occupied : pieces) {
+        for(PieceInterface occupied : new ArrayList<>(pieces)) {
             if(occupied.getLocation().equals(end)) {
-                takenPieces.add(occupied);
-                turn.removePiece(end);
+                removePiece(occupied, pieces);
             }
         }
-        pieces.removeAll(takenPieces);
+        movePiece(piece, end);
 
-        turn.movePiece(piece.getLocation(), end);
-        piece.moveTo(end);
         return pieces;
     }
 
     @Override
     public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
-        resetEndLocations();
+        resetMove();
         int row = piece.getLocation().getRow() + getdRow();
         int col = piece.getLocation().getCol() + getdCol();
 
         Location potentialLocation = new Location(row, col);
 
         while(isLegal(piece, potentialLocation, pieces)){
-            System.out.println(piece.getTeam() + piece.getName() + " " + isLegal(piece, potentialLocation, pieces));
             addEndLocation(potentialLocation);
 
             if(isLimited()) {
@@ -64,10 +60,10 @@ public class TranslationMove extends Move {
             }
         }
 
-        if(potentialPiece != null && potentialPiece.getTeam().equals(piece.getTeam())) {
-            return false;
-        } else if (potentialPiece != null && !canTake()) { // piece is not the same team but cannot take
-            return false;
+        if(potentialPiece != null) { //if there is a piece
+            if(potentialPiece.getTeam().equals(piece.getTeam()) || !canTake()) {
+                return false;
+            }
         }
 
         return tryMove(piece, potentialLocation, pieces);
