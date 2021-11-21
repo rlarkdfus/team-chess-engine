@@ -21,7 +21,7 @@ import org.json.JSONObject;
 public class BoardBuilder2 implements Builder {
 
   public static final String DEFAULT_STYLE = "companion";
-  public static final int ARG_LENGTH = 3;
+  public static final int ARG_LENGTH = 4;
 
   private String gameType;
   private String boardShape;
@@ -127,7 +127,7 @@ public class BoardBuilder2 implements Builder {
     String errorKey = null;
     try {
       errorKey = "moves";
-      moves = getMoves(pieceJSON,team);
+      moves = getMoves(pieceJSON, team);
       errorKey = "attributes";
       attributes = getAttributes(pieceJSON);
       errorKey = "value";
@@ -176,8 +176,9 @@ public class BoardBuilder2 implements Builder {
       int dRow = team.equals(bottomColor) ? -parseInt(args[0]) : parseInt(args[0]);
       int dCol = parseInt(args[1].strip());
       boolean takes = parseBoolean(args[2].strip());
-      newMove.setMove(dRow, dCol, takes);
-    }else{
+      boolean limited = args[3].strip().equals("limited");
+      newMove.setMove(dRow, dCol, takes, limited);
+    } else {
       throw new Exception();
     }
   }

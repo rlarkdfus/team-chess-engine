@@ -37,7 +37,11 @@ class PieceInterfaceTest {
 
     @Test
     void getMoves() {
+<<<<<<< HEAD
 //        Assertions.assertNotNull(piece.getMoveVectors()); //FIXME
+=======
+//        Assertions.assertNotNull(piece.getMoveVectors());
+>>>>>>> 3a299d563f9c3aa97d50dd6b4579dcc595b5d837
     }
 
     @Test

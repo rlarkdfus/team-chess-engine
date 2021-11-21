@@ -1,6 +1,6 @@
 {
   "moves": {
-    "Translationmove": ["1, -1,true","1, 1,true","-1, -1,true","-1, 1,true"]
+    "TranslaTYPOove": ["1, -1,takes, unlimited","1, 1,takes, unlimited","-1, -1,takes, unlimited","-1, 1,takes, unlimited"]
   },
   "attributes":{
     "limited": false,

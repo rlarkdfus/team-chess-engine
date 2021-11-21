@@ -39,7 +39,7 @@ public class TranslationMove extends Move {
             System.out.println(piece.getTeam() + piece.getName() + " " + isLegal(piece, potentialLocation, pieces));
             addEndLocation(potentialLocation);
 
-            if(piece.isLimited()) {
+            if(isLimited()) {
                 break;
             }
 

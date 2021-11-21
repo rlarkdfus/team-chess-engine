@@ -126,7 +126,7 @@ class BoardBuilder2Test {
   }
 
   @Test
-  void testMakeMoveLists()
+  void testGetMoves()
       throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, FileNotFoundException {
 
     List<Move> actual;
@@ -147,6 +147,7 @@ class BoardBuilder2Test {
 
       assertEquals(expectedClass, actualClass, "wrong type of Move! expected: " + expectedClass + ". got: " + actualClass);
     }
+
   }
 
   private JSONObject getPiece()
