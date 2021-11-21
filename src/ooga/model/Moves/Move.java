@@ -1,6 +1,7 @@
 package ooga.model.Moves;
 
 import ooga.Location;
+import ooga.Turn;
 import ooga.model.PieceInterface;
 
 import java.util.ArrayList;
@@ -8,12 +9,13 @@ import java.util.List;
 
 public abstract class Move {
 
+    Turn turn;
     private int dRow;
     private int dCol;
     private boolean take;
     private List<Location> endLocations;
 
-    protected abstract List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
+    public abstract List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
 
     abstract void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces);
 
@@ -134,6 +136,7 @@ public abstract class Move {
 
     protected void resetEndLocations() {
         endLocations = new ArrayList<>();
+        turn = new Turn();
     }
 
     protected void addEndLocation(Location location) {
@@ -150,5 +153,9 @@ public abstract class Move {
 
     protected boolean canTake() {
         return take;
+    }
+
+    public Turn getTurn() {
+        return turn;
     }
 }

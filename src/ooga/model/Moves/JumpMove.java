@@ -8,7 +8,7 @@ import java.util.List;
 public class JumpMove extends Move {
 
     @Override
-    protected List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
+    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         return null;
     }
 

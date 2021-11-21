@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EnPassantMove extends Move {
     @Override
-    protected List<PieceInterface> executeMove(PieceInterface pawn, List<PieceInterface> pieces, Location end) {
+    public List<PieceInterface> executeMove(PieceInterface pawn, List<PieceInterface> pieces, Location end) {
         pawn.moveTo(end);
         Location enemyPawnLocation = new Location(end.getRow() - getdRow(), end.getCol());
         pieces.remove(pieceAt(enemyPawnLocation, pieces));

@@ -9,19 +9,19 @@ import ooga.model.Moves.Move;
 
 public class Piece implements PieceInterface {
 
-  private Location location;
-  private MoveVector moveVectors;
   private String team;
+  private String name;
+  private int score;
+
+  private Location location;
   private boolean moved;
   private boolean firstMove = false;
-  private int score;
-  private String name;
+
   private Map<String, Boolean> attributes;
   private List<Move> moves;
 
   public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
     this.location = location;
-    this.moveVectors = moveVectors;
     this.team = team;
     this.moved = false;
     this.score = score;
@@ -47,26 +47,6 @@ public class Piece implements PieceInterface {
   @Override
   public String getTeam() {
     return team;
-  }
-
-  /**
-   * returns a list of all the possible move locations for a piece at given location
-   *
-   * @param
-   * @return
-   */
-  @Override
-  public List<Vector> getMoveVectors() {
-    List<Vector> moves = new ArrayList<>(moveVectors.getMoveVectors());
-    if(!moved) {
-      moves.addAll(moveVectors.getInitialVectors());
-    }
-    return moves;
-  }
-
-  @Override
-  public List<Vector> getTakeVectors() {
-    return moveVectors.getTakeVectors();
   }
 
   /**
@@ -118,7 +98,7 @@ public class Piece implements PieceInterface {
    */
   @Override
   public String toString() {
-    return moveVectors.toString();
+    return team + name;
   }
 
   /**
@@ -147,5 +127,24 @@ public class Piece implements PieceInterface {
   @Override
   public Piece copy() {
     return new Piece(this.team, this.name, this.location, this.moves, this.attributes, this.score);
+  }
+
+  @Override
+  public List<Location> getAllMoves() {
+    List<Location> endLocations = new ArrayList<>();
+    for(Move move : moves) {
+      endLocations.addAll(move.getEndLocations());
+    }
+    return endLocations;
+  }
+
+  @Override
+  public Move getMove(Location end) {
+    for(Move move : moves) {
+      if(end.inList(move.getEndLocations())) {
+        return move;
+      }
+    }
+    return null;
   }
 }

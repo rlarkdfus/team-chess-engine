@@ -9,14 +9,17 @@ import java.util.List;
 public class TranslationMove extends Move {
 
     @Override
-    protected List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
+    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         List<PieceInterface> takenPieces = new ArrayList<>();
         for(PieceInterface occupied : pieces) {
             if(occupied.getLocation().equals(end)) {
                 takenPieces.add(occupied);
+                turn.removePiece(end);
             }
         }
         pieces.removeAll(takenPieces);
+
+        turn.movePiece(piece.getLocation(), end);
         piece.moveTo(end);
         return pieces;
     }

@@ -2,7 +2,9 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
+import ooga.model.Moves.Move;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Board implements Engine {
@@ -13,21 +15,22 @@ public class Board implements Engine {
         STALEMATE
     };
 
-    private MoveFactory moveFactory;
     private List<PlayerInterface> players;
+    private List<PieceInterface> allPieces;
     private int turnCount;
 
     public Board(List<PlayerInterface> players) {
         this.players = players;
-        moveFactory = new MoveFactory(players, 8, 8); //FIXME
         turnCount = 0;
         updateLegalMoves();
     }
 
     private void updateLegalMoves() {
+        allPieces = new ArrayList<>();
         for(PlayerInterface player : players) {
             for(PieceInterface piece : player.getPieces()){
-                player.setLegalMoves(piece, moveFactory.findLegalMoves(player, piece));
+                player.setLegalMoves(piece, piece.getAllMoves());
+                allPieces.addAll(player.getPieces());
             }
         }
     }
@@ -38,32 +41,24 @@ public class Board implements Engine {
      * @param end is piece new location
      */
     public Turn movePiece(Location start, Location end){
-        Turn currentTurn = new Turn();
-        PlayerInterface currentPlayer = findPlayerTurn(turnCount);
-        PlayerInterface otherPlayer = findPlayerTurn(turnCount + 1);
-
-
-        // check for castling
-
-        // add to removed list if piece exists at destination
-        if(otherPlayer.getPiece(end) != null) {
-            currentTurn.removePiece(end);
-            otherPlayer.removePiece(end);
+        // pause current player timer, start next player time
+        PieceInterface piece = null;
+        for(PieceInterface p : allPieces) {
+            if(p.getLocation().equals(start)) {
+                piece = p;
+            }
         }
 
-        //basic move piece
-        currentTurn.movePiece(start, end);
-        currentPlayer.movePiece(moveFactory.pieceAt(start), end);
+        Move move = piece.getMove(end);
+        allPieces = move.executeMove(piece, allPieces, end);
 
         // increment turn
         turnCount++;
-        // pause current player timer, start next player time
-        
 
         // update legal moves
         updateLegalMoves();
 
-        return currentTurn;
+        return move.getTurn();
     }
 
     /**
@@ -81,7 +76,8 @@ public class Board implements Engine {
 
             if(legalMovesCount == 0) {
                 //checkmate
-                return (moveFactory.inCheck(player.getKing(), otherPlayer.getPieces())) ? GameState.CHECKMATE : GameState.STALEMATE;
+                return null;
+//                return (moveFactory.inCheck(player.getKing(), otherPlayer.getPieces())) ? GameState.CHECKMATE : GameState.STALEMATE;
             }
         }
         // game still going
@@ -103,8 +99,12 @@ public class Board implements Engine {
      * @return
      */
     public boolean canMovePiece(Location location) {
-        PieceInterface piece = moveFactory.pieceAt(location);
-        return (piece != null && piece.getTeam().equals(findPlayerTurn(turnCount).getTeam()));
+        for(PieceInterface piece : findPlayerTurn(turnCount).getPieces()) {
+            if(piece.getLocation().equals(location)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private PlayerInterface findPlayerTurn(int turn) {

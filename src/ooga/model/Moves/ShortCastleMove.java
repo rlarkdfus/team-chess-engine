@@ -9,13 +9,16 @@ import java.util.List;
 public class ShortCastleMove extends Move {
 
     @Override
-    protected List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
+    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         Location location = new Location(piece.getLocation().getRow() + getdRow(), piece.getLocation().getCol() + getdCol());
 
         // move rook as well
         PieceInterface rook = findRook(piece.getLocation().getRow(), 7, pieces); // TODO not hardcode column 7
 
+        turn.movePiece(piece.getLocation(), end);
         piece.moveTo(location);
+
+        turn.movePiece(rook.getLocation(), new Location(piece.getLocation().getRow(), 5));
         rook.moveTo(new Location(piece.getLocation().getRow(), 5));
 
         return pieces;

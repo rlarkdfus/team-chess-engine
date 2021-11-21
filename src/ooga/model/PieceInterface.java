@@ -1,6 +1,7 @@
 package ooga.model;
 
 import ooga.Location;
+import ooga.model.Moves.Move;
 
 import java.util.List;
 
@@ -8,8 +9,6 @@ public interface PieceInterface {
 //    String getType();
     String getTeam();
 //    List<Location> getMoves(Location location);
-    List<Vector> getMoveVectors();
-    List<Vector> getTakeVectors();
 //    void getValue();
     boolean isLimited();
     int getScore();
@@ -21,4 +20,8 @@ public interface PieceInterface {
     boolean hasMoved();
     boolean isFirstMove();
     Piece copy();
+    List<Location> getAllMoves();
+
+    Move getMove(Location end);
+
 }
