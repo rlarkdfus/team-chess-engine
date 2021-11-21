@@ -14,7 +14,8 @@ public class Controller implements ControllerInterface {
 
   private Engine model;
   private ViewInterface view;
-  Builder boardBuilder;
+  private Builder boardBuilder;
+
   public Controller(){
     boardBuilder = new BoardBuilder2(DEFAULT_CHESS_CONFIGURATION);
     this.view = new View(this);

@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class Move {
 
-    Turn turn;
+    private Turn turn;
     private int dRow;
     private int dCol;
     private boolean take;

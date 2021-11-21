@@ -1,10 +1,8 @@
 package ooga.model.Moves;
 
+import java.util.List;
 import ooga.Location;
 import ooga.model.PieceInterface;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ShortCastleMove extends Move {
 
@@ -15,10 +13,10 @@ public class ShortCastleMove extends Move {
         // move rook as well
         PieceInterface rook = findRook(piece.getLocation().getRow(), 7, pieces); // TODO not hardcode column 7
 
-        turn.movePiece(piece.getLocation(), end);
+        getTurn().movePiece(piece.getLocation(), end);
         piece.moveTo(location);
 
-        turn.movePiece(rook.getLocation(), new Location(piece.getLocation().getRow(), 5));
+        getTurn().movePiece(rook.getLocation(), new Location(piece.getLocation().getRow(), 5));
         rook.moveTo(new Location(piece.getLocation().getRow(), 5));
 
         return pieces;

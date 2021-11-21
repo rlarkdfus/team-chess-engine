@@ -14,12 +14,12 @@ public class TranslationMove extends Move {
         for(PieceInterface occupied : pieces) {
             if(occupied.getLocation().equals(end)) {
                 takenPieces.add(occupied);
-                turn.removePiece(end);
+                getTurn().removePiece(end);
             }
         }
         pieces.removeAll(takenPieces);
 
-        turn.movePiece(piece.getLocation(), end);
+        getTurn().movePiece(piece.getLocation(), end);
         piece.moveTo(end);
         return pieces;
     }
