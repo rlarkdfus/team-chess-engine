@@ -79,4 +79,6 @@ public class View implements ViewInterface {
     public void resetBoard() {
         boardView.resetBoard();
     }
+
+    public void showError(String message) {ViewUtility.showError(message);}
 }

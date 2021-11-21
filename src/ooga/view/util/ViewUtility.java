@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 public class ViewUtility {
 
     private static ResourceBundle myResources = ResourceBundle.getBundle("ooga/view/resources/English");
+    public static final String ERROR_ALERT_TITLE = "Error";
     public static final String SELECT_JSON_FILE = "Select JSON File";
     public static final String JSON_FILE_EXTENSION_DESCRIPTION = "JSON Files (*.json)";
     public static final String CSV_FILE_EXTENSION_DESCRIPTION = "CSV (Comma delimited) (*.csv)";
@@ -143,14 +144,14 @@ public class ViewUtility {
         return node;
     }
 
-//    /**
-//     * shows an error message
-//     * @param message the error message to show
-//     */
-//    protected void showError(String message) {
-//        Alert alert = new Alert(Alert.AlertType.ERROR);
-//        alert.setTitle(ERROR_ALERT_TITLE);
-//        alert.setContentText(message);
-//        alert.showAndWait();
-//    }
+    /**
+     * shows an error message
+     * @param message the error message to show
+     */
+    public static void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(ERROR_ALERT_TITLE);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 }

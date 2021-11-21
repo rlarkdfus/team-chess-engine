@@ -9,7 +9,6 @@ import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.view.View;
 import ooga.view.ViewInterface;
-import ooga.view.util.ViewUtility;
 
 public class Controller implements ControllerInterface {
 
@@ -19,29 +18,34 @@ public class Controller implements ControllerInterface {
   private ViewInterface view;
   private LocationWriter locationWriter;
 
-  public Controller() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-    this.view = new View(this);
-    this.locationWriter = new LocationWriter();
-    buildGame(boardBuilder);
+  public Controller() {
+    try {
+      BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+      view = new View(this);
+      this.locationWriter = new LocationWriter();
+      buildGame(boardBuilder);
+    }
+    catch (Exception e) {
+      view.showError(e.getMessage());
+    }
   }
-
 
   @Override
   public boolean canMovePiece(Location location) {
     return model.canMovePiece(location);
   }
 
-//  @Override
-//  public void updateView() {
-//    view.initializeDisplay();
-//  }
-
   @Override
-  public void uploadConfiguration(File file) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    if (file != null) {
+  public void uploadConfiguration(File file)  {
+    if (file == null) {
+      return;
+    }
+    try {
       BoardBuilder boardBuilder = new BoardBuilder(file);
       buildGame(boardBuilder);
+    }
+    catch (Exception e) {
+      view.showError(e.getMessage());
     }
   }
 
@@ -57,14 +61,9 @@ public class Controller implements ControllerInterface {
     return model.getLegalMoves(location);
   }
 
-//  @Override
-//  public List<PieceInterface> getInitialPieces() {
-//    return boardBuilder.getInitialPieces();
-//  }
-
   private void buildGame(BoardBuilder boardBuilder) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    this.model = new Board(boardBuilder.getInitialPlayers());
-    this.view.initializeDisplay(boardBuilder.getInitialPieceViews());
+    model = new Board(boardBuilder.getInitialPlayers());
+    view.initializeDisplay(boardBuilder.getInitialPieceViews());
   }
 
   public void downloadGame(String filePath) {

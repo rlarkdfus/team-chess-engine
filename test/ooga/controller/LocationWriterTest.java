@@ -24,13 +24,12 @@ class LocationWriterTest {
   public Path predirectory;
 
   @BeforeEach
-  void setUp() throws IOException {
+  void setUp() throws Exception {
     locWriter = new LocationWriter();
     locationParser = new LocationParser();
     jsonParser = new JsonParser();
     file = new File("data/chess/defaultChess.json");
     boardBuilder = new BoardBuilder(file);
-
     directory = predirectory.resolve("testfile1.csv");
   }
 

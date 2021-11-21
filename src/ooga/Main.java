@@ -20,7 +20,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public void start(Stage stage) {
         new Controller();
     }
 }

@@ -21,12 +21,6 @@ public class GameConfigurationUI extends GridPane implements UIInterface {
     public void createUI() {
         this.add(ViewUtility.makeLabel("variation"), 0, 0);
         this.add(ViewUtility.makeComboBox("game_variation", List.of("chess", "moreChess"), System.out::println), 1, 0);
-        this.add(ViewUtility.makeButton("upload_configuration", e -> {
-            try {
-                controller.uploadConfiguration(ViewUtility.selectJSONFile());
-            } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException ex) {
-                ex.printStackTrace();
-            }
-        }), 1, 1);
+        this.add(ViewUtility.makeButton("upload_configuration", e -> {controller.uploadConfiguration(ViewUtility.selectJSONFile());}), 1, 1);
     }
 }

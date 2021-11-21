@@ -19,4 +19,6 @@ public interface ViewInterface {
     void changePieceStyle(String style);
 
     void resetBoard();
+
+    void showError(String message);
 }
