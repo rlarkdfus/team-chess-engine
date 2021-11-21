@@ -9,14 +9,13 @@ import java.util.List;
 public class JumpMove extends Move {
 
     @Override
-    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
+    public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         for(PieceInterface occupied : new ArrayList<>(pieces)) {
             if(occupied.getLocation().equals(end)) {
                 removePiece(occupied, pieces);
             }
         }
         movePiece(piece, end);
-        return pieces;
     }
 
     @Override
@@ -59,6 +58,6 @@ public class JumpMove extends Move {
             return false;
         }
 
-        return tryMove(piece, potentialLocation, pieces);
+        return tryMove(piece, potentialLocation, new ArrayList<>(pieces));
     }
 }

@@ -13,15 +13,17 @@ public class TranslationMove extends Move {
     }
 
     @Override
-    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
+    public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
+        List<PieceInterface> board = new ArrayList<>(pieces);
         for(PieceInterface occupied : new ArrayList<>(pieces)) {
             if(occupied.getLocation().equals(end)) {
                 removePiece(occupied, pieces);
+                board.remove(occupied);
             }
         }
         movePiece(piece, end);
 
-        return pieces;
+//        return board;
     }
 
     @Override
@@ -61,11 +63,11 @@ public class TranslationMove extends Move {
         }
 
         if(potentialPiece != null) { //if there is a piece
-            if(potentialPiece.getTeam().equals(piece.getTeam()) || !canTake()) {
+            if(potentialPiece.getTeam().equals(piece.getTeam()) || canTake()) {
                 return false;
             }
         }
 
-        return tryMove(piece, potentialLocation, pieces);
+        return tryMove(piece, potentialLocation, new ArrayList<>(pieces));
     }
 }

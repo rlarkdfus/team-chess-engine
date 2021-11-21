@@ -4,6 +4,7 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.model.Piece;
 import ooga.model.PieceInterface;
+import ooga.model.PlayerInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public abstract class Move {
         resetMove();
     }
 
-    public abstract List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
+    public abstract void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
 
     public abstract void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces);
 
@@ -45,9 +46,10 @@ public abstract class Move {
      * @return true if the king is under attack from list of pieces
      */
     public boolean underAttack(Location location, List<PieceInterface> attackingPieces) {
-        for(PieceInterface atackingPiece : attackingPieces) {
-            for(Location attackLocation : atackingPiece.getEndLocations()) {
+        for(PieceInterface attackingPiece : attackingPieces) {
+            for(Location attackLocation : attackingPiece.getEndLocations()) {
                 if(location.equals(attackLocation)) {
+                    System.out.println("attacking piece: " + attackingPiece);
                     return true;
                 }
             }
@@ -104,44 +106,36 @@ public abstract class Move {
         piece.tryMove(potentialLocation);
 
         // look for checks
-        List<PieceInterface> attackingPieces = new ArrayList<>();
-        for(PieceInterface attackingPiece : pieces) {
-            if(!piece.getTeam().equals(attackingPiece.getTeam())) {
-                attackingPieces.add(attackingPiece);
-            }
-        }
+        List<PieceInterface> attackingPieces = getAttackingPieces(piece, pieces);
 
         // if the king is in check, undo move and return false
-        if(underAttack(findKing(pieces).getLocation(), attackingPieces)) {
-            undoTryMove(piece, pieceLocation, takenPiece, pieces);
+        if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces)) {
+            piece.tryMove(pieceLocation);
             return false;
         }
 
         //otherwise undo the move and return true
-        undoTryMove(piece, pieceLocation, takenPiece, pieces);
+        piece.tryMove(pieceLocation);
         return true;
     }
 
-    protected PieceInterface findKing(List<PieceInterface> pieces) {
+    protected List<PieceInterface> getAttackingPieces(PieceInterface attackedPiece, List<PieceInterface> allPieces) {
+        List<PieceInterface> attackingPieces = new ArrayList<>();
+        for(PieceInterface piece : allPieces) {
+            if(!piece.getTeam().equals(attackedPiece.getTeam())) {
+                attackingPieces.add(piece);
+            }
+        }
+        return attackingPieces;
+    }
+
+    protected PieceInterface findKing(PieceInterface teamPiece, List<PieceInterface> pieces) {
         for(PieceInterface piece : pieces) {
-            if(piece.getName().equals("K")) {
+            if(piece.toString().equals(teamPiece.getTeam() + "K")) {
                 return piece;
             }
         }
         return null;
-    }
-
-    /**
-     * Undo the tried move after trying the move
-     * @param piece is the piece player moved
-     * @param pieceLocation is the original location the player is attempting to move the piece to
-     * @param takenPiece is the piece that was taken during the turn, if a piece was taken
-     */
-    protected void undoTryMove(PieceInterface piece, Location pieceLocation, PieceInterface takenPiece, List<PieceInterface> pieces) {
-        piece.tryMove(pieceLocation);
-        if (takenPiece != null) {
-            pieces.add(takenPiece);
-        }
     }
 
     protected boolean inBounds(int newRow, int newCol) {

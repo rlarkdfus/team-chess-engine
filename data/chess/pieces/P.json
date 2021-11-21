@@ -1,6 +1,6 @@
 {
   "moves": {
-    "TranslationMove": ["1, 0,false,limited"],
+    "TranslationMove": ["1, 0,false,limited","1, -1,takes,limited","1, 1,takes,limited"],
     "PawnMove": ["2,0,false,limited"],
     "EnPassantMove": ["1, -1,takes,limited","1, 1,takes,limited"]
   },

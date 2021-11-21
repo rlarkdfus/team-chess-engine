@@ -30,10 +30,13 @@ public class Board implements Engine {
     }
 
     private void updateLegalMoves() {
-        List<PieceInterface> allPiecesCopy = new ArrayList<>(allPieces);
-        for(PieceInterface piece : allPiecesCopy) {
-            piece.updateMoves(allPieces);
+        for(PieceInterface piece : allPieces) {
+            piece.updateMoves(new ArrayList<>(allPieces));
         }
+
+//        for(Iterator<PieceInterface> iterator = allPieces.iterator(); iterator.hasNext();){
+//            iterator.next().updateMoves(allPieces);
+//        }
     }
 
     /**
@@ -53,12 +56,21 @@ public class Board implements Engine {
 
         Move move = piece.getMove(end);
         Turn turn = move.getTurn();
-        allPieces = new ArrayList<>(move.executeMove(piece, allPieces, end));
+        move.executeMove(piece, allPieces, end);
+
+        System.out.println("Piece size: " + allPieces.size());
 
         // increment turn
         turnCount++;
 
+
+        System.out.println("before");
+        System.out.println(this);
+
         updateLegalMoves();
+
+        System.out.println("after");
+        System.out.println(this);
 
         return turn;
     }
@@ -116,5 +128,33 @@ public class Board implements Engine {
 
     private PlayerInterface findPlayerTurn(int turn) {
         return players.get(turn % players.size());
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
+        for(int i = 0; i < 8; i++) {
+            str.append(i+"\t|");
+//            str.append("|");
+            for(int j = 0; j < 8; j++) {
+                Location location = new Location(i, j);
+                boolean found = false;
+
+                for(PieceInterface piece : allPieces) {
+                    if(piece.getLocation().equals(location)) {
+                        str.append(piece.toString() + "\t");
+                        found = true;
+                    }
+                }
+                if(!found){
+                    str.append("\t");
+                }
+                str.append("|");
+            }
+            str.append("\n");
+        }
+        str.append("__________________________________\n");
+        return str.toString();
     }
 }

@@ -4,16 +4,15 @@ import ooga.Location;
 import ooga.model.PieceInterface;
 import java.util.ArrayList;
 import java.util.List;
+
 public class EnPassantMove extends Move {
 
     @Override
-    public List<PieceInterface> executeMove(PieceInterface pawn, List<PieceInterface> pieces, Location end) {
+    public void executeMove(PieceInterface pawn, List<PieceInterface> pieces, Location end) {
         Location enemyPawnLocation = new Location(end.getRow() - getdRow(), end.getCol());
 
         movePiece(pawn, end);
         removePiece(pieceAt(enemyPawnLocation, pieces), pieces);
-
-        return pieces;
     }
 
     @Override
@@ -39,7 +38,7 @@ public class EnPassantMove extends Move {
             return false;
         }
 
-        return tryMove(pawn, potentialLocation, pieces);
+        return tryMove(pawn, potentialLocation, new ArrayList<>(pieces));
     }
 
     /**
@@ -50,6 +49,7 @@ public class EnPassantMove extends Move {
      */
     @Override
     public boolean tryMove(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
+        Location pieceLocation = new Location(piece.getLocation().getRow(), piece.getLocation().getCol());
         Location otherPawnLocation = new Location(potentialLocation.getRow() - getdRow(), potentialLocation.getCol());
         PieceInterface takenPiece = pieceAt(otherPawnLocation, pieces);
         
@@ -65,13 +65,13 @@ public class EnPassantMove extends Move {
         }
 
         // if the king is in check, undo move and return false
-        if(underAttack(findKing(pieces).getLocation(), attackingPieces)) {
-            undoTryMove(piece, otherPawnLocation, takenPiece, pieces);
+        if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces)) {
+            piece.tryMove(pieceLocation);
             return false;
         }
 
         //otherwise undo the move and return true
-        undoTryMove(piece, otherPawnLocation, takenPiece, pieces);
+        piece.tryMove(pieceLocation);
         return true;
     }
 }

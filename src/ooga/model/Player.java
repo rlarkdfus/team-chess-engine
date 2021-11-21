@@ -49,10 +49,18 @@ public class Player implements PlayerInterface {
 
     @Override
     public PieceInterface getPiece(Location location) {
+        List<PieceInterface> p = new ArrayList<>();
         for(PieceInterface piece : remainingPieces.keySet()) {
             if(piece.getLocation().equals(location)) {
-                return piece;
+                p.add(piece);
+//                return piece;
             }
+        }
+        if(p.size() > 0){
+            if(p.size() > 1){
+                System.out.println("Player.getPiece " + p.size() + " pieces " + p + " at " + location);
+            }
+            return p.get(0);
         }
         return null;
     }
