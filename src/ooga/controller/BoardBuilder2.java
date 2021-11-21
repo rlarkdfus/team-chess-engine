@@ -175,7 +175,7 @@ public class BoardBuilder2 implements Builder {
     if (args.length == ARG_LENGTH) {
       int dRow = team.equals(bottomColor) ? -parseInt(args[0]) : parseInt(args[0]);
       int dCol = parseInt(args[1].strip());
-      boolean takes = parseBoolean(args[2].strip());
+      boolean takes = args[3].strip().equals("takes");
       boolean limited = args[3].strip().equals("limited");
       newMove.setMove(dRow, dCol, takes, limited);
     } else {

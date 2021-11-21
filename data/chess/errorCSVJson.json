@@ -6,5 +6,8 @@
   "rules": "default",
   "style": "companion",
   "boardColors": ["#f3dab0", "#bb885b"],
+  "endcon" : "myendcon.json",
   "csv": "data/chess/locations/errorCSV.csv"
 }
+
+
