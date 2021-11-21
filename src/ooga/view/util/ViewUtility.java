@@ -7,9 +7,11 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,12 @@ import java.util.function.Consumer;
 public class ViewUtility {
 
     private static ResourceBundle myResources = ResourceBundle.getBundle("ooga/view/resources/English");
+    public static final String SELECT_JSON_FILE = "Select JSON File";
+    public static final String JSON_FILE_EXTENSION_DESCRIPTION = "JSON Files (*.json)";
+    public static final String CSV_FILE_EXTENSION_DESCRIPTION = "CSV (Comma delimited) (*.csv)";
+    public static final String JSON_EXTENSION = "*json";
+    public static final String CSV_EXTENSION = "*csv";
+    public static final String EMPTY_FILE_PATH = "";
 
     /**
      * makes a label
@@ -95,6 +103,33 @@ public class ViewUtility {
     public static GridPane makeGridPane(String property) {
         GridPane result = new GridPane();
         return (GridPane) setID(property, result);
+    }
+
+    /**
+     * creates a filechooser to select a JSON file
+     * @return selected JSON file
+     */
+    public static File selectJSONFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle(SELECT_JSON_FILE);
+        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(JSON_FILE_EXTENSION_DESCRIPTION,
+                JSON_EXTENSION);
+        fileChooser.getExtensionFilters().add(fileExtension);
+        File file = fileChooser.showOpenDialog(new Stage());
+        return file;
+    }
+
+    /**
+     * creates a filechooser to save a csv file
+     * @return the path of the saved file
+     */
+    public static String saveCSVPath() {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(
+                CSV_FILE_EXTENSION_DESCRIPTION, CSV_EXTENSION);
+        fileChooser.getExtensionFilters().addAll(fileExtension);
+        File file = fileChooser.showSaveDialog(new Stage());
+        return file != null ? file.getAbsolutePath() : EMPTY_FILE_PATH;
     }
 
     /**

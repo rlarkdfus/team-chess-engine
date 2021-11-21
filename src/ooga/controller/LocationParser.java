@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import ooga.model.Piece;
 import com.opencsv.CSVReader;
 
 public class LocationParser {

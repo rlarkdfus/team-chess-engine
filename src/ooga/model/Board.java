@@ -11,7 +11,8 @@ public class Board implements Engine {
     public enum GameState {
         RUNNING,
         CHECKMATE,
-        STALEMATE
+        STALEMATE,
+        CHECK
     };
 
     private MoveFactory moveFactory;
@@ -23,6 +24,10 @@ public class Board implements Engine {
         moveFactory = new MoveFactory(players, 8, 8); //FIXME
         turnCount = 0;
         updateLegalMoves();
+    }
+
+    public List<PlayerInterface> getPlayers() {
+        return players;
     }
 
     private void updateLegalMoves() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {

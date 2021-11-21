@@ -26,4 +26,12 @@ public class ViewController {
     public void handleNewGame() {
         view.resetBoard();
     }
+
+    public void handleChangeTurnMinutes(Number time) {
+        System.out.println(time);
+    }
+
+    public void handleChangeTimeIncrement(Number increment) {
+        System.out.println(increment);
+    }
 }

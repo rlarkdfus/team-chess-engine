@@ -32,8 +32,6 @@ public class ViewTest extends DukeApplicationTest {
     @Override
     public void start(Stage stage) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         new Controller();
-//        Button uploadConfig = lookup("#upload_configuration").queryButton();
-//        clickOn(uploadConfig);
     }
 
     @Test
@@ -75,14 +73,6 @@ public class ViewTest extends DukeApplicationTest {
     }
 
     @Test
-    void testDoubleClickPieceDeselect() {
-        String location = "(7,4)";
-        PieceView testPiece = queryPieceView(WHITE, KING, location, STYLE_COMPANION);
-        doubleClickOn(testPiece);
-        assertThrows(EmptyNodeQueryException.class, () -> lookup(String.format("#select_location%s", location)).query());
-    }
-
-    @Test
     void testSingleRightClickEmptySquareHighlight() {
         String location = "(3,3)";
         rightClickOn(queryBoardSquare(location));
@@ -104,7 +94,7 @@ public class ViewTest extends DukeApplicationTest {
         testMovePiece(WHITE, PAWN, whiteStart, whiteEnd);
         Button reset = lookup("#new_game").queryButton();
         clickOn(reset);
-        assertThrows(EmptyNodeQueryException.class, () -> queryPieceView(WHITE, PAWN, whiteStart, STYLE_COMPANION));
+        assertDoesNotThrow(() -> queryPieceView(WHITE, PAWN, whiteStart, STYLE_COMPANION));
     }
 
     @Test

@@ -25,6 +25,8 @@ public interface Engine {
     Board.GameState checkGameState();
 
     List<Location> getLegalMoves(Location location);
+
+    List<PlayerInterface> getPlayers();
     
     boolean canMovePiece(Location location);
 }

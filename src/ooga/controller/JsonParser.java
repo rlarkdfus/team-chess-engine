@@ -7,36 +7,33 @@ import org.json.JSONObject;
 
 public class JsonParser implements ParserInterface {
 
-  public JsonParser(){
-    
+  public JsonParser() {
   }
 
   @Override
-  public JSONObject loadFile(File file){
+  public JSONObject loadFile(File file) {
     String currFileString = readFile(file);
-    JSONObject jsonObject = buildJSON(currFileString);
-    return jsonObject;
+    return buildJSON(currFileString);
   }
 
   private String readFile(File currFile) {
-    Scanner scan = null;
-    String currFileString;
+    Scanner scan;
+    StringBuilder currFileString;
     try {
       scan = new Scanner(currFile);
     } catch (FileNotFoundException e) {
       return null;
     }
 
-    currFileString = new String();
+    currFileString = new StringBuilder();
     while (scan.hasNext()) {
-      currFileString += scan.nextLine();
+      currFileString.append(scan.nextLine());
     }
     scan.close();
-    return currFileString;
+    return currFileString.toString();
   }
 
   private JSONObject buildJSON(String currFileString) {
-    JSONObject obj = new JSONObject(currFileString);
-    return obj;
+    return new JSONObject(currFileString);
   }
 }
