@@ -6,12 +6,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-import ooga.Location;
-import ooga.model.Moves.Move;
 import ooga.model.Piece;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
@@ -41,6 +37,7 @@ public class BoardBuilder2 implements Builder {
 
   private LocationParser locationParser;
   private JsonParser jsonParser;
+  private PieceBuilder pieceBuilder;
 
   public BoardBuilder2(File defaultFile) {
     mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
@@ -49,7 +46,6 @@ public class BoardBuilder2 implements Builder {
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
     style = DEFAULT_STYLE;
-
     try {
       build(defaultFile);
     } catch (FileNotFoundException | CsvException | PlayerNotFoundException | InvalidPieceConfigException | InvalidGameConfigException e) {
@@ -81,6 +77,7 @@ public class BoardBuilder2 implements Builder {
       playerList.add(new Player(player));
     }
     csvData = locationParser.getInitialLocations(csv);
+    pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     iterateCSVData();
   }
 
@@ -108,84 +105,15 @@ public class BoardBuilder2 implements Builder {
           continue;
         }
 
+        Piece piece = pieceBuilder.buildPiece(square, r, c);
         int playerListIdx = determinePlayer(r, c, square[0]);
-        Piece piece = buildPiece(r, c);
+
         pieceList.add(new PieceViewBuilder(piece));
         playerList.get(playerListIdx).addPiece(piece);
       }
     }
   }
 
-  private Piece buildPiece(int r, int c) throws FileNotFoundException, InvalidPieceConfigException {
-    String[] square = csvData.get(r).get(c).split(mappings.getString("csvDelimiter"));
-    String team = square[0];
-    String pieceName = square[1];
-    Location location = new Location(r, c);
-
-    String pieceJsonPath = "data/" + gameType + "/pieces/" + pieceName + ".json";
-    JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
-
-    List<Move> moves;
-    Map<String, Boolean> attributes;
-    int value;
-    String errorKey = null;
-    try {
-      errorKey = mappings.getString("moves");
-      moves = getMoves(pieceJSON, team);
-      errorKey = mappings.getString("attributes");
-      attributes = getAttributes(pieceJSON);
-      errorKey = mappings.getString("value");
-      value = pieceJSON.getInt(mappings.getString("value"));
-    } catch (Throwable e) {
-      throw new InvalidPieceConfigException(r, c, pieceJsonPath, errorKey);
-    }
-    return new Piece(team, pieceName, location, moves, attributes, value);
-
-  }
-
-
-  private List<Move> getMoves(JSONObject pieceObj, String team) throws Throwable {
-    JSONObject moveTypes = pieceObj.getJSONObject(mappings.getString("moves"));
-    List<Move> moveList = new ArrayList<>();
-    for (String moveType : moveTypes.keySet()) {
-      List<Move> newMoves = makeTypeOfMove(moveType, (JSONArray) moveTypes.get(moveType), team);
-      moveList.addAll(newMoves);
-    }
-    return moveList;
-  }
-
-  private List<Move> makeTypeOfMove(String moveType, JSONArray arguments, String team)
-      throws Throwable {
-    List<Move> moves = new ArrayList<>();
-    for (int i = 0; i < arguments.length(); i++) {
-      Move newMove = makeNewMove(moveType);
-      if (newMove == null) {
-        continue;
-      }
-      setMoveArgs(team, newMove, arguments.getString(i));
-      moves.add(newMove);
-    }
-    return moves;
-  }
-
-  private Move makeNewMove(String moveType) throws Throwable {
-    Class<?> clazz = Class.forName("ooga.model.Moves." + moveType);
-    Move newMove = (Move) clazz.getDeclaredConstructor().newInstance();
-    return newMove;
-  }
-
-  private void setMoveArgs(String team, Move newMove, String arg) throws Exception {
-    String[] args = arg.split(mappings.getString("jsonDelimiter"));
-    if (args.length == ARG_LENGTH) {
-      int dRow = team.equals(bottomColor) ? -parseInt(args[0]) : parseInt(args[0]);
-      int dCol = parseInt(args[1].strip());
-      boolean takes = args[3].strip().equals(mappings.getString("takes"));
-      boolean limited = args[3].strip().equals(mappings.getString("limited"));
-      newMove.setMove(dRow, dCol, takes, limited);
-    } else {
-      throw new Exception();
-    }
-  }
 
 
   private int determinePlayer(int r, int c, String team) throws PlayerNotFoundException {
@@ -201,19 +129,7 @@ public class BoardBuilder2 implements Builder {
     return playerListIdx;
   }
 
-  /**
-   * @param pieceJSON - JSON object of the piece
-   * @return a map of all the attributes and their values
-   */
-  private Map<String, Boolean> getAttributes(JSONObject pieceJSON) {
-    JSONObject attributes = pieceJSON.getJSONObject(mappings.getString("attributes"));
-    Map<String, Boolean> map = new HashMap<>();
-    for (String attribute : attributes.keySet()) {
-      map.put(attribute, attributes.getBoolean(attribute));
-    }
 
-    return map;
-  }
 
   /**
    * sets the instance variables to the values given by the inputted json object

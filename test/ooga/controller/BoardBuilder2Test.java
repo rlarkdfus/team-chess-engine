@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 class BoardBuilder2Test {
 
   Builder boardBuilder;
+  PieceBuilder pieceBuilder;
   JsonParser jp;
   String gameType;
   String team;
@@ -31,9 +32,21 @@ class BoardBuilder2Test {
   void setUp() {
     String testFile = "data/chess/oneBlackPawn.json";
     boardBuilder = new BoardBuilder2(new File(testFile));
+
+    getPieceBuilder();
     gameType = "chess";
     team = "b";
     jp = new JsonParser();
+  }
+
+  private void getPieceBuilder() {
+    try {
+      Field f = boardBuilder.getClass().getDeclaredField("pieceBuilder");
+      f.setAccessible(true);
+      pieceBuilder = (PieceBuilder) f.get(boardBuilder);
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      e.printStackTrace();
+    }
   }
 
   @Test
@@ -114,10 +127,10 @@ class BoardBuilder2Test {
   void testGetAttributes()
       throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, FileNotFoundException {
 
-    Method getAttributes = boardBuilder.getClass()
+    Method getAttributes = pieceBuilder.getClass()
         .getDeclaredMethod("getAttributes", JSONObject.class);
     getAttributes.setAccessible(true);
-    Map<String, Boolean> map = (Map<String, Boolean>) getAttributes.invoke(boardBuilder,
+    Map<String, Boolean> map = (Map<String, Boolean>) getAttributes.invoke(pieceBuilder,
         getPiece());
 
     assertEquals(true, map.get("limited"), "limited should be true");
@@ -132,11 +145,11 @@ class BoardBuilder2Test {
     List<Move> actual;
     List<Move> expected;
 
-    Method getMoves = boardBuilder.getClass()
+    Method getMoves = pieceBuilder.getClass()
         .getDeclaredMethod("getMoves", JSONObject.class, String.class);
     getMoves.setAccessible(true);
 
-    actual = (List<Move>) getMoves.invoke(boardBuilder, getPiece(), team);
+    actual = (List<Move>) getMoves.invoke(pieceBuilder, getPiece(), team);
     expected =List.of(new EnPassantMove(),new EnPassantMove(),new TranslationMove(),new PawnMove());
 
     assertEquals(expected.size(), actual.size(),"wrong number of moves.");
