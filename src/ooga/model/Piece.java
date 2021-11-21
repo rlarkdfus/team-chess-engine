@@ -2,9 +2,12 @@ package ooga.model;
 
 import ooga.Location;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class Piece implements PieceInterface {
 
@@ -15,18 +18,15 @@ public class Piece implements PieceInterface {
   private int score;
   private String name;
   private Map<String, Boolean> attributes;
+  private boolean isEliminated;
+  private boolean endConditionSatisified;
+  private int uniqueID;
+  //Used to create a unique hash/id for each piece;
+  private Location initialLocation;
+  String endStateString = "eliminated";
 
-  //FIXMe: Add attribute for score
-  public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes) {
-    this.team = team;
-    this.name = name;
-    this.location = location;
-    this.moveVectors = moveVectors;
-    this.attributes = attributes;
-    hasMoved = false;
-  }
 
-  
+
   public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
     this.location = location;
     this.moveVectors = moveVectors;
@@ -35,6 +35,18 @@ public class Piece implements PieceInterface {
     this.score = score;
     this.name = name;
     this.attributes = attributes;
+  }
+
+
+  public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score, String endStateString) {
+    this.location = location;
+    this.moveVectors = moveVectors;
+    this.team = team;
+    this.hasMoved = hasMoved;
+    this.score = score;
+    this.name = name;
+    this.attributes = attributes;
+    this.endStateString = endStateString;
   }
 
   /**
@@ -108,7 +120,39 @@ public class Piece implements PieceInterface {
       this.location = location;
     }
 
-    /**
+  @Override
+  public int getUniqueId() {
+    return this.uniqueID;
+  }
+
+  @Override
+  public void setEliminated(boolean state) {
+    isEliminated = state;
+  }
+
+  @Override
+  public boolean getEliminatedState() {
+    return isEliminated;
+  }
+
+  //Fixme: Fix the end state
+  @Override
+  public boolean getEndState() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    Method method= this.getClass().getDeclaredMethod(endStateString);
+    //endState string can be standard(no end state, or eliminated, meaning it is killed)
+    Object value = method.invoke(this);
+    return (boolean) value;
+  }
+
+  //Used for reflection.
+  private boolean standard(){
+    return true;
+  }
+  private boolean eliminated(){
+    return this.isEliminated;
+  }
+
+  /**
    * override toString to print out piece information
    *
    * @return
@@ -117,6 +161,22 @@ public class Piece implements PieceInterface {
   public String toString() {
     return moveVectors.toString();
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Piece piece = (Piece) o;
+    return score == piece.score && Objects.equals(location, piece.location) && Objects.equals(team, piece.team) && Objects.equals(name, piece.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(initialLocation, team, score, name);
+  }
+
+
+
 
   /**
    * holds the vector of move directions for each piece

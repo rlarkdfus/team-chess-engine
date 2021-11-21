@@ -11,7 +11,6 @@ import java.util.Map;
 import ooga.Location;
 import ooga.model.MoveVector;
 import ooga.model.Piece;
-import ooga.model.PieceInterface;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
 import ooga.model.Vector;
@@ -47,6 +46,7 @@ public class BoardBuilder implements Builder {
     try {
       build(jsonParser.loadFile(file));
     } catch (Exception e) {
+      System.out.println("invalid csv");
       e.printStackTrace();
     }
   }
@@ -105,8 +105,9 @@ public class BoardBuilder implements Builder {
 
         MoveVector moveVector = getMoveVector(pieceJSON, team);
         Map<String, Boolean> attributes = getAttributes(pieceJSON);
+        int score = pieceJSON.getInt("value");
 
-        Piece piece = new Piece(team, pieceName, location, moveVector, attributes);
+        Piece piece = new Piece(team, pieceName, location, moveVector, attributes, score);
         pieceList.add(new PieceViewBuilder(piece));
         playerList.get(playerListIdx).addPiece(piece);
       }

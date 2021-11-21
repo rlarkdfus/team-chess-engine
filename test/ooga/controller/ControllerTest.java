@@ -5,11 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.InvocationTargetException;
+
 class ControllerTest {
 
   private Controller c;
   @BeforeEach
-  void setUp() {
+  void setUp() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     c = new Controller();
   }
 

@@ -2,13 +2,17 @@ package ooga.model;
 
 import ooga.Location;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Player implements PlayerInterface {
+    private Map<Integer, Boolean> pieceIDandState;
     private Map<PieceInterface, List<Location>> remainingPieces;
+    //Keep track of all their killed pieces
+    private List<PieceInterface> killedPieces;
     private final String team;
     private int score;
 
@@ -19,17 +23,29 @@ public class Player implements PlayerInterface {
         remainingPieces = new HashMap<>();
 //        inCheck = false;
         score = 0;
+        pieceIDandState = new HashMap<>();
+        this.killedPieces = new ArrayList<>();
     }
 
     /**
      * remove a pice from the player's posession
      * @param location
      */
-    public void removePiece(Location location){
+    public void removePiece(Location location) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         for(PieceInterface piece : remainingPieces.keySet()) {
             if(piece.getLocation().equals(location)) {
+                //Fixme: added for testing purposes
+//                System.out.println("A Piece Has been Killed (you have reached the inside of the if conditional)");
+//                System.out.println(piece.getEndState());
+                piece.setEliminated(true);
+                //Fixme: added for testing purposes
+//                System.out.println(piece.getEndState());
+                killedPieces.add(piece);
+                //Fixme: added for testing purposes
+//                System.out.println(piece.getName() + " " + piece.getTeam() + " " +  piece.getUniqueId() + "" + piece.getEliminatedState());
                 remainingPieces.remove(piece);
                 score -= piece.getScore();
+
                 return;
             }
         }
@@ -48,8 +64,9 @@ public class Player implements PlayerInterface {
      * @param piece
      */
     @Override
-    public void addPiece(PieceInterface piece){
+    public void addPiece(PieceInterface piece) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         remainingPieces.put(piece, new ArrayList<>());
+        pieceIDandState.put(piece.getUniqueId(),piece.getEndState());
         score += piece.getScore();
     }
 

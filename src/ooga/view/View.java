@@ -10,6 +10,7 @@ import ooga.controller.Controller;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
 import ooga.view.ui.gameSettingsUI.GameSettingsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
+import ooga.view.util.ViewUtility;
 
 import java.util.List;
 
@@ -57,8 +58,7 @@ public class View implements ViewInterface {
         this.boardView = new BoardView(controller, pieceViewList, 8, 8);
         this.settingsUI = new SettingsUI(controller, viewController);
         this.gameInfoUI = new GameInfoUI();
-        this.gameSettingsInfoUI = new GameSettingsUI(viewController);
-
+        this.gameSettingsInfoUI = new GameSettingsUI(controller, viewController);
         stage.setScene(setupDisplay());
         stage.show();
     }

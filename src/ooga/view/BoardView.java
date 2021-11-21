@@ -1,5 +1,6 @@
 package ooga.view;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.Group;
@@ -11,8 +12,6 @@ import ooga.Turn;
 import ooga.controller.BoardBuilder;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
-import ooga.model.Piece;
-import ooga.model.PieceInterface;
 
 public class BoardView extends Group implements BoardViewInterface {
 
@@ -36,11 +35,20 @@ public class BoardView extends Group implements BoardViewInterface {
     public void initializeBoardView(List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
         renderBackground(row, col);
         renderInitialChessPieces(pieceViews, DEFAULT_PIECE_STYLE);
-        this.setOnMouseClicked(e -> clickBoard(e));
-        background[0][0].check();
+        this.setOnMouseClicked(e -> {
+            try {
+                clickBoard(e);
+            } catch (InvocationTargetException ex) {
+                ex.printStackTrace();
+            } catch (NoSuchMethodException ex) {
+                ex.printStackTrace();
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
-    private void clickBoard(MouseEvent mouse) {
+    private void clickBoard(MouseEvent mouse) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         Location clickLocation = new Location((int) mouse.getY() / 60, (int) mouse.getX() / 60);
 
         if (mouse.getButton() == MouseButton.SECONDARY) {
@@ -141,13 +149,6 @@ public class BoardView extends Group implements BoardViewInterface {
 
     @Override
     public void changePieceStyle(String style) {
-//        for (int i = 0; i < 8; i++) {
-//            for (int j = 0; j < 8; j++) {
-//                if (pieceGrid[i][j] != null) {
-//                    pieceGrid[i][j].changeStyle(style);
-//                }
-//            }
-//        }
         for (PieceView pieceView : pieceList) {
             if(pieceView != null) {
                 pieceView.changeStyle(style);
@@ -158,11 +159,10 @@ public class BoardView extends Group implements BoardViewInterface {
     @Override
     public void resetBoard() {
         clearBoard();
-        // renderInitialChessPieces(DEFAULT_PIECE_STYLE);
+        //renderInitialChessPieces(DEFAULT_PIECE_STYLE);
     }
 
     private void clearBoard() {
-        System.out.println("clear board");
         for(PieceView pieceView : pieceList) {
             if (pieceView != null) {
                 removePiece(pieceView.location);

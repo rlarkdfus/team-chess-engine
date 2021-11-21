@@ -9,7 +9,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +22,7 @@ import java.util.function.Consumer;
 public class ViewUtility {
 
     private static ResourceBundle myResources = ResourceBundle.getBundle("ooga/view/resources/English");
+    public static final String CSV_FILE_EXTENSION_DESCRIPTION = "CSV (Comma delimited) (*.csv)";
 
     /**
      * makes a label
@@ -95,6 +99,19 @@ public class ViewUtility {
     public static GridPane makeGridPane(String property) {
         GridPane result = new GridPane();
         return (GridPane) setID(property, result);
+    }
+
+    /**
+     * creates a filechooser to save a csv file
+     * @return the path of the saved file
+     */
+    public static String saveCSVPath() {
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(
+                CSV_FILE_EXTENSION_DESCRIPTION, "*.csv");
+        fileChooser.getExtensionFilters().addAll(fileExtension);
+        File file = fileChooser.showSaveDialog(new Stage());
+        return file != null ? file.getAbsolutePath() : "";
     }
 
     /**

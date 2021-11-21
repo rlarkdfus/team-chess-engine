@@ -16,6 +16,5 @@ public class GameInfoUI extends GridPane implements UIInterface {
         this.add(ViewUtility.makeLabel("time_control"), 0, 0);
         this.add(ViewUtility.makeLabel("variation"), 0, 1);
         this.add(ViewUtility.makeLabel("chess"), 1, 1);
-
     }
 }

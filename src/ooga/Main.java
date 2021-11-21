@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import ooga.controller.Controller;
 import ooga.view.View;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Feel free to completely change this code or delete it entirely. 
  */
@@ -18,7 +20,7 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         new Controller();
     }
 }

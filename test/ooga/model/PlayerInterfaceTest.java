@@ -1,6 +1,8 @@
 package ooga.model;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import ooga.Location;
@@ -8,18 +10,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class PlayerInterfaceTest {
     private PlayerInterface player;
     private PieceInterface piece;
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         player = new Player("white");
         List<Vector> vectors = new ArrayList<>();
         vectors.add(new Vector(-1, 0));
@@ -31,12 +26,12 @@ class PlayerInterfaceTest {
         MoveVector vec = new MoveVector(vectors, vectors, vectors);
         Map<String, Boolean> map = new HashMap<>();
         map.put("limited", false);
-        piece = new Piece("w", "P", loc, vec, map);
+        piece = new Piece("w", "P", loc, vec, map, 1);
         player.addPiece(piece);
     }
 
     @Test
-    void removePiece() {
+    void removePiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         player.removePiece(piece.getLocation());
         Assertions.assertEquals(player.getPieces().size(), 0);
     }
@@ -47,7 +42,7 @@ class PlayerInterfaceTest {
     }
 
     @Test
-    void addPiece() {
+    void addPiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         player.addPiece(piece);
         Assertions.assertEquals(player.getPieces().size(), 2);
     }
