@@ -11,8 +11,10 @@ public class EnPassantMove extends Move {
     public void executeMove(PieceInterface pawn, List<PieceInterface> pieces, Location end) {
         Location enemyPawnLocation = new Location(end.getRow() - getdRow(), end.getCol());
 
+        Location removeFrom = pieceAt(enemyPawnLocation, pieces) == null ? end : enemyPawnLocation;
+        System.out.println("EnPassantMove.executeMove removed " + pieceAt(removeFrom, pieces));
+        removePiece(pieceAt(removeFrom, pieces), pieces);
         movePiece(pawn, end);
-        removePiece(pieceAt(enemyPawnLocation, pieces), pieces);
     }
 
     @Override
@@ -34,6 +36,9 @@ public class EnPassantMove extends Move {
 
         PieceInterface otherPawn = pieceAt(otherPawnLocation, pieces);
 
+        if(pieceAt(potentialLocation, pieces) != null && !pieceAt(potentialLocation, pieces).getTeam().equals(pawn.getTeam())){
+            return tryMove(pawn, potentialLocation, new ArrayList<>(pieces));
+        }
         if (otherPawn == null || !otherPawn.isFirstMove()){
             return false;
         }
