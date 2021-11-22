@@ -11,10 +11,12 @@ import ooga.controller.InvalidGameConfigException;
 
 public class LocationEndConditionHandler {
   private Map<Location, String> targetLocations;
+  private Map<String, Integer> teams;
   private ResourceBundle resourceBundle;
   public LocationEndConditionHandler(){
     targetLocations = new HashMap<>();
     resourceBundle = ResourceBundle.getBundle("JSONMappings");
+    teams = new HashMap();
   }
   public boolean isGameOver(List<PieceInterface> alivePieces){
     boolean foundLocation;
@@ -22,6 +24,8 @@ public class LocationEndConditionHandler {
       foundLocation = false;
       for (PieceInterface p : alivePieces){
         if (p.getLocation().equals(l) && p.getName().equals(targetLocations.get(l))){
+          teams.putIfAbsent(p.getTeam(),0);
+          teams.put(p.getTeam(),teams.get(p.getTeam())+1);
           foundLocation = true;
           break;
         }
@@ -30,11 +34,16 @@ public class LocationEndConditionHandler {
         return false;
       }
     }
-    return true;
+    for (String team : teams.keySet()){
+      if (teams.get(team).equals(targetLocations.size())){
+        return true;
+      }
+    }
+    return false;
   }
   public void setArgs(Map<String, List<String>> properties, List<PlayerInterface> players)
       throws InvalidGameConfigException {
-    String[] keys = resourceBundle.getString("eliminationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
+    String[] keys = resourceBundle.getString("locationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
     List<String> pieces = properties.get(keys[0]);
     List<String> locations = properties.get(keys[1]);
     if (pieces.size() != locations.size()){throw new InvalidGameConfigException();}
