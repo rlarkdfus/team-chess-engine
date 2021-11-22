@@ -1,5 +1,7 @@
 package ooga.view.util;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -58,10 +60,11 @@ public class ViewUtility {
     }
 
     // used for timers, think of better way maybe?
-    public Text makeText(String property) {
+    public Text makeText(String property, StringProperty boundValue) {
         Text result = new Text(property);
         result.setText(myResources.getString(property));
         result.getStyleClass().add("text");
+        result.textProperty().bind(boundValue);
         return (Text) setID(property, result);
     }
 
@@ -90,9 +93,9 @@ public class ViewUtility {
      * @param max      the maximum slider value
      * @return the slider
      */
-    public Slider makeSlider(String property, double min, double max, double start, Consumer<Number> response) {
+    public Slider makeSlider(String property, double min, double max, double start, Consumer<Integer> response) {
         Slider result = new Slider(min, max, start);
-        result.valueProperty().addListener((o, oldValue, newValue) -> response.accept(newValue));
+        result.valueProperty().addListener((o, oldValue, newValue) -> response.accept(newValue.intValue()));
         result.getStyleClass().add("slider");
         return (Slider) setID(property, result);
     }

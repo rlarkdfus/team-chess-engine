@@ -14,6 +14,11 @@ public interface ControllerInterface {
 //    void updateView();
 
     /**
+     * Resets a game to its initial/default state
+     */
+    void resetGame();
+
+    /**
      * View calls loadFile to choose a file to load a game
      */
     void uploadConfiguration(File file) throws Exception;

@@ -24,7 +24,7 @@ public class SettingsUI extends GridPane implements UIInterface {
         this.controller = controller;
         this.viewController = viewController;
         gameConfigurationUI = new GameConfigurationUI(controller);
-        timeConfigurationUI = new TimeConfigurationUI(viewController);
+        timeConfigurationUI = new TimeConfigurationUI(controller, viewController);
         boardStyleUI = new BoardStyleUI(viewController);
         this.viewUtility = new ViewUtility();
         createUI();
