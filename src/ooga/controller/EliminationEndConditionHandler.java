@@ -10,7 +10,6 @@ import ooga.model.PlayerInterface;
 
 public class EliminationEndConditionHandler {
   private Map<String, Integer> pieceEndAmounts;
-  private List<String> pieceTypes;
   private Map<String, Integer> initialPieceAmounts;
 
   public void setArgs(Map<String, List<String>> propertiesMap, List<PlayerInterface> players) {
@@ -39,9 +38,9 @@ public class EliminationEndConditionHandler {
     Map<String, Integer> pieceRemovedMap = new HashMap<>();
 
     for(PlayerInterface player : players) {
-      pieceTypes.forEach(pieceType -> {
-        pieceAmountMap.putIfAbsent(pieceType, 0);
-        pieceRemovedMap.putIfAbsent(pieceType, 0);}
+      player.getPieces().forEach(pieceType -> {
+        pieceAmountMap.putIfAbsent(pieceType.getName(), 0);
+        pieceRemovedMap.putIfAbsent(pieceType.getName(), 0);}
       );
       setAmountsOfEachPieceOnBoard(pieceAmountMap, player);
       if (checkIfEndConditionsMet(pieceAmountMap)) {
