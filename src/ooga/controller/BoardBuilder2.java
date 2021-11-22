@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import ooga.model.Piece;
 import ooga.model.Player;
@@ -29,7 +31,6 @@ public class BoardBuilder2 implements Builder {
   private List<String> players;
   private String bottomColor;
   private String style;
-  private String rules;
   private String csv;
   private List<List<String>> csvData;
   private List<PlayerInterface> playerList;
@@ -38,6 +39,8 @@ public class BoardBuilder2 implements Builder {
   private LocationParser locationParser;
   private JsonParser jsonParser;
   private PieceBuilder pieceBuilder;
+
+//  private EndConditionHandler endConditionHandler;
 
   public BoardBuilder2(File defaultFile) {
     mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
@@ -79,6 +82,12 @@ public class BoardBuilder2 implements Builder {
     csvData = locationParser.getInitialLocations(csv);
     pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     iterateCSVData();
+    try {
+      buildEndConditionHandler(jsonObject.getString(mappings.getString("rules")));
+    }catch (Exception e){
+      throw new InvalidGameConfigException();
+    }
+
   }
 
   @Override
@@ -91,6 +100,10 @@ public class BoardBuilder2 implements Builder {
     return playerList;
   }
 
+  @Override
+  public void getEndConditionHandler() {
+//    return endConditionHandler;
+  }
   /**
    * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
    * pieceGrid
@@ -136,25 +149,40 @@ public class BoardBuilder2 implements Builder {
    *
    * @param jsonObject - jsonobject representation of the .json file
    */
-  private void extractJSONObj(JSONObject jsonObject) {
+  private void extractJSONObj(JSONObject jsonObject)
+      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException {
     gameType = jsonObject.getString(mappings.getString("type"));
     boardShape = jsonObject.getString(mappings.getString("board"));
     style = jsonObject.getString(mappings.getString("style"));
     boardSize = new ArrayList<>();
     List<String> a = Arrays.asList(jsonObject.getString(mappings.getString("boardSize")).split("x"));
     a.forEach((num) -> boardSize.add(parseInt(num)));
-    boardColors = extractColors(jsonObject.getJSONArray(mappings.getString("boardColors")));
-    players = extractColors(jsonObject.getJSONArray(mappings.getString("players")));
+    boardColors = convertJSONArrayOfStrings(jsonObject.getJSONArray(mappings.getString("boardColors")));
+    players = convertJSONArrayOfStrings(jsonObject.getJSONArray(mappings.getString("players")));
     bottomColor = players.get(0); //assumes that bottom player is the first given player color
-    rules = jsonObject.getString(mappings.getString("rules"));
     csv = jsonObject.getString(mappings.getString("csv"));
+  }
+
+  private void buildEndConditionHandler(String ruleJsonFile)
+      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException {
+    JSONObject rules = jsonParser.loadFile(new File(ruleJsonFile));
+    String type = rules.getString(mappings.getString("type"));
+    List<String> keys = List.of(mappings.getString(type).split("jsonDelimiter"));
+    Map<String,List<String>> endConditionProperties = new HashMap<>();
+    for (String key : keys){
+      endConditionProperties.put(key, convertJSONArrayOfStrings(rules.getJSONArray(key)));
+    }
+    Class<?> clazz = Class.forName("ooga.model.EndConditionHandler." + type);
+//    endConditionHandler = (EndConditionHandler) clazz.getDeclaredConstructor().newInstance();
+//    endConditionHandler.setArgs(endConditionProperties);
+
   }
 
   /**
    * @param jsonArray - jsonarray of strings that represent colors of the board/players;
    * @return - a List of strings version of the jsonarray
    */
-  private List<String> extractColors(JSONArray jsonArray) {
+  private List<String> convertJSONArrayOfStrings(JSONArray jsonArray) {
     List<String> ret = new ArrayList<>();
     for (int i = 0; i < jsonArray.length(); i++) {
       ret.add(jsonArray.getString(i));
