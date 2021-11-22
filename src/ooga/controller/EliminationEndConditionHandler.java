@@ -1,6 +1,7 @@
 package ooga.controller;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import ooga.model.Piece;
@@ -14,7 +15,11 @@ public class EliminationEndConditionHandler {
 
   public void setArgs(Map<String, List<String>> propertiesMap, List<PlayerInterface> players) {
     pieceEndAmounts = new HashMap<>();
-    // propertiesMap.get("amount").forEach((amount) -> pieceEndAmounts.put(amount));
+    Iterator<String> pieceIter = propertiesMap.get("pieceType").iterator();
+    Iterator<String> amountIter = propertiesMap.get(("amount")).iterator();
+    while(pieceIter.hasNext() && amountIter.hasNext()) {
+      pieceEndAmounts.putIfAbsent(pieceIter.next(), Integer.parseInt(amountIter.next()));
+    }
     /**
      * Set piece end amounts based on prop file
      */
