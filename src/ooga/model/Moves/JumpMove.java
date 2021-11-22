@@ -1,39 +1,32 @@
 package ooga.model.Moves;
 
-import java.util.ArrayList;
 import ooga.Location;
 import ooga.model.PieceInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JumpMove extends Move {
 
     @Override
-    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        List<PieceInterface> takenPieces = new ArrayList<>();
-        for(PieceInterface occupied : pieces) {
+    public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
+        for(PieceInterface occupied : new ArrayList<>(pieces)) {
             if(occupied.getLocation().equals(end)) {
-                takenPieces.add(occupied);
-                getTurn().removePiece(end);
+                removePiece(occupied, pieces);
             }
         }
-        pieces.removeAll(takenPieces);
-
-        getTurn().movePiece(piece.getLocation(), end);
-        piece.moveTo(end);
-        return pieces;
+        movePiece(piece, end);
     }
 
     @Override
     public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
-        resetEndLocations();
+        resetMove();
         int row = piece.getLocation().getRow() + getdRow();
         int col = piece.getLocation().getCol() + getdCol();
 
         Location potentialLocation = new Location(row, col);
 
         while(isLegal(piece, potentialLocation, pieces)){
-
             addEndLocation(potentialLocation);
 
             if(isLimited()) {
@@ -64,6 +57,6 @@ public class JumpMove extends Move {
             return false;
         }
 
-        return tryMove(piece, potentialLocation, pieces);
+        return tryMove(piece, potentialLocation, new ArrayList<>(pieces));
     }
 }

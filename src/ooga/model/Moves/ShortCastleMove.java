@@ -7,24 +7,17 @@ import ooga.model.PieceInterface;
 public class ShortCastleMove extends Move {
 
     @Override
-    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        Location location = new Location(piece.getLocation().getRow() + getdRow(), piece.getLocation().getCol() + getdCol());
-
+    public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         // move rook as well
         PieceInterface rook = findRook(piece.getLocation().getRow(), 7, pieces); // TODO not hardcode column 7
 
-        getTurn().movePiece(piece.getLocation(), end);
-        piece.moveTo(location);
-
-        getTurn().movePiece(rook.getLocation(), new Location(piece.getLocation().getRow(), 5));
-        rook.moveTo(new Location(piece.getLocation().getRow(), 5));
-
-        return pieces;
+        movePiece(piece, end);
+        movePiece(rook, new Location(piece.getLocation().getRow(), 5));
     }
 
     @Override
     public void updateMoveLocations(PieceInterface king, List<PieceInterface> pieces) {
-        resetEndLocations();
+        resetMove();
         int row = king.getLocation().getRow() + getdRow();
         int col = king.getLocation().getCol() + getdCol();
 
@@ -40,26 +33,37 @@ public class ShortCastleMove extends Move {
         if(!inBounds(potentialLocation.getRow(), potentialLocation.getCol())) {
             return false;
         }
+        System.out.println(king);
 
         PieceInterface rook = findRook(king.getLocation().getRow(), 7, pieces); // TODO not hardcode column 7
 
+        if(rook == null) {
+//            System.out.println("rook not found");
+            return false;
+        }
+
         // make sure none have moved
         if(king.hasMoved() || rook.hasMoved()) {
+//            System.out.println("moved");
             return false;
         }
 
         // construct location 1 above, and 2 above, make sure they're clear
         Location intermediateLocation = new Location(potentialLocation.getRow(), potentialLocation.getCol()-getdCol()/2);
         if(!isClear(List.of(potentialLocation, intermediateLocation), pieces)) {
+//            System.out.println("not clear");
             return false;
         }
         // must make sure nothing in that row is under attack
         List<Location> kingLocations = List.of(king.getLocation(), potentialLocation, intermediateLocation);
-        for(Location l : kingLocations){
-            if(underAttack(l, pieces)){
+        List<PieceInterface> attackingPieces = getAttackingPieces(king, pieces);
+        for(Location loc : kingLocations){
+            if(underAttack(loc, attackingPieces)){
+//                System.out.println("under attack");
                 return false;
             }
         }
+//        System.out.println("can castle");
         return true;
     }
 

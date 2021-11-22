@@ -8,8 +8,7 @@ import java.util.List;
 public class LongCastleMove extends Move {
 
     @Override
-    public List<PieceInterface> executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        return null;
+    public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
     }
 
     @Override

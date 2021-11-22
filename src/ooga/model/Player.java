@@ -17,22 +17,7 @@ public class Player implements PlayerInterface {
     public Player(String team) {
         this.team = team;
         remainingPieces = new HashMap<>();
-//        inCheck = false;
         score = 0;
-    }
-
-    /**
-     * remove a pice from the player's posession
-     * @param location
-     */
-    public void removePiece(Location location){
-        for(PieceInterface piece : remainingPieces.keySet()) {
-            if(piece.getLocation().equals(location)) {
-                remainingPieces.remove(piece);
-                score -= piece.getScore();
-                return;
-            }
-        }
     }
 
     /**
@@ -53,6 +38,11 @@ public class Player implements PlayerInterface {
         score += piece.getScore();
     }
 
+    public void removePiece(PieceInterface piece){
+        remainingPieces.remove(piece);
+        score -= piece.getScore();
+    }
+
     /**
      * returns the player team
      * @return
@@ -62,31 +52,20 @@ public class Player implements PlayerInterface {
         return team;
     }
 
-    public PieceInterface getKing(){
-        for(PieceInterface piece : remainingPieces.keySet()) {
-            if(piece.getName().equals("K")) {
-                return piece;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void movePiece(PieceInterface piece, Location end) {
-        piece.moveTo(end);
-    }
-    
-    @Override
-    public void tryMove(PieceInterface piece, Location end) {
-        piece.tryMove(end);
-    }
-
     @Override
     public PieceInterface getPiece(Location location) {
+        List<PieceInterface> p = new ArrayList<>();
         for(PieceInterface piece : remainingPieces.keySet()) {
             if(piece.getLocation().equals(location)) {
-                return piece;
+                p.add(piece);
+//                return piece;
             }
+        }
+        if(p.size() > 0){
+            if(p.size() > 1){
+                System.out.println("Player.getPiece " + p.size() + " pieces " + p + " at " + location);
+            }
+            return p.get(0);
         }
         return null;
     }

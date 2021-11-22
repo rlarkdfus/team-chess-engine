@@ -2,12 +2,9 @@
   "type": "chess",
   "board": "square",
   "boardSize": "8x8",
+  "boardColors": ["#f3dab0", "#bb885b"],
   "players": ["w", "b"],
   "rules": "default",
   "style": "companion",
-  "boardColors": ["#f3dab0", "#bb885b"],
-  "endcon" : "myendcon.json",
-  "csv": "data/chess/locations/errorCSV.csv"
+  "csv": "data/chess/locations/oneBlackKnight.csv"
 }
-
-

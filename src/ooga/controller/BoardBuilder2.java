@@ -1,6 +1,5 @@
 package ooga.controller;
 
-import static java.lang.Boolean.parseBoolean;
 import static java.lang.Integer.parseInt;
 
 import java.io.File;
@@ -10,8 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ooga.Location;
-import ooga.model.Moves.Move;
+import java.util.ResourceBundle;
 import ooga.model.Piece;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
@@ -22,6 +20,9 @@ public class BoardBuilder2 implements Builder {
 
   public static final String DEFAULT_STYLE = "companion";
   public static final int ARG_LENGTH = 4;
+  public static final String PROPERTIES_FILE = "JSONMappings";
+  private ResourceBundle mappings;
+
 
   private String gameType;
   private String boardShape;
@@ -30,7 +31,6 @@ public class BoardBuilder2 implements Builder {
   private List<String> players;
   private String bottomColor;
   private String style;
-  private String rules;
   private String csv;
   private List<List<String>> csvData;
   private List<PlayerInterface> playerList;
@@ -38,14 +38,17 @@ public class BoardBuilder2 implements Builder {
 
   private LocationParser locationParser;
   private JsonParser jsonParser;
+  private PieceBuilder pieceBuilder;
+
+//  private EndConditionHandler endConditionHandler;
 
   public BoardBuilder2(File defaultFile) {
+    mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
     jsonParser = new JsonParser();
     locationParser = new LocationParser();
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
     style = DEFAULT_STYLE;
-
     try {
       build(defaultFile);
     } catch (FileNotFoundException | CsvException | PlayerNotFoundException | InvalidPieceConfigException | InvalidGameConfigException e) {
@@ -77,7 +80,14 @@ public class BoardBuilder2 implements Builder {
       playerList.add(new Player(player));
     }
     csvData = locationParser.getInitialLocations(csv);
+    pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     iterateCSVData();
+    try {
+      buildEndConditionHandler(jsonObject.getString(mappings.getString("rules")));
+    }catch (Exception e){
+      throw new InvalidGameConfigException();
+    }
+
   }
 
   @Override
@@ -90,6 +100,10 @@ public class BoardBuilder2 implements Builder {
     return playerList;
   }
 
+  @Override
+  public void getEndConditionHandler() {
+//    return endConditionHandler;
+  }
   /**
    * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
    * pieceGrid
@@ -98,90 +112,21 @@ public class BoardBuilder2 implements Builder {
       throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
-        String[] square = csvData.get(r).get(c).split("_");
+        String[] square = csvData.get(r).get(c).split(mappings.getString("csvDelimiter"));
         if (square.length < 2) {
           //signifies that this square is empty
           continue;
         }
 
+        Piece piece = pieceBuilder.buildPiece(square, r, c);
         int playerListIdx = determinePlayer(r, c, square[0]);
-        Piece piece = buildPiece(r, c);
+
         pieceList.add(new PieceViewBuilder(piece));
         playerList.get(playerListIdx).addPiece(piece);
       }
     }
   }
 
-  private Piece buildPiece(int r, int c) throws FileNotFoundException, InvalidPieceConfigException {
-    String[] square = csvData.get(r).get(c).split("_");
-    String team = square[0];
-    String pieceName = square[1];
-    Location location = new Location(r, c);
-
-    String pieceJsonPath = "data/" + gameType + "/pieces/" + pieceName + ".json";
-    JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
-
-    List<Move> moves;
-    Map<String, Boolean> attributes;
-    int value;
-    String errorKey = null;
-    try {
-      errorKey = "moves";
-      moves = getMoves(pieceJSON, team);
-      errorKey = "attributes";
-      attributes = getAttributes(pieceJSON);
-      errorKey = "value";
-      value = pieceJSON.getInt("value");
-    } catch (Throwable e) {
-      throw new InvalidPieceConfigException(r, c, pieceJsonPath, errorKey);
-    }
-    return new Piece(team, pieceName, location, moves, attributes, value);
-
-  }
-
-
-  private List<Move> getMoves(JSONObject pieceObj, String team) throws Throwable {
-    JSONObject moveTypes = pieceObj.getJSONObject("moves");
-    List<Move> moveList = new ArrayList<>();
-    for (String moveType : moveTypes.keySet()) {
-      List<Move> newMoves = makeTypeOfMove(moveType, (JSONArray) moveTypes.get(moveType), team);
-      moveList.addAll(newMoves);
-    }
-    return moveList;
-  }
-
-  private List<Move> makeTypeOfMove(String moveType, JSONArray arguments, String team)
-      throws Throwable {
-    List<Move> moves = new ArrayList<>();
-    for (int i = 0; i < arguments.length(); i++) {
-      Move newMove = makeNewMove(moveType);
-      if (newMove == null) {
-        continue;
-      }
-      setMoveArgs(team, newMove, arguments.getString(i));
-      moves.add(newMove);
-    }
-    return moves;
-  }
-
-  private Move makeNewMove(String moveType) throws Throwable {
-    Class<?> clazz = Class.forName("ooga.model.Moves." + moveType);
-    Move newMove = (Move) clazz.getDeclaredConstructor().newInstance();
-    return newMove;
-  }
-
-  private void setMoveArgs(String team, Move newMove, String arg) throws Exception {
-    String[] args = arg.split(",");
-    if (args.length == ARG_LENGTH) {
-      int dRow = team.equals(bottomColor) ? -parseInt(args[0]) : parseInt(args[0]);
-      int dCol = parseInt(args[1].strip());
-      boolean takes = parseBoolean(args[2].strip());
-      boolean limited = args[3].strip().equals("limited");
-      newMove.setMove(dRow, dCol, takes, limited);
-    } else {
-      throw new Exception();
-    }
-  }
 
 
   private int determinePlayer(int r, int c, String team) throws PlayerNotFoundException {
@@ -197,44 +142,47 @@ public class BoardBuilder2 implements Builder {
     return playerListIdx;
   }
 
-  /**
-   * @param pieceJSON - JSON object of the piece
-   * @return a map of all the attributes and their values
-   */
-  private Map<String, Boolean> getAttributes(JSONObject pieceJSON) {
-    JSONObject attributes = pieceJSON.getJSONObject("attributes");
-    Map<String, Boolean> map = new HashMap<>();
-    for (String attribute : attributes.keySet()) {
-      map.put(attribute, attributes.getBoolean(attribute));
-    }
 
-    return map;
-  }
 
   /**
    * sets the instance variables to the values given by the inputted json object
    *
    * @param jsonObject - jsonobject representation of the .json file
    */
-  private void extractJSONObj(JSONObject jsonObject) {
-    gameType = jsonObject.getString("type");
-    boardShape = jsonObject.getString("board");
-    style = jsonObject.getString("style");
+  private void extractJSONObj(JSONObject jsonObject)
+      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException {
+    gameType = jsonObject.getString(mappings.getString("type"));
+    boardShape = jsonObject.getString(mappings.getString("board"));
+    style = jsonObject.getString(mappings.getString("style"));
     boardSize = new ArrayList<>();
-    List<String> a = Arrays.asList(jsonObject.getString("boardSize").split("x"));
+    List<String> a = Arrays.asList(jsonObject.getString(mappings.getString("boardSize")).split("x"));
     a.forEach((num) -> boardSize.add(parseInt(num)));
-    boardColors = extractColors(jsonObject.getJSONArray("boardColors"));
-    players = extractColors(jsonObject.getJSONArray("players"));
+    boardColors = convertJSONArrayOfStrings(jsonObject.getJSONArray(mappings.getString("boardColors")));
+    players = convertJSONArrayOfStrings(jsonObject.getJSONArray(mappings.getString("players")));
     bottomColor = players.get(0); //assumes that bottom player is the first given player color
-    rules = jsonObject.getString("rules");
-    csv = jsonObject.getString("csv");
+    csv = jsonObject.getString(mappings.getString("csv"));
+  }
+
+  private void buildEndConditionHandler(String ruleJsonFile)
+      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException {
+    JSONObject rules = jsonParser.loadFile(new File(ruleJsonFile));
+    String type = rules.getString(mappings.getString("type"));
+    List<String> keys = List.of(mappings.getString(type).split("jsonDelimiter"));
+    Map<String,List<String>> endConditionProperties = new HashMap<>();
+    for (String key : keys){
+      endConditionProperties.put(key, convertJSONArrayOfStrings(rules.getJSONArray(key)));
+    }
+    Class<?> clazz = Class.forName("ooga.model.EndConditionHandler." + type);
+//    endConditionHandler = (EndConditionHandler) clazz.getDeclaredConstructor().newInstance();
+//    endConditionHandler.setArgs(endConditionProperties);
+
   }
 
   /**
    * @param jsonArray - jsonarray of strings that represent colors of the board/players;
    * @return - a List of strings version of the jsonarray
    */
-  private List<String> extractColors(JSONArray jsonArray) {
+  private List<String> convertJSONArrayOfStrings(JSONArray jsonArray) {
     List<String> ret = new ArrayList<>();
     for (int i = 0; i < jsonArray.length(); i++) {
       ret.add(jsonArray.getString(i));
