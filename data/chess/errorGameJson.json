@@ -3,7 +3,7 @@
   "board": "square",
   "boardSize": "8x8",
   "players": ["w", "b"],
-  "rules": "default",
+  "rules": "data/chess/rules/default.json",
   "style": "companion",
   "csv": "data/chess/locations/oneBlackPawn.csv"
 }

@@ -9,21 +9,23 @@ import java.util.List;
 import java.util.Map;
 import ooga.controller.BoardBuilder2;
 import ooga.controller.Builder;
+import ooga.model.EndConditionHandler.EliminationEndCondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class EliminationEndConditionHandlerTest {
-  EliminationEndConditionHandler e;
+  EliminationEndCondition e;
   List<PlayerInterface> players;
   @BeforeEach
   void setUp() {
-    e = new EliminationEndConditionHandler();
+    e = new EliminationEndCondition();
     String testFile = "data/chess/defaultChess.json";
     Builder boardBuilder = new BoardBuilder2(new File(testFile));
     players = boardBuilder.getInitialPlayers();
     
     e.setArgs(Map.of("pieceType", List.of("P","K"), "amount", List.of("2", "1")),getAllPieces());
   }
+
   @Test
   void testSetArgs() throws NoSuchFieldException, IllegalAccessException {
     Field f;
@@ -35,10 +37,12 @@ class EliminationEndConditionHandlerTest {
     f = e.getClass().getDeclaredField("piecesToEliminate");
     f.setAccessible(true);
     Map<String, Integer> piecesToEliminate = ( Map<String, Integer>)f.get(e);
-    for (String s : piecesToEliminate.keySet()){
-      System.out.println(s);
-    }
     assertEquals(4, piecesToEliminate.keySet().size());
+    assertEquals(true, piecesToEliminate.keySet().contains("b_P"),"piecestoeliminate doesn't have b_P");
+    assertEquals(true, piecesToEliminate.keySet().contains("b_K"),"piecestoeliminate doesn't have b_K");
+    assertEquals(true, piecesToEliminate.keySet().contains("w_P"),"piecestoeliminate doesn't have w_P");
+    assertEquals(true, piecesToEliminate.keySet().contains("w_K"),"piecestoeliminate doesn't have w_K");
+
   }
 
   @Test
@@ -47,6 +51,8 @@ class EliminationEndConditionHandlerTest {
     removePieces(pieces, List.of("b_K","b_P","b_P"));
     boolean ret = e.isGameOver(pieces);
     assertEquals(true, ret,"game should be over");
+    assertEquals("b",e.getWinner(),"black should win");
+
   }
 
   @Test
@@ -55,6 +61,7 @@ class EliminationEndConditionHandlerTest {
     removePieces(pieces, List.of("w_K","w_P","w_P"));
     boolean ret = e.isGameOver(pieces);
     assertEquals(true, ret,"game should end");
+    assertEquals("w",e.getWinner(),"white should win");
   }
 
   @Test

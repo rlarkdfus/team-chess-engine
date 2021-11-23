@@ -155,16 +155,4 @@ public class Piece implements PieceInterface {
     }
   }
 
-  @Override
-  public boolean equals(Object o){
-    if (!(o instanceof Piece)) {
-      return false;
-    }
-    Piece other = (Piece) o;
-    if (other.team == this.team && other.name == this.name){
-      return true;
-    }
-    return false;
-
-  }
 }

@@ -1,4 +1,4 @@
-package ooga.model;
+package ooga.model.EndConditionHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,17 +7,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import ooga.model.PieceInterface;
 
-public class EliminationEndConditionHandler implements EndConditionInterface{
+public class EliminationEndCondition implements EndConditionInterface {
   private List<PieceInterface> previousTurnPieces;
   private Map<String, Integer> piecesToEliminate;
+  private String winner;
 
   @Override
   public void setArgs(Map<String, List<String>> propertiesMap, List<PieceInterface> allpieces) {
 
-    /**
-     * Set piece end amounts based on prop file
-     */
     Set<String> teams = new HashSet<>();
     for(PieceInterface piece : allpieces) {
       teams.add(piece.getTeam());
@@ -45,6 +44,11 @@ public class EliminationEndConditionHandler implements EndConditionInterface{
     return checkEndConditions();
   }
 
+  @Override
+  public String getWinner(){
+    return winner;
+  }
+
   private void findMissingPiece(List<PieceInterface> alivePieces) {
     boolean found = false;
     for (PieceInterface p : previousTurnPieces){
@@ -66,6 +70,7 @@ public class EliminationEndConditionHandler implements EndConditionInterface{
     HashMap<String, Integer> targetPiecesRemaining = getTargetPiecesRemaining();
     for (String team : targetPiecesRemaining.keySet()){
       if (targetPiecesRemaining.get(team) == 0){
+        winner = team;
         return true;
       }
     }

@@ -1,4 +1,4 @@
-package ooga.model;
+package ooga.model.EndConditionHandler;
 
 import static java.lang.Integer.parseInt;
 
@@ -6,14 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import ooga.Location;
 import ooga.controller.InvalidGameConfigException;
+import ooga.model.PieceInterface;
 
-public class LocationEndConditionHandler implements EndConditionInterface{
-  private Map<Location, String> targetLocations;
+public class LocationEndCondition implements EndConditionInterface{
+  private Map<ooga.Location, String> targetLocations;
   private Map<String, Integer> teams;
   private ResourceBundle resourceBundle;
-  public LocationEndConditionHandler(){
+  private String winner;
+  public LocationEndCondition(){
     targetLocations = new HashMap<>();
     resourceBundle = ResourceBundle.getBundle("JSONMappings");
     teams = new HashMap();
@@ -22,7 +23,7 @@ public class LocationEndConditionHandler implements EndConditionInterface{
   @Override
   public boolean isGameOver(List<PieceInterface> alivePieces){
     boolean foundLocation;
-    for (Location l : targetLocations.keySet()){
+    for (ooga.Location l : targetLocations.keySet()){
       foundLocation = false;
       for (PieceInterface p : alivePieces){
         if (p.getLocation().equals(l) && p.getName().equals(targetLocations.get(l))){
@@ -38,6 +39,7 @@ public class LocationEndConditionHandler implements EndConditionInterface{
     }
     for (String team : teams.keySet()){
       if (teams.get(team).equals(targetLocations.size())){
+        winner = team;
         return true;
       }
     }
@@ -53,8 +55,13 @@ public class LocationEndConditionHandler implements EndConditionInterface{
     for (int i =0; i < pieces.size();i++){
       String piece = pieces.get(i);
       String[] rowColValues = locations.get(i).split(resourceBundle.getString("jsonDelimiter"));
-      Location location = new Location(parseInt(rowColValues[0]),parseInt(rowColValues[1]));
+      ooga.Location location = new ooga.Location(parseInt(rowColValues[0]),parseInt(rowColValues[1]));
       targetLocations.put(location,piece);
     }
+  }
+
+  @Override
+  public String getWinner() {
+    return winner;
   }
 }
