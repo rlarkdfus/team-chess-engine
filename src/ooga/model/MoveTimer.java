@@ -12,7 +12,12 @@ public class MoveTimer {
     private int initialTime;
     private int increment;
     private boolean outOfTime;
+
+    private boolean isPlaying;
+    private boolean isPaused;
+
     private Timer timer;
+    private TimerTask timerTask;
 
     public MoveTimer(int initialTime, int initialIncrement) {
         this.initialTime = initialTime;
@@ -20,7 +25,7 @@ public class MoveTimer {
         this.timeLeft = new SimpleStringProperty(formatTime(initialTime));
         this.increment = initialIncrement;
         this.outOfTime = false;
-        initializeTimer();
+        this.isPlaying = false;
     }
 
     public StringProperty getTimeLeft() {
@@ -39,21 +44,42 @@ public class MoveTimer {
         this.increment = increment;
     }
 
+    public void start() {
+        if (isPlaying) {
+            return;
+        }
+        isPlaying = true;
+        isPaused = false;
+        timer = new Timer();
+        timerTask = makeTimerTask();
+        timer.scheduleAtFixedRate(timerTask, 1000, 1000 );
+        timerTask.run();
+    }
+
+    public void pause() {
+        if (isPaused) {
+            return;
+        }
+        timer.cancel();
+        isPaused = true;
+        isPlaying = false;
+    }
+
     public void reset() {
+        timer.cancel();
+        isPaused = true;
+        isPlaying = false;
         seconds = initialTime;
         outOfTime = false;
     }
 
-    private void initializeTimer() {
-        timer = new Timer();
-        TimerTask task = new TimerTask() {
+    private TimerTask makeTimerTask() {
+        return new TimerTask() {
             @Override
             public void run() {
                 decrementTime();
             }
         };
-        timer.scheduleAtFixedRate(task, 1000, 1000);
-        task.run();
     }
 
     /**

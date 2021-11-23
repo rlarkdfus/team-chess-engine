@@ -120,4 +120,16 @@ public class Controller implements ControllerInterface {
     whiteMoveTimer.reset();
     blackMoveTimer.reset();
   }
+
+  public void pauseTimer() {
+    whiteMoveTimer.pause();
+  }
+
+  public void resumeTimer() {
+    whiteMoveTimer.start();
+  }
+
+  public void resetTimer() {
+    whiteMoveTimer.reset();
+  }
 }

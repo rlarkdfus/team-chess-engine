@@ -49,6 +49,9 @@ public class View implements ViewInterface {
         root.add(gameSettingsInfoUI, 0 , 1);
         root.add(gameInfoUI, 0, 0, 3, 1);
         root.add(boardView, 1, 1);
+        root.add(viewUtility.makeButton("pause", e -> controller.pauseTimer()), 0,2);
+        root.add(viewUtility.makeButton("resume", e -> controller.resumeTimer()), 1,2);
+        root.add(viewUtility.makeButton("reset", e -> controller.resetTimer()), 1,3);
         Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_STYLESHEET).toExternalForm());
         return scene;
