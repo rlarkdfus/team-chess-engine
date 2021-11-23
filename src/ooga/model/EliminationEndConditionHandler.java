@@ -1,70 +1,96 @@
-package ooga.controller;
+package ooga.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import ooga.model.Piece;
-import ooga.model.PieceInterface;
-import ooga.model.PlayerInterface;
+import java.util.Set;
 
-public class EliminationEndConditionHandler {
-  private Map<String, Integer> pieceEndAmounts;
-  private Map<String, Integer> initialPieceAmounts;
+public class EliminationEndConditionHandler implements EndConditionInterface{
+  private List<PieceInterface> previousTurnPieces;
+  private Map<String, Integer> piecesToEliminate;
 
-  public void setArgs(Map<String, List<String>> propertiesMap, List<PlayerInterface> players) {
-    pieceEndAmounts = new HashMap<>();
-    Iterator<String> pieceIter = propertiesMap.get("pieceType").iterator();
-    Iterator<String> amountIter = propertiesMap.get(("amount")).iterator();
-    while(pieceIter.hasNext() && amountIter.hasNext()) {
-      pieceEndAmounts.putIfAbsent(pieceIter.next(), Integer.parseInt(amountIter.next()));
-    }
+  @Override
+  public void setArgs(Map<String, List<String>> propertiesMap, List<PieceInterface> allpieces) {
+
     /**
      * Set piece end amounts based on prop file
      */
-
-    initialPieceAmounts = new HashMap<>();
-    propertiesMap.get("pieceType").forEach(key -> initialPieceAmounts.putIfAbsent(key, 0));
-
-    for(PieceInterface piece : players.get(0).getPieces()) {
-      if(initialPieceAmounts.containsKey(piece.getName())) {
-        initialPieceAmounts.put(piece.getName(), initialPieceAmounts.get(piece.getName()) + 1);
+    Set<String> teams = new HashSet<>();
+    for(PieceInterface piece : allpieces) {
+      teams.add(piece.getTeam());
+    }
+    previousTurnPieces = new ArrayList<>(allpieces);
+    piecesToEliminate = new HashMap<>();
+    Iterator<String> pieceIter = propertiesMap.get("pieceType").iterator();
+    Iterator<String> amountIter = propertiesMap.get(("amount")).iterator();
+    while(pieceIter.hasNext() && amountIter.hasNext()) {
+      String pieceType = pieceIter.next();
+      int amount = Integer.parseInt(amountIter.next());
+      for (String team : teams){
+        String key = team+"_"+pieceType;
+        piecesToEliminate.putIfAbsent(key, amount);
       }
     }
   }
 
-  public boolean isGameOver(List<PlayerInterface> players) {
-    Map<String, Integer> pieceAmountMap = new HashMap<>();
-    Map<String, Integer> pieceRemovedMap = new HashMap<>();
-
-    for(PlayerInterface player : players) {
-      player.getPieces().forEach(pieceType -> {
-        pieceAmountMap.putIfAbsent(pieceType.getName(), 0);
-        pieceRemovedMap.putIfAbsent(pieceType.getName(), 0);}
-      );
-      setAmountsOfEachPieceOnBoard(pieceAmountMap, player);
-      if (checkIfEndConditionsMet(pieceAmountMap)) {
-        return true; // GAME OVER
-      }
+  @Override
+  public boolean isGameOver(List<PieceInterface> alivePieces) {
+    if (previousTurnPieces.size() == alivePieces.size()){
+      return false;
     }
-    return false;
+    findMissingPiece(alivePieces);
+    return checkEndConditions();
   }
 
-  private boolean checkIfEndConditionsMet(Map<String, Integer> pieceAmountMap) {
-    for(String pieceType : pieceAmountMap.keySet()) {
-      int piecesRemoved = initialPieceAmounts.get(pieceType) - pieceAmountMap.get(pieceType);
-      if (piecesRemoved >= pieceEndAmounts.get(pieceType)) {
+  private void findMissingPiece(List<PieceInterface> alivePieces) {
+    boolean found = false;
+    for (PieceInterface p : previousTurnPieces){
+      found = false;
+      for (PieceInterface alive : alivePieces){
+        if (p.equals(alive)){
+          found = true;
+          break;
+        }
+      }
+      if (!found){
+        logMissing(p);
+      }
+    }
+
+  }
+
+  private boolean checkEndConditions() {
+    HashMap<String, Integer> targetPiecesRemaining = getTargetPiecesRemaining();
+    for (String team : targetPiecesRemaining.keySet()){
+      if (targetPiecesRemaining.get(team) == 0){
         return true;
       }
     }
     return false;
   }
 
-  private void setAmountsOfEachPieceOnBoard(Map<String, Integer> pieceAmountMap, PlayerInterface player) {
-    for(PieceInterface piece : player.getPieces()) {
-      if(pieceAmountMap.keySet().contains(piece.getName())) {
-        pieceAmountMap.put(piece.getName(), pieceAmountMap.get(piece.getName()) + 1);
-      }
+  private HashMap<String, Integer> getTargetPiecesRemaining() {
+    HashMap<String, Integer> targetPiecesRemaining = new HashMap<>();
+    for (String pieceString : piecesToEliminate.keySet()){
+      String[] pieceStringInfo = pieceString.split("_");
+      String team = pieceStringInfo[0];
+      int piecesLeft = piecesToEliminate.get(pieceString);
+      targetPiecesRemaining.putIfAbsent(team, 0);
+      targetPiecesRemaining.put(team, targetPiecesRemaining.get(team) + piecesLeft);
     }
+    return targetPiecesRemaining;
   }
+
+  private void logMissing(PieceInterface missing) {
+    String key = missing.getTeam() + "_" + missing.getName();
+    if (!piecesToEliminate.containsKey(key)){
+      return;
+    }
+    piecesToEliminate.put(key,piecesToEliminate.get(key)-1);
+  }
+
+
 }

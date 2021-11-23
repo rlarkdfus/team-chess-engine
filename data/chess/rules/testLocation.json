@@ -1,5 +1,5 @@
 {
-  "gameType": "elimination",
-  "pieceType": "K",
-  "amount": ["1,0"]
+  "gameType": "location",
+  "pieceType": ["P","P"],
+  "amount": ["1,0","2,0"]
 }

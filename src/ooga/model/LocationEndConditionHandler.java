@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 import ooga.Location;
 import ooga.controller.InvalidGameConfigException;
 
-public class LocationEndConditionHandler {
+public class LocationEndConditionHandler implements EndConditionInterface{
   private Map<Location, String> targetLocations;
   private Map<String, Integer> teams;
   private ResourceBundle resourceBundle;
@@ -18,6 +18,8 @@ public class LocationEndConditionHandler {
     resourceBundle = ResourceBundle.getBundle("JSONMappings");
     teams = new HashMap();
   }
+
+  @Override
   public boolean isGameOver(List<PieceInterface> alivePieces){
     boolean foundLocation;
     for (Location l : targetLocations.keySet()){
@@ -41,7 +43,8 @@ public class LocationEndConditionHandler {
     }
     return false;
   }
-  public void setArgs(Map<String, List<String>> properties, List<PlayerInterface> players)
+
+  public void setArgs(Map<String, List<String>> properties, List<PieceInterface> allpieces)
       throws InvalidGameConfigException {
     String[] keys = resourceBundle.getString("locationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
     List<String> pieces = properties.get(keys[0]);

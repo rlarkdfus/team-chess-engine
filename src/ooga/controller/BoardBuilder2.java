@@ -82,11 +82,11 @@ public class BoardBuilder2 implements Builder {
     csvData = locationParser.getInitialLocations(csv);
     pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     iterateCSVData();
-    try {
-      buildEndConditionHandler(jsonObject.getString(mappings.getString("rules")));
-    }catch (Exception e){
-      throw new InvalidGameConfigException();
-    }
+//    try {
+//      buildEndConditionHandler(jsonObject.getString(mappings.getString("rules")));
+//    }catch (Exception e){
+//      throw new InvalidGameConfigException();
+//    }
 
   }
 

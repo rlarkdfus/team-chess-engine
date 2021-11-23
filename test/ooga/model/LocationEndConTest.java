@@ -7,18 +7,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import ooga.Location;
+import ooga.controller.Builder;
 import ooga.controller.InvalidGameConfigException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class LocationEndConTest {
   LocationEndConditionHandler l;
+  Builder boardBuilder;
   @BeforeEach
   void setUp() {
     l = new LocationEndConditionHandler();
+//    String testFile = "data/chess/oneBlackPawn.json";
+//    boardBuilder = new BoardBuilder2(new File(testFile));
+//    boardBuilder.getEndConditionHandler();
     try {
       l.setArgs(Map.of("pieceType", List.of("P","P"),
-          "location", List.of("1,0","2,0")), List.of(new Player("b")));
+          "location", List.of("1,0","2,0")), List.of(new Piece("b","P",new Location(1,0),new ArrayList<>(), new HashMap<>(), 1)));
     } catch (InvalidGameConfigException e) {
     }
   }
