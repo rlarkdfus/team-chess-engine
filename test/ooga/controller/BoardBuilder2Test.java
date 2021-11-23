@@ -15,6 +15,7 @@ import ooga.model.Moves.EnPassantMove;
 import ooga.model.Moves.Move;
 import ooga.model.Moves.PawnMove;
 import ooga.model.Moves.TranslationMove;
+import ooga.model.Piece;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 import org.json.JSONObject;
@@ -119,6 +120,23 @@ class BoardBuilder2Test {
     }
   }
 
+  @Test
+  void testConvertingAPiece() throws FileNotFoundException, InvalidPieceConfigException {
+    PlayerInterface player = boardBuilder.getInitialPlayers().get(1);
+    List<PieceInterface> pieces = player.getPieces();
+    PieceInterface piece = pieces.get(0);
+
+    PieceInterface newPiece = boardBuilder.convertPiece(piece, "Q");
+
+    String expectedTeam = "b";
+    String expectedType = "Q";
+
+    String actualTeam = newPiece.getTeam();
+    String actualType = newPiece.getName();
+
+    assertEquals(expectedTeam, actualTeam);
+    assertEquals(expectedType, actualType);
+  }
   @Test
   void testExceptions(){
     String filepath = "data/chess/errorGameJson.json";
