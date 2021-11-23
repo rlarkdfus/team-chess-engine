@@ -1,18 +1,22 @@
-package ooga.model.Moves;
+package ooga.model.Moves.castle;
 
-import java.util.List;
 import ooga.Location;
+import ooga.model.Moves.Move;
 import ooga.model.PieceInterface;
 
-public class ShortCastleMove extends Move {
+import java.util.List;
+
+public abstract class CastleMove extends Move {
+
+    protected abstract Location findRookLocation(PieceInterface piece);
 
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         // move rook as well
-        PieceInterface rook = findRook(piece.getLocation().getRow(), 7, pieces); // TODO not hardcode column 7
+        PieceInterface rook = pieceAt(findRookLocation(piece), pieces);
 
         movePiece(piece, end);
-        movePiece(rook, new Location(piece.getLocation().getRow(), 5));
+        movePiece(rook, new Location(piece.getLocation().getRow(), piece.getLocation().getCol() - getdCol()/2));
     }
 
     @Override
@@ -29,13 +33,13 @@ public class ShortCastleMove extends Move {
     }
 
     @Override
-    boolean isLegal(PieceInterface king, Location potentialLocation, List<PieceInterface> pieces) {
+    protected boolean isLegal(PieceInterface king, Location potentialLocation, List<PieceInterface> pieces) {
         if(!inBounds(potentialLocation.getRow(), potentialLocation.getCol())) {
             return false;
         }
 //        System.out.println(king);
 
-        PieceInterface rook = findRook(king.getLocation().getRow(), 7, pieces); // TODO not hardcode column 7
+        PieceInterface rook = pieceAt(findRookLocation(king), pieces);
 
         if(rook == null) {
 //            System.out.println("rook not found");
@@ -65,9 +69,5 @@ public class ShortCastleMove extends Move {
         }
 //        System.out.println("can castle");
         return true;
-    }
-
-    private PieceInterface findRook(int row, int col, List<PieceInterface> pieces) {
-        return pieceAt(new Location(row, col), pieces);
     }
 }

@@ -30,7 +30,7 @@ public abstract class Move {
         return endLocations;
     }
 
-    abstract boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces);
+    protected abstract boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces);
 
     public void setMove(int dRow, int dCol, boolean take, boolean limited){ //TODO: boolean take
         this.dRow = dRow;

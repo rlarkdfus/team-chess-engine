@@ -26,7 +26,7 @@ public class PawnMove extends Move { //TODO: pawn move takes in +-2 depending on
     }
 
     @Override
-    boolean isLegal(PieceInterface pawn, Location potentialLocation, List<PieceInterface> pieces) {
+    protected boolean isLegal(PieceInterface pawn, Location potentialLocation, List<PieceInterface> pieces) {
         // construct location 1 above, and 2 above, make sure they're clear
         Location intermediateLocation = new Location(potentialLocation.getRow() - getdRow()/2, potentialLocation.getCol());
         if(!isClear(List.of(potentialLocation, intermediateLocation), pieces)) {

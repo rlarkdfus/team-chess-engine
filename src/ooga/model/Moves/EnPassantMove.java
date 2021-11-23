@@ -31,7 +31,7 @@ public class EnPassantMove extends Move {
     }
 
     @Override
-    boolean isLegal(PieceInterface pawn, Location potentialLocation, List<PieceInterface> pieces) {
+    protected boolean isLegal(PieceInterface pawn, Location potentialLocation, List<PieceInterface> pieces) {
         Location otherPawnLocation = new Location(pawn.getLocation().getRow(), potentialLocation.getCol());
 
         PieceInterface otherPawn = pieceAt(otherPawnLocation, pieces);

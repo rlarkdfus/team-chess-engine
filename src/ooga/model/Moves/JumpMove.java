@@ -40,7 +40,7 @@ public class JumpMove extends Move {
     }
 
     @Override
-    boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
+    protected boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
         if(!inBounds(potentialLocation.getRow(), potentialLocation.getCol())) {
             return false;
         }
