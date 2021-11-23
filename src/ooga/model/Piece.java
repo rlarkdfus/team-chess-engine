@@ -81,9 +81,9 @@ public class Piece implements PieceInterface {
 
     @Override
     public void moveTo(Location location) {
-      tryMove(location);
       firstMove = !firstMove && !moved;
       moved = true;
+      tryMove(location);
     }
     
     @Override
@@ -150,6 +150,7 @@ public class Piece implements PieceInterface {
 
   @Override
   public void updateMoves(List<PieceInterface> pieces) {
+    firstMove = false;
     for(Move move : moves) {
       move.updateMoveLocations(this, pieces);
     }

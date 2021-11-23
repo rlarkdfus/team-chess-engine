@@ -36,13 +36,12 @@ public class EnPassantMove extends Move {
 
         PieceInterface otherPawn = pieceAt(otherPawnLocation, pieces);
 
-        if(pieceAt(potentialLocation, pieces) != null && !pieceAt(potentialLocation, pieces).getTeam().equals(pawn.getTeam())){
-            return tryMove(pawn, potentialLocation, new ArrayList<>(pieces));
+        if(pieceAt(potentialLocation, pieces) != null) {
+            return false;
         }
         if (otherPawn == null || !otherPawn.isFirstMove()){
             return false;
         }
-
         return tryMove(pawn, potentialLocation, new ArrayList<>(pieces));
     }
 
