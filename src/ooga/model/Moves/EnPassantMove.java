@@ -61,12 +61,7 @@ public class EnPassantMove extends Move {
         pieces.remove(takenPiece);
 
         // look for checks
-        List<PieceInterface> attackingPieces = new ArrayList<>();
-        for(PieceInterface attackingPiece : pieces) {
-            if(!piece.getTeam().equals(attackingPiece.getTeam())) {
-                attackingPieces.add(attackingPiece);
-            }
-        }
+        List<PieceInterface> attackingPieces = getAttackingPieces(piece, pieces);
 
         // if the king is in check, undo move and return false
         if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces)) {

@@ -2,9 +2,7 @@ package ooga.model.Moves;
 
 import ooga.Location;
 import ooga.Turn;
-import ooga.model.Piece;
 import ooga.model.PieceInterface;
-import ooga.model.PlayerInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,23 +45,20 @@ public abstract class Move {
      */
     public boolean underAttack(Location location, List<PieceInterface> attackingPieces) {
         for(PieceInterface attackingPiece : attackingPieces) {
-            for(Location attackLocation : attackingPiece.getEndLocations()) {
-                if(location.equals(attackLocation)) {
-                    return true;
-                }
+            if(location.inList(attackingPiece.getEndLocations())) {
+                return true;
             }
         }
         return false;
     }
 
     protected boolean isClear(List<Location> locations, List<PieceInterface> pieces) {
-        for(Location location : locations) {
-            for(PieceInterface piece : pieces) {
-                if(piece.getLocation().equals(location)) {
-                    return false;
-                }
+        for(PieceInterface piece : pieces) {
+            if(piece.getLocation().inList(locations)) {
+                return false;
             }
         }
+
         return true;
     }
 
@@ -93,7 +88,7 @@ public abstract class Move {
      * @return if the move is legal or not
      */
     public boolean tryMove(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
-        Location pieceLocation = new Location(piece.getLocation().getRow(), piece.getLocation().getCol());
+        Location originalLocation = new Location(piece.getLocation().getRow(), piece.getLocation().getCol());
         PieceInterface takenPiece = null;
 
         // theoretically move piece to location
@@ -109,12 +104,12 @@ public abstract class Move {
 
         // if the king is in check, undo move and return false
         if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces)) {
-            piece.tryMove(pieceLocation);
+            piece.tryMove(originalLocation);
             return false;
         }
 
         //otherwise undo the move and return true
-        piece.tryMove(pieceLocation);
+        piece.tryMove(originalLocation);
         return true;
     }
 
@@ -130,7 +125,7 @@ public abstract class Move {
 
     protected PieceInterface findKing(PieceInterface teamPiece, List<PieceInterface> pieces) {
         for(PieceInterface piece : pieces) {
-            if(piece.toString().equals(teamPiece.getTeam() + "K")) {
+            if(piece.getTeam().equals(teamPiece.getTeam()) && piece.getName().equals("K")) {
                 return piece;
             }
         }

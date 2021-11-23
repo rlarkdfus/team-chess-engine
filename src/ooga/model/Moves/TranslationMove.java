@@ -18,8 +18,6 @@ public class TranslationMove extends Move {
             }
         }
         movePiece(piece, end);
-
-//        return board;
     }
 
     @Override
@@ -29,13 +27,9 @@ public class TranslationMove extends Move {
         int col = piece.getLocation().getCol() + getdCol();
 
         Location potentialLocation = new Location(row, col);
-        boolean firstEncounter = false;
 
         while(isLegal(piece, potentialLocation, pieces)){
-            if(firstEncounter){
-                break;
-            }
-//            System.out.println(piece.getTeam() + piece.getName() + " " + isLegal(piece, potentialLocation, pieces));
+
             addEndLocation(potentialLocation);
 
             if(isLimited()) {
@@ -43,7 +37,7 @@ public class TranslationMove extends Move {
             }
 
             if(pieceAt(potentialLocation, pieces) != null && !pieceAt(potentialLocation, pieces).getTeam().equals(piece.getTeam())){
-                firstEncounter = true;
+                break;
             }
 
             row += getdRow();
@@ -58,21 +52,13 @@ public class TranslationMove extends Move {
             return false;
         }
 
-        // find potential piece at new location
-        PieceInterface potentialPiece = null;
-        for(PieceInterface p : pieces) {
-            if(p.getLocation().equals(potentialLocation)) {
-                potentialPiece = p;
-                break;
-            }
-        }
+        PieceInterface potentialPiece = pieceAt(potentialLocation, pieces);
 
         if(potentialPiece != null) { //if there is a piece
             if(potentialPiece.getTeam().equals(piece.getTeam()) || !canTake()) {
                 return false;
             }
         }
-
         return tryMove(piece, potentialLocation, new ArrayList<>(pieces));
     }
 }

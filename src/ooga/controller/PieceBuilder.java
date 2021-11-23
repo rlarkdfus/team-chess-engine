@@ -91,7 +91,7 @@ public class PieceBuilder {
     if (args.length == BoardBuilder2.ARG_LENGTH) {
       int dRow = team.equals(bottomColor) ? -parseInt(args[0]) : parseInt(args[0]);
       int dCol = parseInt(args[1].strip());
-      boolean takes = args[3].strip().equals(mappings.getString("takes"));
+      boolean takes = args[2].strip().equals(mappings.getString("takes"));
       boolean limited = args[3].strip().equals(mappings.getString("limited"));
       newMove.setMove(dRow, dCol, takes, limited);
     } else {
