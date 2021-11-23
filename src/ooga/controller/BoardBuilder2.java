@@ -23,6 +23,8 @@ public class BoardBuilder2 implements Builder {
   public static final String DEFAULT_STYLE = "companion";
   public static final int ARG_LENGTH = 4;
   public static final String PROPERTIES_FILE = "JSONMappings";
+  public static final String CSV_DELIMETER = "csvDelimeter";
+
   private ResourceBundle mappings;
 
   private String gameType;
@@ -98,6 +100,28 @@ public class BoardBuilder2 implements Builder {
   public EndConditionInterface getEndConditionHandler() {
     return endCondition;
   }
+
+  /**
+   * This method takes in a piece and converts it into a converted piece of a different type
+   * An example use case for this is in promotion, where a pawn turns into a promoted version of the
+   * piece
+   * @param piece Piece from the board that will be changed to another kind of piece
+   * @param pieceType The kind of piece that this will be changed to
+   * @return
+   * @throws FileNotFoundException
+   * @throws InvalidPieceConfigException
+   */
+  @Override
+  public PieceInterface convertPiece(PieceInterface piece, String pieceType)
+      throws FileNotFoundException, InvalidPieceConfigException {
+    String pieceTeam = piece.getTeam();
+    String[] pieceData = new String[]{pieceTeam, pieceType};
+    int pieceRow = piece.getLocation().getRow();
+    int pieceColumn = piece.getLocation().getCol();
+    Piece newPiece = pieceBuilder.buildPiece(pieceData, pieceRow, pieceColumn);
+
+    return newPiece;
+  }
   /**
    * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
    * pieceGrid
@@ -106,7 +130,9 @@ public class BoardBuilder2 implements Builder {
       throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
-        String[] square = csvData.get(r).get(c).split(mappings.getString("csvDelimiter"));
+//        String[] square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
+        String[] square = csvData.get(r).get(c).split("_");
+
         if (square.length < 2) {
           continue;           //signifies that this square is empty
         }
