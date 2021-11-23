@@ -93,9 +93,9 @@ public class ViewUtility {
      * @param max      the maximum slider value
      * @return the slider
      */
-    public Slider makeSlider(String property, double min, double max, double start, Consumer<Integer> response) {
+    public Slider makeSlider(String property, double min, double max, double start, Consumer<Double> response) {
         Slider result = new Slider(min, max, start);
-        result.valueProperty().addListener((o, oldValue, newValue) -> response.accept(newValue.intValue()));
+        result.valueProperty().addListener((o, oldValue, newValue) -> response.accept(newValue.doubleValue()));
         result.getStyleClass().add("slider");
         return (Slider) setID(property, result);
     }

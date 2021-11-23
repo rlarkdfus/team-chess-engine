@@ -5,6 +5,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ooga.controller.Controller;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,18 @@ public class ViewTest extends DukeApplicationTest {
     @Override
     public void start(Stage stage) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         new Controller();
+    }
+
+    @Test
+    void testTimerInitialTime() {
+        // 10 minutes start time
+        int expected = 10*60;
+        int tolerance = 5;
+        Text whiteTimeLabel = lookup("#white_timer_display").query();
+        String[] times = whiteTimeLabel.getText().split(":");
+        int minutes = Integer.parseInt(times[0]);
+        int seconds = Integer.parseInt(times[1]);
+        assertEquals(expected, 60 * minutes + seconds, tolerance);
     }
 
     @Test

@@ -15,7 +15,7 @@ import ooga.view.ViewInterface;
 public class Controller implements ControllerInterface {
 
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
-  public static final int DEFAULT_INITIAL_TIME = 20;
+  public static final int DEFAULT_INITIAL_TIME = 10*60;
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
   private Engine model;
@@ -106,14 +106,14 @@ public class Controller implements ControllerInterface {
     blackMoveTimer.incrementTime();
   }
 
-  public void setIncrement(int increment) {
-    whiteMoveTimer.setIncrement(increment);
-    blackMoveTimer.setIncrement(increment);
+  public void setIncrement(double increment) {
+    whiteMoveTimer.setIncrement((int) increment);
+    blackMoveTimer.setIncrement((int) increment);
   }
 
-  public void setInitialTime(int initialTime) {
-    whiteMoveTimer.setInitialTime(initialTime);
-    blackMoveTimer.setInitialTime(initialTime);
+  public void setInitialTime(double initialTime) {
+    whiteMoveTimer.setInitialTime((int) (initialTime * 60));
+    blackMoveTimer.setInitialTime((int) (initialTime * 60));
   }
 
   private void resetTimers() {

@@ -41,7 +41,6 @@ public class View implements ViewInterface {
         this.stage = new Stage();
         //TODO: this is probably bad design idk
         viewController.setView(this);
-        //this.viewController = controller.getViewController();
     }
 
     private Scene setupDisplay() {
@@ -76,10 +75,6 @@ public class View implements ViewInterface {
 
     public void changePieceStyle(String style) {
         boardView.changePieceStyle(style);
-    }
-
-    public void resetBoard() {
-        boardView.resetBoard();
     }
 
     public void showError(String message) {viewUtility.showError(message);}
