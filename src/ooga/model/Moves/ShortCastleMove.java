@@ -33,7 +33,7 @@ public class ShortCastleMove extends Move {
         if(!inBounds(potentialLocation.getRow(), potentialLocation.getCol())) {
             return false;
         }
-        System.out.println(king);
+//        System.out.println(king);
 
         PieceInterface rook = findRook(king.getLocation().getRow(), 7, pieces); // TODO not hardcode column 7
 

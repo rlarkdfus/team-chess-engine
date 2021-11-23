@@ -68,7 +68,7 @@ public class TranslationMove extends Move {
         }
 
         if(potentialPiece != null) { //if there is a piece
-            if(potentialPiece.getTeam().equals(piece.getTeam()) || canTake()) {
+            if(potentialPiece.getTeam().equals(piece.getTeam()) || !canTake()) {
                 return false;
             }
         }

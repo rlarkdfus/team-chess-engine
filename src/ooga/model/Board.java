@@ -33,10 +33,6 @@ public class Board implements Engine {
         for(PieceInterface piece : allPieces) {
             piece.updateMoves(new ArrayList<>(allPieces));
         }
-
-//        for(Iterator<PieceInterface> iterator = allPieces.iterator(); iterator.hasNext();){
-//            iterator.next().updateMoves(allPieces);
-//        }
     }
 
     /**
@@ -129,11 +125,17 @@ public class Board implements Engine {
      * @return
      */
     public boolean canMovePiece(Location location) {
-        for(PieceInterface piece : findPlayerTurn(turnCount).getPieces()) {
-            if(piece.getLocation().equals(location)) {
+        String turn = findPlayerTurn(turnCount).getTeam();
+        for(PieceInterface piece : allPieces) {
+            if(piece.getTeam().equals(turn) && piece.getLocation().equals(location)) {
                 return true;
             }
         }
+//        for(PieceInterface piece : findPlayerTurn(turnCount).getPieces()) {
+//            if(piece.getLocation().equals(location)) {
+//                return true;
+//            }
+//        }
         return false;
     }
 
