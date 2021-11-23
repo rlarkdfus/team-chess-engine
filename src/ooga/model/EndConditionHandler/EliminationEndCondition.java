@@ -50,7 +50,7 @@ public class EliminationEndCondition implements EndConditionInterface {
   }
 
   private void findMissingPiece(List<PieceInterface> alivePieces) {
-    boolean found = false;
+    boolean found;
     for (PieceInterface p : previousTurnPieces){
       found = false;
       for (PieceInterface alive : alivePieces){
