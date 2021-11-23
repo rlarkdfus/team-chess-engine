@@ -69,20 +69,17 @@ public class Board implements Engine {
             }
         }
 
-        System.out.println("Piece size: " + allPieces.size());
-
         // increment turn
         turnCount++;
 
 
-        System.out.println("before");
-        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
-        System.out.println(this);
-
+//        System.out.println("before");
+//        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
+//        System.out.println(this);
 
         updateLegalMoves();
 
-        System.out.println("after");
+//        System.out.println("after");
         System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
         System.out.println(this);
 

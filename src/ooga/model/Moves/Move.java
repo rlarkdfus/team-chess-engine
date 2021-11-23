@@ -49,7 +49,6 @@ public abstract class Move {
         for(PieceInterface attackingPiece : attackingPieces) {
             for(Location attackLocation : attackingPiece.getEndLocations()) {
                 if(location.equals(attackLocation)) {
-                    System.out.println("attacking piece: " + attackingPiece);
                     return true;
                 }
             }

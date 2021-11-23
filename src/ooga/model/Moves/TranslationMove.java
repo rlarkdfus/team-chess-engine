@@ -8,10 +8,6 @@ import java.util.List;
 
 public class TranslationMove extends Move {
 
-    public TranslationMove() {
-        super();
-    }
-
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         List<PieceInterface> board = new ArrayList<>(pieces);
