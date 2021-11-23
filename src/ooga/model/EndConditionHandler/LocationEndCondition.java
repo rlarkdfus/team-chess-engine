@@ -48,7 +48,7 @@ public class LocationEndCondition implements EndConditionInterface{
 
   public void setArgs(Map<String, List<String>> properties, List<PieceInterface> allpieces)
       throws InvalidGameConfigException {
-    String[] keys = resourceBundle.getString("locationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
+    String[] keys = resourceBundle.getString("LocationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
     List<String> pieces = properties.get(keys[0]);
     List<String> locations = properties.get(keys[1]);
     if (pieces.size() != locations.size()){throw new InvalidGameConfigException();}

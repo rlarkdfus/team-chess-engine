@@ -68,10 +68,19 @@ public class EliminationEndCondition implements EndConditionInterface {
 
   private boolean checkEndConditions() {
     HashMap<String, Integer> targetPiecesRemaining = getTargetPiecesRemaining();
+    String loser = null;
     for (String team : targetPiecesRemaining.keySet()){
       if (targetPiecesRemaining.get(team) == 0){
-        winner = team;
-        return true;
+        loser = team;
+        break;
+      }
+    }
+    if (loser == null){
+      for (String team : targetPiecesRemaining.keySet()){
+        if (!team.equals(loser)){
+          winner = team;
+          return true;
+        }
       }
     }
     return false;

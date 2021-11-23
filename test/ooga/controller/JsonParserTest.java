@@ -40,7 +40,7 @@ class JsonParserTest {
     assertEquals("#bb885b", testObj.getJSONArray("boardColors").getString(1), "should be bb885b. got: " + testObj.getJSONArray("boardColors").getString(1));
     assertEquals("w", testObj.getJSONArray("players").getString(0), "should be white(w). got: " + testObj.getJSONArray("players").getString(0));
     assertEquals("b", testObj.getJSONArray("players").getString(1), "should be black(b). got: " + testObj.getJSONArray("players").getString(1));
-    assertEquals("default", testObj.getString("rules"), "should be default. got: " + testObj.getString("rules"));
+    assertEquals("data/chess/rules/default.json", testObj.getString("rules"), "should be default. got: " + testObj.getString("rules"));
     assertEquals("data/chess/locations/oneBlackPawn.csv", testObj.getString("csv"),"should be data/chess/locations/oneBlackPawn.csv");
   }
 
