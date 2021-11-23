@@ -1,4 +1,4 @@
-package ooga.model.Moves.castle;
+package ooga.model.Moves;
 
 import ooga.Location;
 import ooga.model.Moves.Move;

@@ -1,7 +1,7 @@
-package ooga.model.Moves.castle;
+package ooga.model.Moves;
 
 import ooga.Location;
-import ooga.model.Moves.castle.CastleMove;
+import ooga.model.Moves.CastleMove;
 import ooga.model.PieceInterface;
 
 public class LongCastleMove extends CastleMove {
