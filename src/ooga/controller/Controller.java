@@ -4,30 +4,44 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
+import ooga.model.MoveTimer;
 import ooga.view.View;
 import ooga.view.ViewInterface;
 
 public class Controller implements ControllerInterface {
 
-  private final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
+  public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
+  public static final int DEFAULT_INITIAL_TIME = 10*60;
+  public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
   private Engine model;
   private ViewInterface view;
   private LocationWriter locationWriter;
+  private MoveTimer whiteMoveTimer;
+  private MoveTimer blackMoveTimer;
 
   public Controller() {
     try {
       BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
       view = new View(this);
-      this.locationWriter = new LocationWriter();
+      locationWriter = new LocationWriter();
+      whiteMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+      blackMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
       buildGame(boardBuilder);
     }
     catch (Exception e) {
       view.showError(e.getMessage());
     }
+  }
+
+  @Override
+  public void resetGame() {
+    uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
+    resetTimers();
   }
 
   @Override
@@ -55,6 +69,7 @@ public class Controller implements ControllerInterface {
     if (model.checkGameState() != Board.GameState.RUNNING) {
       System.out.println(model.checkGameState()); //FIXME
     }
+    incrementWhiteTime();
   }
 
   public List<Location> getLegalMoves(Location location){
@@ -72,5 +87,37 @@ public class Controller implements ControllerInterface {
     }
     catch (IOException ignored) {
     }
+  }
+
+  //TODO: make this part use reflection
+  public StringProperty getWhiteTimeLeft() {
+    return whiteMoveTimer.getTimeLeft();
+  }
+
+  public StringProperty getBlackTimeLeft() {
+    return blackMoveTimer.getTimeLeft();
+  }
+
+  public void incrementWhiteTime() {
+    whiteMoveTimer.incrementTime();
+  }
+
+  public void incrementBlackTime() {
+    blackMoveTimer.incrementTime();
+  }
+
+  public void setIncrement(double increment) {
+    whiteMoveTimer.setIncrement((int) increment);
+    blackMoveTimer.setIncrement((int) increment);
+  }
+
+  public void setInitialTime(double initialTime) {
+    whiteMoveTimer.setInitialTime((int) (initialTime * 60));
+    blackMoveTimer.setInitialTime((int) (initialTime * 60));
+  }
+
+  private void resetTimers() {
+    whiteMoveTimer.reset();
+    blackMoveTimer.reset();
   }
 }

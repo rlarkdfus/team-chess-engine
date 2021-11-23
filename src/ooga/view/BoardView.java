@@ -1,6 +1,5 @@
 package ooga.view;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,6 @@ public class BoardView extends Group implements BoardViewInterface {
     public static final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
     public static final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
     public static final String DEFAULT_PIECE_STYLE = "companion";
-    public static final String DEFAULT_CONFIGURATION_JSON = "data/chess/defaultChess.json";
 
     private ControllerInterface controller;
     private Location startLocation;
@@ -150,8 +148,9 @@ public class BoardView extends Group implements BoardViewInterface {
     public void resetBoard() {
         clearBoard();
         try {
-            controller.uploadConfiguration(new File(DEFAULT_CONFIGURATION_JSON));
-        } catch (Exception ignored) {
+            controller.resetGame();
+        }
+        catch (Exception ignored) {
         }
     }
 

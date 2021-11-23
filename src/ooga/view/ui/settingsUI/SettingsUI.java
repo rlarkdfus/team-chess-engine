@@ -24,7 +24,7 @@ public class SettingsUI extends GridPane implements UIInterface {
         this.controller = controller;
         this.viewController = viewController;
         gameConfigurationUI = new GameConfigurationUI(controller);
-        timeConfigurationUI = new TimeConfigurationUI(viewController);
+        timeConfigurationUI = new TimeConfigurationUI(controller, viewController);
         boardStyleUI = new BoardStyleUI(viewController);
         this.viewUtility = new ViewUtility();
         createUI();
@@ -35,6 +35,6 @@ public class SettingsUI extends GridPane implements UIInterface {
         this.add(gameConfigurationUI, 0, 0, 3, 2);
         this.add(timeConfigurationUI, 0, 2, 3, 3);
         this.add(boardStyleUI, 0, 5, 3, 3);
-        this.add(viewUtility.makeButton("new_game", e -> viewController.handleNewGame()), 0, 8);
+        this.add(viewUtility.makeButton("new_game", e -> controller.resetGame()), 0, 8);
     }
 }
