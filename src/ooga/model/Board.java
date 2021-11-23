@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class Board implements Engine {
+private static final int Rows = 8;
+private static final int Cols = 8;
 
     public enum GameState {
         RUNNING,
@@ -21,7 +23,7 @@ public class Board implements Engine {
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
-        moveFactory = new MoveFactory(players, 8, 8); //FIXME
+        moveFactory = new MoveFactory(players, Rows, Cols); //FIXME
         turnCount = 0;
         updateLegalMoves();
     }
@@ -49,6 +51,7 @@ public class Board implements Engine {
         PlayerInterface otherPlayer = findPlayerTurn(turnCount + 1);
 
 
+
         // check for castling
 
         // add to removed list if piece exists at destination
@@ -61,6 +64,16 @@ public class Board implements Engine {
         currentTurn.movePiece(start, end);
         currentPlayer.movePiece(moveFactory.pieceAt(start), end);
 
+
+        //Check for pawn promotion
+        PieceInterface dummypiece = moveFactory.pieceAt(end);
+        if(dummypiece.getName().equals("P")){
+            if(end.getRow() == 0 || end.getRow() ==Rows-1){
+                System.out.println("pawn at end");
+//                promotePiece(dummypiece,end,currentPlayer);
+            }
+        }
+
         // increment turn
         turnCount++;
         // pause current player timer, start next player time
@@ -71,6 +84,20 @@ public class Board implements Engine {
 
         return currentTurn;
     }
+
+
+
+
+    private void promotePiece(PieceInterface pieceInterface, Location location, PlayerInterface player) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        //need to initial
+        PieceInterface queen;
+//       queen = new Piece(player.getTeam(), "q", location, 0, 0);
+        player.removePiece(pieceInterface.getLocation());
+//        player.addPiece(queen);
+
+    }
+
+
 
     /**
      * see if the game is still running or if its over
