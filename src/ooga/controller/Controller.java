@@ -60,8 +60,8 @@ public class Controller implements ControllerInterface {
     try {
       boardBuilder.build(file);
       buildGame(boardBuilder);
-    }catch (Exception E){
-      //todo: handle exception
+    }catch (Exception e){
+      e.printStackTrace();
     }
   }
 
