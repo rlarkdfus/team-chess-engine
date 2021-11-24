@@ -88,7 +88,7 @@ public class PieceBuilder {
 
   private void setMoveArgs(String team, Move newMove, String arg) throws Exception {
     String[] args = arg.split(mappings.getString("jsonDelimiter"));
-    if (args.length == BoardBuilder2.ARG_LENGTH) {
+    if (args.length == BoardBuilder.ARG_LENGTH) {
       int dRow = team.equals(bottomColor) ? -parseInt(args[0]) : parseInt(args[0]);
       int dCol = parseInt(args[1].strip());
       boolean takes = args[2].strip().equals(mappings.getString("takes"));

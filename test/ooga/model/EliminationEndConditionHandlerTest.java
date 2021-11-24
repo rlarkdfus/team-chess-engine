@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import ooga.controller.BoardBuilder2;
+import ooga.controller.BoardBuilder;
 import ooga.controller.Builder;
 import ooga.model.EndConditionHandler.EliminationEndCondition;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ class EliminationEndConditionHandlerTest {
   void setUp() {
     e = new EliminationEndCondition();
     String testFile = "data/chess/defaultChess.json";
-    Builder boardBuilder = new BoardBuilder2(new File(testFile));
+    Builder boardBuilder = new BoardBuilder(new File(testFile));
     players = boardBuilder.getInitialPlayers();
     
     e.setArgs(Map.of("pieceType", List.of("P","K"), "amount", List.of("2", "1")),getAllPieces());

@@ -18,7 +18,7 @@ import ooga.model.PlayerInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class BoardBuilder2 implements Builder {
+public class BoardBuilder implements Builder {
 
   public static final String DEFAULT_STYLE = "companion";
   public static final int ARG_LENGTH = 4;
@@ -42,7 +42,7 @@ public class BoardBuilder2 implements Builder {
   private PieceBuilder pieceBuilder;
   private EndConditionInterface endCondition;
 
-  public BoardBuilder2(File defaultFile) {
+  public BoardBuilder(File defaultFile) {
     mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
     jsonParser = new JsonParser();
     locationParser = new LocationParser();

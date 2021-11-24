@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import ooga.Location;
-import ooga.controller.BoardBuilder2;
+import ooga.controller.BoardBuilder;
 import ooga.controller.Builder;
 import ooga.model.Moves.Move;
 import ooga.model.Moves.TranslationMove;
@@ -72,7 +72,7 @@ public class TranslationMoveTest {
   }
 
   private void makePiece(String file) {
-    builder = new BoardBuilder2(new File(file));
+    builder = new BoardBuilder(new File(file));
     PieceInterface piece = builder.getInitialPlayers().get(1).getPiece(new Location(0,0));
     assertEquals("b",piece.getTeam());
     assertEquals("N",piece.getName());

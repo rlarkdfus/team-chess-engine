@@ -29,7 +29,7 @@ public class Controller implements ControllerInterface {
   public Controller() {
     try {
 
-      boardBuilder = new BoardBuilder2(DEFAULT_CHESS_CONFIGURATION);
+      boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
       buildGame(boardBuilder);
       view = new View(this);
       locationWriter = new LocationWriter();
