@@ -68,11 +68,11 @@ public class Player implements PlayerInterface {
         pieceIDandState.put(piece.getUniqueId(),piece.getEndState());
         score += piece.getScore();
     }
-//
-//    public void removePiece(PieceInterface piece){
-//        remainingPieces.remove(piece);
-//        score -= piece.getScore();
-//    }
+    @Override
+    public void removePiece(PieceInterface piece){
+        remainingPieces.remove(piece);
+        score -= piece.getScore();
+    }
 
     /**
      * returns the player team
@@ -124,10 +124,6 @@ public class Player implements PlayerInterface {
         remainingPieces.put(piece, moves);
     }
 
-    @Override
-    public void removePiece(PieceInterface piece) {
-
-    }
 
     private void calculateScore(){
         for(PieceInterface piece: remainingPieces.keySet()){
