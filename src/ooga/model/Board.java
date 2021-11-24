@@ -31,6 +31,7 @@ private static final int Cols = 8;
     private List<PieceInterface> allPieces;
     private EndConditionInterface endCondition;
     private int turnCount;
+    private PlayerInterface currentPlayer;
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
@@ -115,13 +116,13 @@ private static final int Cols = 8;
     }
 
     private void promotePiece(PieceInterface pieceInterface) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
-        //need to initial
-        PlayerInterface currentPlayer = null;
-        for(PlayerInterface playerInterface: players){
-            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
-                currentPlayer = playerInterface;
-            }
-        }
+//        //need to initial
+//        PlayerInterface currentPlayer = null;
+//        for(PlayerInterface playerInterface: players){
+//            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
+//                currentPlayer = playerInterface;
+//            }
+//        }
         BoardBuilder builder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
         PieceInterface newPiece = builder.convertPiece(pieceInterface,"Q");
         System.out.println(currentPlayer.getScore());
@@ -134,8 +135,10 @@ private static final int Cols = 8;
 
         System.out.println("Ne piece name: " + newPiece.getName());
         currentPlayer.addPiece(newPiece);
+        System.out.println("New piece team: " + newPiece.getTeam());
         System.out.println("^Score with new piece added");
         System.out.println(currentPlayer.getScore());
+        System.out.println("Current player team" + currentPlayer.getTeam());
 
     }
 
@@ -208,6 +211,9 @@ private static final int Cols = 8;
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
+        currentPlayer = players.get((turn+1) % players.size());
+        //FIXME: check if you can return this
+//        return currentPlayer;
         return players.get(turn % players.size());
     }
 
