@@ -9,13 +9,16 @@ import java.util.List;
 import java.util.Map;
 import ooga.controller.Builder;
 import ooga.controller.InvalidGameConfigException;
+import ooga.model.Board.GameState;
 import ooga.model.EndConditionHandler.LocationEndCondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class LocationEndConTest {
+
   LocationEndCondition l;
   Builder boardBuilder;
+
   @BeforeEach
   void setUp() {
     l = new LocationEndCondition();
@@ -23,8 +26,9 @@ public class LocationEndConTest {
 //    boardBuilder = new BoardBuilder2(new File(testFile));
 //    boardBuilder.getEndConditionHandler();
     try {
-      l.setArgs(Map.of("pieceType", List.of("P","P"),
-          "location", List.of("1,0","2,0")), List.of(new Piece("b","P",new ooga.Location(1,0),new ArrayList<>(), new HashMap<>(), 1)));
+      l.setArgs(Map.of("pieceType", List.of("P", "P"),
+          "location", List.of("1,0", "2,0")), List.of(
+          new Piece("b", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1),new Piece("w", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1)));
     } catch (InvalidGameConfigException e) {
     }
   }
@@ -34,23 +38,45 @@ public class LocationEndConTest {
   void testWinBlack()
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     PlayerInterface player1 = new Player("b");
-    player1.addPiece(new Piece("b","P",new ooga.Location(1,0),new ArrayList<>(), new HashMap<>(), 1));
-    player1.addPiece(new Piece("b","P",new ooga.Location(2,0),new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(2, 0), new ArrayList<>(), new HashMap<>(), 1));
     List<PlayerInterface> players = List.of(player1);
 
-    boolean ret = l.isGameOver(players);
-    assertEquals(true, ret);
+    GameState ret = l.isGameOver(players);
+    assertEquals(GameState.CHECKMATE, ret);
   }
 
   @Test
   void testWinWhite()
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     PlayerInterface player1 = new Player("b");
-    player1.addPiece(new Piece("w","P",new ooga.Location(1,0),new ArrayList<>(), new HashMap<>(), 1));
-    player1.addPiece(new Piece("w","P",new ooga.Location(2,0),new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("w", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("w", "P", new ooga.Location(2, 0), new ArrayList<>(), new HashMap<>(), 1));
     List<PlayerInterface> players = List.of(player1);
-    boolean ret = l.isGameOver(players);
-    assertEquals(true, ret);
+    GameState ret = l.isGameOver(players);
+    assertEquals(GameState.CHECKMATE, ret);
+  }
+
+  @Test
+  void testNotEnoughPieces() //when you dont have enough pieces to make all the target locations
+      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    PlayerInterface player1 = new Player("b");
+    PlayerInterface player2 = new Player("w");
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(2, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player2.addPiece(
+        new Piece("w", "P", new ooga.Location(0, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player2.addPiece(
+        new Piece("w", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1));
+
+    List<PlayerInterface> players = List.of(player1, player2);
+    GameState ret = l.isGameOver(players);
+    assertEquals(GameState.CHECKMATE, ret);
+    assertEquals("w", l.getWinner());
   }
 
   @Test
@@ -58,11 +84,17 @@ public class LocationEndConTest {
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     PlayerInterface player1 = new Player("b");
     PlayerInterface player2 = new Player("w");
-    player1.addPiece(new Piece("b","P",new ooga.Location(1,0),new ArrayList<>(), new HashMap<>(), 1));
-    player2.addPiece(new Piece("w","P",new ooga.Location(2,0),new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(7, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player2.addPiece(
+        new Piece("w", "P", new ooga.Location(2, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player2.addPiece(
+        new Piece("w", "P", new ooga.Location(6, 0), new ArrayList<>(), new HashMap<>(), 1));
     List<PlayerInterface> players = List.of(player1, player2);
-    boolean ret = l.isGameOver(players);
-    assertEquals(false, ret);
+    GameState ret = l.isGameOver(players);
+    assertEquals(GameState.RUNNING, ret);
   }
 
   @Test
@@ -70,11 +102,13 @@ public class LocationEndConTest {
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     PlayerInterface player1 = new Player("b");
     PlayerInterface player2 = new Player("w");
-    player1.addPiece(new Piece("b","K",new ooga.Location(0,0),new ArrayList<>(), new HashMap<>(), 1));
-    player1.addPiece(new Piece("b","Q",new ooga.Location(0,6),new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "K", new ooga.Location(0, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "Q", new ooga.Location(0, 6), new ArrayList<>(), new HashMap<>(), 1));
     List<PlayerInterface> players = List.of(player1, player2);
-    boolean ret = l.isGameOver(players);
-    assertEquals(false, ret);
+    GameState ret = l.isGameOver(players);
+    assertEquals(GameState.RUNNING, ret);
   }
 
   @Test
@@ -82,11 +116,13 @@ public class LocationEndConTest {
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     PlayerInterface player1 = new Player("b");
     PlayerInterface player2 = new Player("w");
-    player1.addPiece(new Piece("b","P",new ooga.Location(0,0),new ArrayList<>(), new HashMap<>(), 1));
-    player1.addPiece(new Piece("b","P",new ooga.Location(0,6),new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(0, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(0, 6), new ArrayList<>(), new HashMap<>(), 1));
     List<PlayerInterface> players = List.of(player1, player2);
-    boolean ret = l.isGameOver(players);
-    assertEquals(false, ret);
+    GameState ret = l.isGameOver(players);
+    assertEquals(GameState.RUNNING, ret);
   }
 
   @Test
@@ -94,11 +130,13 @@ public class LocationEndConTest {
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     PlayerInterface player1 = new Player("b");
     PlayerInterface player2 = new Player("w");
-    player1.addPiece(new Piece("b","K",new ooga.Location(1,0),new ArrayList<>(), new HashMap<>(), 1));
-    player1.addPiece(new Piece("b","Q",new ooga.Location(2,0),new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "K", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "Q", new ooga.Location(2, 0), new ArrayList<>(), new HashMap<>(), 1));
     List<PlayerInterface> players = List.of(player1, player2);
-    boolean ret = l.isGameOver(players);
-    assertEquals(false, ret);
+    GameState ret = l.isGameOver(players);
+    assertEquals(GameState.RUNNING, ret);
   }
 
   @Test
@@ -106,11 +144,19 @@ public class LocationEndConTest {
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     PlayerInterface player1 = new Player("b");
     PlayerInterface player2 = new Player("w");
-    player1.addPiece(new Piece("b","P",new ooga.Location(1,0),new ArrayList<>(), new HashMap<>(), 1));
-    player1.addPiece(new Piece("b","Q",new ooga.Location(2,0),new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "Q", new ooga.Location(2, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(2, 6), new ArrayList<>(), new HashMap<>(), 1));
+    player2.addPiece(
+        new Piece("w", "P", new ooga.Location(4, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player2.addPiece(
+        new Piece("w", "P", new ooga.Location(3, 0), new ArrayList<>(), new HashMap<>(), 1));
     List<PlayerInterface> players = List.of(player1, player2);
-    boolean ret = l.isGameOver(players);
-    assertEquals(false, ret);
+    GameState ret = l.isGameOver(players);
+    assertEquals(GameState.RUNNING, ret);
   }
 
   @Test
@@ -118,11 +164,13 @@ public class LocationEndConTest {
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     PlayerInterface player1 = new Player("b");
     PlayerInterface player2 = new Player("w");
-    player1.addPiece(new Piece("b","P",new ooga.Location(1,0),new ArrayList<>(), new HashMap<>(), 1));
-    player1.addPiece(new Piece("b","P",new ooga.Location(0,6),new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1));
+    player1.addPiece(
+        new Piece("b", "P", new ooga.Location(0, 6), new ArrayList<>(), new HashMap<>(), 1));
     List<PlayerInterface> players = List.of(player1, player2);
-    boolean ret = l.isGameOver(players);
-    assertEquals(false, ret);
+    GameState ret = l.isGameOver(players);
+    assertEquals(GameState.RUNNING, ret);
   }
 
 }

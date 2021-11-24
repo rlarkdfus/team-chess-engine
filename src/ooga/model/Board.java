@@ -125,7 +125,7 @@ private static final int Cols = 8;
      */
     @Override
     public GameState checkGameState() {
-        if (endCondition.isGameOver(players)){
+        if (endCondition.isGameOver(players).equals(GameState.CHECKMATE)){
             return GameState.CHECKMATE;
         }
         int totalLegalMoves = 0;
