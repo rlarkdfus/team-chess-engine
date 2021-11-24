@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.model.Board;
@@ -14,122 +15,126 @@ import ooga.view.ViewInterface;
 
 public class Controller implements ControllerInterface {
 
-  public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
-  public static final int DEFAULT_INITIAL_TIME = 10*60;
-  public static final int DEFAULT_INITIAL_INCREMENT = 5;
+    public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
+    public static final int DEFAULT_INITIAL_TIME = 10 * 60;
+    public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
-  private Engine model;
-  private ViewInterface view;
-  private LocationWriter locationWriter;
-  private MoveTimer whiteMoveTimer;
-  private MoveTimer blackMoveTimer;
+    private Engine model;
+    private ViewInterface view;
+    private LocationWriter locationWriter;
+    private MoveTimer whiteMoveTimer;
+    private MoveTimer blackMoveTimer;
+    private Builder boardBuilder;
 
-  public Controller() {
-    try {
-      BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-      view = new View(this);
-      locationWriter = new LocationWriter();
-      whiteMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
-      blackMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
-      buildGame(boardBuilder);
+    public Controller() {
+        try {
+            boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+            view = new View(this);
+            locationWriter = new LocationWriter();
+            whiteMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+            blackMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+            buildGame(boardBuilder);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+//      view.showError(e.getMessage());
+        }
     }
-    catch (Exception e) {
-      view.showError(e.getMessage());
+
+    @Override
+    public void resetGame() {
+        try {
+            uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
+        } catch (Exception e) {
+            //todo:handle
+        }
+        resetTimers();
     }
-  }
 
-  @Override
-  public void resetGame() {
-    uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
-    resetTimers();
-  }
-
-  @Override
-  public boolean canMovePiece(Location location) {
-    return model.canMovePiece(location);
-  }
-
-  @Override
-  public void uploadConfiguration(File file)  {
-    if (file == null) {
-      return;
+    @Override
+    public boolean canMovePiece(Location location) {
+        return model.canMovePiece(location);
     }
-    try {
-      BoardBuilder boardBuilder = new BoardBuilder(file);
-      buildGame(boardBuilder);
+
+    @Override
+    public void uploadConfiguration(File file) {
+        try {
+            boardBuilder.build(file);
+            buildGame(boardBuilder);
+        } catch (Exception E) {
+            //todo: handle exception
+        }
     }
-    catch (Exception e) {
-      view.showError(e.getMessage());
+
+    @Override
+    public void movePiece(Location start, Location end) throws
+            InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        view.updateDisplay(model.movePiece(start, end));
+        if (model.checkGameState() != Board.GameState.RUNNING) {
+            System.out.println(model.checkGameState()); //FIXME
+
+        }
+        incrementWhiteTime();
     }
-  }
 
-  @Override
-  public void movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    view.updateDisplay(model.movePiece(start, end));
-    if (model.checkGameState() != Board.GameState.RUNNING) {
-      System.out.println(model.checkGameState()); //FIXME
+    public List<Location> getLegalMoves(Location location) {
+        return model.getLegalMoves(location);
     }
-    incrementWhiteTime();
-  }
 
-  public List<Location> getLegalMoves(Location location){
-    return model.getLegalMoves(location);
-  }
-
-  private void buildGame(BoardBuilder boardBuilder) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    model = new Board(boardBuilder.getInitialPlayers());
-    view.initializeDisplay(boardBuilder.getInitialPieceViews());
-  }
-
-  public void downloadGame(String filePath) {
-    try {
-      locationWriter.saveCSV(filePath, model.getPlayers());
+    private void buildGame(Builder boardBuilder) throws
+            InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        model = new Board(boardBuilder.getInitialPlayers());
+        view.initializeDisplay(boardBuilder.getInitialPieceViews());
     }
-    catch (IOException ignored) {
+
+
+    public void downloadGame(String filePath) {
+        try {
+            locationWriter.saveCSV(filePath, model.getPlayers());
+        } catch (IOException ignored) {
+        }
     }
-  }
 
-  //TODO: make this part use reflection
-  public StringProperty getWhiteTimeLeft() {
-    return whiteMoveTimer.getTimeLeft();
-  }
+    //TODO: make this part use reflection
+    public StringProperty getWhiteTimeLeft() {
+        return whiteMoveTimer.getTimeLeft();
+    }
 
-  public StringProperty getBlackTimeLeft() {
-    return blackMoveTimer.getTimeLeft();
-  }
+    public StringProperty getBlackTimeLeft() {
+        return blackMoveTimer.getTimeLeft();
+    }
 
-  public void incrementWhiteTime() {
-    whiteMoveTimer.incrementTime();
-  }
+    public void incrementWhiteTime() {
+        whiteMoveTimer.incrementTime();
+    }
 
-  public void incrementBlackTime() {
-    blackMoveTimer.incrementTime();
-  }
+    public void incrementBlackTime() {
+        blackMoveTimer.incrementTime();
+    }
 
-  public void setIncrement(double increment) {
-    whiteMoveTimer.setIncrement((int) increment);
-    blackMoveTimer.setIncrement((int) increment);
-  }
+    public void setIncrement(double increment) {
+        whiteMoveTimer.setIncrement((int) increment);
+        blackMoveTimer.setIncrement((int) increment);
+    }
 
-  public void setInitialTime(double initialTime) {
-    whiteMoveTimer.setInitialTime((int) (initialTime * 60));
-    blackMoveTimer.setInitialTime((int) (initialTime * 60));
-  }
+    public void setInitialTime(double initialTime) {
+        whiteMoveTimer.setInitialTime((int) (initialTime * 60));
+        blackMoveTimer.setInitialTime((int) (initialTime * 60));
+    }
 
-  private void resetTimers() {
-    whiteMoveTimer.reset();
-    blackMoveTimer.reset();
-  }
+    private void resetTimers() {
+        whiteMoveTimer.reset();
+        blackMoveTimer.reset();
+    }
 
-  public void pauseTimer() {
-    whiteMoveTimer.pause();
-  }
+    public void pauseTimer() {
+        whiteMoveTimer.pause();
+    }
 
-  public void resumeTimer() {
-    whiteMoveTimer.start();
-  }
+    public void resumeTimer() {
+        whiteMoveTimer.start();
+    }
 
-  public void resetTimer() {
-    whiteMoveTimer.reset();
-  }
+    public void resetTimer() {
+        whiteMoveTimer.reset();
+    }
 }

@@ -1,0 +1,15 @@
+{
+  "moves": {
+    "TranslaTYPOove": [
+      "1, -1,takes, unlimited",
+      "1, 1,takes, unlimited",
+      "-1, -1,takes, unlimited",
+      "-1, 1,takes, unlimited"
+    ]
+  },
+  "attributes": {
+    "limited": false,
+    "canTransform": false
+  },
+  "value": 3
+}

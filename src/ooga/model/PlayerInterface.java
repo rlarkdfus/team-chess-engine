@@ -15,8 +15,9 @@ public interface PlayerInterface {
     PieceInterface getKing();
     void movePiece(PieceInterface piece, Location end);
     void tryMove(PieceInterface piece, Location end);
-    PieceInterface getPiece(Location location);
 
+    PieceInterface getPiece(Location location);
     List<Location> getLegalMoves(Location location);
     void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
+    void removePiece(PieceInterface piece);
 }

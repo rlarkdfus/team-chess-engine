@@ -1,3 +1,5 @@
 {
-
+  "gameType": "Elimination",
+  "pieceType": ["K"],
+  "amount": ["1"]
 }

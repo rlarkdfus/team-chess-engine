@@ -4,8 +4,7 @@ import java.util.List;
 import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.Turn;
-import ooga.controller.BoardBuilder;
-import ooga.model.PieceInterface;
+import ooga.controller.PieceViewBuilder;
 
 public interface BoardViewInterface {
     /**
@@ -18,7 +17,7 @@ public interface BoardViewInterface {
 //      */
 //    void initializeBoardView(int row, int col);
 
-    void initializeBoardView(List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col);
+    void initializeBoardView(List<PieceViewBuilder> pieceViews, int row, int col);
 
     /**
      * Checkered pattern board colors

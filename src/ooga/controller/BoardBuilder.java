@@ -3,239 +3,226 @@ package ooga.controller;
 import static java.lang.Integer.parseInt;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ooga.Location;
-import ooga.model.MoveVector;
+import java.util.ResourceBundle;
+import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Piece;
+import ooga.model.PieceInterface;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
-import ooga.model.Vector;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class BoardBuilder implements Builder {
+
   public static final String DEFAULT_STYLE = "companion";
-  public static final String INVALID_JSON_ERROR = "Invalid JSON format";
+  public static final int ARG_LENGTH = 4;
+  public static final String PROPERTIES_FILE = "JSONMappings";
+  public static final String CSV_DELIMETER = "csvDelimeter";
+
+  private ResourceBundle mappings;
 
   private String gameType;
   private String boardShape;
   private List<Integer> boardSize;
   private List<String> boardColors;
-  private List<String> players;
   private String bottomColor;
   private String style;
-  private String rules;
-  private String csv;
   private List<List<String>> csvData;
   private List<PlayerInterface> playerList;
   private List<PieceViewBuilder> pieceList;
 
   private LocationParser locationParser;
   private JsonParser jsonParser;
+  private PieceBuilder pieceBuilder;
+  private EndConditionInterface endCondition;
 
-  public BoardBuilder(File file) throws Exception {
+  public BoardBuilder(File defaultFile) {
+    mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
     jsonParser = new JsonParser();
     locationParser = new LocationParser();
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
     style = DEFAULT_STYLE;
-    build(jsonParser.loadFile(file));
-  }
+    try {
+      build(defaultFile);
+    } catch (Exception e) {
+      //default file shouldn't have any issues
+      e.printStackTrace();
+    }
 
+  }
 
   /**
-   * Overridden interface method. builds a pieceinterface which is essentially the grid
-   * that holds the pieces of the game.
-   * @param jsonObject - parsed .json file
-   * @returns - a pieceinterface grid
-   * @throws Exception - if the csv file in the JSONObject isn't valid
+   * Overridden interface method. builds a pieceinterface which is essentially the grid that holds
+   * the pieces of the game.
+   *
+   * @param file - the file to be parsed and used to build the json object
+   * @throws CsvException
+   * @throws FileNotFoundException
+   * @throws PlayerNotFoundException
+   * @throws InvalidPieceConfigException
+   * @throws InvalidGameConfigException
+   * @throws InvalidEndGameConfigException
    */
   @Override
-  public void build(JSONObject jsonObject) throws Exception {
-    extractJSONObj(jsonObject);
-    for (String player : players){
-      playerList.add(new Player(player));
-    }
-    csvData = locationParser.getInitialLocations(csv);
+  public void build(File file)
+      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException {
+    JSONObject gameJson = jsonParser.loadFile(file);
+    extractJSONObj(gameJson);
+
+    pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     iterateCSVData();
+    try {
+      buildEndConditionHandler(gameJson.getString(mappings.getString("rules")));
+    }catch (Exception e){
+      throw new InvalidEndGameConfigException(e.getClass());
+    }
+
   }
 
   @Override
-  public List<PieceViewBuilder> getInitialPieceViews(){
-    if (!this.style.equals(style)){
-      //make new piece list w style
-    }
+  public List<PieceViewBuilder> getInitialPieceViews() {
     return pieceList;
   }
 
   @Override
-  public List<PlayerInterface> getInitialPlayers(){
+  public List<PlayerInterface> getInitialPlayers() {
     return playerList;
   }
 
+  @Override
+  public EndConditionInterface getEndConditionHandler() {
+    return endCondition;
+  }
+
+  /**
+   * This method takes in a piece and converts it into a converted piece of a different type
+   * An example use case for this is in promotion, where a pawn turns into a promoted version of the
+   * piece
+   * @param piece Piece from the board that will be changed to another kind of piece
+   * @param pieceType The kind of piece that this will be changed to
+   * @return
+   * @throws FileNotFoundException
+   * @throws InvalidPieceConfigException
+   */
+  @Override
+  public PieceInterface convertPiece(PieceInterface piece, String pieceType)
+      throws FileNotFoundException, InvalidPieceConfigException {
+    String pieceTeam = piece.getTeam();
+    String[] pieceData = new String[]{pieceTeam, pieceType};
+    int pieceRow = piece.getLocation().getRow();
+    int pieceColumn = piece.getLocation().getCol();
+    Piece newPiece = pieceBuilder.buildPiece(pieceData, pieceRow, pieceColumn);
+
+    return newPiece;
+  }
   /**
    * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
    * pieceGrid
    */
-  private void iterateCSVData() throws Exception {
+  private void iterateCSVData()
+      throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
+//        String[] square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
         String[] square = csvData.get(r).get(c).split("_");
-        if (square.length < 2){           //signifies that this square is empty
-          continue;
+
+        if (square.length < 2) {
+          continue;           //signifies that this square is empty
         }
+        Piece piece = pieceBuilder.buildPiece(square, r, c);
+        int playerListIdx = determinePlayer(r, c, square[0]);
 
-        String team = square[0];
-        String pieceName = square[1];
-        Location location = new Location(r,c);
-
-        int playerListIdx = determinePlayer(team);
-
-        String pieceJsonPath = "data/"+gameType+"/pieces/"+pieceName+".json";
-        JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
-
-        MoveVector moveVector = getMoveVector(pieceJSON, team);
-        Map<String, Boolean> attributes = getAttributes(pieceJSON);
-        int score = pieceJSON.getInt("value");
-
-        Piece piece = new Piece(team, pieceName, location, moveVector, attributes, score);
         pieceList.add(new PieceViewBuilder(piece));
-        playerList.get(playerListIdx).addPiece(piece);
+        try {
+          playerList.get(playerListIdx).addPiece(piece);
+        }catch (Exception e){
+          //todo handle exception
+        }
       }
     }
   }
 
-  private int determinePlayer(String team) throws Exception {
+  private int determinePlayer(int r, int c, String team) throws PlayerNotFoundException {
     int playerListIdx = -1;
-    for (PlayerInterface p : playerList){
-      if (p.getTeam().equals(team)){
+    for (PlayerInterface p : playerList) {
+      if (p.getTeam().equals(team)) {
         playerListIdx = playerList.indexOf(p);
       }
     }
-    if (playerListIdx < 0){
-      // TODO: what case is this an issue?
-      throw new Exception("player index out of bounds");
+    if (playerListIdx < 0) {
+      throw new PlayerNotFoundException(r, c, team);
     }
     return playerListIdx;
   }
 
-  private MoveVector getMoveVector(JSONObject pieceJSON, String teamColor) {
-    Map<String, List<Vector>> map = mapOfMoveVectors(pieceJSON.getJSONObject("moveVectors"),teamColor);
-    List<Vector> moves = map.get("moves");
-    List<Vector> takeMoves = map.get("takeMoves");
-    List<Vector> initialMoves = map.get("initialMoves");
-
-    return new MoveVector(moves,takeMoves,initialMoves);
-  }
-
-  /**
-   * @param pieceJSON - JSON object of the piece
-   * @return a map of all the attributes and their values
-   */
-  private Map<String, Boolean> getAttributes(JSONObject pieceJSON) {
-    JSONObject attributes = pieceJSON.getJSONObject("attributes");
-    Map<String, Boolean> map = new HashMap<>();
-    for (String attribute : attributes.keySet()){
-      map.put(attribute, attributes.getBoolean(attribute));
-    }
-
-    return map;
-  }
-
-  /**
-   * @param moveVectors - JSONObject which contains a bunch Lists<lists> that represent movement vectors
-   * @return a map of the movement vector type (ie takeMoveVectors) to a list<list>
-   */
-  private Map<String,List<Vector>> mapOfMoveVectors(JSONObject moveVectors, String color) {
-    Map<String,List<Vector>> map = new HashMap<>();
-    for (String vectorType : moveVectors.keySet()){
-      JSONArray jsonArray = moveVectors.getJSONArray(vectorType);
-      List<Vector> vectors = jsonarrayToVectorList(jsonArray, color);
-      map.put(vectorType,vectors);
-    }
-    return map;
-  }
-
-  /**
-   * @param jsonArray Takes a jsonArray of strings that represent 1 type of movement vector (ie takeMove).
-   * @return ret - List<List<Integer>> version of the jsonArrays
-   */
-  private List<Vector> jsonarrayToVectorList(JSONArray jsonArray, String color) {
-    List<Vector> ret = new ArrayList<>();
-
-    for (int i = 0; i<jsonArray.length();i++){
-      String[] splitString = jsonArray.getString(i).split(",");
-      int row = parseInt(splitString[0]);
-      int col = parseInt(splitString[1]);
-      if (color.equals(bottomColor)){
-        row = row * -1;
-      }
-      ret.add(new Vector(row,col));
-    }
-    return ret;
-  }
-
   /**
    * sets the instance variables to the values given by the inputted json object
+   *
    * @param jsonObject - jsonobject representation of the .json file
    */
-  private void extractJSONObj(JSONObject jsonObject) throws Exception {
-    try {
-      gameType = jsonObject.getString("type");
-      boardShape = jsonObject.getString("board");
-      style = jsonObject.getString("style");
+  private void extractJSONObj(JSONObject jsonObject) throws InvalidGameConfigException {
+    try{
+      gameType = jsonObject.getString(mappings.getString("type"));
+      boardShape = jsonObject.getString(mappings.getString("board"));
+      style = jsonObject.getString(mappings.getString("style"));
+
       boardSize = new ArrayList<>();
-      List<String> a = Arrays.asList(jsonObject.getString("boardSize").split("x"));
-      a.forEach((num) -> boardSize.add(parseInt(num)));
-      boardColors = extractColors(jsonObject.getJSONArray("boardColors"));
-      players = extractColors(jsonObject.getJSONArray("players"));
-      bottomColor = players.get(0); //assumes that bottom player is the first given player color
-      rules = jsonObject.getString("rules");
-      csv = jsonObject.getString("csv");
+      for (String dimension : jsonObject.getString(mappings.getString("boardSize")).split("x")){
+        boardSize.add(parseInt(dimension));
+      }
+
+      boardColors = convertJSONArrayOfStrings(
+          jsonObject.getJSONArray(mappings.getString("boardColors")));
+
+      for (String player : convertJSONArrayOfStrings(
+          jsonObject.getJSONArray(mappings.getString("players")))) {
+        playerList.add(new Player(player));
+      }
+      bottomColor = playerList.get(0).getTeam(); //assumes that bottom player is the first player
+
+      String csv = jsonObject.getString(mappings.getString("csv"));
+      csvData = locationParser.getInitialLocations(csv);
+
+    }catch (Exception e){
+      throw new InvalidGameConfigException();
     }
-    catch (Exception e) {
-      throw new Exception(INVALID_JSON_ERROR);
+  }
+
+  private void buildEndConditionHandler(String ruleJsonFile)
+      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidGameConfigException {
+    JSONObject rules = jsonParser.loadFile(new File(ruleJsonFile));
+    String type = rules.getString(mappings.getString("gameType"));
+    String[] keys = mappings.getString(type+"RuleKeys").split(mappings.getString("jsonDelimiter"));
+    Map<String,List<String>> endConditionProperties = new HashMap<>();
+    for (String key : keys){
+      endConditionProperties.put(key, convertJSONArrayOfStrings(rules.getJSONArray(key)));
     }
+    Class<?> clazz = Class.forName("ooga.model.EndConditionHandler." + type + "EndCondition");
+    endCondition = (EndConditionInterface) clazz.getDeclaredConstructor().newInstance();
+    List<PieceInterface> initialPieces = new ArrayList<>();
+    for (PlayerInterface p : playerList){
+      initialPieces.addAll(p.getPieces());
+    }
+    endCondition.setArgs(endConditionProperties, initialPieces);
+
   }
 
   /**
    * @param jsonArray - jsonarray of strings that represent colors of the board/players;
    * @return - a List of strings version of the jsonarray
    */
-  private List<String> extractColors(JSONArray jsonArray) {
+  private List<String> convertJSONArrayOfStrings(JSONArray jsonArray) {
     List<String> ret = new ArrayList<>();
     for (int i = 0; i < jsonArray.length(); i++) {
       ret.add(jsonArray.getString(i));
     }
     return ret;
-  }
-
-  public class PieceViewBuilder {
-
-    private String team;
-    private String name;
-    private Location location;
-
-    public PieceViewBuilder(Piece piece) {
-      this.team = piece.getTeam();
-      this.name = piece.getName();
-      this.location = piece.getLocation();
-    }
-
-    public String getTeam() {
-      return team;
-    }
-
-    public String getName() {
-      return name;
-    }
-
-    public Location getLocation() {
-      return location;
-    }
   }
 }

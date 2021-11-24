@@ -21,7 +21,6 @@ public class Player implements PlayerInterface {
     public Player(String team) {
         this.team = team;
         remainingPieces = new HashMap<>();
-//        inCheck = false;
         score = 0;
         pieceIDandState = new HashMap<>();
         this.killedPieces = new ArrayList<>();
@@ -69,6 +68,11 @@ public class Player implements PlayerInterface {
         pieceIDandState.put(piece.getUniqueId(),piece.getEndState());
         score += piece.getScore();
     }
+//
+//    public void removePiece(PieceInterface piece){
+//        remainingPieces.remove(piece);
+//        score -= piece.getScore();
+//    }
 
     /**
      * returns the player team
@@ -79,31 +83,35 @@ public class Player implements PlayerInterface {
         return team;
     }
 
-    public PieceInterface getKing(){
-        for(PieceInterface piece : remainingPieces.keySet()) {
-            if(piece.getName().equals("K")) {
-                return piece;
-            }
-        }
+    @Override
+    public PieceInterface getKing() {
         return null;
     }
 
     @Override
     public void movePiece(PieceInterface piece, Location end) {
-        piece.moveTo(end);
+
     }
-    
+
     @Override
     public void tryMove(PieceInterface piece, Location end) {
-        piece.tryMove(end);
+
     }
 
     @Override
     public PieceInterface getPiece(Location location) {
+        List<PieceInterface> p = new ArrayList<>();
         for(PieceInterface piece : remainingPieces.keySet()) {
             if(piece.getLocation().equals(location)) {
-                return piece;
+                p.add(piece);
+//                return piece;
             }
+        }
+        if(p.size() > 0){
+            if(p.size() > 1){
+                System.out.println("Player.getPiece " + p.size() + " pieces " + p + " at " + location);
+            }
+            return p.get(0);
         }
         return null;
     }
@@ -114,6 +122,11 @@ public class Player implements PlayerInterface {
 
     public void setLegalMoves(PieceInterface piece, List<Location> moves){
         remainingPieces.put(piece, moves);
+    }
+
+    @Override
+    public void removePiece(PieceInterface piece) {
+
     }
 
     private void calculateScore(){

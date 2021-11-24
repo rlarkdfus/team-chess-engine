@@ -1,21 +1,29 @@
 {
-  "moveVectors": {
-    "takeMoves": [
-      "1,-1",
-      "1,1"
+  "moves": {
+    "TranslationMove": [
+      "1, 0,false,limited"
     ],
-    "moves": [
-      "1,0"
+    "PawnMove": [
+      "2,0,false,limited"
     ],
-    "initialMoves": [
-      "2,0"
+    "EnPassantMove": [
+      "1, -1,takes,limited",
+      "1, 1,takes,limited"
+    ],
+    "TakeOnlyMove": [
+      "1, -1,takes,limited",
+      "1, 1,takes,limited"
     ]
   },
   "attributes": {
     "limited": true,
-    "canEnPassant": true,
-    "canTransform": true,
-    "canCastle": false
+    "canTransform": true
   },
-  "value": 1
+  "value": 1,
+  "transform": [
+    "Q",
+    "R",
+    "N",
+    "B"
+  ]
 }

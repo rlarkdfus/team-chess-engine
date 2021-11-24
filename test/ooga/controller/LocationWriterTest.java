@@ -3,7 +3,6 @@ package ooga.controller;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -17,7 +16,7 @@ class LocationWriterTest {
   private LocationWriter locWriter;
   private LocationParser locationParser;
   private JsonParser jsonParser;
-  private BoardBuilder boardBuilder;
+  private Builder boardBuilder;
   private File file;
   private Path directory;
   @TempDir
@@ -29,7 +28,9 @@ class LocationWriterTest {
     locationParser = new LocationParser();
     jsonParser = new JsonParser();
     file = new File("data/chess/defaultChess.json");
+
     boardBuilder = new BoardBuilder(file);
+
     directory = predirectory.resolve("testfile1.csv");
   }
 

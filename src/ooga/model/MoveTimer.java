@@ -52,7 +52,7 @@ public class MoveTimer {
         isPaused = false;
         timer = new Timer();
         timerTask = makeTimerTask();
-        timer.scheduleAtFixedRate(timerTask, 1000, 1000 );
+        timer.scheduleAtFixedRate(timerTask, 1000, 1000);
         timerTask.run();
     }
 
@@ -103,6 +103,7 @@ public class MoveTimer {
 
     /**
      * converts time in seconds to "mm:ss"
+     *
      * @param seconds the time in seconds (maximum of 3599)
      * @return the String representation of the time
      */
@@ -114,6 +115,7 @@ public class MoveTimer {
 
     /**
      * Converts time to two digit string
+     *
      * @param time the time as an integer
      * @return the String representation of the time with two digits
      */

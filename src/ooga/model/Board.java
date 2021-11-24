@@ -2,11 +2,15 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
+import ooga.model.Moves.Move;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Board implements Engine {
+private static final int Rows = 8;
+private static final int Cols = 8;
 
     public enum GameState {
         RUNNING,
@@ -15,14 +19,20 @@ public class Board implements Engine {
         CHECK
     };
 
-    private MoveFactory moveFactory;
     private List<PlayerInterface> players;
+    private List<PieceInterface> allPieces;
     private int turnCount;
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
-        moveFactory = new MoveFactory(players, 8, 8); //FIXME
         turnCount = 0;
+        allPieces = new ArrayList<>();
+        for(PlayerInterface player : players) {
+            allPieces.addAll(player.getPieces());
+        }
+        for (PieceInterface piece : allPieces){
+            piece.updateMoves(allPieces);
+        }
         updateLegalMoves();
     }
 
@@ -30,11 +40,9 @@ public class Board implements Engine {
         return players;
     }
 
-    private void updateLegalMoves() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        for(PlayerInterface player : players) {
-            for(PieceInterface piece : player.getPieces()){
-                player.setLegalMoves(piece, moveFactory.findLegalMoves(player, piece));
-            }
+    private void updateLegalMoves() {
+        for(PieceInterface piece : allPieces) {
+            piece.updateMoves(new ArrayList<>(allPieces));
         }
     }
 
@@ -43,34 +51,75 @@ public class Board implements Engine {
      * @param start is piece initial location
      * @param end is piece new location
      */
-    public Turn movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        Turn currentTurn = new Turn();
-        PlayerInterface currentPlayer = findPlayerTurn(turnCount);
-        PlayerInterface otherPlayer = findPlayerTurn(turnCount + 1);
-
-
-        // check for castling
-
-        // add to removed list if piece exists at destination
-        if(otherPlayer.getPiece(end) != null) {
-            currentTurn.removePiece(end);
-            otherPlayer.removePiece(end);
+    public Turn movePiece(Location start, Location end){
+        // pause current player timer, start next player time
+        PieceInterface piece = null;
+        for(PieceInterface p : allPieces) {
+            if(p.getLocation().equals(start)) {
+                piece = p;
+                break;
+            }
         }
 
-        //basic move piece
-        currentTurn.movePiece(start, end);
-        currentPlayer.movePiece(moveFactory.pieceAt(start), end);
+        Move move = piece.getMove(end);
+        Turn turn = move.getTurn();
+        move.executeMove(piece, allPieces, end);
+
+        // remove piece from player if needed after turn
+        for(Location removeLocation : turn.getRemoved()){
+            for(PlayerInterface player : players){
+                for(PieceInterface p : player.getPieces()){
+                    if (p.getLocation().equals(removeLocation)) {
+                        player.removePiece(p);
+                    }
+                }
+            }
+        }
+
+
+        //Check for pawn promotion
+//        PieceInterface dummypiece = moveFactory.pieceAt(end);
+//        if(dummypiece.getName().equals("P")){
+//            if(end.getRow() == 0 || end.getRow() ==Rows-1){
+//                System.out.println("pawn at end");
+////                promotePiece(dummypiece,end,currentPlayer);
+//            }
+//        }
 
         // increment turn
         turnCount++;
-        // pause current player timer, start next player time
-        
 
-        // update legal moves
+
+//        System.out.println("before");
+//        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
+//        System.out.println(this);
+
         updateLegalMoves();
 
-        return currentTurn;
+//        System.out.println("after");
+        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
+        System.out.println(this);
+//        updatePieceMoves();
+        return turn;
     }
+
+
+    private void updatePieceMoves(){
+        for (PieceInterface piece : allPieces){
+            piece.updateMoves(allPieces);
+        }
+    }
+
+    private void promotePiece(PieceInterface pieceInterface, Location location, PlayerInterface player) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        //need to initial
+        PieceInterface queen;
+//       queen = new Piece(player.getTeam(), "q", location, 0, 0);
+        player.removePiece(pieceInterface.getLocation());
+//        player.addPiece(queen);
+
+    }
+
+
 
     /**
      * see if the game is still running or if its over
@@ -87,7 +136,8 @@ public class Board implements Engine {
 
             if(legalMovesCount == 0) {
                 //checkmate
-                return (moveFactory.inCheck(player.getKing(), otherPlayer.getPieces())) ? GameState.CHECKMATE : GameState.STALEMATE;
+                return null;
+//                return (moveFactory.inCheck(player.getKing(), otherPlayer.getPieces())) ? GameState.CHECKMATE : GameState.STALEMATE;
             }
         }
         // game still going
@@ -100,7 +150,13 @@ public class Board implements Engine {
      * @return
      */
     public List<Location> getLegalMoves(Location location){
-        return findPlayerTurn(turnCount).getLegalMoves(location);
+        for(PieceInterface piece : allPieces) {
+            if(piece.getLocation().equals(location)) {
+//                System.out.println(piece.getName() + " " + piece.getTeam());
+                return piece.getEndLocations();
+            }
+        }
+        return null;
     }
 
     /**
@@ -109,11 +165,49 @@ public class Board implements Engine {
      * @return
      */
     public boolean canMovePiece(Location location) {
-        PieceInterface piece = moveFactory.pieceAt(location);
-        return (piece != null && piece.getTeam().equals(findPlayerTurn(turnCount).getTeam()));
+        String turn = findPlayerTurn(turnCount).getTeam();
+        for(PieceInterface piece : allPieces) {
+            if(piece.getTeam().equals(turn) && piece.getLocation().equals(location)) {
+                return true;
+            }
+        }
+//        for(PieceInterface piece : findPlayerTurn(turnCount).getPieces()) {
+//            if(piece.getLocation().equals(location)) {
+//                return true;
+//            }
+//        }
+        return false;
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
         return players.get(turn % players.size());
+    }
+
+    @Override
+    public String toString(){
+        StringBuilder str = new StringBuilder();
+        str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
+        for(int i = 0; i < 8; i++) {
+            str.append(i+"\t|");
+//            str.append("|");
+            for(int j = 0; j < 8; j++) {
+                Location location = new Location(i, j);
+                boolean found = false;
+
+                for(PieceInterface piece : allPieces) {
+                    if(piece.getLocation().equals(location)) {
+                        str.append(piece.toString() + "\t");
+                        found = true;
+                    }
+                }
+                if(!found){
+                    str.append("\t");
+                }
+                str.append("|");
+            }
+            str.append("\n");
+        }
+        str.append("__________________________________\n");
+        return str.toString();
     }
 }
