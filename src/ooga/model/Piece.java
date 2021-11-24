@@ -167,6 +167,7 @@ public class Piece implements PieceInterface {
   public List<Location> getEndLocations() {
     List<Location> locations = new ArrayList<>();
     for(Move move : moves) {
+//      System.out.println(move.getClass());
       locations.addAll(move.getEndLocations());
     }
     return locations;

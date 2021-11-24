@@ -31,6 +31,9 @@ private static final int Cols = 8;
         for(PlayerInterface player : players) {
             allPieces.addAll(player.getPieces());
         }
+        for (PieceInterface piece : allPieces){
+            piece.updateMoves(allPieces);
+        }
 //        updateLegalMoves();
     }
 
@@ -99,12 +102,16 @@ private static final int Cols = 8;
 //        System.out.println("after");
         System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
         System.out.println(this);
-
+        updatePieceMoves();
         return turn;
     }
 
 
-
+    private void updatePieceMoves(){
+        for (PieceInterface piece : allPieces){
+            piece.updateMoves(allPieces);
+        }
+    }
 
     private void promotePiece(PieceInterface pieceInterface, Location location, PlayerInterface player) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         //need to initial
@@ -148,6 +155,7 @@ private static final int Cols = 8;
     public List<Location> getLegalMoves(Location location){
         for(PieceInterface piece : allPieces) {
             if(piece.getLocation().equals(location)) {
+//                System.out.println(piece.getName() + " " + piece.getTeam());
                 return piece.getEndLocations();
             }
         }
