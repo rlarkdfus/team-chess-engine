@@ -1,24 +1,15 @@
 {
-  "moveVectors": {
-    "takeMoves": [
-      "0,1",
-      "0,-1",
-      "1,0",
-      "-1,0"
-    ],
-    "moves": [
-      "0,1",
-      "0,-1",
-      "1,0",
-      "-1,0"
-    ],
-    "initialMoves": []
+  "moves": {
+    "TranslationMove": [
+      "1,0,takes,unlimited",
+      "0,1,takes,unlimited",
+      "-1,0,takes,unlimited",
+      "0,-1,takes,unlimited"
+    ]
   },
-  "attributes": {
+  "attributes":{
     "limited": false,
-    "canEnPassant": false,
-    "canTransform": false,
-    "canCastle": true
+    "canTransform": false
   },
   "value": 5
 }

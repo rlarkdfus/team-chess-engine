@@ -1,14 +1,10 @@
 {
-  "moveVectors": {
-    "takeMoves": ["1,-1","1,1","-1,1","-1,-1"],
-    "moves": ["1,-1","1,1","-1,1","-1,-1"],
-    "initialMoves": []
+  "moves": {
+    "TranslationMove": ["1, -1, takes, unlimited","1, 1, takes, unlimited","-1, -1, takes, unlimited","-1, 1, takes, unlimited"]
   },
-  "attributes": {
+  "attributes":{
     "limited": false,
-    "canEnPassant": false,
-    "canTransform": false,
-    "canCastle": false,
+    "canTransform": false
   },
   "value": 3
 }

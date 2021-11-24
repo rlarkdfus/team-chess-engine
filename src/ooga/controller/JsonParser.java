@@ -11,23 +11,17 @@ public class JsonParser implements ParserInterface {
   }
 
   @Override
-  public JSONObject loadFile(File file) {
+  public JSONObject loadFile(File file) throws FileNotFoundException {
     String currFileString = readFile(file);
     return buildJSON(currFileString);
   }
 
-  private String readFile(File currFile) {
-    Scanner scan;
-    StringBuilder currFileString;
-    try {
-      scan = new Scanner(currFile);
-    } catch (FileNotFoundException e) {
-      return null;
-    }
 
-    currFileString = new StringBuilder();
+  private String readFile(File currFile) throws FileNotFoundException {
+    Scanner scan = new Scanner(currFile);
+    String currFileString = new String();
     while (scan.hasNext()) {
-      currFileString.append(scan.nextLine());
+      currFileString += (scan.nextLine());
     }
     scan.close();
     return currFileString.toString();

@@ -10,22 +10,22 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.Turn;
-import ooga.controller.BoardBuilder;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
+import ooga.controller.PieceViewBuilder;
 
 public class BoardView extends Group implements BoardViewInterface {
 
-    public static final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
-    public static final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
-    public static final String DEFAULT_PIECE_STYLE = "companion";
+    private final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
+    private final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
+    private final String DEFAULT_PIECE_STYLE = "companion";
 
     private ControllerInterface controller;
     private Location startLocation;
     private BoardSquare[][] background;
     private List<PieceView> pieceList;
 
-    public BoardView(Controller controller, List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
+    public BoardView(Controller controller, List<PieceViewBuilder> pieceViews, int row, int col) {
         this.controller = controller;
         startLocation = null;
         pieceList = new ArrayList<>();
@@ -33,7 +33,7 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     @Override
-    public void initializeBoardView(List<BoardBuilder.PieceViewBuilder> pieceViews, int row, int col) {
+    public void initializeBoardView(List<PieceViewBuilder> pieceViews, int row, int col) {
         renderBackground(row, col);
         renderInitialChessPieces(pieceViews, DEFAULT_PIECE_STYLE);
         this.setOnMouseClicked(e -> {
@@ -97,8 +97,9 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void removePiece(Location location) {
-        for (PieceView pieceView : pieceList) {
-            if (pieceView.location.equals(location)) {
+
+        for(PieceView pieceView : pieceList){
+            if(pieceView.location.equals(location) ){
                 this.getChildren().remove(pieceView);
             }
         }
@@ -117,8 +118,8 @@ public class BoardView extends Group implements BoardViewInterface {
         changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
     }
 
-    private void renderInitialChessPieces(List<BoardBuilder.PieceViewBuilder> pieceViews, String style) {
-        for (BoardBuilder.PieceViewBuilder piece : pieceViews) {
+    private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style) {
+        for(PieceViewBuilder piece : pieceViews) {
             PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
             pieceList.add(newPiece);
             this.getChildren().add(newPiece);
@@ -155,7 +156,8 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void clearBoard() {
-        for (PieceView pieceView : pieceList) {
+
+        for(PieceView pieceView : pieceList) {
             if (pieceView != null) {
                 removePiece(pieceView.location);
             }

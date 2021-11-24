@@ -1,0 +1,5 @@
+{
+  "gameType": "Location",
+  "pieceType": ["P","P"],
+  "amount": ["1,0","2,0"]
+}

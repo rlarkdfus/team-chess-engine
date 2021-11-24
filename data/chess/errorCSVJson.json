@@ -1,0 +1,13 @@
+{
+  "type": "chess",
+  "board": "square",
+  "boardSize": "8x8",
+  "players": ["w", "b"],
+  "rules": "data/chess/rules/default.json",
+  "style": "companion",
+  "boardColors": ["#f3dab0", "#bb885b"],
+  "endcon" : "myendcon.json",
+  "csv": "data/chess/locations/errorCSV.csv"
+}
+
+
