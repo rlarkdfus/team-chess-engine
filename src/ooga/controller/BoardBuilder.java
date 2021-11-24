@@ -24,6 +24,10 @@ public class BoardBuilder implements Builder {
   public static final int ARG_LENGTH = 4;
   public static final String PROPERTIES_FILE = "JSONMappings";
   public static final String CSV_DELIMETER = "csvDelimiter";
+  public static final String RULES = "rules";
+  public static final String TYPE = "type";
+  public static final String BOARD = "board";
+  public static final String STYLE = "style";
 
   private ResourceBundle mappings;
 
@@ -79,7 +83,7 @@ public class BoardBuilder implements Builder {
     pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     iterateCSVData();
     try {
-      buildEndConditionHandler(gameJson.getString(mappings.getString("rules")));
+      buildEndConditionHandler(gameJson.getString(mappings.getString(RULES)));
     }catch (Exception e){
       throw new InvalidEndGameConfigException(e.getClass());
     }
@@ -168,9 +172,9 @@ public class BoardBuilder implements Builder {
    */
   private void extractJSONObj(JSONObject jsonObject) throws InvalidGameConfigException {
     try{
-      gameType = jsonObject.getString(mappings.getString("type"));
-      boardShape = jsonObject.getString(mappings.getString("board"));
-      style = jsonObject.getString(mappings.getString("style"));
+      gameType = jsonObject.getString(mappings.getString(TYPE));
+      boardShape = jsonObject.getString(mappings.getString(BOARD));
+      style = jsonObject.getString(mappings.getString(STYLE));
 
       boardSize = new ArrayList<>();
       for (String dimension : jsonObject.getString(mappings.getString("boardSize")).split("x")){
