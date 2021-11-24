@@ -1,6 +1,7 @@
 package ooga.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -67,7 +68,7 @@ public class Controller implements ControllerInterface {
 
     @Override
     public void movePiece (Location start, Location end) throws
-    InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+            InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
       view.updateDisplay(model.movePiece(start, end));
       if (model.checkGameState() != Board.GameState.RUNNING) {
         System.out.println(model.checkGameState()); //FIXME

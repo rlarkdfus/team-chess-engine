@@ -50,6 +50,7 @@ public class Player implements PlayerInterface {
         }
     }
 
+
     /**
      * get the list of pieces that a player has
      * @return
@@ -72,6 +73,11 @@ public class Player implements PlayerInterface {
     public void removePiece(PieceInterface piece){
         remainingPieces.remove(piece);
         score -= piece.getScore();
+    }
+
+    @Override
+    public int getScore() {
+        return score;
     }
 
     /**
