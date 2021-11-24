@@ -46,8 +46,6 @@ public class BoardBuilder implements Builder {
     mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
     jsonParser = new JsonParser();
     locationParser = new LocationParser();
-    pieceList = new ArrayList<>();
-    playerList = new ArrayList<>();
     style = DEFAULT_STYLE;
     try {
       build(defaultFile);
@@ -73,6 +71,8 @@ public class BoardBuilder implements Builder {
   @Override
   public void build(File file)
       throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException {
+    pieceList = new ArrayList<>();
+    playerList = new ArrayList<>();
     JSONObject gameJson = jsonParser.loadFile(file);
     extractJSONObj(gameJson);
 
