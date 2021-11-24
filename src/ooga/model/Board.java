@@ -25,7 +25,6 @@ private static final int Cols = 8;
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
-//        moveFactory = new MoveFactory(players, Rows, Cols); //FIXME
         turnCount = 0;
         allPieces = new ArrayList<>();
         for(PlayerInterface player : players) {
@@ -34,20 +33,18 @@ private static final int Cols = 8;
         for (PieceInterface piece : allPieces){
             piece.updateMoves(allPieces);
         }
-//        updateLegalMoves();
+        updateLegalMoves();
     }
 
     public List<PlayerInterface> getPlayers() {
         return players;
     }
 
-//    private void updateLegalMoves() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-//        for(PlayerInterface player : players) {
-//            for(PieceInterface piece : player.getPieces()){
-//                player.setLegalMoves(piece, moveFactory.findLegalMoves(player, piece));
-//            }
-//        }
-//    }
+    private void updateLegalMoves() {
+        for(PieceInterface piece : allPieces) {
+            piece.updateMoves(new ArrayList<>(allPieces));
+        }
+    }
 
     /**
      * Moves piece from start to end and updates the board
@@ -97,12 +94,12 @@ private static final int Cols = 8;
 //        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
 //        System.out.println(this);
 
-//        updateLegalMoves();
+        updateLegalMoves();
 
 //        System.out.println("after");
         System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
         System.out.println(this);
-        updatePieceMoves();
+//        updatePieceMoves();
         return turn;
     }
 
