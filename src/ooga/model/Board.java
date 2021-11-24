@@ -104,16 +104,8 @@ private static final int Cols = 8;
 
 //        System.out.println("after");
         System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
-        System.out.println(this);
-//        updatePieceMoves();
+//        System.out.println(this);
         return turn;
-    }
-
-
-    private void updatePieceMoves(){
-        for (PieceInterface piece : allPieces){
-            piece.updateMoves(allPieces);
-        }
     }
 
     private void promotePiece(PieceInterface pieceInterface, Location location, PlayerInterface player) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
@@ -136,7 +128,14 @@ private static final int Cols = 8;
         if (endCondition.isGameOver(players)){
             return GameState.CHECKMATE;
         }
+        int totalLegalMoves = 0;
+        for (PieceInterface piece : findPlayerTurn(turnCount).getPieces()){
+            totalLegalMoves += getLegalMoves(piece.getLocation()).size();
+        }
 
+        if (totalLegalMoves == 0){
+            return GameState.STALEMATE;
+        }
         // game still going
         return GameState.RUNNING;
     }
