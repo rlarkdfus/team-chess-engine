@@ -1,8 +1,13 @@
 {
   "moves": {
-    "TranslaTYPOove": ["1, -1,takes, unlimited","1, 1,takes, unlimited","-1, -1,takes, unlimited","-1, 1,takes, unlimited"]
+    "TranslaTYPOove": [
+      "1, -1,takes, unlimited",
+      "1, 1,takes, unlimited",
+      "-1, -1,takes, unlimited",
+      "-1, 1,takes, unlimited"
+    ]
   },
-  "attributes":{
+  "attributes": {
     "limited": false,
     "canTransform": false
   },

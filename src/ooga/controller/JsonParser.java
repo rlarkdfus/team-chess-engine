@@ -7,30 +7,27 @@ import org.json.JSONObject;
 
 public class JsonParser implements ParserInterface {
 
-  public JsonParser(){
-    
+  public JsonParser() {
   }
 
   @Override
   public JSONObject loadFile(File file) throws FileNotFoundException {
     String currFileString = readFile(file);
-    JSONObject jsonObject = buildJSON(currFileString);
-    return jsonObject;
+    return buildJSON(currFileString);
   }
+
 
   private String readFile(File currFile) throws FileNotFoundException {
     Scanner scan = new Scanner(currFile);
     String currFileString = new String();
-
     while (scan.hasNext()) {
-      currFileString += scan.nextLine();
+      currFileString += (scan.nextLine());
     }
     scan.close();
-    return currFileString;
+    return currFileString.toString();
   }
 
   private JSONObject buildJSON(String currFileString) {
-    JSONObject obj = new JSONObject(currFileString);
-    return obj;
+    return new JSONObject(currFileString);
   }
 }

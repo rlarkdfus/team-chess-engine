@@ -11,6 +11,7 @@ import ooga.controller.PieceViewBuilder;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
 import ooga.view.ui.gameSettingsUI.GameSettingsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
+import ooga.view.util.ViewUtility;
 
 public class View implements ViewInterface {
 
@@ -23,6 +24,7 @@ public class View implements ViewInterface {
 
     private Controller controller;
     private ViewController viewController;
+    private ViewUtility viewUtility;
     private Stage stage;
 
     private GridPane root;
@@ -34,10 +36,10 @@ public class View implements ViewInterface {
     public View(Controller controller) {
         this.controller = controller;
         this.viewController = new ViewController();
+        this.viewUtility = new ViewUtility();
         this.stage = new Stage();
         //TODO: this is probably bad design idk
         viewController.setView(this);
-        //this.viewController = controller.getViewController();
     }
 
     private Scene setupDisplay() {
@@ -56,8 +58,7 @@ public class View implements ViewInterface {
         this.boardView = new BoardView(controller, pieceViewList, 8, 8);
         this.settingsUI = new SettingsUI(controller, viewController);
         this.gameInfoUI = new GameInfoUI();
-        this.gameSettingsInfoUI = new GameSettingsUI(viewController);
-
+        this.gameSettingsInfoUI = new GameSettingsUI(controller, viewController);
         stage.setScene(setupDisplay());
         stage.show();
     }
@@ -75,7 +76,5 @@ public class View implements ViewInterface {
         boardView.changePieceStyle(style);
     }
 
-    public void resetBoard() {
-        boardView.resetBoard();
-    }
+    public void showError(String message) {viewUtility.showError(message);}
 }

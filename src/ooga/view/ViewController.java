@@ -22,8 +22,4 @@ public class ViewController {
     public void handleChangePieceStyle(String style) {
         view.changePieceStyle(style);
     }
-
-    public void handleNewGame() {
-        view.resetBoard();
-    }
 }

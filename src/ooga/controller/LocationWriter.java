@@ -13,31 +13,26 @@ import ooga.model.PlayerInterface;
 public class LocationWriter {
   private List<String> csvGrid;
 
-  public void saveCSV(String filePath, List<PlayerInterface> players) throws Exception {
+  public void saveCSV(String filePath, List<PlayerInterface> players) throws IOException {
     makeGrid(players);
-    try {
-      FileWriter fileWriter = new FileWriter(filePath);
-      BufferedWriter writer = new BufferedWriter(fileWriter);
-      for (String row : csvGrid) {
-          writer.write(row);
-          writer.newLine();
-      }
-      writer.close();
-    } catch (Exception e) {
-      throw new Exception("Unable to find file to save csv");
+    FileWriter fileWriter = new FileWriter(filePath);
+    BufferedWriter writer = new BufferedWriter(fileWriter);
+    for (String row : csvGrid) {
+        writer.write(row);
+        writer.newLine();
     }
-
+    writer.close();
   }
 
   private void makeGrid(List<PlayerInterface> players) {
     csvGrid = new ArrayList<>();
-    ArrayList<String[]> tempGrid = new ArrayList<>();
+    List<String[]> tempGrid = new ArrayList<>();
     setZeroes(tempGrid);
     setPieces(players, tempGrid);
     listStringArrToListString(tempGrid);
   }
 
-  private void setZeroes(ArrayList<String[]> tempGrid) {
+  private void setZeroes(List<String[]> tempGrid) {
     for (int i = 0; i < 8; i++) {
       int[] gridRowInts = new int[8];
       String[] gridRow = Arrays.stream(gridRowInts)
@@ -47,7 +42,7 @@ public class LocationWriter {
     }
   }
 
-  private void setPieces(List<PlayerInterface> players, ArrayList<String[]> tempGrid) {
+  private void setPieces(List<PlayerInterface> players, List<String[]> tempGrid) {
     for(PlayerInterface player: players) {
       List<PieceInterface> pieces = player.getPieces();
       pieces.forEach(piece -> {
@@ -59,7 +54,7 @@ public class LocationWriter {
     }
   }
 
-  private void listStringArrToListString(ArrayList<String[]> tempGrid) {
+  private void listStringArrToListString(List<String[]> tempGrid) {
     for(String[] pieceRow : tempGrid) {
       String csvRow = String.join(",", pieceRow);
       csvGrid.add(csvRow);

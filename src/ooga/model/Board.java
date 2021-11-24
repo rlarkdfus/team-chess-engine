@@ -4,29 +4,40 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.model.Moves.Move;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Board implements Engine {
+private static final int Rows = 8;
+private static final int Cols = 8;
 
     public enum GameState {
         RUNNING,
         CHECKMATE,
-        STALEMATE
+        STALEMATE,
+        CHECK
     };
 
     private List<PlayerInterface> players;
     private List<PieceInterface> allPieces;
     private int turnCount;
 
-    public Board(List<PlayerInterface> players) {
+    public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
         turnCount = 0;
         allPieces = new ArrayList<>();
         for(PlayerInterface player : players) {
             allPieces.addAll(player.getPieces());
         }
+        for (PieceInterface piece : allPieces){
+            piece.updateMoves(allPieces);
+        }
         updateLegalMoves();
+    }
+
+    public List<PlayerInterface> getPlayers() {
+        return players;
     }
 
     private void updateLegalMoves() {
@@ -65,6 +76,16 @@ public class Board implements Engine {
             }
         }
 
+
+        //Check for pawn promotion
+//        PieceInterface dummypiece = moveFactory.pieceAt(end);
+//        if(dummypiece.getName().equals("P")){
+//            if(end.getRow() == 0 || end.getRow() ==Rows-1){
+//                System.out.println("pawn at end");
+////                promotePiece(dummypiece,end,currentPlayer);
+//            }
+//        }
+
         // increment turn
         turnCount++;
 
@@ -78,9 +99,27 @@ public class Board implements Engine {
 //        System.out.println("after");
         System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
         System.out.println(this);
-
+//        updatePieceMoves();
         return turn;
     }
+
+
+    private void updatePieceMoves(){
+        for (PieceInterface piece : allPieces){
+            piece.updateMoves(allPieces);
+        }
+    }
+
+    private void promotePiece(PieceInterface pieceInterface, Location location, PlayerInterface player) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        //need to initial
+        PieceInterface queen;
+//       queen = new Piece(player.getTeam(), "q", location, 0, 0);
+        player.removePiece(pieceInterface.getLocation());
+//        player.addPiece(queen);
+
+    }
+
+
 
     /**
      * see if the game is still running or if its over
@@ -113,6 +152,7 @@ public class Board implements Engine {
     public List<Location> getLegalMoves(Location location){
         for(PieceInterface piece : allPieces) {
             if(piece.getLocation().equals(location)) {
+//                System.out.println(piece.getName() + " " + piece.getTeam());
                 return piece.getEndLocations();
             }
         }

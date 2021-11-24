@@ -3,7 +3,6 @@ package ooga.controller;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -24,12 +23,13 @@ class LocationWriterTest {
   public Path predirectory;
 
   @BeforeEach
-  void setUp() throws IOException {
+  void setUp() throws Exception {
     locWriter = new LocationWriter();
     locationParser = new LocationParser();
     jsonParser = new JsonParser();
     file = new File("data/chess/defaultChess.json");
-    boardBuilder = new BoardBuilder2(file);
+
+    boardBuilder = new BoardBuilder(file);
 
     directory = predirectory.resolve("testfile1.csv");
   }

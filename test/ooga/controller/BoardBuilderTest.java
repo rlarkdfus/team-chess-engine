@@ -14,8 +14,8 @@ import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.EnPassantMove;
 import ooga.model.Moves.Move;
 import ooga.model.Moves.PawnMove;
+import ooga.model.Moves.TakeOnlyMove;
 import ooga.model.Moves.TranslationMove;
-import ooga.model.Piece;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 import org.json.JSONObject;
@@ -23,7 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-class BoardBuilder2Test {
+class BoardBuilderTest {
 
   Builder boardBuilder;
   PieceBuilder pieceBuilder;
@@ -34,7 +34,7 @@ class BoardBuilder2Test {
   @BeforeEach
   void setUp() {
     String testFile = "data/chess/oneBlackPawn.json";
-    boardBuilder = new BoardBuilder2(new File(testFile));
+    boardBuilder = new BoardBuilder(new File(testFile));
 
     getPieceBuilder();
     gameType = "chess";
@@ -109,7 +109,10 @@ class BoardBuilder2Test {
     getMoves.setAccessible(true);
 
     actual = (List<Move>) getMoves.invoke(pieceBuilder, getPiece(), team);
-    expected =List.of(new EnPassantMove(),new EnPassantMove(),new TranslationMove(),new PawnMove());
+    for (Move m : actual){
+      System.out.println(m.getClass());
+    }
+    expected =List.of(new EnPassantMove(),new EnPassantMove(),new TakeOnlyMove(),new TakeOnlyMove(),new TranslationMove(),new PawnMove());
 
     assertEquals(expected.size(), actual.size(),"wrong number of moves.");
 

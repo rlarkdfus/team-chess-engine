@@ -2,9 +2,12 @@ package ooga.model;
 
 import ooga.Location;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import ooga.model.Moves.Move;
 
 public class Piece implements PieceInterface {
@@ -18,6 +21,13 @@ public class Piece implements PieceInterface {
   private boolean firstMove = false;
 
   private Map<String, Boolean> attributes;
+  private boolean isEliminated;
+  private boolean endConditionSatisified;
+  private int uniqueID;
+  //Used to create a unique hash/id for each piece;
+  private Location initialLocation;
+  String endStateString = "eliminated";
+
   private List<Move> moves;
 
   public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
@@ -91,7 +101,39 @@ public class Piece implements PieceInterface {
       this.location = location;
     }
 
-    /**
+  @Override
+  public int getUniqueId() {
+    return this.uniqueID;
+  }
+
+  @Override
+  public void setEliminated(boolean state) {
+    isEliminated = state;
+  }
+
+  @Override
+  public boolean getEliminatedState() {
+    return isEliminated;
+  }
+
+  //Fixme: Fix the end state
+  @Override
+  public boolean getEndState() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    Method method= this.getClass().getDeclaredMethod(endStateString);
+    //endState string can be standard(no end state, or eliminated, meaning it is killed)
+    Object value = method.invoke(this);
+    return (boolean) value;
+  }
+
+  //Used for reflection.
+  private boolean standard(){
+    return true;
+  }
+  private boolean eliminated(){
+    return this.isEliminated;
+  }
+
+  /**
    * override toString to print out piece information
    *
    * @return
@@ -101,6 +143,22 @@ public class Piece implements PieceInterface {
     return team + name;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Piece piece = (Piece) o;
+    return score == piece.score && Objects.equals(location, piece.location) && Objects.equals(team, piece.team) && Objects.equals(name, piece.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(initialLocation, team, score, name);
+  }
+
+
+
+
   /**
    * get all the locations a piece can move to
    * @return
@@ -109,6 +167,7 @@ public class Piece implements PieceInterface {
   public List<Location> getEndLocations() {
     List<Location> locations = new ArrayList<>();
     for(Move move : moves) {
+//      System.out.println(move.getClass());
       locations.addAll(move.getEndLocations());
     }
     return locations;

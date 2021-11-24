@@ -5,11 +5,15 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ooga.controller.Controller;
 import org.junit.jupiter.api.Test;
 import org.testfx.service.query.EmptyNodeQueryException;
 import util.DukeApplicationTest;
+
+import java.lang.reflect.InvocationTargetException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,10 +31,20 @@ public class ViewTest extends DukeApplicationTest {
 
     // this method is run BEFORE EACH test to set up application in a fresh state
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         new Controller();
-//        Button uploadConfig = lookup("#upload_configuration").queryButton();
-//        clickOn(uploadConfig);
+    }
+
+    @Test
+    void testTimerInitialTime() {
+        // 10 minutes start time
+        int expected = 10*60;
+        int tolerance = 5;
+        Text whiteTimeLabel = lookup("#white_timer_display").query();
+        String[] times = whiteTimeLabel.getText().split(":");
+        int minutes = Integer.parseInt(times[0]);
+        int seconds = Integer.parseInt(times[1]);
+        assertEquals(expected, 60 * minutes + seconds, tolerance);
     }
 
     @Test
@@ -72,14 +86,6 @@ public class ViewTest extends DukeApplicationTest {
     }
 
     @Test
-    void testDoubleClickPieceDeselect() {
-        String location = "(7,4)";
-        PieceView testPiece = queryPieceView(WHITE, KING, location, STYLE_COMPANION);
-        doubleClickOn(testPiece);
-        assertThrows(EmptyNodeQueryException.class, () -> lookup(String.format("#select_location%s", location)).query());
-    }
-
-    @Test
     void testSingleRightClickEmptySquareHighlight() {
         String location = "(3,3)";
         rightClickOn(queryBoardSquare(location));
@@ -101,7 +107,7 @@ public class ViewTest extends DukeApplicationTest {
         testMovePiece(WHITE, PAWN, whiteStart, whiteEnd);
         Button reset = lookup("#new_game").queryButton();
         clickOn(reset);
-        assertThrows(EmptyNodeQueryException.class, () -> queryPieceView(WHITE, PAWN, whiteStart, STYLE_COMPANION));
+        assertDoesNotThrow(() -> queryPieceView(WHITE, PAWN, whiteStart, STYLE_COMPANION));
     }
 
     @Test
