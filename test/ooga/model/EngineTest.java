@@ -2,11 +2,13 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
+import ooga.controller.InvalidPieceConfigException;
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ class EngineTest {
 //    }
 
     @Test
-    void movePiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    void movePiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
         Location start = new Location(6, 0);
         Location end = new Location(5, 0);
         Turn turn = board.movePiece(start, end);
