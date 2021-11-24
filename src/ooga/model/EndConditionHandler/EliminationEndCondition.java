@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import ooga.model.PieceInterface;
+import ooga.model.PlayerInterface;
 
 public class EliminationEndCondition implements EndConditionInterface {
   private List<PieceInterface> previousTurnPieces;
@@ -36,7 +37,13 @@ public class EliminationEndCondition implements EndConditionInterface {
   }
 
   @Override
-  public boolean isGameOver(List<PieceInterface> alivePieces) {
+  public boolean isGameOver(List<PlayerInterface> players) {
+    List<PieceInterface> alivePieces = new ArrayList<>();
+    for (PlayerInterface player : players){
+      for (PieceInterface piece : player.getPieces()){
+        alivePieces.add(piece);
+      }
+    }
     if (previousTurnPieces.size() == alivePieces.size()){
       return false;
     }
@@ -75,7 +82,7 @@ public class EliminationEndCondition implements EndConditionInterface {
         break;
       }
     }
-    if (loser == null){
+    if (loser != null){
       for (String team : targetPiecesRemaining.keySet()){
         if (!team.equals(loser)){
           winner = team;

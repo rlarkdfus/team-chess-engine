@@ -133,7 +133,7 @@ private static final int Cols = 8;
      */
     @Override
     public GameState checkGameState() {
-        if (endCondition.isGameOver(allPieces)){
+        if (endCondition.isGameOver(players)){
             return GameState.CHECKMATE;
         }
 

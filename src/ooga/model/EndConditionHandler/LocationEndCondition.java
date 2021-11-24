@@ -2,12 +2,14 @@ package ooga.model.EndConditionHandler;
 
 import static java.lang.Integer.parseInt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import ooga.controller.InvalidGameConfigException;
 import ooga.model.PieceInterface;
+import ooga.model.PlayerInterface;
 
 public class LocationEndCondition implements EndConditionInterface{
   private Map<ooga.Location, String> targetLocations;
@@ -21,7 +23,13 @@ public class LocationEndCondition implements EndConditionInterface{
   }
 
   @Override
-  public boolean isGameOver(List<PieceInterface> alivePieces){
+  public boolean isGameOver(List<PlayerInterface> players) {
+    List<PieceInterface> alivePieces = new ArrayList<>();
+    for (PlayerInterface player : players){
+      for (PieceInterface piece : player.getPieces()){
+        alivePieces.add(piece);
+      }
+    }
     boolean foundLocation;
     for (ooga.Location l : targetLocations.keySet()){
       foundLocation = false;
