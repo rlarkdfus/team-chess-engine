@@ -2,6 +2,7 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
+import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
 
 import java.lang.reflect.InvocationTargetException;
@@ -21,6 +22,7 @@ private static final int Cols = 8;
 
     private List<PlayerInterface> players;
     private List<PieceInterface> allPieces;
+    private EndConditionInterface endCondition;
     private int turnCount;
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
@@ -38,6 +40,10 @@ private static final int Cols = 8;
 
     public List<PlayerInterface> getPlayers() {
         return players;
+    }
+
+    public void setEndCondition(EndConditionInterface endCondition) {
+        this.endCondition = endCondition;
     }
 
     private void updateLegalMoves() {
@@ -127,19 +133,10 @@ private static final int Cols = 8;
      */
     @Override
     public GameState checkGameState() {
-        for(PlayerInterface player : players) {
-            PlayerInterface otherPlayer = findPlayerTurn(turnCount + 1);
-            int legalMovesCount = 0;
-            for(PieceInterface piece : player.getPieces()) {
-                legalMovesCount += player.getLegalMoves(piece.getLocation()).size();
-            }
-
-            if(legalMovesCount == 0) {
-                //checkmate
-                return null;
-//                return (moveFactory.inCheck(player.getKing(), otherPlayer.getPieces())) ? GameState.CHECKMATE : GameState.STALEMATE;
-            }
+        if (endCondition.isGameOver(allPieces)){
+            return GameState.CHECKMATE;
         }
+
         // game still going
         return GameState.RUNNING;
     }

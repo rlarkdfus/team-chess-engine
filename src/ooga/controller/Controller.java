@@ -83,6 +83,7 @@ public class Controller implements ControllerInterface {
     private void buildGame (Builder boardBuilder) throws
     InvocationTargetException, NoSuchMethodException, IllegalAccessException {
       model = new Board(boardBuilder.getInitialPlayers());
+      model.setEndCondition(boardBuilder.getEndConditionHandler());
       view.initializeDisplay(boardBuilder.getInitialPieceViews());
     }
 

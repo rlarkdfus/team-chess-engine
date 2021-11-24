@@ -5,6 +5,7 @@ import ooga.Turn;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import ooga.model.EndConditionHandler.EndConditionInterface;
 
 public interface Engine {
     /**
@@ -27,6 +28,8 @@ public interface Engine {
     List<Location> getLegalMoves(Location location);
 
     List<PlayerInterface> getPlayers();
+
+    void setEndCondition(EndConditionInterface endCondition);
     
     boolean canMovePiece(Location location);
 }
