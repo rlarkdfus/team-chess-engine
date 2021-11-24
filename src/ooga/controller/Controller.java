@@ -10,6 +10,7 @@ import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.model.MoveTimer;
+
 import ooga.view.View;
 import ooga.view.ViewInterface;
 
@@ -34,6 +35,8 @@ public class Controller implements ControllerInterface {
             whiteMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
             blackMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
             buildGame(boardBuilder);
+            view.initializeDisplay(boardBuilder.getInitialPieceViews());
+            resumeTimer();
         } catch (Exception e) {
             System.out.println(e.getMessage());
 //      view.showError(e.getMessage());
@@ -43,11 +46,11 @@ public class Controller implements ControllerInterface {
     @Override
     public void resetGame() {
         try {
+            resetTimers();
             uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
         } catch (Exception e) {
             //todo:handle
         }
-        resetTimers();
     }
 
     @Override
@@ -60,6 +63,8 @@ public class Controller implements ControllerInterface {
         try {
             boardBuilder.build(file);
             buildGame(boardBuilder);
+            view.resetDisplay(boardBuilder.getInitialPieceViews());
+            resumeTimer();
         } catch (Exception E) {
             //todo: handle exception
         }
@@ -83,7 +88,7 @@ public class Controller implements ControllerInterface {
     private void buildGame(Builder boardBuilder) throws
             InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         model = new Board(boardBuilder.getInitialPlayers());
-        view.initializeDisplay(boardBuilder.getInitialPieceViews());
+        model.setEndCondition(boardBuilder.getEndConditionHandler());
     }
 
 

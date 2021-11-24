@@ -7,6 +7,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MoveTimer {
+    // timer parameters
+    public static final int DELAY = 1000;
+    public static final int PERIOD = 1000;
+
     private StringProperty timeLeft;
     private int seconds;
     private int initialTime;
@@ -26,6 +30,8 @@ public class MoveTimer {
         this.increment = initialIncrement;
         this.outOfTime = false;
         this.isPlaying = false;
+        timeLeft.setValue(timeToString(seconds));
+        timer = new Timer();
     }
 
     public StringProperty getTimeLeft() {
@@ -52,7 +58,8 @@ public class MoveTimer {
         isPaused = false;
         timer = new Timer();
         timerTask = makeTimerTask();
-        timer.scheduleAtFixedRate(timerTask, 1000, 1000);
+        timer.scheduleAtFixedRate(timerTask, DELAY, PERIOD);
+        timeLeft.setValue(timeToString(seconds));
         timerTask.run();
     }
 
@@ -70,6 +77,7 @@ public class MoveTimer {
         isPaused = true;
         isPlaying = false;
         seconds = initialTime;
+        timeLeft.setValue(timeToString(seconds));
         outOfTime = false;
     }
 

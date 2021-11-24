@@ -1,22 +1,17 @@
 package ooga.view.ui.settingsUI;
 
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import ooga.controller.Controller;
 import ooga.view.ViewController;
 import ooga.view.ui.UIInterface;
+import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
 import ooga.view.util.ViewUtility;
-
-import java.sql.Time;
-import java.util.List;
 
 public class SettingsUI extends GridPane implements UIInterface {
 
     private Controller controller;
     private ViewController viewController;
     private GameConfigurationUI gameConfigurationUI;
-    private TimeConfigurationUI timeConfigurationUI;
     private BoardStyleUI boardStyleUI;
     private ViewUtility viewUtility;
 
@@ -24,7 +19,6 @@ public class SettingsUI extends GridPane implements UIInterface {
         this.controller = controller;
         this.viewController = viewController;
         gameConfigurationUI = new GameConfigurationUI(controller);
-        timeConfigurationUI = new TimeConfigurationUI(controller, viewController);
         boardStyleUI = new BoardStyleUI(viewController);
         this.viewUtility = new ViewUtility();
         createUI();
@@ -33,8 +27,6 @@ public class SettingsUI extends GridPane implements UIInterface {
     @Override
     public void createUI() {
         this.add(gameConfigurationUI, 0, 0, 3, 2);
-        this.add(timeConfigurationUI, 0, 2, 3, 3);
         this.add(boardStyleUI, 0, 5, 3, 3);
-        this.add(viewUtility.makeButton("new_game", e -> controller.resetGame()), 0, 8);
     }
 }
