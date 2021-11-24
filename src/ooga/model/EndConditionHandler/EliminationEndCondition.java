@@ -7,7 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import ooga.model.Board.GameState;
 import ooga.model.PieceInterface;
+import ooga.model.PlayerInterface;
 
 public class EliminationEndCondition implements EndConditionInterface {
   private List<PieceInterface> previousTurnPieces;
@@ -36,9 +38,15 @@ public class EliminationEndCondition implements EndConditionInterface {
   }
 
   @Override
-  public boolean isGameOver(List<PieceInterface> alivePieces) {
+  public GameState isGameOver(List<PlayerInterface> players) {
+    List<PieceInterface> alivePieces = new ArrayList<>();
+    for (PlayerInterface player : players){
+      for (PieceInterface piece : player.getPieces()){
+        alivePieces.add(piece);
+      }
+    }
     if (previousTurnPieces.size() == alivePieces.size()){
-      return false;
+      return GameState.RUNNING;
     }
     findMissingPiece(alivePieces);
     return checkEndConditions();
@@ -66,7 +74,7 @@ public class EliminationEndCondition implements EndConditionInterface {
 
   }
 
-  private boolean checkEndConditions() {
+  private GameState checkEndConditions() {
     HashMap<String, Integer> targetPiecesRemaining = getTargetPiecesRemaining();
     String loser = null;
     for (String team : targetPiecesRemaining.keySet()){
@@ -75,15 +83,15 @@ public class EliminationEndCondition implements EndConditionInterface {
         break;
       }
     }
-    if (loser == null){
+    if (loser != null){
       for (String team : targetPiecesRemaining.keySet()){
         if (!team.equals(loser)){
           winner = team;
-          return true;
+          return GameState.CHECKMATE;
         }
       }
     }
-    return false;
+    return GameState.RUNNING;
   }
 
   private HashMap<String, Integer> getTargetPiecesRemaining() {
