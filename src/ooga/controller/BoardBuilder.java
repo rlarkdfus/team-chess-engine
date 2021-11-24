@@ -23,7 +23,7 @@ public class BoardBuilder implements Builder {
   public static final String DEFAULT_STYLE = "companion";
   public static final int ARG_LENGTH = 4;
   public static final String PROPERTIES_FILE = "JSONMappings";
-  public static final String CSV_DELIMETER = "csvDelimeter";
+  public static final String CSV_DELIMETER = "csvDelimiter";
 
   private ResourceBundle mappings;
 
@@ -130,8 +130,7 @@ public class BoardBuilder implements Builder {
       throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
-//        String[] square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
-        String[] square = csvData.get(r).get(c).split("_");
+        String[] square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
 
         if (square.length < 2) {
           continue;           //signifies that this square is empty
