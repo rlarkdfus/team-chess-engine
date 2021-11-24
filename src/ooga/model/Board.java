@@ -2,12 +2,19 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
+import ooga.controller.BoardBuilder;
+import ooga.controller.Builder;
+import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
 
 public class Board implements Engine {
 private static final int Rows = 8;
@@ -57,7 +64,7 @@ private static final int Cols = 8;
      * @param start is piece initial location
      * @param end is piece new location
      */
-    public Turn movePiece(Location start, Location end){
+    public Turn movePiece(Location start, Location end) throws FileNotFoundException, InvocationTargetException, InvalidPieceConfigException, NoSuchMethodException, IllegalAccessException {
         // pause current player timer, start next player time
         PieceInterface piece = null;
         for(PieceInterface p : allPieces) {
@@ -84,13 +91,12 @@ private static final int Cols = 8;
 
 
         //Check for pawn promotion
-//        PieceInterface dummypiece = moveFactory.pieceAt(end);
-//        if(dummypiece.getName().equals("P")){
-//            if(end.getRow() == 0 || end.getRow() ==Rows-1){
-//                System.out.println("pawn at end");
-////                promotePiece(dummypiece,end,currentPlayer);
-//            }
-//        }
+        if(piece.getName().equals("P")){
+            if(end.getRow() == 0 || end.getRow() ==Rows-1){
+                System.out.println("pawn at end");
+                promotePiece(piece);
+            }
+        }
 
         // increment turn
         turnCount++;
@@ -108,15 +114,41 @@ private static final int Cols = 8;
         return turn;
     }
 
-    private void promotePiece(PieceInterface pieceInterface, Location location, PlayerInterface player) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private void promotePiece(PieceInterface pieceInterface) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
         //need to initial
-        PieceInterface queen;
-//       queen = new Piece(player.getTeam(), "q", location, 0, 0);
-        player.removePiece(pieceInterface.getLocation());
-//        player.addPiece(queen);
+        PlayerInterface currentPlayer = null;
+        for(PlayerInterface playerInterface: players){
+            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
+                currentPlayer = playerInterface;
+            }
+        }
+        BoardBuilder builder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+        PieceInterface newPiece = builder.convertPiece(pieceInterface,"Q");
+        System.out.println(currentPlayer.getScore());
+        System.out.println("^ Score before removing");
+
+
+        currentPlayer.removePiece(pieceInterface);
+        System.out.println(currentPlayer.getScore());
+        System.out.println("^Score after removing");
+
+        System.out.println("Ne piece name: " + newPiece.getName());
+        currentPlayer.addPiece(newPiece);
+        System.out.println("^Score with new piece added");
+        System.out.println(currentPlayer.getScore());
 
     }
 
+    private void promotePiece2(PieceInterface pieceInterface){
+        //Should make currentPlayer a private reference variable instead
+        PlayerInterface currentPlayer = null;
+        for(PlayerInterface playerInterface: players){
+            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
+                currentPlayer = playerInterface;
+            }
+        }
+
+    }
 
 
     /**
