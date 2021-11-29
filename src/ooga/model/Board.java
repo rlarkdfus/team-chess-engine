@@ -46,10 +46,18 @@ private static final int Cols = 8;
         updateLegalMoves();
     }
 
+    /**
+     * this method returns the list of all players
+     * @return
+     */
     public List<PlayerInterface> getPlayers() {
         return players;
     }
 
+    /**
+     * this method sets the end conditions of the board
+     * @param endCondition
+     */
     public void setEndCondition(EndConditionInterface endCondition) {
         this.endCondition = endCondition;
     }
@@ -217,6 +225,10 @@ private static final int Cols = 8;
         return players.get(turn % players.size());
     }
 
+    /**
+     * this method overrides toString and prints out the current board state in an easily digestable format
+     * @return
+     */
     @Override
     public String toString(){
         StringBuilder str = new StringBuilder();
