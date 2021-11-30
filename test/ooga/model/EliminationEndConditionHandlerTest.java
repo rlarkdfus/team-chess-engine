@@ -11,6 +11,7 @@ import java.util.Map;
 import ooga.Location;
 import ooga.controller.BoardBuilder;
 import ooga.controller.Builder;
+import ooga.model.Board.GameState;
 import ooga.model.EndConditionHandler.EliminationEndCondition;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,8 +58,8 @@ class EliminationEndConditionHandlerTest {
   void testBlackWin()
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     removePieces("w", List.of(new Location(7, 4), new Location(6, 0), new Location(6, 1)));
-    boolean ret = e.isGameOver(players);
-    assertEquals(true, ret, "game should be over");
+    GameState ret = e.isGameOver(players);
+    assertEquals(GameState.CHECKMATE, ret, "game should be over");
     assertEquals("b", e.getWinner(), "black should win");
 
   }
@@ -68,8 +69,8 @@ class EliminationEndConditionHandlerTest {
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
 
     removePieces("b", List.of(new Location(0, 4), new Location(1, 0), new Location(1, 1)));
-    boolean ret = e.isGameOver(players);
-    assertEquals(true, ret, "game should end");
+    GameState ret = e.isGameOver(players);
+    assertEquals(GameState.CHECKMATE, ret, "game should end");
     assertEquals("w", e.getWinner(), "white should win");
   }
 
@@ -77,8 +78,8 @@ class EliminationEndConditionHandlerTest {
   void testAlmostWin()
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     removePieces("b", List.of(new Location(0, 4), new Location(1, 0)));
-    boolean ret = e.isGameOver(players);
-    assertEquals(false, ret, "still need to remove 1 more b_pawn");
+    GameState ret = e.isGameOver(players);
+    assertEquals(GameState.RUNNING, ret, "still need to remove 1 more b_pawn");
   }
 
   @Test
@@ -86,8 +87,8 @@ class EliminationEndConditionHandlerTest {
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     removePieces("b", List.of(new Location(0, 4), new Location(1, 0)));
     removePieces("w",List.of(new Location(6, 1)));
-    boolean ret = e.isGameOver(players);
-    assertEquals(false, ret, "still need to remove 1 more b_pawn, 1 w_pawn, 1 w_king");
+    GameState ret = e.isGameOver(players);
+    assertEquals(GameState.RUNNING, ret, "still need to remove 1 more b_pawn, 1 w_pawn, 1 w_king");
   }
 
   private List<PieceInterface> getAllPieces() {
@@ -107,6 +108,5 @@ class EliminationEndConditionHandlerTest {
         }
       }
     }
-
   }
 }

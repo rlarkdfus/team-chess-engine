@@ -1,6 +1,7 @@
 package ooga.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import ooga.Location;
@@ -29,7 +30,7 @@ public interface ControllerInterface {
      * @param start is initial location of moved piece
      * @param end is final location of moved piece
      */
-    void movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
+    void movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException;
 
     /**
      * Returns true if the piece at the location of user click can be moved

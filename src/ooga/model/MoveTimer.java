@@ -7,12 +7,21 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MoveTimer {
+    // timer parameters
+    public static final int DELAY = 1000;
+    public static final int PERIOD = 1000;
+
     private StringProperty timeLeft;
     private int seconds;
     private int initialTime;
     private int increment;
     private boolean outOfTime;
+
+    private boolean isPlaying;
+    private boolean isPaused;
+
     private Timer timer;
+    private TimerTask timerTask;
 
     public MoveTimer(int initialTime, int initialIncrement) {
         this.initialTime = initialTime;
@@ -20,7 +29,9 @@ public class MoveTimer {
         this.timeLeft = new SimpleStringProperty(formatTime(initialTime));
         this.increment = initialIncrement;
         this.outOfTime = false;
-        initializeTimer();
+        this.isPlaying = false;
+        timeLeft.setValue(timeToString(seconds));
+        timer = new Timer();
     }
 
     public StringProperty getTimeLeft() {
@@ -39,21 +50,44 @@ public class MoveTimer {
         this.increment = increment;
     }
 
+    public void start() {
+        if (isPlaying) {
+            return;
+        }
+        isPlaying = true;
+        isPaused = false;
+        timer = new Timer();
+        timerTask = makeTimerTask();
+        timer.scheduleAtFixedRate(timerTask, DELAY, PERIOD);
+        timeLeft.setValue(timeToString(seconds));
+        timerTask.run();
+    }
+
+    public void pause() {
+        if (isPaused) {
+            return;
+        }
+        timer.cancel();
+        isPaused = true;
+        isPlaying = false;
+    }
+
     public void reset() {
+        timer.cancel();
+        isPaused = true;
+        isPlaying = false;
         seconds = initialTime;
+        timeLeft.setValue(timeToString(seconds));
         outOfTime = false;
     }
 
-    private void initializeTimer() {
-        timer = new Timer();
-        TimerTask task = new TimerTask() {
+    private TimerTask makeTimerTask() {
+        return new TimerTask() {
             @Override
             public void run() {
                 decrementTime();
             }
         };
-        timer.scheduleAtFixedRate(task, 1000, 1000);
-        task.run();
     }
 
     /**
@@ -77,6 +111,7 @@ public class MoveTimer {
 
     /**
      * converts time in seconds to "mm:ss"
+     *
      * @param seconds the time in seconds (maximum of 3599)
      * @return the String representation of the time
      */
@@ -88,6 +123,7 @@ public class MoveTimer {
 
     /**
      * Converts time to two digit string
+     *
      * @param time the time as an integer
      * @return the String representation of the time with two digits
      */

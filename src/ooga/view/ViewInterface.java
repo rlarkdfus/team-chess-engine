@@ -13,6 +13,8 @@ public interface ViewInterface {
 
     void initializeDisplay(List<PieceViewBuilder> pieceViewList);
 
+    void resetDisplay(List<PieceViewBuilder> pieceViewList);
+
     void changeBoardColor(Color color1, Color color2);
 
     void changePieceStyle(String style);

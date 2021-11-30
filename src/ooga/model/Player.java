@@ -27,7 +27,7 @@ public class Player implements PlayerInterface {
     }
 
     /**
-     * remove a pice from the player's posession
+     * remove a piece from the player's possession
      * @param location
      */
     public void removePiece(Location location) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
@@ -50,6 +50,7 @@ public class Player implements PlayerInterface {
         }
     }
 
+
     /**
      * get the list of pieces that a player has
      * @return
@@ -68,10 +69,24 @@ public class Player implements PlayerInterface {
         pieceIDandState.put(piece.getUniqueId(),piece.getEndState());
         score += piece.getScore();
     }
+
+    /**
+     * remove a piece from player's possession
+     * @param piece
+     */
     @Override
     public void removePiece(PieceInterface piece){
         remainingPieces.remove(piece);
         score -= piece.getScore();
+    }
+
+    /**
+     * return a player's score
+     * @return
+     */
+    @Override
+    public int getScore() {
+        return score;
     }
 
     /**
@@ -98,6 +113,11 @@ public class Player implements PlayerInterface {
 
     }
 
+    /**
+     * return the piece, if it exists, at a location
+     * @param location
+     * @return
+     */
     @Override
     public PieceInterface getPiece(Location location) {
         List<PieceInterface> p = new ArrayList<>();
@@ -116,15 +136,27 @@ public class Player implements PlayerInterface {
         return null;
     }
 
+    /**
+     * return the legal moves of a piece at location
+     * @param location
+     * @return
+     */
     public List<Location> getLegalMoves(Location location){
         return remainingPieces.get(getPiece(location));
     }
 
+    /**
+     * set the legal moves of a piece
+     * @param piece
+     * @param moves
+     */
     public void setLegalMoves(PieceInterface piece, List<Location> moves){
         remainingPieces.put(piece, moves);
     }
 
-
+    /**
+     * get score of all pieces
+     */
     private void calculateScore(){
         for(PieceInterface piece: remainingPieces.keySet()){
             score += piece.getScore();

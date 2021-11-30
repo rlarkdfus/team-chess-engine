@@ -1,8 +1,6 @@
 package ooga.view;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -36,15 +34,32 @@ public class ViewTest extends DukeApplicationTest {
     }
 
     @Test
-    void testTimerInitialTime() {
-        // 10 minutes start time
-        int expected = 10*60;
-        int tolerance = 5;
-        Text whiteTimeLabel = lookup("#white_timer_display").query();
-        String[] times = whiteTimeLabel.getText().split(":");
-        int minutes = Integer.parseInt(times[0]);
-        int seconds = Integer.parseInt(times[1]);
-        assertEquals(expected, 60 * minutes + seconds, tolerance);
+    void testSetTimerInitialTime() {
+        Slider minutesSlider = lookup("#minutes_slider").query();
+        Button newGame = lookup("#new_game").queryButton();
+        String expected = "15:00";
+        setValue(minutesSlider, Integer.parseInt(expected.split(":")[0]));
+        clickOn(newGame);
+        Text blackTimeLabel = lookup("#black_timer_display").query();
+        assertEquals(expected, blackTimeLabel.getText());
+    }
+
+    @Test
+    void testSetIncrementLabelUpdate() {
+        Slider incrementSlider = lookup("#increment_slider").query();
+        String expected = "15";
+        setValue(incrementSlider, Integer.parseInt(expected));
+        Label incrementSliderLabel = lookup("#increment_slider_value").query();
+        assertEquals(expected, incrementSliderLabel.getText());
+    }
+
+    @Test
+    void testSetTimeLabelUpdate() {
+        Slider minutesSlider = lookup("#minutes_slider").query();
+        String expected = "18";
+        setValue(minutesSlider, Integer.parseInt(expected));
+        Label incrementSliderLabel = lookup("#minutes_slider_value").query();
+        assertEquals(expected, incrementSliderLabel.getText());
     }
 
     @Test

@@ -20,4 +20,5 @@ public interface PlayerInterface {
     List<Location> getLegalMoves(Location location);
     void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
     void removePiece(PieceInterface piece);
+    int getScore();
 }
