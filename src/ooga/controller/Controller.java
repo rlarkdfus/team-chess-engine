@@ -7,10 +7,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
+import ooga.Turn;
 import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.model.MoveTimer;
-
 import ooga.view.View;
 import ooga.view.ViewInterface;
 
@@ -71,7 +71,8 @@ public class Controller implements ControllerInterface {
     @Override
     public void movePiece (Location start, Location end) throws
             InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
-      view.updateDisplay(model.movePiece(start, end));
+      Turn turn = model.movePiece(start, end);
+      view.updateDisplay(turn);
       if (model.checkGameState() != Board.GameState.RUNNING) {
         System.out.println(model.checkGameState()); //FIXME
 

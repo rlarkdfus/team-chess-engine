@@ -26,13 +26,12 @@ public class EliminationEndCondition implements EndConditionInterface {
     previousTurnPieces = new ArrayList<>(allpieces);
     piecesToEliminate = new HashMap<>();
     Iterator<String> pieceIter = propertiesMap.get("pieceType").iterator();
-    Iterator<String> amountIter = propertiesMap.get(("amount")).iterator();
-    while(pieceIter.hasNext() && amountIter.hasNext()) {
+    while(pieceIter.hasNext()) {
       String pieceType = pieceIter.next();
-      int amount = Integer.parseInt(amountIter.next());
       for (String team : teams){
         String key = team+"_"+pieceType;
-        piecesToEliminate.putIfAbsent(key, amount);
+        piecesToEliminate.putIfAbsent(key, 0);
+        piecesToEliminate.put(key, piecesToEliminate.get(key)+1);
       }
     }
   }

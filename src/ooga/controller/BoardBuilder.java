@@ -23,7 +23,7 @@ public class BoardBuilder implements Builder {
   public static final String DEFAULT_STYLE = "companion";
   public static final int ARG_LENGTH = 4;
   public static final String PROPERTIES_FILE = "JSONMappings";
-  public static final String CSV_DELIMETER = "csvDelimeter";
+  public static final String CSV_DELIMETER = "csvDelimiter";
 
   private ResourceBundle mappings;
 
@@ -81,9 +81,9 @@ public class BoardBuilder implements Builder {
     try {
       buildEndConditionHandler(gameJson.getString(mappings.getString("rules")));
     }catch (Exception e){
+      e.printStackTrace();
       throw new InvalidEndGameConfigException(e.getClass());
     }
-
   }
 
   @Override
@@ -137,8 +137,8 @@ public class BoardBuilder implements Builder {
       throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
-//        String[] square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
-        String[] square = csvData.get(r).get(c).split("_");
+        String[] square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
+//        String[] square = csvData.get(r).get(c).split("_");
 
         if (square.length < 2) {
           continue;           //signifies that this square is empty
@@ -203,7 +203,7 @@ public class BoardBuilder implements Builder {
   }
 
   private void buildEndConditionHandler(String ruleJsonFile)
-      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidGameConfigException {
+      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidGameConfigException, InvalidEndGameConfigException {
     JSONObject rules = jsonParser.loadFile(new File(ruleJsonFile));
     String type = rules.getString(mappings.getString("gameType"));
     String[] keys = mappings.getString(type+"RuleKeys").split(mappings.getString("jsonDelimiter"));
@@ -218,7 +218,29 @@ public class BoardBuilder implements Builder {
       initialPieces.addAll(p.getPieces());
     }
     endCondition.setArgs(endConditionProperties, initialPieces);
+    checkValidEndCondition(endConditionProperties);
+  }
 
+  private void checkValidEndCondition(Map<String,List<String>> endConditionProperties)
+      throws InvalidEndGameConfigException {
+    String pieceKey = mappings.getString("pieceType");
+    List<String> endGamePieces = endConditionProperties.get(pieceKey);
+    for (PlayerInterface player : playerList){
+      HashMap<String, Integer> playerPieces = new HashMap<>();
+      for (PieceInterface p : player.getPieces()){
+        playerPieces.putIfAbsent(p.getName(),0);
+        playerPieces.put(p.getName(),playerPieces.get(p.getName())+1);
+      }
+      for (String p : endGamePieces){
+        playerPieces.put(p,playerPieces.get(p)-1);
+      }
+      for (String key : playerPieces.keySet()){
+        if (playerPieces.get(key) < 0){
+          throw new InvalidEndGameConfigException("not enough pieces to be eliminated");
+        }
+      }
+
+    }
   }
 
   /**

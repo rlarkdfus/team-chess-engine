@@ -1,6 +1,7 @@
 package ooga.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,7 +35,11 @@ class BoardBuilderTest {
   @BeforeEach
   void setUp() {
     String testFile = "data/chess/oneBlackPawn.json";
-    boardBuilder = new BoardBuilder(new File(testFile));
+    try {
+      boardBuilder = new BoardBuilder(new File(testFile));
+    }catch (Exception e){
+      System.out.println(e.getClass());
+    }
 
     getPieceBuilder();
     gameType = "chess";
@@ -51,6 +56,17 @@ class BoardBuilderTest {
   }
 
   @Test
+  void testInvalidEndCondition()   {
+    //EndGameBuilder Test
+    String testFile = "data/chess/errorInvalidEndConJson.json";
+    assertThrowsExactly(InvalidEndGameConfigException.class,()->{
+      boardBuilder.build(new File(testFile));
+    } );
+
+
+  }
+
+  @Test
   void testPlayerList() {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
     assertEquals(2, players.size(), "incorrect number of players. expected 2. got: " + players.size());
@@ -64,7 +80,7 @@ class BoardBuilderTest {
       }else{
         assertEquals("w", p.getTeam(), "other team should be white. got: " + p.getTeam());
         List<PieceInterface> pieces = p.getPieces();
-        assertEquals(0, pieces.size(), "white team should have 0 pieces. got: " + pieces.size());
+        assertEquals(1, pieces.size(), "white team should have 1 pieces. got: " + pieces.size());
       }
     }
   }
@@ -72,13 +88,13 @@ class BoardBuilderTest {
   @Test
   void testPieceList() {
     List<PieceViewBuilder> pieces = boardBuilder.getInitialPieceViews();
-    assertEquals(1, pieces.size(), "incorrect number of pieces. expected 1. got: " + pieces.size());
-    for (PieceViewBuilder p : pieces){
+    assertEquals(2, pieces.size(), "incorrect number of pieces. expected 2. got: " + pieces.size());
+    PieceViewBuilder p = pieces.get(0);
       assertEquals("P",p.getName(),"name should be P. got: " + p.getName());
       assertEquals(team,p.getTeam(),"team should be b. got: " + p.getTeam());
       assertEquals(0,p.getLocation().getRow(),"location row should be 0. got: " + p.getLocation().getRow());
       assertEquals(0,p.getLocation().getCol(),"location col should be 0. got: " + p.getLocation().getCol());
-    }
+
   }
 
   @Test
