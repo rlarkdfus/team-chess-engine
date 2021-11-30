@@ -6,14 +6,19 @@ import ooga.controller.BoardBuilder;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
+import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
+import ooga.Location;
+import ooga.Turn;
+import ooga.controller.BoardBuilder;
+import ooga.controller.InvalidPieceConfigException;
+import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.Moves.Move;
 
 public class Board implements Engine {
 private static final int Rows = 8;

@@ -8,13 +8,21 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
+<<<<<<< HEAD
 import ooga.model.*;
+=======
+import ooga.Turn;
+import ooga.model.Board;
+import ooga.model.Engine;
+import ooga.model.MoveTimer;
+>>>>>>> albert
 import ooga.view.View;
 import ooga.view.ViewInterface;
 import org.json.JSONObject;
 
 public class Controller implements ControllerInterface {
 
+<<<<<<< HEAD
     public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
     public static final int DEFAULT_INITIAL_TIME = 10;
     public static final int DEFAULT_INITIAL_INCREMENT = 5;
@@ -39,6 +47,30 @@ public class Controller implements ControllerInterface {
             startTimersForNewGame();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+=======
+  public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
+  public static final int DEFAULT_INITIAL_TIME = 10*60;
+  public static final int DEFAULT_INITIAL_INCREMENT = 5;
+
+  private Engine model;
+  private ViewInterface view;
+  private LocationWriter locationWriter;
+  private MoveTimer whiteMoveTimer;
+  private MoveTimer blackMoveTimer;
+  private Builder boardBuilder;
+
+  public Controller() {
+    try {
+      boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+      view = new View(this);
+      locationWriter = new LocationWriter();
+      whiteMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+      blackMoveTimer = new MoveTimer(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+      buildGame(boardBuilder);
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+      //default shouldn't have errors
+>>>>>>> albert
 //      view.showError(e.getMessage());
         }
     }
@@ -47,12 +79,18 @@ public class Controller implements ControllerInterface {
      * Reset the game with the default board configuration
      */
     @Override
+<<<<<<< HEAD
     public void resetGame() {
         try {
             uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
         } catch (Exception e) {
             //todo:handle
         }
+=======
+    public void resetGame () {
+      uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
+      resetTimers();
+>>>>>>> albert
     }
 
     /**
@@ -71,6 +109,7 @@ public class Controller implements ControllerInterface {
      */
     @Override
     public void uploadConfiguration(File file) {
+<<<<<<< HEAD
         try {
             jsonFile = file;
             boardBuilder.build(file);
@@ -80,6 +119,19 @@ public class Controller implements ControllerInterface {
         } catch (Exception E) {
             E.printStackTrace();
         }
+=======
+      if (file == null){
+        return;
+      }
+      try {
+          boardBuilder.build(file);
+          buildGame(boardBuilder);
+          view.resetDisplay(boardBuilder.getInitialPieceViews());
+          resumeTimer();
+      } catch (Exception E) {
+        view.showError(E.toString());
+      }
+>>>>>>> albert
     }
 
     /**
@@ -101,7 +153,8 @@ public class Controller implements ControllerInterface {
     @Override
     public void movePiece (Location start, Location end) throws
             InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
-      view.updateDisplay(model.movePiece(start, end));
+      Turn turn = model.movePiece(start, end);
+      view.updateDisplay(turn);
       if (model.checkGameState() != Board.GameState.RUNNING) {
         System.out.println(model.checkGameState()); //FIXME
 

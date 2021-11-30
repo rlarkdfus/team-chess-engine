@@ -41,7 +41,7 @@ public class JumpMoveTest {
     allpieces.add(new Piece("w","P",new Location(4,2), new ArrayList<>(), new HashMap<>(), 1));
     move.executeMove(p, allpieces, endLocation);
     assertEquals(true,endLocation.equals(p.getLocation()),"piece should move to 4,2. got: "+ p.getLocation());
-    assertEquals(1, allpieces.size(), "allpieces should've lost a piece");
+    assertEquals(2, allpieces.size(), "allpieces should've lost a piece. should only have 2 kings");
   }
 
   @Test
