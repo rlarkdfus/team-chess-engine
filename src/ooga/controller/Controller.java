@@ -2,6 +2,7 @@ package ooga.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -13,6 +14,7 @@ import ooga.model.MoveTimer;
 
 import ooga.view.View;
 import ooga.view.ViewInterface;
+import org.json.JSONObject;
 
 public class Controller implements ControllerInterface {
 
@@ -26,9 +28,11 @@ public class Controller implements ControllerInterface {
   private MoveTimer whiteMoveTimer;
   private MoveTimer blackMoveTimer;
   private Builder boardBuilder;
+  private File jsonFile;
 
   public Controller() {
     try {
+      jsonFile = DEFAULT_CHESS_CONFIGURATION;
       boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
       view = new View(this);
       locationWriter = new LocationWriter();
@@ -59,12 +63,13 @@ public class Controller implements ControllerInterface {
     @Override
     public void uploadConfiguration(File file) {
         try {
+            jsonFile = file;
             boardBuilder.build(file);
             buildGame(boardBuilder);
             view.resetDisplay(boardBuilder.getInitialPieceViews());
             resumeTimer();
         } catch (Exception E) {
-            //todo: handle exception
+            E.printStackTrace();
         }
     }
 
@@ -93,7 +98,10 @@ public class Controller implements ControllerInterface {
 
     public void downloadGame (String filePath){
       try {
-        locationWriter.saveCSV(filePath, model.getPlayers());
+        JSONWriter jsonWriter = new JSONWriter();
+        jsonWriter.saveFile(jsonFile, filePath);
+
+        locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
       } catch (IOException ignored) {
       }
     }

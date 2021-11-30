@@ -25,8 +25,8 @@ public class ViewUtility {
     public final String SELECT_JSON_FILE = "Select JSON File";
     public final String JSON_FILE_EXTENSION_DESCRIPTION = "JSON Files (*.json)";
     public final String CSV_FILE_EXTENSION_DESCRIPTION = "CSV (Comma delimited) (*.csv)";
-    public final String JSON_EXTENSION = ".json";
-    public final String CSV_EXTENSION = ".csv";
+    public final String JSON_EXTENSION = "*.json";
+    public final String CSV_EXTENSION = "*.csv";
     public final String EMPTY_FILE_PATH = "";
 
     /**
@@ -130,9 +130,9 @@ public class ViewUtility {
      */
     public String saveCSVPath() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(
-                CSV_FILE_EXTENSION_DESCRIPTION, CSV_EXTENSION);
-        fileChooser.getExtensionFilters().addAll(fileExtension);
+//        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(
+//                JSON_FILE_EXTENSION_DESCRIPTION, CSV_EXTENSION);
+//        fileChooser.getExtensionFilters().addAll(fileExtension);
         File file = fileChooser.showSaveDialog(new Stage());
         return file != null ? file.getAbsolutePath() : EMPTY_FILE_PATH;
     }
