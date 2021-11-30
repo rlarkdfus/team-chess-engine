@@ -25,13 +25,14 @@ private static final int Cols = 8;
         CHECKMATE,
         STALEMATE,
         CHECK
-    };
+    }
 
     private List<PlayerInterface> players;
     private List<PieceInterface> allPieces;
     private EndConditionInterface endCondition;
     private int turnCount;
     private PlayerInterface currentPlayer;
+
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
@@ -110,6 +111,7 @@ private static final int Cols = 8;
         // increment turn
         turnCount++;
 
+        toggleTimers();
 
 //        System.out.println("before");
 //        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
@@ -122,6 +124,18 @@ private static final int Cols = 8;
 //        System.out.println(this);
         return turn;
     }
+
+    /**
+     * pause current player timer, add increment, start next player time
+     */
+    private void toggleTimers() {
+        PlayerInterface currentPlayer = findPlayerTurn(turnCount-1);
+        PlayerInterface nextPlayer = findPlayerTurn(turnCount);
+        currentPlayer.toggleTimer();
+        currentPlayer.incrementTime();
+        nextPlayer.toggleTimer();
+    }
+
 
     private void promotePiece(PieceInterface pieceInterface) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
 //        //need to initial
@@ -150,16 +164,16 @@ private static final int Cols = 8;
 
     }
 
-    private void promotePiece2(PieceInterface pieceInterface){
-        //Should make currentPlayer a private reference variable instead
-        PlayerInterface currentPlayer = null;
-        for(PlayerInterface playerInterface: players){
-            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
-                currentPlayer = playerInterface;
-            }
-        }
-
-    }
+//    private void promotePiece2(PieceInterface pieceInterface){
+//        //Should make currentPlayer a private reference variable instead
+//        PlayerInterface currentPlayer = null;
+//        for(PlayerInterface playerInterface: players){
+//            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
+//                currentPlayer = playerInterface;
+//            }
+//        }
+//
+//    }
 
 
     /**
