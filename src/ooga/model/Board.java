@@ -3,14 +3,13 @@ package ooga.model;
 import ooga.Location;
 import ooga.Turn;
 import ooga.controller.BoardBuilder;
-import ooga.controller.Builder;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
 
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +31,6 @@ private static final int Cols = 8;
     private EndConditionInterface endCondition;
     private int turnCount;
     private PlayerInterface currentPlayer;
-
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
@@ -110,8 +108,8 @@ private static final int Cols = 8;
 
         // increment turn
         turnCount++;
-
         toggleTimers();
+
 
 //        System.out.println("before");
 //        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
@@ -147,11 +145,23 @@ private static final int Cols = 8;
 //        }
         BoardBuilder builder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
         PieceInterface newPiece = builder.convertPiece(pieceInterface,"Q");
+        try {
+            Field f = newPiece.getClass().getDeclaredField("moves");
+            f.setAccessible(true);
+            List<Move> moves = (List<Move>) f.get(newPiece);
+            System.out.println(moves);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+
+
         System.out.println(currentPlayer.getScore());
         System.out.println("^ Score before removing");
 
 
         currentPlayer.removePiece(pieceInterface);
+        allPieces.remove(pieceInterface);
+        allPieces.add(newPiece);
         System.out.println(currentPlayer.getScore());
         System.out.println("^Score after removing");
 
@@ -161,7 +171,9 @@ private static final int Cols = 8;
         System.out.println("^Score with new piece added");
         System.out.println(currentPlayer.getScore());
         System.out.println("Current player team" + currentPlayer.getTeam());
-
+        for (PieceInterface p : currentPlayer.getPieces()){
+            System.out.println(p.getName());
+        }
     }
 
 //    private void promotePiece2(PieceInterface pieceInterface){
