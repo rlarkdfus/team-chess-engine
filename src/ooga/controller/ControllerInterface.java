@@ -40,5 +40,4 @@ public interface ControllerInterface {
 
     List<Location> getLegalMoves(Location location);
 
-//    List<PieceInterface> getInitialPieces();
 }
