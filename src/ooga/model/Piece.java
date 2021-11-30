@@ -215,4 +215,8 @@ public class Piece implements PieceInterface {
     }
   }
 
+  @Override
+  public List<Move> getMoves(){
+    return moves;
+  }
 }

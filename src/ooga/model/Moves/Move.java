@@ -20,34 +20,74 @@ public abstract class Move {
         resetMove();
     }
 
-    public abstract void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
-
-    public abstract void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces);
-
-    public List<Location> getEndLocations() {
-        return endLocations;
-    }
-
-    protected abstract boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces);
-
-    public void setMove(int dRow, int dCol, boolean take, boolean limited){ //TODO: boolean take
+    public void setMove(int dRow, int dCol, boolean take, boolean limited){
         this.dRow = dRow;
         this.dCol = dCol;
         this.take = take;
         this.limited = limited;
     }
-    // [[(1,0), (2,0), ...],[(1,1),(2,1),...],...[...]]
+
+    public abstract void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
+
+    public void updateMoveLocations(PieceInterface king, List<PieceInterface> pieces) {
+        resetMove();
+        for(Location location : findAllEndLocations(king, pieces)) {
+            if(isLegal(king, location, pieces)) {
+                addEndLocation(location);
+            }
+        }
+    }
+
+    protected abstract boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces);
+
+    /**
+     * Returns list of all possible locations of a given piece based on other pieces disregarding checks
+     * @param piece is the piece player is attempting to move
+     * @return list of all potential locations regardless of game rules
+     */
+    public List<Location> findAllEndLocations(PieceInterface piece, List<PieceInterface> pieces) {
+        List<Location> endLocations = new ArrayList<>();
+        int row = piece.getLocation().getRow() + dRow;
+        int col = piece.getLocation().getCol() + dCol;
+
+        Location potentialLocation = new Location(row, col);
+
+        while(inBounds(row, col)){
+            if(pieceAt(potentialLocation, pieces) != null) {
+                if(pieceAt(potentialLocation, pieces).getTeam().equals(piece.getTeam()) || !take) {
+                    break;
+                }
+                endLocations.add(potentialLocation);
+                break;
+            }
+
+            endLocations.add(potentialLocation);
+
+            if(limited) {
+                break;
+            }
+
+            row += getdRow();
+            col += getdCol();
+            potentialLocation = new Location(row, col);
+        }
+        return endLocations;
+    }
 
     /**
      * Checks if the king is under attack from enemy pieces
      * @param attackingPieces is the list of pieces attacking the king
      * @return true if the king is under attack from list of pieces
      */
-    public boolean underAttack(Location location, List<PieceInterface> attackingPieces) {
+    public boolean underAttack(Location location, List<PieceInterface> attackingPieces, List<PieceInterface> allPieces) {
         for(PieceInterface attackingPiece : attackingPieces) {
-            if(location.inList(attackingPiece.getEndLocations())) {
-                return true;
+            List<Move> attackingMoves = attackingPiece.getMoves();
+            for(Move attackingMove : attackingMoves) {
+                if(location.inList(attackingMove.findAllEndLocations(attackingPiece, allPieces))) {
+                    return true;
+                }
             }
+
         }
         return false;
     }
@@ -103,7 +143,10 @@ public abstract class Move {
         List<PieceInterface> attackingPieces = getAttackingPieces(piece, pieces);
 
         // if the king is in check, undo move and return false
-        if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces)) {
+        if(findKing(piece, pieces) == null) {
+            return false;
+        }
+        if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces, pieces)) {
             piece.tryMove(originalLocation);
             return false;
         }
@@ -139,6 +182,10 @@ public abstract class Move {
     protected void resetMove() {
         endLocations = new ArrayList<>();
         turn = new Turn();
+    }
+
+    public List<Location> getEndLocations() {
+        return endLocations;
     }
 
     protected void addEndLocation(Location location) {

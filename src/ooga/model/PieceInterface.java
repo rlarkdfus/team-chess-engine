@@ -28,4 +28,5 @@ public interface PieceInterface {
     List<Location> getAllEndLocations();
     Move getMove(Location end);
     void updateMoves(List<PieceInterface> pieces);
+    List<Move> getMoves();
 }

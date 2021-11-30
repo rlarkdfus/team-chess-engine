@@ -18,19 +18,6 @@ public class EnPassantMove extends Move {
     }
 
     @Override
-    public void updateMoveLocations(PieceInterface pawn, List<PieceInterface> pieces) {
-        resetMove();
-        int row = pawn.getLocation().getRow() + getdRow();
-        int col = pawn.getLocation().getCol() + getdCol();
-
-        Location potentialLocation = new Location(row, col);
-
-        if(isLegal(pawn, potentialLocation, pieces)) {
-            addEndLocation(potentialLocation);
-        }
-    }
-
-    @Override
     protected boolean isLegal(PieceInterface pawn, Location potentialLocation, List<PieceInterface> pieces) {
         Location otherPawnLocation = new Location(pawn.getLocation().getRow(), potentialLocation.getCol());
 
@@ -64,7 +51,10 @@ public class EnPassantMove extends Move {
         List<PieceInterface> attackingPieces = getAttackingPieces(piece, pieces);
 
         // if the king is in check, undo move and return false
-        if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces)) {
+        if(findKing(piece, pieces) == null) {
+            return false;
+        }
+        if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces, pieces)) {
             piece.tryMove(pieceLocation);
             return false;
         }
