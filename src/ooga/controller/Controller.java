@@ -22,9 +22,11 @@ public class Controller implements ControllerInterface {
     private LocationWriter locationWriter;
     private Builder boardBuilder;
     private TimeController timeController;
+    private File jsonFile;
 
     public Controller() {
         try {
+            jsonFile = DEFAULT_CHESS_CONFIGURATION;
             boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
             timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
             view = new View(this);
@@ -68,12 +70,13 @@ public class Controller implements ControllerInterface {
     @Override
     public void uploadConfiguration(File file) {
         try {
+            jsonFile = file;
             boardBuilder.build(file);
             buildGame(boardBuilder);
             view.resetDisplay(boardBuilder.getInitialPieceViews());
             startTimersForNewGame();
         } catch (Exception E) {
-            //todo: handle exception
+            E.printStackTrace();
         }
     }
 
@@ -99,17 +102,22 @@ public class Controller implements ControllerInterface {
       view.updateDisplay(model.movePiece(start, end));
       if (model.checkGameState() != Board.GameState.RUNNING) {
         System.out.println(model.checkGameState()); //FIXME
-
-        }
+      }
     }
 
-    /**
-     * gets the legal moves for the given location
-     * @param location the initial location
-     * @return a list of destination locations reachable from the initial location
-     */
-    public List<Location> getLegalMoves(Location location) {
-        return model.getLegalMoves(location);
+    public List<Location> getLegalMoves (Location location){
+      return model.getLegalMoves(location);
+    }
+
+
+    public void downloadGame (String filePath){
+      try {
+        JSONWriter jsonWriter = new JSONWriter();
+        jsonWriter.saveFile(jsonFile, filePath);
+
+        locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
+      } catch (IOException ignored) {
+      }
     }
 
     private void buildGame(Builder boardBuilder) throws
@@ -117,18 +125,9 @@ public class Controller implements ControllerInterface {
         model = new Board(boardBuilder.getInitialPlayers());
         timeController.configTimers(model.getPlayers());
         model.setEndCondition(boardBuilder.getEndConditionHandler());
+        view.initializeDisplay(boardBuilder.getInitialPieceViews());
     }
 
-    /**
-     * downloads the current board state to a csv file
-     * @param filePath the file path of the csv
-     */
-    public void downloadGame(String filePath) {
-        try {
-            locationWriter.saveCSV(filePath, model.getPlayers());
-        } catch (IOException ignored) {
-        }
-    }
 
     /**
      * gets the amount of time left on a player's timer
