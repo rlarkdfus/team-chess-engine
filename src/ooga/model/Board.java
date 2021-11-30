@@ -132,11 +132,10 @@ private static final int Cols = 8;
      * pause current player timer, add increment, start next player time
      */
     private void toggleTimers() {
-        PlayerInterface currentPlayer = findPlayerTurn(turnCount-1);
-        PlayerInterface nextPlayer = findPlayerTurn(turnCount);
+        PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
+        prevPlayer.toggleTimer();
+        prevPlayer.incrementTime();
         currentPlayer.toggleTimer();
-        currentPlayer.incrementTime();
-        nextPlayer.toggleTimer();
     }
 
 
