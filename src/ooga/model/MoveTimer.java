@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MoveTimer {
+public class MoveTimer implements TimerInterface {
     // timer parameters
     public static final int DELAY = 1000;
     public static final int PERIOD = 1000;
@@ -15,55 +15,71 @@ public class MoveTimer {
     private int seconds;
     private int initialTime;
     private int increment;
-    private boolean outOfTime;
 
     private boolean isPlaying;
     private boolean isPaused;
 
     private Timer timer;
-    private TimerTask timerTask;
 
-    public MoveTimer(int initialTime, int initialIncrement) {
-        this.initialTime = initialTime;
-        this.seconds = initialTime;
-        this.timeLeft = new SimpleStringProperty(formatTime(initialTime));
-        this.increment = initialIncrement;
-        this.outOfTime = false;
-        this.isPlaying = false;
-        timeLeft.setValue(timeToString(seconds));
+    public MoveTimer() {
+        this(0, 0);
+    }
+
+    public MoveTimer(int initialTimeMinutes, int initialIncrementSeconds) {
+        setInitialTime(initialTimeMinutes);
+        setIncrement(initialIncrementSeconds);
+        seconds = initialTime;
+        timeLeft = new SimpleStringProperty(timeToString(seconds));
+        isPlaying = false;
         timer = new Timer();
     }
 
+    @Override
     public StringProperty getTimeLeft() {
         return timeLeft;
     }
 
+    @Override
     public boolean isOutOfTime() {
-        return outOfTime;
+        return seconds == 0;
     }
 
-    public void setInitialTime(int initialTime) {
-        this.initialTime = initialTime;
+    @Override
+    public void setInitialTime(int minutes) {
+        initialTime = Math.max(60 * minutes, 0);
     }
 
-    public void setIncrement(int increment) {
-        this.increment = increment;
+    @Override
+    public void setIncrement(int seconds) {
+        increment = Math.max(seconds, 0);
     }
 
-    public void start() {
+    /**
+     * toggles the state of the timer (on to off, and vice versa)
+     */
+    @Override
+    public void toggle() {
+        if (isPlaying) {
+            pause();
+        } else {
+            start();
+        }
+    }
+
+    private void start() {
         if (isPlaying) {
             return;
         }
         isPlaying = true;
         isPaused = false;
         timer = new Timer();
-        timerTask = makeTimerTask();
+        TimerTask timerTask = makeTimerTask();
         timer.scheduleAtFixedRate(timerTask, DELAY, PERIOD);
         timeLeft.setValue(timeToString(seconds));
         timerTask.run();
     }
 
-    public void pause() {
+    private void pause() {
         if (isPaused) {
             return;
         }
@@ -72,13 +88,13 @@ public class MoveTimer {
         isPlaying = false;
     }
 
+    @Override
     public void reset() {
         timer.cancel();
         isPaused = true;
         isPlaying = false;
         seconds = initialTime;
         timeLeft.setValue(timeToString(seconds));
-        outOfTime = false;
     }
 
     private TimerTask makeTimerTask() {
@@ -96,7 +112,6 @@ public class MoveTimer {
     private void decrementTime() {
         seconds--;
         if (seconds == 0) {
-            outOfTime = true;
             timer.cancel();
         }
         timeLeft.setValue(timeToString(seconds));
@@ -105,8 +120,10 @@ public class MoveTimer {
     /**
      * increments the amount of time by the increment value
      */
+    @Override
     public void incrementTime() {
         seconds += increment;
+        timeLeft.setValue(timeToString(seconds));
     }
 
     /**

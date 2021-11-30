@@ -227,6 +227,14 @@ public class ViewTest extends DukeApplicationTest {
         assertFalse(pieceExists(BLACK, PAWN, whiteEnd2));
     }
 
+    @Test
+    void moveforever() {
+        while (true) {
+            moveTo(0,0);
+            moveTo(500,500);
+        }
+    }
+
     /**
      * Utility function for testing moving a piece to a spot
      * @param side the side the piece is on ("b" or "w")

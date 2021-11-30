@@ -53,7 +53,6 @@ public class BoardBuilder implements Builder {
       //default file shouldn't have any issues
       e.printStackTrace();
     }
-
   }
 
   /**
