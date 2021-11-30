@@ -11,9 +11,6 @@ import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
 public class LocationWriter {
-  public static final String TEAM_PIECETYPE_FORMAT = "%s_%s";
-  public static final String COMMA = ",";
-
   private List<String> csvGrid;
 
   public void saveCSV(String filePath, List<PlayerInterface> players) throws IOException {
@@ -52,14 +49,14 @@ public class LocationWriter {
         Location location = piece.getLocation();
         int col = location.getCol();
         int row = location.getRow();
-        tempGrid.get(row)[col] = String.format(TEAM_PIECETYPE_FORMAT, piece.getTeam(), piece.getName());
+        tempGrid.get(row)[col] = String.format("%s_%s", piece.getTeam(), piece.getName());
       });
     }
   }
 
   private void listStringArrToListString(List<String[]> tempGrid) {
     for(String[] pieceRow : tempGrid) {
-      String csvRow = String.join(COMMA, pieceRow);
+      String csvRow = String.join(",", pieceRow);
       csvGrid.add(csvRow);
     }
   }
