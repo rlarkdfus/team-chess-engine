@@ -22,13 +22,10 @@ public class BoardBuilder implements Builder {
   public static final int ARG_LENGTH = 4;
   public static final String PROPERTIES_FILE = "JSONMappings";
   public static final String CSV_DELIMETER = "csvDelimiter";
-<<<<<<< HEAD
   public static final String RULES = "rules";
   public static final String TYPE = "type";
   public static final String BOARD = "board";
   public static final String STYLE = "style";
-=======
->>>>>>> albert
 
   private ResourceBundle mappings;
 
@@ -83,7 +80,7 @@ public class BoardBuilder implements Builder {
     pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     EndConditionBuilder endConditionBuilder= new EndConditionBuilder(jsonParser);
     iterateCSVData();
-    endCondition = endConditionBuilder.buildEndConditionHandler(gameJson.getString(mappings.getString("rules")),playerList);
+    endCondition = endConditionBuilder.buildEndConditionHandler(gameJson.getString(RULES),playerList);
   }
 
   @Override
