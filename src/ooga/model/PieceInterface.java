@@ -29,4 +29,5 @@ public interface PieceInterface {
     Move getMove(Location end);
     void updateMoves(List<PieceInterface> pieces);
     List<Move> getMoves();
+    boolean isSameTeam(PieceInterface piece);
 }

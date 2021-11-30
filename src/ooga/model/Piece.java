@@ -219,4 +219,14 @@ public class Piece implements PieceInterface {
   public List<Move> getMoves(){
     return moves;
   }
+
+  /**
+   * return whether this piece and another piece are on the same team
+   * @param piece
+   * @return
+   */
+  @Override
+  public boolean isSameTeam(PieceInterface piece){
+    return team.equals(piece.getTeam());
+  }
 }

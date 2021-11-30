@@ -54,7 +54,7 @@ public abstract class Move {
 
         while(inBounds(row, col)){
             if(pieceAt(potentialLocation, pieces) != null) {
-                if(pieceAt(potentialLocation, pieces).getTeam().equals(piece.getTeam()) || !take) {
+                if(pieceAt(potentialLocation, pieces).isSameTeam(piece) || !take) {
                     break;
                 }
                 endLocations.add(potentialLocation);
@@ -129,37 +129,44 @@ public abstract class Move {
      */
     public boolean tryMove(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
         Location originalLocation = new Location(piece.getLocation().getRow(), piece.getLocation().getCol());
-        PieceInterface takenPiece = null;
+        PieceInterface takenPiece = tryTakeMove(potentialLocation, pieces);
 
         // theoretically move piece to location
-        if(pieceAt(potentialLocation, pieces) != null) { //take piece if exists
-            takenPiece = pieceAt(potentialLocation, pieces);
+        if(takenPiece != null) { //take piece if exists
             pieces.remove(takenPiece);
         }
         //move piece to new location
         piece.tryMove(potentialLocation);
 
+        return !inCheck(piece, pieces, originalLocation);
+    }
+
+    private boolean inCheck(PieceInterface piece, List<PieceInterface> pieces, Location originalLocation) {
         // look for checks
         List<PieceInterface> attackingPieces = getAttackingPieces(piece, pieces);
 
         // if the king is in check, undo move and return false
         if(findKing(piece, pieces) == null) {
-            return false;
+            return true;
         }
         if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces, pieces)) {
             piece.tryMove(originalLocation);
-            return false;
+            return true;
         }
 
         //otherwise undo the move and return true
         piece.tryMove(originalLocation);
-        return true;
+        return false;
+    }
+
+    protected PieceInterface tryTakeMove(Location location, List<PieceInterface> pieces) {
+        return pieceAt(location, pieces);
     }
 
     protected List<PieceInterface> getAttackingPieces(PieceInterface attackedPiece, List<PieceInterface> allPieces) {
         List<PieceInterface> attackingPieces = new ArrayList<>();
         for(PieceInterface piece : allPieces) {
-            if(!piece.getTeam().equals(attackedPiece.getTeam())) {
+            if(!piece.isSameTeam(attackedPiece)) {
                 attackingPieces.add(piece);
             }
         }
@@ -168,7 +175,7 @@ public abstract class Move {
 
     protected PieceInterface findKing(PieceInterface teamPiece, List<PieceInterface> pieces) {
         for(PieceInterface piece : pieces) {
-            if(piece.getTeam().equals(teamPiece.getTeam()) && piece.getName().equals("K")) {
+            if(teamPiece.isSameTeam(piece) && piece.getName().equals("K")) {
                 return piece;
             }
         }
