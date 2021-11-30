@@ -2,6 +2,7 @@ package ooga.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.PieceInterface;
@@ -9,7 +10,7 @@ import ooga.model.PlayerInterface;
 
 public interface Builder {
   void build(File file)
-      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException;
+      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException;
   List<PieceViewBuilder> getInitialPieceViews();
 
   List<PlayerInterface> getInitialPlayers();

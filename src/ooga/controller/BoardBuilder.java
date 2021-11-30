@@ -6,9 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Piece;
@@ -70,20 +68,16 @@ public class BoardBuilder implements Builder {
    */
   @Override
   public void build(File file)
-      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException {
+      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
     JSONObject gameJson = jsonParser.loadFile(file);
     extractJSONObj(gameJson);
 
     pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
+    EndConditionBuilder endConditionBuilder= new EndConditionBuilder(jsonParser);
     iterateCSVData();
-    try {
-      buildEndConditionHandler(gameJson.getString(mappings.getString("rules")));
-    }catch (Exception e){
-      e.printStackTrace();
-      throw new InvalidEndGameConfigException(e.getClass());
-    }
+    endCondition = endConditionBuilder.buildEndConditionHandler(gameJson.getString(mappings.getString("rules")),playerList);
   }
 
   @Override
@@ -122,12 +116,6 @@ public class BoardBuilder implements Builder {
 
     return newPiece;
   }
-
-
-
-
-
-
 
   /**
    * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
@@ -199,47 +187,6 @@ public class BoardBuilder implements Builder {
 
     }catch (Exception e){
       throw new InvalidGameConfigException();
-    }
-  }
-
-  private void buildEndConditionHandler(String ruleJsonFile)
-      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidGameConfigException, InvalidEndGameConfigException {
-    JSONObject rules = jsonParser.loadFile(new File(ruleJsonFile));
-    String type = rules.getString(mappings.getString("gameType"));
-    String[] keys = mappings.getString(type+"RuleKeys").split(mappings.getString("jsonDelimiter"));
-    Map<String,List<String>> endConditionProperties = new HashMap<>();
-    for (String key : keys){
-      endConditionProperties.put(key, convertJSONArrayOfStrings(rules.getJSONArray(key)));
-    }
-    Class<?> clazz = Class.forName("ooga.model.EndConditionHandler." + type + "EndCondition");
-    endCondition = (EndConditionInterface) clazz.getDeclaredConstructor().newInstance();
-    List<PieceInterface> initialPieces = new ArrayList<>();
-    for (PlayerInterface p : playerList){
-      initialPieces.addAll(p.getPieces());
-    }
-    endCondition.setArgs(endConditionProperties, initialPieces);
-    checkValidEndCondition(endConditionProperties);
-  }
-
-  private void checkValidEndCondition(Map<String,List<String>> endConditionProperties)
-      throws InvalidEndGameConfigException {
-    String pieceKey = mappings.getString("pieceType");
-    List<String> endGamePieces = endConditionProperties.get(pieceKey);
-    for (PlayerInterface player : playerList){
-      HashMap<String, Integer> playerPieces = new HashMap<>();
-      for (PieceInterface p : player.getPieces()){
-        playerPieces.putIfAbsent(p.getName(),0);
-        playerPieces.put(p.getName(),playerPieces.get(p.getName())+1);
-      }
-      for (String p : endGamePieces){
-        playerPieces.put(p,playerPieces.get(p)-1);
-      }
-      for (String key : playerPieces.keySet()){
-        if (playerPieces.get(key) < 0){
-          throw new InvalidEndGameConfigException("not enough pieces to be eliminated");
-        }
-      }
-
     }
   }
 
