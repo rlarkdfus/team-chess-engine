@@ -1,6 +1,8 @@
 package ooga.model;
 
+import javafx.beans.property.StringProperty;
 import ooga.Location;
+import ooga.model.Moves.Move;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -15,8 +17,7 @@ public class Player implements PlayerInterface {
     private List<PieceInterface> killedPieces;
     private final String team;
     private int score;
-
-    //TODO: Chess timer
+    private TimerInterface moveTimer;
 
     public Player(String team) {
         this.team = team;
@@ -24,6 +25,38 @@ public class Player implements PlayerInterface {
         score = 0;
         pieceIDandState = new HashMap<>();
         this.killedPieces = new ArrayList<>();
+        this.moveTimer = new MoveTimer();
+    }
+
+    @Override
+    public StringProperty getTimeLeft() {
+        return moveTimer.getTimeLeft();
+    }
+
+    @Override
+    public void toggleTimer() {
+        moveTimer.toggle();
+    }
+
+    @Override
+    public void resetTimer() {
+        moveTimer.reset();
+    }
+
+    /**
+     * configures the player's timer with an initial time and increment
+     * @param initialTimeMinutes initial time (min)
+     * @param incrementSeconds time increment per move (s)
+     */
+    @Override
+    public void configTimer(int initialTimeMinutes, int incrementSeconds) {
+        moveTimer.setInitialTime(initialTimeMinutes);
+        moveTimer.setIncrement(incrementSeconds);
+    }
+
+    @Override
+    public void incrementTime() {
+        moveTimer.incrementTime();
     }
 
     /**

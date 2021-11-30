@@ -4,6 +4,7 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.controller.InvalidPieceConfigException;
 import org.assertj.core.api.Assert;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +13,6 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.util.Locale;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class EngineTest {
     private Engine board;
