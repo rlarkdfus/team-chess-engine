@@ -2,7 +2,6 @@ package ooga.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -11,7 +10,6 @@ import ooga.Location;
 import ooga.model.*;
 import ooga.view.View;
 import ooga.view.ViewInterface;
-import org.json.JSONObject;
 
 public class Controller implements ControllerInterface {
 
@@ -24,11 +22,9 @@ public class Controller implements ControllerInterface {
     private LocationWriter locationWriter;
     private Builder boardBuilder;
     private TimeController timeController;
-    private File jsonFile;
 
     public Controller() {
         try {
-            jsonFile = DEFAULT_CHESS_CONFIGURATION;
             boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
             timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
             view = new View(this);
@@ -72,13 +68,12 @@ public class Controller implements ControllerInterface {
     @Override
     public void uploadConfiguration(File file) {
         try {
-            jsonFile = file;
             boardBuilder.build(file);
             buildGame(boardBuilder);
             view.resetDisplay(boardBuilder.getInitialPieceViews());
             startTimersForNewGame();
         } catch (Exception E) {
-            E.printStackTrace();
+            //todo: handle exception
         }
     }
 
@@ -105,51 +100,7 @@ public class Controller implements ControllerInterface {
       if (model.checkGameState() != Board.GameState.RUNNING) {
         System.out.println(model.checkGameState()); //FIXME
 
-<<<<<<< src/ooga/controller/Controller.java
-      }
-      incrementWhiteTime();
-    }
-
-    public List<Location> getLegalMoves (Location location){
-      return model.getLegalMoves(location);
-    }
-
-    private void buildGame (Builder boardBuilder) throws
-    InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-      model = new Board(boardBuilder.getInitialPlayers());
-      model.setEndCondition(boardBuilder.getEndConditionHandler());
-      view.initializeDisplay(boardBuilder.getInitialPieceViews());
-    }
-
-
-    public void downloadGame (String filePath){
-      try {
-        JSONWriter jsonWriter = new JSONWriter();
-        jsonWriter.saveFile(jsonFile, filePath);
-
-        locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
-      } catch (IOException ignored) {
-      }
-    }
-
-    //TODO: make this part use reflection
-    public StringProperty getWhiteTimeLeft () {
-      return whiteMoveTimer.getTimeLeft();
-    }
-
-    public StringProperty getBlackTimeLeft () {
-      return blackMoveTimer.getTimeLeft();
-    }
-
-    public void incrementWhiteTime () {
-      whiteMoveTimer.incrementTime();
-    }
-
-    public void incrementBlackTime () {
-      blackMoveTimer.incrementTime();
-=======
         }
->>>>>>> src/ooga/controller/Controller.java
     }
 
     /**
