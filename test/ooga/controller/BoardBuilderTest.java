@@ -158,33 +158,21 @@ class BoardBuilderTest {
   }
   @Test
   void testExceptions(){
-    String filepath = "data/chess/errorGameJson.json";
-    try {
-      boardBuilder.build(new File(filepath));
-    } catch (Exception e) {
-      assertEquals(InvalidGameConfigException.class, e.getClass(),"should throw InvalidGameConfigException");
-    }
+    assertThrowsExactly(InvalidGameConfigException.class,()->{
+      boardBuilder.build(new File("data/chess/errorGameJson.json"));
+    } );
 
-    filepath = "data/chess/errorCSVJson.json";
-    try {
-      boardBuilder.build(new File(filepath));
-    } catch (Exception e) {
-      assertEquals(CsvException.class, e.getClass(),"should throw CsvException");
-    }
+    assertThrowsExactly(CsvException.class,()->{
+      boardBuilder.build(new File("data/chess/errorCSVJson.json"));
+    } );
 
-    filepath = "data/chess/errorPieceJson.json";
-    try {
-      boardBuilder.build(new File(filepath));
-    } catch (Exception e) {
-      assertEquals(InvalidPieceConfigException.class, e.getClass(),"should throw InvalidPieceConfigException");
-    }
+    assertThrowsExactly(InvalidPieceConfigException.class,()->{
+      boardBuilder.build(new File("data/chess/errorPieceJson.json"));
+    } );
 
-    filepath = "data/chess/errorPlayerJson.json";
-    try {
-      boardBuilder.build(new File(filepath));
-    } catch (Exception e) {
-      assertEquals(PlayerNotFoundException.class, e.getClass(),"should throw PlayerNotFoundException");
-    }
+    assertThrowsExactly(PlayerNotFoundException.class,()->{
+      boardBuilder.build(new File("data/chess/errorPlayerJson.json"));
+    } );
   }
 
   private JSONObject getPiece()

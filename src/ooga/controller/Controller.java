@@ -37,17 +37,14 @@ public class Controller implements ControllerInterface {
       buildGame(boardBuilder);
     } catch (Exception e) {
       System.out.println(e.getMessage());
+      //default shouldn't have errors
 //      view.showError(e.getMessage());
     }
   }
 
     @Override
     public void resetGame () {
-      try {
-        uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
-      } catch (Exception e) {
-        //todo:handle
-      }
+      uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
       resetTimers();
     }
 
@@ -58,14 +55,17 @@ public class Controller implements ControllerInterface {
 
     @Override
     public void uploadConfiguration(File file) {
-        try {
-            boardBuilder.build(file);
-            buildGame(boardBuilder);
-            view.resetDisplay(boardBuilder.getInitialPieceViews());
-            resumeTimer();
-        } catch (Exception E) {
-            //todo: handle exception
-        }
+      if (file == null){
+        return;
+      }
+      try {
+          boardBuilder.build(file);
+          buildGame(boardBuilder);
+          view.resetDisplay(boardBuilder.getInitialPieceViews());
+          resumeTimer();
+      } catch (Exception E) {
+        view.showError(E.toString());
+      }
     }
 
     @Override

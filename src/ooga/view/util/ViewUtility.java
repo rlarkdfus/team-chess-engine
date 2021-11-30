@@ -25,8 +25,8 @@ public class ViewUtility {
     public final String SELECT_JSON_FILE = "Select JSON File";
     public final String JSON_FILE_EXTENSION_DESCRIPTION = "JSON Files (*.json)";
     public final String CSV_FILE_EXTENSION_DESCRIPTION = "CSV (Comma delimited) (*.csv)";
-    public final String JSON_EXTENSION = ".json";
-    public final String CSV_EXTENSION = ".csv";
+    public final String JSON_EXTENSION = "*.json";
+    public final String CSV_EXTENSION = "*.csv";
     public final String EMPTY_FILE_PATH = "";
 
     /**

@@ -122,12 +122,15 @@ public class BoardBuilder implements Builder {
    * pieceGrid
    */
   private void iterateCSVData()
-      throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException {
+      throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException, CsvException {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
-        String[] square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
-//        String[] square = csvData.get(r).get(c).split("_");
-
+        String[] square;
+        try {
+          square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
+        }catch (Exception e){
+          throw new CsvException(r);
+        }
         if (square.length < 2) {
           continue;           //signifies that this square is empty
         }
@@ -135,11 +138,7 @@ public class BoardBuilder implements Builder {
         int playerListIdx = determinePlayer(r, c, square[0]);
 
         pieceList.add(new PieceViewBuilder(piece));
-        try {
-          playerList.get(playerListIdx).addPiece(piece);
-        }catch (Exception e){
-          //todo handle exception
-        }
+        playerList.get(playerListIdx).addPiece(piece);
       }
     }
   }
@@ -186,7 +185,7 @@ public class BoardBuilder implements Builder {
       csvData = locationParser.getInitialLocations(csv);
 
     }catch (Exception e){
-      throw new InvalidGameConfigException();
+      throw new InvalidGameConfigException(e.toString());
     }
   }
 
