@@ -80,6 +80,7 @@ public class ViewUtility {
         result.valueProperty()
                 .addListener((o, oldValue, newValue) -> response.accept(lang.get(newValue)));
         result.getStyleClass().add("combo-box");
+        //result.setValue("test");
         return (ComboBox) setID(property, result);
     }
 

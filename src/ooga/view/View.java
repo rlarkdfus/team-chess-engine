@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ooga.Turn;
 import ooga.controller.Controller;
+import ooga.controller.ControllerInterface;
 import ooga.controller.PieceViewBuilder;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
 import ooga.view.ui.gameSettingsUI.GameSettingsUI;
@@ -40,7 +41,6 @@ public class View implements ViewInterface {
         this.viewController = new ViewController();
         this.viewUtility = new ViewUtility();
         this.stage = new Stage();
-        //TODO: this is probably bad design idk
         viewController.setView(this);
     }
 
