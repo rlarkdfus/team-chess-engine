@@ -1,0 +1,10 @@
+{
+"boardSize":"8x8",
+"players":["w","b"],
+"csv":"/Users/luispereda/Documents/CS 307/Projects/ooga_team09/data/chess/belugaaa.csv",
+"rules":"data/chess/rules/default.json",
+"style":"companion",
+"type":"chess",
+"boardColors":["#f3dab0","#bb885b"],
+"board":"square"
+}
