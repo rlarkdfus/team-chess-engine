@@ -12,11 +12,6 @@ import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
 public class EliminationEndCondition implements EndConditionInterface {
-  public static final String PIECE_TYPE = "pieceType";
-  public static final String AMOUNT = "amount";
-  public static final String UNDERSCORE = "_";
-  public static final String PIECE_TEAM_TYPE_FORMAT = "%s_%s";
-
   private List<PieceInterface> previousTurnPieces;
   private Map<String, Integer> piecesToEliminate;
   private String winner;
@@ -30,8 +25,8 @@ public class EliminationEndCondition implements EndConditionInterface {
     }
     previousTurnPieces = new ArrayList<>(allpieces);
     piecesToEliminate = new HashMap<>();
-    Iterator<String> pieceIter = propertiesMap.get(PIECE_TYPE).iterator();
-    Iterator<String> amountIter = propertiesMap.get((AMOUNT)).iterator();
+    Iterator<String> pieceIter = propertiesMap.get("pieceType").iterator();
+    Iterator<String> amountIter = propertiesMap.get(("amount")).iterator();
     while(pieceIter.hasNext() && amountIter.hasNext()) {
       String pieceType = pieceIter.next();
       int amount = Integer.parseInt(amountIter.next());
@@ -102,7 +97,7 @@ public class EliminationEndCondition implements EndConditionInterface {
   private HashMap<String, Integer> getTargetPiecesRemaining() {
     HashMap<String, Integer> targetPiecesRemaining = new HashMap<>();
     for (String pieceString : piecesToEliminate.keySet()){
-      String[] pieceStringInfo = pieceString.split(UNDERSCORE);
+      String[] pieceStringInfo = pieceString.split("_");
       String team = pieceStringInfo[0];
       int piecesLeft = piecesToEliminate.get(pieceString);
       targetPiecesRemaining.putIfAbsent(team, 0);
@@ -112,8 +107,7 @@ public class EliminationEndCondition implements EndConditionInterface {
   }
 
   private void logMissing(PieceInterface missing) {
-//    String key = missing.getTeam() + UNDERSCORE + missing.getName();
-    String key = String.format(PIECE_TEAM_TYPE_FORMAT, missing.getTeam(), missing.getName());
+    String key = missing.getTeam() + "_" + missing.getName();
     if (!piecesToEliminate.containsKey(key)){
       return;
     }
