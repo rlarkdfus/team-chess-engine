@@ -1,11 +1,5 @@
 package ooga.model;
 
-import ooga.Location;
-import ooga.Turn;
-import ooga.controller.BoardBuilder;
-import ooga.controller.InvalidPieceConfigException;
-import ooga.model.EndConditionHandler.EndConditionInterface;
-import ooga.model.Moves.Move;
 import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
 
 import java.io.FileNotFoundException;
@@ -98,7 +92,7 @@ private static final int Cols = 8;
         for(Location removeLocation : turn.getRemoved()){
             for(PlayerInterface player : players){
                 for(PieceInterface p : player.getPieces()){
-                    if (p.getLocation().equals(removeLocation)) {
+                    if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
                         player.removePiece(p);
                     }
                 }
@@ -202,7 +196,8 @@ private static final int Cols = 8;
      */
     @Override
     public GameState checkGameState() {
-        if (endCondition.isGameOver(players).equals(GameState.CHECKMATE)){
+        GameState endConditionResult = endCondition.isGameOver(players);
+        if (endConditionResult == GameState.CHECKMATE){
             return GameState.CHECKMATE;
         }
         int totalLegalMoves = 0;

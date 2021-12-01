@@ -26,11 +26,11 @@ public class LocationEndCondition implements EndConditionInterface{
     minPieceAmounts = new HashMap<>();
     teams = new HashSet<>();
     resourceBundle = ResourceBundle.getBundle("JSONMappings");
-    currTeamLocations = new HashMap();
   }
 
   @Override
   public GameState isGameOver(List<PlayerInterface> players) {
+    currTeamLocations = new HashMap();
     List<PieceInterface> alivePieces = getAlivePieces(players);
     if (notEnoughPieces(alivePieces)){
       return GameState.CHECKMATE;
@@ -81,7 +81,6 @@ public class LocationEndCondition implements EndConditionInterface{
     }
     if (loser != null){
       for (String team : teams){
-        System.out.println(team);
         if (!team.equals(loser)){
           winner = team;
           return true;
