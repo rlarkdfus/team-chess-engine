@@ -1,1 +1,4 @@
-{"password":"asdf"}
+{
+  "password": "password",
+  "wins": "5"
+}
