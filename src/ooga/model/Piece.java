@@ -1,13 +1,10 @@
 package ooga.model;
 
-import ooga.Location;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import ooga.Location;
 import ooga.model.Moves.Move;
 
 public class Piece implements PieceInterface {
@@ -136,33 +133,6 @@ public class Piece implements PieceInterface {
   }
 
   /**
-   * return whether a piece is eliminated
-   * @return
-   */
-  @Override
-  public boolean getEliminatedState() {
-    return isEliminated;
-  }
-
-
-  //Fixme: Fix the end state
-  @Override
-  public boolean getEndState() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-    Method method= this.getClass().getDeclaredMethod(endStateString);
-    //endState string can be standard(no end state, or eliminated, meaning it is killed)
-    Object value = method.invoke(this);
-    return (boolean) value;
-  }
-
-  //Used for reflection.
-  private boolean standard(){
-    return true;
-  }
-  private boolean eliminated(){
-    return this.isEliminated;
-  }
-
-  /**
    * override toString to print out piece information
    *
    * @return
@@ -278,4 +248,18 @@ public class Piece implements PieceInterface {
     }
   }
 
+  @Override
+  public List<Move> getMoves(){
+    return moves;
+  }
+
+  /**
+   * return whether this piece and another piece are on the same team
+   * @param piece
+   * @return
+   */
+  @Override
+  public boolean isSameTeam(PieceInterface piece){
+    return team.equals(piece.getTeam());
+  }
 }

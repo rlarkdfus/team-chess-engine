@@ -12,6 +12,12 @@ import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
 public class EliminationEndCondition implements EndConditionInterface {
+  public static final String PIECE_TYPE = "pieceType";
+  public static final String AMOUNT = "amount";
+  public static final String UNDERSCORE = "_";
+  public static final String PIECE_TEAM_TYPE_FORMAT = "%s_%s";
+  private final String NO_WINNER = "noWinner";
+
   private List<PieceInterface> previousTurnPieces;
   private Map<String, Integer> piecesToEliminate;
   private String winner;
@@ -20,19 +26,19 @@ public class EliminationEndCondition implements EndConditionInterface {
   public void setArgs(Map<String, List<String>> propertiesMap, List<PieceInterface> allpieces) {
 
     Set<String> teams = new HashSet<>();
+    previousTurnPieces = new ArrayList<>();
     for(PieceInterface piece : allpieces) {
       teams.add(piece.getTeam());
+      previousTurnPieces.add(piece);
     }
-    previousTurnPieces = new ArrayList<>(allpieces);
     piecesToEliminate = new HashMap<>();
-    Iterator<String> pieceIter = propertiesMap.get("pieceType").iterator();
-    Iterator<String> amountIter = propertiesMap.get(("amount")).iterator();
-    while(pieceIter.hasNext() && amountIter.hasNext()) {
+    Iterator<String> pieceIter = propertiesMap.get(PIECE_TYPE).iterator();
+    while(pieceIter.hasNext()) {
       String pieceType = pieceIter.next();
-      int amount = Integer.parseInt(amountIter.next());
       for (String team : teams){
         String key = team+"_"+pieceType;
-        piecesToEliminate.putIfAbsent(key, amount);
+        piecesToEliminate.putIfAbsent(key, 0);
+        piecesToEliminate.put(key, piecesToEliminate.get(key)+1);
       }
     }
   }
@@ -49,7 +55,9 @@ public class EliminationEndCondition implements EndConditionInterface {
       return GameState.RUNNING;
     }
     findMissingPiece(alivePieces);
-    return checkEndConditions();
+    previousTurnPieces = alivePieces;
+    GameState gameState = checkEndConditions();
+    return gameState;
   }
 
   @Override
@@ -76,14 +84,14 @@ public class EliminationEndCondition implements EndConditionInterface {
 
   private GameState checkEndConditions() {
     HashMap<String, Integer> targetPiecesRemaining = getTargetPiecesRemaining();
-    String loser = null;
+    String loser = NO_WINNER;
     for (String team : targetPiecesRemaining.keySet()){
-      if (targetPiecesRemaining.get(team) == 0){
+      if (targetPiecesRemaining.get(team) <= 0){
         loser = team;
         break;
       }
     }
-    if (loser != null){
+    if (loser != NO_WINNER){
       for (String team : targetPiecesRemaining.keySet()){
         if (!team.equals(loser)){
           winner = team;
@@ -97,7 +105,7 @@ public class EliminationEndCondition implements EndConditionInterface {
   private HashMap<String, Integer> getTargetPiecesRemaining() {
     HashMap<String, Integer> targetPiecesRemaining = new HashMap<>();
     for (String pieceString : piecesToEliminate.keySet()){
-      String[] pieceStringInfo = pieceString.split("_");
+      String[] pieceStringInfo = pieceString.split(UNDERSCORE);
       String team = pieceStringInfo[0];
       int piecesLeft = piecesToEliminate.get(pieceString);
       targetPiecesRemaining.putIfAbsent(team, 0);
@@ -107,7 +115,7 @@ public class EliminationEndCondition implements EndConditionInterface {
   }
 
   private void logMissing(PieceInterface missing) {
-    String key = missing.getTeam() + "_" + missing.getName();
+    String key = String.format(PIECE_TEAM_TYPE_FORMAT, missing.getTeam(), missing.getName());
     if (!piecesToEliminate.containsKey(key)){
       return;
     }

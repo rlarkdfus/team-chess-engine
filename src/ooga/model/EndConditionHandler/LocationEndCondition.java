@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import ooga.controller.InvalidGameConfigException;
+import ooga.controller.InvalidEndGameConfigException;
 import ooga.model.Board.GameState;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
@@ -26,11 +26,11 @@ public class LocationEndCondition implements EndConditionInterface{
     minPieceAmounts = new HashMap<>();
     teams = new HashSet<>();
     resourceBundle = ResourceBundle.getBundle("JSONMappings");
-    currTeamLocations = new HashMap();
   }
 
   @Override
   public GameState isGameOver(List<PlayerInterface> players) {
+    currTeamLocations = new HashMap();
     List<PieceInterface> alivePieces = getAlivePieces(players);
     if (notEnoughPieces(alivePieces)){
       return GameState.CHECKMATE;
@@ -81,7 +81,6 @@ public class LocationEndCondition implements EndConditionInterface{
     }
     if (loser != null){
       for (String team : teams){
-        System.out.println(team);
         if (!team.equals(loser)){
           winner = team;
           return true;
@@ -102,11 +101,11 @@ public class LocationEndCondition implements EndConditionInterface{
   }
 
   public void setArgs(Map<String, List<String>> properties, List<PieceInterface> allpieces)
-      throws InvalidGameConfigException {
+      throws InvalidEndGameConfigException {
     String[] keys = resourceBundle.getString("LocationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
     List<String> pieces = properties.get(keys[0]);
     List<String> locations = properties.get(keys[1]);
-    if (pieces.size() != locations.size()){throw new InvalidGameConfigException();}
+    if (pieces.size() != locations.size()){throw new InvalidEndGameConfigException("missing location for pieces");}
     buildTargetLocations(pieces, locations);
     buildMinPieceAmounts();
     buildTeams(allpieces);

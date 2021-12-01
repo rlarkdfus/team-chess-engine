@@ -1,19 +1,18 @@
 package ooga.model;
 
-import ooga.Location;
-import ooga.Turn;
-import ooga.controller.BoardBuilder;
-import ooga.controller.InvalidPieceConfigException;
-import ooga.model.EndConditionHandler.EndConditionInterface;
-import ooga.model.Moves.Move;
+import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
+import ooga.Location;
+import ooga.Turn;
+import ooga.controller.BoardBuilder;
+import ooga.controller.InvalidPieceConfigException;
+import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.Moves.Move;
 
 public class Board implements Engine {
 private static final int Rows = 8;
@@ -33,7 +32,7 @@ private static final int firstRow = 0;
     private EndConditionInterface endCondition;
     private int turnCount;
     private PlayerInterface currentPlayer;
-    List<Location> promotionSquares;
+    private GameState currGameState;
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
@@ -42,9 +41,11 @@ private static final int firstRow = 0;
         for(PlayerInterface player : players) {
             allPieces.addAll(player.getPieces());
         }
+
         for (PieceInterface piece : allPieces){
             piece.updateMoves(allPieces);
         }
+        System.out.println(this);
         updateLegalMoves();
         promotionSquares = new ArrayList<>();
       initializePromotionSquares();
@@ -97,7 +98,7 @@ private static final int firstRow = 0;
         for(Location removeLocation : turn.getRemoved()){
             for(PlayerInterface player : players){
                 for(PieceInterface p : player.getPieces()){
-                    if (p.getLocation().equals(removeLocation)) {
+                    if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
                         player.removePiece(p);
                     }
                 }
@@ -112,16 +113,10 @@ private static final int firstRow = 0;
         turnCount++;
         toggleTimers();
 
-
-//        System.out.println("before");
-//        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
-//        System.out.println(this);
-
+        //update game data
         updateLegalMoves();
+        currGameState = endCondition.isGameOver(players);
 
-//        System.out.println("after");
-        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
-//        System.out.println(this);
         return turn;
     }
 
@@ -150,11 +145,10 @@ private static final int firstRow = 0;
      * pause current player timer, add increment, start next player time
      */
     private void toggleTimers() {
-        PlayerInterface currentPlayer = findPlayerTurn(turnCount-1);
-        PlayerInterface nextPlayer = findPlayerTurn(turnCount);
+        PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
+        prevPlayer.toggleTimer();
+        prevPlayer.incrementTime();
         currentPlayer.toggleTimer();
-        currentPlayer.incrementTime();
-        nextPlayer.toggleTimer();
     }
 
 
@@ -179,7 +173,7 @@ private static final int firstRow = 0;
      */
     @Override
     public GameState checkGameState() {
-        if (endCondition.isGameOver(players).equals(GameState.CHECKMATE)){
+        if (currGameState == GameState.CHECKMATE){
             return GameState.CHECKMATE;
         }
         int totalLegalMoves = 0;
@@ -209,13 +203,20 @@ private static final int firstRow = 0;
         return null;
     }
 
+    @Override
+    public String getWinner() {
+        if (currGameState == GameState.CHECKMATE){
+            return endCondition.getWinner();
+        }
+        return null;
+    }
 
 
-    /**
-     * determine whether player selects their own piece on their turn
-     * @param location
-     * @return
-     */
+        /**
+         * determine whether player selects their own piece on their turn
+         * @param location
+         * @return
+         */
     public boolean canMovePiece(Location location) {
         String turn = findPlayerTurn(turnCount).getTeam();
         for(PieceInterface piece : allPieces) {
