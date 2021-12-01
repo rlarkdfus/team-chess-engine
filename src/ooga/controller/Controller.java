@@ -9,8 +9,10 @@ import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.Turn;
 import ooga.model.Board;
+import ooga.model.Board.GameState;
 import ooga.model.Engine;
 import ooga.view.LoginView;
+import ooga.view.GameOverScreen;
 import ooga.view.View;
 import ooga.view.ViewInterface;
 
@@ -28,6 +30,7 @@ public class Controller implements ControllerInterface {
   private LoginController loginController;
   private File jsonFile;
   private LoginView loginView;
+  private GameOverScreen gameOverScreen;
 
   public Controller() {
     initializeLogin();
@@ -46,9 +49,13 @@ public class Controller implements ControllerInterface {
    * Reset the game with the default board configuration
    */
   @Override
-  public void resetGame() {
-    uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
-  }
+  public void resetGame() {uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);}
+
+  /**
+   * Quits the game
+   */
+  @Override
+  public void quit() {System.exit(0);}
 
   /**
    * @param location is the desired destination of the move
@@ -102,8 +109,10 @@ public class Controller implements ControllerInterface {
       InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
     Turn turn = model.movePiece(start, end);
     view.updateDisplay(turn);
-    if (model.checkGameState() != Board.GameState.RUNNING) {
-      System.out.println(model.checkGameState()); //FIXME
+    GameState gameState = model.checkGameState();
+    if (gameState != Board.GameState.RUNNING) {
+      String winner = model.getWinner();
+      gameOverScreen = new GameOverScreen(this, winner);
     }
   }
 

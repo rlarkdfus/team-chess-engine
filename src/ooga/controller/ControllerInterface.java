@@ -32,7 +32,9 @@ public interface ControllerInterface {
      */
     void movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException;
 
-    /**
+  void quit();
+
+  /**
      * Returns true if the piece at the location of user click can be moved
      * @param location is the location of piece
      */
