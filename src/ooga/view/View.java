@@ -77,13 +77,16 @@ public class View implements ViewInterface {
         boardView.updateBoardView(turn);
     }
 
+    @Override
     public void changeBoardColor(Color color1, Color color2) {
         boardView.changeColors(color1, color2);
     }
 
+    @Override
     public void changePieceStyle(String style) {
         boardView.changePieceStyle(style);
     }
 
+    @Override
     public void showError(String message) {viewUtility.showError(message);}
 }

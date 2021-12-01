@@ -16,10 +16,7 @@ class LoginControllerTest {
   @Test
   void GivenValidUsernameAndPassword_ThenLoginSuccessful() throws Exception {
     boolean expected = true;
-
-    boolean actual = loginController.isValidLogin("Luis", "password");
-
-    assertEquals(expected, actual);
+    assertEquals(expected, loginController.isValidLogin("Luis", "password"));
   }
 
   @Test
@@ -29,8 +26,7 @@ class LoginControllerTest {
 
   @Test
   void GivenInvalidPasswordAndValidUsername_ThenReturnFalse() throws Exception {
-    boolean actual = loginController.isValidLogin("Luis", "SanchoPanza");
     boolean expected = false;
-    assertEquals(expected, actual);
+    assertEquals(expected, loginController.isValidLogin("Luis", "SanchoPanza"));
   }
 }
