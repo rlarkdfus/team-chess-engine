@@ -10,6 +10,7 @@ import ooga.model.PlayerInterface;
 public interface Builder {
   void build(File file)
       throws FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CsvException;
+
   List<PieceViewBuilder> getInitialPieceViews();
 
   List<PlayerInterface> getInitialPlayers();
