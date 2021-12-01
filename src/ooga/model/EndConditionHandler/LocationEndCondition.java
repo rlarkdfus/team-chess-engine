@@ -74,6 +74,7 @@ public class LocationEndCondition implements EndConditionInterface{
       String pieceType = piece.split("_")[1];
       if (minPieceAmounts.containsKey(pieceType)){
         if (currentAmounts.get(piece) < minPieceAmounts.get(pieceType)){
+          System.out.println("here");
           loser = piece.split("_")[0];
           break;
         }

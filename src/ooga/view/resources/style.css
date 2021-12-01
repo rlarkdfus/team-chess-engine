@@ -1,46 +1,49 @@
 . SettingsUI {
-    -fx-hgap: 10px;
-    -fx-vgap: 10px;
-    -fx-padding: 20px;
-    -fx-background-color: lightblue;
+  -fx-hgap: 10px;
+  -fx-vgap: 10px;
+  -fx-padding: 20px;
+  -fx-background-color: lightblue;
 }
 
 . BoardStyleUI {
-    -fx-hgap: 10px;
-    -fx-vgap: 10px;
-    -fx-padding: 20px;
-    -fx-background-color: lightblue;
+  -fx-hgap: 10px;
+  -fx-vgap: 10px;
+  -fx-padding: 20px;
+  -fx-background-color: lightblue;
 }
 
 . GameInfoUI {
-    -fx-hgap: 10px;
-    -fx-vgap: 10px;
-    -fx-padding: 20px;
-    -fx-background-color: lightgreen;
+  -fx-hgap: 10px;
+  -fx-vgap: 10px;
+  -fx-padding: 20px;
+  -fx-background-color: lightgreen;
 }
 
 . GameSettingsUI {
-    -fx-hgap: 10px;
-    -fx-vgap: 10px;
-    -fx-padding: 20px;
-    -fx-background-color: lightpink;
+  -fx-hgap: 10px;
+  -fx-vgap: 10px;
+  -fx-padding: 20px;
+  -fx-background-color: lightpink;
 }
 
-<<<<<<< HEAD
 . LoginUI {
-    -fx-hgap: 10px;
-    -fx-vgap: 10px;
-    -fx-padding: 20px;
-    -fx-background-color: tan;
-=======
-. EndScreenUI{
-    -fx-hgap: 10px;
-    -fx-vgap: 10px;
-    -fx-padding: 20px;
-    -fx-background-color: lightgrey;
+  -fx-hgap: 10px;
+  -fx-vgap: 10px;
+  -fx-padding: 20px;
+  -fx-background-color: tan;
 }
 
-#WinnerText{
-    -fx-font: bold 20pt "Arial";
->>>>>>> b9917f107baaaf51a48897b8e261493b8f20a138
+. EndScreenUI {
+  -fx-hgap: 10px;
+  -fx-vgap: 10px;
+  -fx-padding: 20px;
+  -fx-background-color: lightgrey;
+}
+
+#WinnerText {
+  -fx-font: bold 20pt "Arial";
+}
+
+#DrawText {
+  -fx-font: bold 40pt "Arial";
 }
