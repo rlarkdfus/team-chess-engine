@@ -33,6 +33,8 @@ public interface Engine {
     List<PlayerInterface> getPlayers();
 
     void setEndCondition(EndConditionInterface endCondition);
-    
-    boolean canMovePiece(Location location);
+
+  String getWinner();
+
+  boolean canMovePiece(Location location);
 }

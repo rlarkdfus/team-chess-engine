@@ -11,6 +11,7 @@ import ooga.Turn;
 import ooga.model.Board;
 import ooga.model.Board.GameState;
 import ooga.model.Engine;
+import ooga.view.GameOverScreen;
 import ooga.view.View;
 import ooga.view.ViewInterface;
 
@@ -26,6 +27,7 @@ public class Controller implements ControllerInterface {
   private Builder boardBuilder;
   private TimeController timeController;
   private File jsonFile;
+  private GameOverScreen gameOverScreen;
 
   public Controller() {
     try {
@@ -48,9 +50,13 @@ public class Controller implements ControllerInterface {
    * Reset the game with the default board configuration
    */
   @Override
-  public void resetGame() {
-    uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
-  }
+  public void resetGame() {uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);}
+
+  /**
+   * Quits the game
+   */
+  @Override
+  public void quit() {System.exit(0);}
 
   /**
    * @param location is the desired destination of the move
@@ -107,7 +113,8 @@ public class Controller implements ControllerInterface {
     view.updateDisplay(turn);
     GameState gameState = model.checkGameState();
     if (gameState != Board.GameState.RUNNING) {
-      System.out.println(gameState); //FIXME
+      String winner = model.getWinner();
+      gameOverScreen = new GameOverScreen(this, winner);
     }
   }
 
