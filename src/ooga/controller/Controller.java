@@ -9,6 +9,7 @@ import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.Turn;
 import ooga.model.Board;
+import ooga.model.Board.GameState;
 import ooga.model.Engine;
 import ooga.view.View;
 import ooga.view.ViewInterface;
@@ -104,8 +105,9 @@ public class Controller implements ControllerInterface {
       InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
     Turn turn = model.movePiece(start, end);
     view.updateDisplay(turn);
-    if (model.checkGameState() != Board.GameState.RUNNING) {
-      System.out.println(model.checkGameState()); //FIXME
+    GameState gameState = model.checkGameState();
+    if (gameState != Board.GameState.RUNNING) {
+      System.out.println(gameState); //FIXME
     }
   }
 
