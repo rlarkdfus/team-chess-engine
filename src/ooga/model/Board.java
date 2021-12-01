@@ -17,12 +17,14 @@ import ooga.model.Moves.Move;
 public class Board implements Engine {
 private static final int Rows = 8;
 private static final int Cols = 8;
+private static final int lastRow = Rows -1;
+private static final int firstRow = 0;
+
 
     public enum GameState {
         RUNNING,
         CHECKMATE,
         STALEMATE,
-        CHECK
     }
 
     private List<PlayerInterface> players;
@@ -30,6 +32,7 @@ private static final int Cols = 8;
     private EndConditionInterface endCondition;
     private int turnCount;
     private PlayerInterface currentPlayer;
+    private List<Location> promotionSquares;
     private GameState currGameState;
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
@@ -45,8 +48,12 @@ private static final int Cols = 8;
         }
         System.out.println(this);
         updateLegalMoves();
+        promotionSquares = new ArrayList<>();
+      initializePromotionSquares();
     }
 
+    private void initializePromotionSquares() {
+    }
     /**
      * this method returns the list of all players
      * @return
@@ -101,12 +108,7 @@ private static final int Cols = 8;
 
 
         //Check for pawn promotion
-        if(piece.getName().equals("P")){
-            if(end.getRow() == 0 || end.getRow() ==Rows-1){
-                System.out.println("pawn at end");
-                promotePiece(piece);
-            }
-        }
+        checkPromotion(piece, end);
 
         // increment turn
         turnCount++;
@@ -117,6 +119,27 @@ private static final int Cols = 8;
         currGameState = endCondition.isGameOver(players);
 
         return turn;
+    }
+
+    private void checkPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        //check pawn promotion specifically
+
+        checkPawnPromotion(piece, end);
+
+        //Check piece promotion specifically
+        for(Location promotionLocation: promotionSquares){
+            if(end.equals(promotionLocation)){
+                promotePiece(piece);
+            }
+        }
+    }
+    private void checkPawnPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        if(piece.getName().equals("P")){
+            if(end.getRow() == firstRow || end.getRow() ==lastRow){
+                System.out.println("pawn at end");
+                promotePiece(piece);
+            }
+        }
     }
 
     /**
@@ -130,57 +153,19 @@ private static final int Cols = 8;
     }
 
 
-    private void promotePiece(PieceInterface pieceInterface) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
-//        //need to initial
-//        PlayerInterface currentPlayer = null;
-//        for(PlayerInterface playerInterface: players){
-//            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
-//                currentPlayer = playerInterface;
-//            }
-//        }
-        BoardBuilder builder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-        PieceInterface newPiece = builder.convertPiece(pieceInterface,"Q");
-        try {
-            Field f = newPiece.getClass().getDeclaredField("moves");
-            f.setAccessible(true);
-            List<Move> moves = (List<Move>) f.get(newPiece);
-            System.out.println(moves);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-
-
-        System.out.println(currentPlayer.getScore());
-        System.out.println("^ Score before removing");
-
+    private void promotePiece(PieceInterface pieceInterface) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException{
+        PieceInterface newPiece = currentPlayer.createQueen();
+        newPiece.moveTo(pieceInterface.getLocation());
 
         currentPlayer.removePiece(pieceInterface);
         allPieces.remove(pieceInterface);
-        allPieces.add(newPiece);
-        System.out.println(currentPlayer.getScore());
-        System.out.println("^Score after removing");
 
-        System.out.println("Ne piece name: " + newPiece.getName());
+        allPieces.add(newPiece);
         currentPlayer.addPiece(newPiece);
-        System.out.println("New piece team: " + newPiece.getTeam());
-        System.out.println("^Score with new piece added");
-        System.out.println(currentPlayer.getScore());
-        System.out.println("Current player team" + currentPlayer.getTeam());
-        for (PieceInterface p : currentPlayer.getPieces()){
-            System.out.println(p.getName());
-        }
+
     }
 
-//    private void promotePiece2(PieceInterface pieceInterface){
-//        //Should make currentPlayer a private reference variable instead
-//        PlayerInterface currentPlayer = null;
-//        for(PlayerInterface playerInterface: players){
-//            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
-//                currentPlayer = playerInterface;
-//            }
-//        }
-//
-//    }
+
 
 
     /**
@@ -240,18 +225,13 @@ private static final int Cols = 8;
                 return true;
             }
         }
-//        for(PieceInterface piece : findPlayerTurn(turnCount).getPieces()) {
-//            if(piece.getLocation().equals(location)) {
-//                return true;
-//            }
-//        }
+
         return false;
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn+1) % players.size());
-        //FIXME: check if you can return this
-//        return currentPlayer;
+        currentPlayer = players.get((turn) % players.size());
+
         return players.get(turn % players.size());
     }
 

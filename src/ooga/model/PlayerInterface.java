@@ -42,5 +42,7 @@ public interface PlayerInterface {
 
   void removePiece(PieceInterface piece);
 
-  int getScore();
+    int getScore();
+    PieceInterface createQueen();
+    void addTime(Integer seconds);
 }
