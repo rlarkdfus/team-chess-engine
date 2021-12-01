@@ -13,19 +13,6 @@ public class PawnMove extends Move { //TODO: pawn move takes in +-2 depending on
     }
 
     @Override
-    public void updateMoveLocations(PieceInterface pawn, List<PieceInterface> pieces) {
-        resetMove();
-        int row = pawn.getLocation().getRow() + getdRow();
-        int col = pawn.getLocation().getCol()+ getdCol();
-
-        Location potentialLocation = new Location(row, col);
-
-        if(isLegal(pawn, potentialLocation, pieces)) {
-            addEndLocation(potentialLocation);
-        }
-    }
-
-    @Override
     protected boolean isLegal(PieceInterface pawn, Location potentialLocation, List<PieceInterface> pieces) {
         // construct location 1 above, and 2 above, make sure they're clear
         Location intermediateLocation = new Location(potentialLocation.getRow() - getdRow()/2, potentialLocation.getCol());

@@ -44,9 +44,12 @@ private static final int Cols = 8;
         for(PlayerInterface player : players) {
             allPieces.addAll(player.getPieces());
         }
+        System.out.println(this);
+
         for (PieceInterface piece : allPieces){
             piece.updateMoves(allPieces);
         }
+        System.out.println(this);
         updateLegalMoves();
     }
 
