@@ -103,7 +103,6 @@ public class Player implements PlayerInterface {
     public void addPiece(PieceInterface piece){
         remainingPieces.put(piece, new ArrayList<>());
         initialPieces.add(piece);
-        pieceIDandState.put(piece.getUniqueId(),piece.getEndState());
         score += piece.getScore();
     }
 
