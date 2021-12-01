@@ -74,7 +74,6 @@ public class GameOverScreen {
       return drawLabel;
     }
     String imagePath = String.format("images/%s/%s%s.png", "companion", winner, "K");
-    System.out.println(imagePath);
     return new ImageView(imagePath);
   }
 
