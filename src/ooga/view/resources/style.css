@@ -26,15 +26,12 @@
     -fx-background-color: lightpink;
 }
 
-<<<<<<< Updated upstream
-=======
 . LoginUI {
     -fx-hgap: 10px;
     -fx-vgap: 10px;
     -fx-padding: 20px;
     -fx-background-color: tan;
 }
->>>>>>> Stashed changes
 . EndScreenUI{
     -fx-hgap: 10px;
     -fx-vgap: 10px;
@@ -44,4 +41,8 @@
 
 #WinnerText{
     -fx-font: bold 20pt "Arial";
+}
+
+#DrawText{
+    -fx-font: bold 40pt "Arial";
 }

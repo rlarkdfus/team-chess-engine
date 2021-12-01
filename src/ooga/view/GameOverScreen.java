@@ -56,7 +56,11 @@ public class GameOverScreen {
     HBox top = new HBox();
     top.setAlignment(Pos.CENTER);
 
-    Label winnerText = new Label("Winner: " + winner);
+    String text = "Winner: " + winner;
+    if (winner == null){
+      return top;
+    }
+    Label winnerText = new Label(text);
     winnerText.setId("WinnerText");
 
     top.getChildren().add(winnerText);
@@ -64,6 +68,11 @@ public class GameOverScreen {
   }
 
   private Node makeWinnerPicture() {
+    if (winner == null){
+      Label drawLabel = new Label("Draw");
+      drawLabel.setId("DrawText");
+      return drawLabel;
+    }
     String imagePath = String.format("images/%s/%s%s.png", "companion", winner, "K");
     System.out.println(imagePath);
     return new ImageView(imagePath);
