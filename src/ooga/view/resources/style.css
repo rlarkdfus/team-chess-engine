@@ -1,49 +1,53 @@
+.root {
+    -fx-font-family: "Segoe UI Semibold";
+    /*-fx-background: cornsilk;*/
+    /* define variables to avoid duplicating values */
+    text_color: black;
+    background_color: lightgray;
+}
+
 . SettingsUI {
-  -fx-hgap: 10px;
-  -fx-vgap: 10px;
-  -fx-padding: 20px;
-  -fx-background-color: lightblue;
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: lightblue;
 }
 
 . BoardStyleUI {
-  -fx-hgap: 10px;
-  -fx-vgap: 10px;
-  -fx-padding: 20px;
-  -fx-background-color: lightblue;
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: lightblue;
 }
 
 . GameInfoUI {
-  -fx-hgap: 10px;
-  -fx-vgap: 10px;
-  -fx-padding: 20px;
-  -fx-background-color: lightgreen;
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: lightgreen;
 }
 
 . GameSettingsUI {
-  -fx-hgap: 10px;
-  -fx-vgap: 10px;
-  -fx-padding: 20px;
-  -fx-background-color: lightpink;
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: lightpink;
 }
 
 . LoginUI {
-  -fx-hgap: 10px;
-  -fx-vgap: 10px;
-  -fx-padding: 20px;
-  -fx-background-color: tan;
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: tan;
 }
 
 . EndScreenUI {
-  -fx-hgap: 10px;
-  -fx-vgap: 10px;
-  -fx-padding: 20px;
-  -fx-background-color: lightgrey;
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: lightgrey;
 }
 
 #WinnerText {
-  -fx-font: bold 20pt "Arial";
-}
-
-#DrawText {
-  -fx-font: bold 40pt "Arial";
+    -fx-font: bold 20pt "Arial";
 }
