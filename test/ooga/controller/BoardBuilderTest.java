@@ -139,23 +139,23 @@ class BoardBuilderTest {
     }
   }
 
-  @Test
-  void testConvertingAPiece() throws FileNotFoundException, InvalidPieceConfigException {
-    PlayerInterface player = boardBuilder.getInitialPlayers().get(1);
-    List<PieceInterface> pieces = player.getPieces();
-    PieceInterface piece = pieces.get(0);
-
-    PieceInterface newPiece = boardBuilder.convertPiece(piece, "Q");
-
-    String expectedTeam = "b";
-    String expectedType = "Q";
-
-    String actualTeam = newPiece.getTeam();
-    String actualType = newPiece.getName();
-
-    assertEquals(expectedTeam, actualTeam);
-    assertEquals(expectedType, actualType);
-  }
+//  @Test
+//  void testConvertingAPiece() throws FileNotFoundException, InvalidPieceConfigException {
+//    PlayerInterface player = boardBuilder.getInitialPlayers().get(1);
+//    List<PieceInterface> pieces = player.getPieces();
+//    PieceInterface piece = pieces.get(0);
+//
+//    PieceInterface newPiece = boardBuilder.convertPiece(piece, "Q");
+//
+//    String expectedTeam = "b";
+//    String expectedType = "Q";
+//
+//    String actualTeam = newPiece.getTeam();
+//    String actualType = newPiece.getName();
+//
+//    assertEquals(expectedTeam, actualTeam);
+//    assertEquals(expectedType, actualType);
+//  }
   @Test
   void testExceptions(){
     assertThrowsExactly(InvalidGameConfigException.class,()->{

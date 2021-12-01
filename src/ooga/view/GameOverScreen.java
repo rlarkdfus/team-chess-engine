@@ -65,6 +65,7 @@ public class GameOverScreen {
 
   private Node makeWinnerPicture() {
     String imagePath = String.format("images/%s/%s%s.png", "companion", winner, "K");
+    System.out.println(imagePath);
     return new ImageView(imagePath);
   }
 
