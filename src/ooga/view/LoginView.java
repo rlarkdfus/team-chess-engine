@@ -3,6 +3,7 @@ package ooga.view;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import ooga.controller.Controller;
 import ooga.controller.LoginController;
 import ooga.view.ui.loginUI.LoginUI;
 
@@ -17,17 +18,17 @@ public class LoginView {
     public static final int STAGE_WIDTH = 335;
     public static final int STAGE_HEIGHT = 220;
 
-    private LoginController loginController;
+    private Controller controller;
     private Stage stage;
 
-    public LoginView(LoginController loginController) {
-        this.loginController = loginController;
+    public LoginView(Controller controller) {
+        this.controller = controller;
         this.stage = new Stage();
     }
 
     private Scene setupDisplay() {
         GridPane root = new GridPane();
-        root.add(new LoginUI(loginController), 0, 0);
+        root.add(new LoginUI(controller), 0, 0);
         Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(DEFAULT_STYLESHEET)).toExternalForm());
         return scene;

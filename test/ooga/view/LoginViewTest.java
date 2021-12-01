@@ -17,7 +17,7 @@ public class LoginViewTest extends DukeApplicationTest {
 
     @Override
     public void start(Stage stage) {
-        new LoginController(new Controller());
+        new LoginController();
         usernameField = lookup("#username_field").query();
         passwordField = lookup("#password_field").query();
         login = lookup("#login").queryButton();

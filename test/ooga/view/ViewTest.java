@@ -25,9 +25,9 @@ public class ViewTest extends DukeApplicationTest {
     public static final String STYLE_COMPANION = "companion";
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws Exception {
         Controller controller = new Controller();
-        controller.startGame();
+        controller.handleLoginAttempt("Luis", "password");
     }
 
     @Test
