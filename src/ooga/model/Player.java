@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Player implements PlayerInterface {
-    private Map<Integer, Boolean> pieceIDandState;
     private Map<PieceInterface, List<Location>> remainingPieces;
     //Keep track of all their killed pieces
     private List<PieceInterface> killedPieces;
@@ -23,7 +22,6 @@ public class Player implements PlayerInterface {
         this.team = team;
         remainingPieces = new HashMap<>();
         score = 0;
-        pieceIDandState = new HashMap<>();
         this.killedPieces = new ArrayList<>();
         this.moveTimer = new MoveTimer();
     }
@@ -97,9 +95,8 @@ public class Player implements PlayerInterface {
      * @param piece
      */
     @Override
-    public void addPiece(PieceInterface piece) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public void addPiece(PieceInterface piece){
         remainingPieces.put(piece, new ArrayList<>());
-        pieceIDandState.put(piece.getUniqueId(),piece.getEndState());
         score += piece.getScore();
     }
 

@@ -20,25 +20,7 @@ public abstract class CastleMove extends Move {
     }
 
     @Override
-    public void updateMoveLocations(PieceInterface king, List<PieceInterface> pieces) {
-        resetMove();
-        int row = king.getLocation().getRow() + getdRow();
-        int col = king.getLocation().getCol() + getdCol();
-
-        Location potentialLocation = new Location(row, col);
-
-        if(isLegal(king, potentialLocation, pieces)) {
-            addEndLocation(potentialLocation);
-        }
-    }
-
-    @Override
     protected boolean isLegal(PieceInterface king, Location potentialLocation, List<PieceInterface> pieces) {
-        if(!inBounds(potentialLocation.getRow(), potentialLocation.getCol())) {
-            return false;
-        }
-//        System.out.println(king);
-
         PieceInterface rook = pieceAt(findRookLocation(king), pieces);
 
         if(rook == null) {
@@ -62,7 +44,7 @@ public abstract class CastleMove extends Move {
         List<Location> kingLocations = List.of(king.getLocation(), potentialLocation, intermediateLocation);
         List<PieceInterface> attackingPieces = getAttackingPieces(king, pieces);
         for(Location loc : kingLocations){
-            if(underAttack(loc, attackingPieces)){
+            if(underAttack(loc, attackingPieces, pieces)){
 //                System.out.println("under attack");
                 return false;
             }

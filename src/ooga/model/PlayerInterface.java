@@ -5,40 +5,42 @@ import ooga.Location;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Map;
+import ooga.Location;
 
 public interface PlayerInterface {
 
-    void toggleTimer();
+  void toggleTimer();
 
-    StringProperty getTimeLeft();
+  StringProperty getTimeLeft();
 
-    void resetTimer();
+  void resetTimer();
 
-    void configTimer(int initialTime, int increment);
+  void configTimer(int initialTime, int increment);
 
-    void incrementTime();
+  void incrementTime();
 
-    void removePiece(Location location) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
+  void removePiece(Location location)
+      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
 
-    List<PieceInterface> getPieces();
+  List<PieceInterface> getPieces();
 
-    void addPiece(PieceInterface piece) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
+  void addPiece(PieceInterface piece);
 
-    String getTeam();
+  String getTeam();
 
-    PieceInterface getKing();
+  PieceInterface getKing();
 
-    void movePiece(PieceInterface piece, Location end);
+  void movePiece(PieceInterface piece, Location end);
 
-    void tryMove(PieceInterface piece, Location end);
+  void tryMove(PieceInterface piece, Location end);
 
-    PieceInterface getPiece(Location location);
+  PieceInterface getPiece(Location location);
 
-    List<Location> getLegalMoves(Location location);
+  List<Location> getLegalMoves(Location location);
 
-    void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
+  void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
 
-    void removePiece(PieceInterface piece);
-    int getScore();
+  void removePiece(PieceInterface piece);
+
+  int getScore();
 }

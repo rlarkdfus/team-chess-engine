@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import ooga.controller.Builder;
-import ooga.controller.InvalidGameConfigException;
+import ooga.controller.InvalidEndGameConfigException;
 import ooga.model.Board.GameState;
 import ooga.model.EndConditionHandler.LocationEndCondition;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ public class LocationEndConTest {
       l.setArgs(Map.of("pieceType", List.of("P", "P"),
           "location", List.of("1,0", "2,0")), List.of(
           new Piece("b", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1),new Piece("w", "P", new ooga.Location(1, 0), new ArrayList<>(), new HashMap<>(), 1)));
-    } catch (InvalidGameConfigException e) {
+    } catch (InvalidEndGameConfigException e) {
     }
   }
 //  public Piece(String team, String name, Location location, List<Move> moves, Map<String, Boolean> attributes, int score)

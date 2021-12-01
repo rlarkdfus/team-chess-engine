@@ -42,7 +42,7 @@ class PlayerInterfaceTest {
     }
 
     @Test
-    void addPiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    void addPiece(){
         player.addPiece(piece);
         Assertions.assertEquals(player.getPieces().size(), 2);
     }

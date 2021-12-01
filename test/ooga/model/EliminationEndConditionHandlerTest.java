@@ -28,7 +28,7 @@ class EliminationEndConditionHandlerTest {
     Builder boardBuilder = new BoardBuilder(new File(testFile));
     players = boardBuilder.getInitialPlayers();
 
-    e.setArgs(Map.of("pieceType", List.of("P", "K"), "amount", List.of("2", "1")), getAllPieces());
+    e.setArgs(Map.of("pieceType", List.of("P","P", "K")), getAllPieces());
   }
 
   @Test
@@ -103,9 +103,11 @@ class EliminationEndConditionHandlerTest {
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     for (PlayerInterface p : players) {
       if (p.getTeam().equals(team)) {
+        int initSize = p.getPieces().size();
         for (Location l : ToBeRemoved) {
           p.removePiece(l);
         }
+        assertEquals(initSize-ToBeRemoved.size(), p.getPieces().size());
       }
     }
   }

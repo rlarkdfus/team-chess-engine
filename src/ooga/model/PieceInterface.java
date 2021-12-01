@@ -1,10 +1,8 @@
 package ooga.model;
 
+import java.util.List;
 import ooga.Location;
 import ooga.model.Moves.Move;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 public interface PieceInterface {
 //    String getType();
@@ -19,8 +17,6 @@ public interface PieceInterface {
     void tryMove(Location location);
     int getUniqueId();
     void setEliminated(boolean state);
-    boolean getEliminatedState();
-    boolean getEndState() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException;
     List<Location> getEndLocations();
     boolean hasMoved();
     boolean isFirstMove();
@@ -28,4 +24,6 @@ public interface PieceInterface {
     List<Location> getAllEndLocations();
     Move getMove(Location end);
     void updateMoves(List<PieceInterface> pieces);
+    List<Move> getMoves();
+    boolean isSameTeam(PieceInterface piece);
 }
