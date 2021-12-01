@@ -17,6 +17,7 @@ public class Player implements PlayerInterface {
     private final String team;
     private int score;
     private TimerInterface moveTimer;
+    private List<PieceInterface> initialPieces;
 
     public Player(String team) {
         this.team = team;
@@ -24,6 +25,7 @@ public class Player implements PlayerInterface {
         score = 0;
         this.killedPieces = new ArrayList<>();
         this.moveTimer = new MoveTimer();
+        this.initialPieces = new ArrayList<>();
     }
 
     @Override
@@ -56,6 +58,9 @@ public class Player implements PlayerInterface {
     public void incrementTime() {
         moveTimer.incrementTime();
     }
+
+
+
 
     /**
      * remove a piece from the player's possession
@@ -97,8 +102,13 @@ public class Player implements PlayerInterface {
     @Override
     public void addPiece(PieceInterface piece){
         remainingPieces.put(piece, new ArrayList<>());
+        initialPieces.add(piece);
+        pieceIDandState.put(piece.getUniqueId(),piece.getEndState());
         score += piece.getScore();
     }
+
+    //FIXME: add to interface
+
 
     /**
      * remove a piece from player's possession
@@ -117,6 +127,23 @@ public class Player implements PlayerInterface {
     @Override
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public PieceInterface createQueen() {
+            PieceInterface queen = null;
+            for(PieceInterface pieceInterface: initialPieces){
+                if(pieceInterface.getName().equals("Q")){
+                    queen = pieceInterface;
+                }
+            }
+            return queen;
+
+    }
+
+    @Override
+    public void addTime(Integer seconds) {
+
     }
 
     /**
