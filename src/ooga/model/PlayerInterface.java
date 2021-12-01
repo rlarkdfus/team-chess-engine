@@ -1,10 +1,8 @@
 package ooga.model;
 
-import javafx.beans.property.StringProperty;
-import ooga.Location;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import javafx.beans.property.StringProperty;
 import ooga.Location;
 
 public interface PlayerInterface {
@@ -42,5 +40,7 @@ public interface PlayerInterface {
 
   void removePiece(PieceInterface piece);
 
-  int getScore();
+    int getScore();
+    PieceInterface createQueen();
+    void addTime(Integer seconds);
 }
