@@ -24,22 +24,28 @@ public class Controller implements ControllerInterface {
   private LocationWriter locationWriter;
   private Builder boardBuilder;
   private TimeController timeController;
+  private LoginController loginController;
   private File jsonFile;
 
   public Controller() {
+      loginController = new LoginController(this);
+  }
+
+  public void startGame() {
+    loginController.hideLoginView();
+    view = new View(this);
     try {
       jsonFile = DEFAULT_CHESS_CONFIGURATION;
       boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
       timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
-      view = new View(this);
       locationWriter = new LocationWriter();
       buildGame(boardBuilder);
-      view.initializeDisplay(boardBuilder.getInitialPieceViews());
       timeController.configTimers(model.getPlayers());
       startTimersForNewGame();
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-//      view.showError(e.getMessage());
+      view.initializeDisplay(boardBuilder.getInitialPieceViews());
+    }
+    catch (Exception e){
+      view.showError(e.getMessage());
     }
   }
 
@@ -72,7 +78,6 @@ public class Controller implements ControllerInterface {
     }
     try {
       jsonFile = file;
-
       boardBuilder.build(file);
       buildGame(boardBuilder);
       view.resetDisplay(boardBuilder.getInitialPieceViews());

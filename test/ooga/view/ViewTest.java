@@ -9,9 +9,6 @@ import ooga.controller.Controller;
 import org.junit.jupiter.api.Test;
 import org.testfx.service.query.EmptyNodeQueryException;
 import util.DukeApplicationTest;
-
-import java.lang.reflect.InvocationTargetException;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -27,10 +24,10 @@ public class ViewTest extends DukeApplicationTest {
     public static final String BISHOP = "B";
     public static final String STYLE_COMPANION = "companion";
 
-    // this method is run BEFORE EACH test to set up application in a fresh state
     @Override
-    public void start(Stage stage) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        new Controller();
+    public void start(Stage stage) {
+        Controller controller = new Controller();
+        controller.startGame();
     }
 
     @Test
@@ -225,14 +222,6 @@ public class ViewTest extends DukeApplicationTest {
 
         assertTrue(pieceExists(WHITE, KNIGHT, whiteEnd2));
         assertFalse(pieceExists(BLACK, PAWN, whiteEnd2));
-    }
-
-    @Test
-    void moveforever() {
-        while (true) {
-            moveTo(0,0);
-            moveTo(500,500);
-        }
     }
 
     /**

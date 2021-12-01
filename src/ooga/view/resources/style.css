@@ -25,3 +25,10 @@
     -fx-padding: 20px;
     -fx-background-color: lightpink;
 }
+
+. LoginUI {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: tan;
+}
