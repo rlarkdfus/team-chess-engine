@@ -32,6 +32,7 @@ private static final int firstRow = 0;
     private EndConditionInterface endCondition;
     private int turnCount;
     private PlayerInterface currentPlayer;
+    private List<Location> promotionSquares;
     private GameState currGameState;
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
