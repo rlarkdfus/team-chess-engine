@@ -1,13 +1,10 @@
 package ooga.model;
 
-import ooga.Location;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import ooga.Location;
 import ooga.model.Moves.Move;
 
 public class Piece implements PieceInterface {
@@ -79,58 +76,60 @@ public class Piece implements PieceInterface {
     return score;
   }
 
+  /**
+   * returns the name of a piece
+   * @return
+   */
     @Override
     public String getName() {
         return name;
     }
 
-    @Override
+  /**
+   * returns the location of a piece
+   * @return
+   */
+  @Override
     public Location getLocation() {
         return location;
     }
 
-    @Override
+  /**
+   * moves piece and updates first move and moved flags
+   * @param location
+   */
+  @Override
     public void moveTo(Location location) {
       firstMove = !firstMove && !moved;
       moved = true;
       tryMove(location);
     }
-    
-    @Override
+
+  /**
+   * set a piece location
+   * @param location
+   */
+  @Override
     public void tryMove(Location location) {
       this.location = location;
     }
 
+  /**
+   * return the unique id of a piece
+   * @return
+   */
   @Override
   public int getUniqueId() {
     return this.uniqueID;
   }
 
+  /**
+   * set a piece to be eliminated
+   * @param state
+   */
   @Override
   public void setEliminated(boolean state) {
     isEliminated = state;
-  }
-
-  @Override
-  public boolean getEliminatedState() {
-    return isEliminated;
-  }
-
-  //Fixme: Fix the end state
-  @Override
-  public boolean getEndState() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-    Method method= this.getClass().getDeclaredMethod(endStateString);
-    //endState string can be standard(no end state, or eliminated, meaning it is killed)
-    Object value = method.invoke(this);
-    return (boolean) value;
-  }
-
-  //Used for reflection.
-  private boolean standard(){
-    return true;
-  }
-  private boolean eliminated(){
-    return this.isEliminated;
   }
 
   /**
@@ -143,6 +142,11 @@ public class Piece implements PieceInterface {
     return team + name;
   }
 
+  /**
+   * override equals to check if pieces have same score, location, name, and team
+   * @param o
+   * @return
+   */
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -151,6 +155,10 @@ public class Piece implements PieceInterface {
     return score == piece.score && Objects.equals(location, piece.location) && Objects.equals(team, piece.team) && Objects.equals(name, piece.name);
   }
 
+  /**
+   * gets a hash code of piece
+   * @return
+   */
   @Override
   public int hashCode() {
     return Objects.hash(initialLocation, team, score, name);
@@ -173,21 +181,37 @@ public class Piece implements PieceInterface {
     return locations;
   }
 
+  /**
+   * return whether a piece has moved
+   * @return
+   */
   @Override
   public boolean hasMoved() {
     return moved;
   }
 
+  /**
+   * return whether a piece has just done its first move
+   * @return
+   */
   @Override
   public boolean isFirstMove() {
     return firstMove;
   }
 
+  /**
+   * return a new copy of the same piece
+   * @return
+   */
   @Override
   public Piece copy() {
     return new Piece(this.team, this.name, this.location, this.moves, this.attributes, this.score);
   }
 
+  /**
+   * return all the end locations of a piece
+   * @return
+   */
   @Override
   public List<Location> getAllEndLocations() {
     List<Location> endLocations = new ArrayList<>();
@@ -197,6 +221,11 @@ public class Piece implements PieceInterface {
     return endLocations;
   }
 
+  /**
+   * this method returns the move that results in a piece being at the end location
+   * @param end
+   * @return
+   */
   @Override
   public Move getMove(Location end) {
     for(Move move : moves) {
@@ -207,6 +236,10 @@ public class Piece implements PieceInterface {
     return null;
   }
 
+  /**
+   * this method updates the move locations of all pieces
+   * @param pieces
+   */
   @Override
   public void updateMoves(List<PieceInterface> pieces) {
     firstMove = false;

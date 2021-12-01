@@ -7,9 +7,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import ooga.model.Board.GameState;
 import ooga.model.PieceInterface;
+import ooga.model.PlayerInterface;
 
 public class EliminationEndCondition implements EndConditionInterface {
+  public static final String PIECE_TYPE = "pieceType";
+  public static final String AMOUNT = "amount";
+  public static final String UNDERSCORE = "_";
+  public static final String PIECE_TEAM_TYPE_FORMAT = "%s_%s";
+
   private List<PieceInterface> previousTurnPieces;
   private Map<String, Integer> piecesToEliminate;
   private String winner;
@@ -23,22 +30,27 @@ public class EliminationEndCondition implements EndConditionInterface {
     }
     previousTurnPieces = new ArrayList<>(allpieces);
     piecesToEliminate = new HashMap<>();
-    Iterator<String> pieceIter = propertiesMap.get("pieceType").iterator();
-    Iterator<String> amountIter = propertiesMap.get(("amount")).iterator();
-    while(pieceIter.hasNext() && amountIter.hasNext()) {
+    Iterator<String> pieceIter = propertiesMap.get(PIECE_TYPE).iterator();
+    while(pieceIter.hasNext()) {
       String pieceType = pieceIter.next();
-      int amount = Integer.parseInt(amountIter.next());
       for (String team : teams){
         String key = team+"_"+pieceType;
-        piecesToEliminate.putIfAbsent(key, amount);
+        piecesToEliminate.putIfAbsent(key, 0);
+        piecesToEliminate.put(key, piecesToEliminate.get(key)+1);
       }
     }
   }
 
   @Override
-  public boolean isGameOver(List<PieceInterface> alivePieces) {
+  public GameState isGameOver(List<PlayerInterface> players) {
+    List<PieceInterface> alivePieces = new ArrayList<>();
+    for (PlayerInterface player : players){
+      for (PieceInterface piece : player.getPieces()){
+        alivePieces.add(piece);
+      }
+    }
     if (previousTurnPieces.size() == alivePieces.size()){
-      return false;
+      return GameState.RUNNING;
     }
     findMissingPiece(alivePieces);
     return checkEndConditions();
@@ -66,7 +78,7 @@ public class EliminationEndCondition implements EndConditionInterface {
 
   }
 
-  private boolean checkEndConditions() {
+  private GameState checkEndConditions() {
     HashMap<String, Integer> targetPiecesRemaining = getTargetPiecesRemaining();
     String loser = null;
     for (String team : targetPiecesRemaining.keySet()){
@@ -75,21 +87,21 @@ public class EliminationEndCondition implements EndConditionInterface {
         break;
       }
     }
-    if (loser == null){
+    if (loser != null){
       for (String team : targetPiecesRemaining.keySet()){
         if (!team.equals(loser)){
           winner = team;
-          return true;
+          return GameState.CHECKMATE;
         }
       }
     }
-    return false;
+    return GameState.RUNNING;
   }
 
   private HashMap<String, Integer> getTargetPiecesRemaining() {
     HashMap<String, Integer> targetPiecesRemaining = new HashMap<>();
     for (String pieceString : piecesToEliminate.keySet()){
-      String[] pieceStringInfo = pieceString.split("_");
+      String[] pieceStringInfo = pieceString.split(UNDERSCORE);
       String team = pieceStringInfo[0];
       int piecesLeft = piecesToEliminate.get(pieceString);
       targetPiecesRemaining.putIfAbsent(team, 0);
@@ -99,7 +111,8 @@ public class EliminationEndCondition implements EndConditionInterface {
   }
 
   private void logMissing(PieceInterface missing) {
-    String key = missing.getTeam() + "_" + missing.getName();
+//    String key = missing.getTeam() + UNDERSCORE + missing.getName();
+    String key = String.format(PIECE_TEAM_TYPE_FORMAT, missing.getTeam(), missing.getName());
     if (!piecesToEliminate.containsKey(key)){
       return;
     }

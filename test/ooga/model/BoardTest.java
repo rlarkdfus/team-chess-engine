@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import ooga.Location;
 import ooga.Turn;
 import ooga.Turn.PieceMove;
+import ooga.controller.InvalidPieceConfigException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
@@ -20,7 +22,7 @@ class BoardTest {
   }
 
   @Test
-  void testRemovingPiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+  void testRemovingPiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
     Location loc1 = new Location(0,1);
     Location loc2 = new Location(0,7);
     Turn turn = board.movePiece(loc1, loc2);
@@ -30,7 +32,7 @@ class BoardTest {
   }
 
   @Test
-  void testMovesCorrectly() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+  void testMovesCorrectly() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
     Location end = new Location(3,3);
     Location loc1 = new Location(1,3);
     Location loc2 = new Location(3,3);

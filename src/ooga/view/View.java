@@ -7,10 +7,12 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ooga.Turn;
 import ooga.controller.Controller;
+import ooga.controller.ControllerInterface;
 import ooga.controller.PieceViewBuilder;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
 import ooga.view.ui.gameSettingsUI.GameSettingsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
+import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
 import ooga.view.util.ViewUtility;
 
 public class View implements ViewInterface {
@@ -32,22 +34,26 @@ public class View implements ViewInterface {
     private SettingsUI settingsUI; // right
     private GameInfoUI gameInfoUI; // left
     private GameSettingsUI gameSettingsInfoUI; // top
+    private TimeConfigurationUI timeConfigurationUI;
 
     public View(Controller controller) {
         this.controller = controller;
         this.viewController = new ViewController();
         this.viewUtility = new ViewUtility();
         this.stage = new Stage();
-        //TODO: this is probably bad design idk
         viewController.setView(this);
     }
 
     private Scene setupDisplay() {
         root = new GridPane();
         root.add(settingsUI, 2, 1);
-        root.add(gameSettingsInfoUI, 0 , 1);
+        root.add(timeConfigurationUI, 2, 2, 1, 1);
+        root.add(gameSettingsInfoUI, 0 , 1, 1, 2);
         root.add(gameInfoUI, 0, 0, 3, 1);
-        root.add(boardView, 1, 1);
+        root.add(boardView, 1, 1, 1, 2);
+//        root.add(viewUtility.makeButton("pause", e -> controller.pauseTimer()), 0,2);
+//        root.add(viewUtility.makeButton("resume", e -> controller.resumeTimer()), 1,2);
+//        root.add(viewUtility.makeButton("reset", e -> controller.resetTimer()), 1,3);
         Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
         scene.getStylesheets().add(getClass().getResource(DEFAULT_STYLESHEET).toExternalForm());
         return scene;
@@ -55,8 +61,14 @@ public class View implements ViewInterface {
 
     @Override
     public void initializeDisplay(List<PieceViewBuilder> pieceViewList) {
-        this.boardView = new BoardView(controller, pieceViewList, 8, 8);
+        this.timeConfigurationUI = new TimeConfigurationUI(controller, viewController);
+        resetDisplay(pieceViewList);
+    }
+
+    @Override
+    public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
         this.settingsUI = new SettingsUI(controller, viewController);
+        this.boardView = new BoardView(controller, pieceViewList, 8, 8);
         this.gameInfoUI = new GameInfoUI();
         this.gameSettingsInfoUI = new GameSettingsUI(controller, viewController);
         stage.setScene(setupDisplay());

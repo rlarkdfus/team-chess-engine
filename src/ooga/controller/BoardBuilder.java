@@ -6,9 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Piece;
@@ -23,7 +21,11 @@ public class BoardBuilder implements Builder {
   public static final String DEFAULT_STYLE = "companion";
   public static final int ARG_LENGTH = 4;
   public static final String PROPERTIES_FILE = "JSONMappings";
-  public static final String CSV_DELIMETER = "csvDelimeter";
+  public static final String CSV_DELIMETER = "csvDelimiter";
+  public static final String RULES = "rules";
+  public static final String TYPE = "type";
+  public static final String BOARD = "board";
+  public static final String STYLE = "style";
 
   private ResourceBundle mappings;
 
@@ -46,8 +48,6 @@ public class BoardBuilder implements Builder {
     mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
     jsonParser = new JsonParser();
     locationParser = new LocationParser();
-    pieceList = new ArrayList<>();
-    playerList = new ArrayList<>();
     style = DEFAULT_STYLE;
     try {
       build(defaultFile);
@@ -55,7 +55,6 @@ public class BoardBuilder implements Builder {
       //default file shouldn't have any issues
       e.printStackTrace();
     }
-
   }
 
   /**
@@ -72,18 +71,16 @@ public class BoardBuilder implements Builder {
    */
   @Override
   public void build(File file)
-      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException {
+      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    pieceList = new ArrayList<>();
+    playerList = new ArrayList<>();
     JSONObject gameJson = jsonParser.loadFile(file);
     extractJSONObj(gameJson);
 
     pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
+    EndConditionBuilder endConditionBuilder= new EndConditionBuilder(jsonParser);
     iterateCSVData();
-    try {
-      buildEndConditionHandler(gameJson.getString(mappings.getString("rules")));
-    }catch (Exception e){
-      throw new InvalidEndGameConfigException(e.getClass());
-    }
-
+    endCondition = endConditionBuilder.buildEndConditionHandler(gameJson.getString(RULES),playerList);
   }
 
   @Override
@@ -122,17 +119,21 @@ public class BoardBuilder implements Builder {
 
     return newPiece;
   }
+
   /**
    * Iterates through the list<list> as given by the csvParser. creates pieces and adds them to the
    * pieceGrid
    */
   private void iterateCSVData()
-      throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException {
+      throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException, CsvException {
     for (int r = 0; r < boardSize.get(0); r++) {
       for (int c = 0; c < boardSize.get(1); c++) {
-//        String[] square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
-        String[] square = csvData.get(r).get(c).split("_");
-
+        String[] square;
+        try {
+          square = csvData.get(r).get(c).split(mappings.getString(CSV_DELIMETER));
+        }catch (Exception e){
+          throw new CsvException(r);
+        }
         if (square.length < 2) {
           continue;           //signifies that this square is empty
         }
@@ -140,11 +141,7 @@ public class BoardBuilder implements Builder {
         int playerListIdx = determinePlayer(r, c, square[0]);
 
         pieceList.add(new PieceViewBuilder(piece));
-        try {
-          playerList.get(playerListIdx).addPiece(piece);
-        }catch (Exception e){
-          //todo handle exception
-        }
+        playerList.get(playerListIdx).addPiece(piece);
       }
     }
   }
@@ -169,9 +166,9 @@ public class BoardBuilder implements Builder {
    */
   private void extractJSONObj(JSONObject jsonObject) throws InvalidGameConfigException {
     try{
-      gameType = jsonObject.getString(mappings.getString("type"));
-      boardShape = jsonObject.getString(mappings.getString("board"));
-      style = jsonObject.getString(mappings.getString("style"));
+      gameType = jsonObject.getString(mappings.getString(TYPE));
+      boardShape = jsonObject.getString(mappings.getString(BOARD));
+      style = jsonObject.getString(mappings.getString(STYLE));
 
       boardSize = new ArrayList<>();
       for (String dimension : jsonObject.getString(mappings.getString("boardSize")).split("x")){
@@ -191,27 +188,8 @@ public class BoardBuilder implements Builder {
       csvData = locationParser.getInitialLocations(csv);
 
     }catch (Exception e){
-      throw new InvalidGameConfigException();
+      throw new InvalidGameConfigException(e.toString());
     }
-  }
-
-  private void buildEndConditionHandler(String ruleJsonFile)
-      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidGameConfigException {
-    JSONObject rules = jsonParser.loadFile(new File(ruleJsonFile));
-    String type = rules.getString(mappings.getString("gameType"));
-    String[] keys = mappings.getString(type+"RuleKeys").split(mappings.getString("jsonDelimiter"));
-    Map<String,List<String>> endConditionProperties = new HashMap<>();
-    for (String key : keys){
-      endConditionProperties.put(key, convertJSONArrayOfStrings(rules.getJSONArray(key)));
-    }
-    Class<?> clazz = Class.forName("ooga.model.EndConditionHandler." + type + "EndCondition");
-    endCondition = (EndConditionInterface) clazz.getDeclaredConstructor().newInstance();
-    List<PieceInterface> initialPieces = new ArrayList<>();
-    for (PlayerInterface p : playerList){
-      initialPieces.addAll(p.getPieces());
-    }
-    endCondition.setArgs(endConditionProperties, initialPieces);
-
   }
 
   /**

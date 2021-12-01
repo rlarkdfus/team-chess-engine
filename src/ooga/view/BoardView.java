@@ -1,5 +1,6 @@
 package ooga.view;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
+import ooga.controller.InvalidPieceConfigException;
 import ooga.controller.PieceViewBuilder;
 
 public class BoardView extends Group implements BoardViewInterface {
@@ -41,11 +43,15 @@ public class BoardView extends Group implements BoardViewInterface {
                 clickBoard(e);
             } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException ex) {
                 ex.printStackTrace();
+            } catch (FileNotFoundException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            } catch (InvalidPieceConfigException invalidPieceConfigException) {
+                invalidPieceConfigException.printStackTrace();
             }
         });
     }
 
-    private void clickBoard(MouseEvent mouse) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private void clickBoard(MouseEvent mouse) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
         Location clickLocation = new Location((int) mouse.getY() / 60, (int) mouse.getX() / 60);
         if (mouse.getButton() == MouseButton.SECONDARY) {
             background[clickLocation.getRow()][clickLocation.getCol()].annotate();
