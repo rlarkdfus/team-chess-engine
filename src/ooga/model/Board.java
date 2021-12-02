@@ -32,6 +32,7 @@ private static final int firstRow = 0;
 
     private List<Location> promotionSquares;
     private List<Location> timerSquares;
+    private List<Location> skipSquares;
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
@@ -50,6 +51,9 @@ private static final int firstRow = 0;
       initializePromotionSquares();
         timerSquares = new ArrayList<>();
         initializeTimeSquares();
+        skipSquares = new ArrayList<>();
+        initializeSkipSquares();
+
     }
 
     private void initializePromotionSquares() {
@@ -60,6 +64,10 @@ private static final int firstRow = 0;
 //        timerSquares.add(new Location(3,0));
 //        timerSquares.add(new Location(2,0));
 
+    }
+
+    private void initializeSkipSquares(){
+//        skipSquares.add(new Location(4,0));
     }
     /**
      * this method returns the list of all players
@@ -123,10 +131,10 @@ private static final int firstRow = 0;
         turnCount++;
         toggleTimers();
 
+        checkSkip(piece, end);
         //update game data
         updateLegalMoves();
         currGameState = endCondition.isGameOver(players);
-
         return turn;
     }
 
@@ -147,6 +155,14 @@ private static final int firstRow = 0;
         for(Location timerLocation: timerSquares){
             if(end.equals(timerLocation)){
                 currentPlayer.incrementTime(100000);
+            }
+        }
+    }
+
+    private void checkSkip(PieceInterface pieceInterface, Location end) {
+        for (Location skipLocation : skipSquares) {
+            if (end.equals(skipLocation)) {
+                turnCount++;
             }
         }
     }
