@@ -16,6 +16,7 @@ public class Piece implements PieceInterface {
   private Location location;
   private boolean moved;
   private boolean firstMove = false;
+  private boolean firstMoveUpdate = false;
 
   private Map<String, Boolean> attributes;
   private boolean isEliminated;
@@ -101,6 +102,9 @@ public class Piece implements PieceInterface {
   @Override
     public void moveTo(Location location) {
       firstMove = !firstMove && !moved;
+      if(firstMove) {
+        System.out.println(this);
+      }
       moved = true;
       tryMove(location);
     }
@@ -196,7 +200,7 @@ public class Piece implements PieceInterface {
    */
   @Override
   public boolean isFirstMove() {
-    return firstMove;
+    return (firstMove || firstMoveUpdate);
   }
 
   /**
@@ -245,6 +249,7 @@ public class Piece implements PieceInterface {
    */
   @Override
   public void updateMoves(List<PieceInterface> pieces) {
+    firstMoveUpdate = firstMove && moved;
     firstMove = false;
     for(Move move : moves) {
       move.updateMoveLocations(this, pieces);
