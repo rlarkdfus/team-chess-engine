@@ -6,7 +6,6 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.Turn.PieceMove;
 import ooga.controller.InvalidPieceConfigException;
-import ooga.model.Moves.InvalidPieceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

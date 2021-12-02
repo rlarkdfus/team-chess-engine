@@ -1,4 +1,4 @@
-package ooga.model.Moves;
+package ooga.model;
 
 public class InvalidPieceException extends Exception{
     public InvalidPieceException(Class<? extends Exception> reason) {

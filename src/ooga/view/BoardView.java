@@ -15,7 +15,7 @@ import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.controller.PieceViewBuilder;
-import ooga.model.Moves.InvalidPieceException;
+import ooga.model.InvalidPieceException;
 
 public class BoardView extends Group implements BoardViewInterface {
 

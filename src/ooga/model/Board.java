@@ -8,7 +8,6 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
-import ooga.model.Moves.InvalidPieceException;
 import ooga.model.Moves.Move;
 
 public class Board implements Engine {

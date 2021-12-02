@@ -9,7 +9,6 @@ import java.util.List;
 
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
-import ooga.model.Moves.InvalidPieceException;
 
 public interface Engine {
     /**
