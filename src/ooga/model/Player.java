@@ -2,6 +2,7 @@ package ooga.model;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
+import ooga.model.Moves.InvalidPieceException;
 import ooga.model.Moves.Move;
 
 import java.lang.reflect.InvocationTargetException;
@@ -138,6 +139,17 @@ public class Player implements PlayerInterface {
             }
             return queen;
 
+    }
+
+    //FIXME:
+    //Needs to be in initial Piece List
+    public PieceInterface createPiece(String pieceName) throws InvalidPieceException {
+        for(PieceInterface pieceInterace: initialPieces){
+            if(pieceInterace.getName().equals(pieceName)){
+                return pieceInterace;
+            }
+        }
+        throw new InvalidPieceException(pieceName);
     }
 
     @Override

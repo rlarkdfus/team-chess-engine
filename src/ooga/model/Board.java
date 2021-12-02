@@ -12,6 +12,7 @@ import ooga.Turn;
 import ooga.controller.BoardBuilder;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.Moves.InvalidPieceException;
 import ooga.model.Moves.Move;
 
 public class Board implements Engine {
@@ -81,7 +82,7 @@ private static final int firstRow = 0;
      * @param start is piece initial location
      * @param end is piece new location
      */
-    public Turn movePiece(Location start, Location end) throws FileNotFoundException, InvocationTargetException, InvalidPieceConfigException, NoSuchMethodException, IllegalAccessException {
+    public Turn movePiece(Location start, Location end) throws FileNotFoundException, InvocationTargetException, InvalidPieceConfigException, NoSuchMethodException, IllegalAccessException, InvalidPieceException {
         // pause current player timer, start next player time
         PieceInterface piece = null;
         for(PieceInterface p : allPieces) {
@@ -121,7 +122,7 @@ private static final int firstRow = 0;
         return turn;
     }
 
-    private void checkPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private void checkPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InvalidPieceException {
         //check pawn promotion specifically
 
         checkPawnPromotion(piece, end);
@@ -129,15 +130,15 @@ private static final int firstRow = 0;
         //Check piece promotion specifically
         for(Location promotionLocation: promotionSquares){
             if(end.equals(promotionLocation)){
-                promotePiece(piece);
+                promotePiece(piece,"Q");
             }
         }
     }
-    private void checkPawnPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private void checkPawnPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InvalidPieceException {
         if(piece.getName().equals("P")){
             if(end.getRow() == firstRow || end.getRow() ==lastRow){
                 System.out.println("pawn at end");
-                promotePiece(piece);
+                promotePiece(piece, "Q");
             }
         }
     }
@@ -153,8 +154,8 @@ private static final int firstRow = 0;
     }
 
 
-    private void promotePiece(PieceInterface pieceInterface) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException{
-        PieceInterface newPiece = currentPlayer.createQueen();
+    private void promotePiece(PieceInterface pieceInterface, String newPieceName) throws InvalidPieceException {
+        PieceInterface newPiece = currentPlayer.createPiece(newPieceName);
         newPiece.moveTo(pieceInterface.getLocation());
 
         currentPlayer.removePiece(pieceInterface);

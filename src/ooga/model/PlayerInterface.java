@@ -6,6 +6,7 @@ import ooga.Location;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import ooga.Location;
+import ooga.model.Moves.InvalidPieceException;
 
 public interface PlayerInterface {
 
@@ -45,4 +46,6 @@ public interface PlayerInterface {
     int getScore();
     PieceInterface createQueen();
     void addTime(Integer seconds);
+
+  PieceInterface createPiece(String pieceName) throws InvalidPieceException;
 }

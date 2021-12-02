@@ -9,6 +9,7 @@ import java.util.List;
 
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.Moves.InvalidPieceException;
 
 public interface Engine {
     /**
@@ -21,7 +22,7 @@ public interface Engine {
      * @param start is piece initial location
      * @param end is piece new location
      */
-    Turn movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException;
+    Turn movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException, InvalidPieceException;
 
     /**
      * Determine whether the win condition of the game is satisfied, and declare a winner.
