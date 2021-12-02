@@ -6,6 +6,7 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.Turn.PieceMove;
 import ooga.controller.InvalidPieceConfigException;
+import ooga.model.Moves.InvalidPieceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ class BoardTest {
   }
 
   @Test
-  void testRemovingPiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
+  void testRemovingPiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException, InvalidPieceException {
     Location loc1 = new Location(0,1);
     Location loc2 = new Location(0,7);
     Turn turn = board.movePiece(loc1, loc2);
@@ -32,7 +33,7 @@ class BoardTest {
   }
 
   @Test
-  void testMovesCorrectly() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
+  void testMovesCorrectly() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException, InvalidPieceException {
     Location end = new Location(3,3);
     Location loc1 = new Location(1,3);
     Location loc2 = new Location(3,3);

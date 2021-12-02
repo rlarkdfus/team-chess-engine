@@ -11,6 +11,7 @@ import ooga.Turn;
 import ooga.model.Board;
 import ooga.model.Board.GameState;
 import ooga.model.Engine;
+import ooga.model.Moves.InvalidPieceException;
 import ooga.view.LoginView;
 import ooga.view.GameOverScreen;
 import ooga.view.View;
@@ -110,7 +111,7 @@ public class Controller implements ControllerInterface {
    */
   @Override
   public void movePiece(Location start, Location end) throws
-      InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
+          InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException, InvalidPieceException {
     Turn turn = model.movePiece(start, end);
     view.updateDisplay(turn);
     GameState gameState = model.checkGameState();
