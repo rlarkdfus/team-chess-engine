@@ -2,8 +2,6 @@ package ooga.model;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
-import ooga.model.Moves.InvalidPieceException;
-import ooga.model.Moves.Move;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

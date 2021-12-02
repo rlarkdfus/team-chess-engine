@@ -3,8 +3,6 @@ package ooga.model;
 import ooga.Location;
 import ooga.Turn;
 import ooga.controller.InvalidPieceConfigException;
-import ooga.model.Moves.InvalidPieceException;
-import org.assertj.core.api.Assert;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

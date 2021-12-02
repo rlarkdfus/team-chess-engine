@@ -5,8 +5,7 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import ooga.Location;
-import ooga.model.Moves.InvalidPieceException;
-import ooga.model.PieceInterface;
+import ooga.model.InvalidPieceException;
 
 public interface ControllerInterface {
 
