@@ -106,7 +106,6 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void removePiece(Location location) {
-
         for(PieceView pieceView : pieceList){
             if(pieceView.location.equals(location) ){
                 this.getChildren().remove(pieceView);

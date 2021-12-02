@@ -31,8 +31,8 @@ public class BoardSquare extends StackPane {
     }
 
     private void initializeSquare(Location location) {
-        this.setLayoutX(location.getCol() * 60);
-        this.setLayoutY(location.getRow() * 60);
+        this.setLayoutX(location.getCol()*60);
+        this.setLayoutY(location.getRow()*60);
 
         square = new Rectangle(60, 60);
         square.setFill(originalColor);
