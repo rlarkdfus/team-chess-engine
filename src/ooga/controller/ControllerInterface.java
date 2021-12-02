@@ -30,7 +30,7 @@ public interface ControllerInterface {
      * @param start is initial location of moved piece
      * @param end is final location of moved piece
      */
-    void movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException, InvalidPieceException;
+    void movePiece(Location start, Location end);
 
   void quit();
 

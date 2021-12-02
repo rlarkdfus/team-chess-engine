@@ -4,33 +4,29 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.controller.InvalidPieceConfigException;
 
+import ooga.controller.PieceViewBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 
 class EngineTest {
     private Engine board;
     @BeforeEach
     void setUp() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        board = new Board(new ArrayList<>());
+        board = ModelTestHelper.createBoard();
     }
 
-//    @Test
-//    void initializeBoard() {
-//        board.initializeBoard();
-//    }
-
     @Test
-    void movePiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException, InvalidPieceException {
+    void movePiece() {
         Location start = new Location(6, 0);
         Location end = new Location(5, 0);
-        Turn turn = board.movePiece(start, end);
-        Assertions.assertNotNull(turn);
+        List<PieceInterface> pieces = board.movePiece(start, end);
+        List<Location> pieceLocations = ModelTestHelper.getPieceLocations(pieces);
+        Assertions.assertNotNull(end.inList(pieceLocations));
     }
 
     @Test
@@ -39,7 +35,7 @@ class EngineTest {
 
     @Test
     void getLegalMoves() {
-        List<Location> moves = board.getLegalMoves(new Location(6, 0));
+        List<Location> moves = board.getLegalMoves(new Location(1, 0));
         Assertions.assertNotNull(moves);
     }
 

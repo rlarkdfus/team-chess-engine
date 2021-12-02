@@ -183,13 +183,19 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     @Override
-    public void updateBoardView(Turn turn) {
-        for (Location removed : turn.getRemoved()) {
-            removePiece(removed);
+    public void updateBoardView(List<PieceViewBuilder> pieceViews) {
+        this.getChildren().removeAll(pieceList);
+        for(PieceViewBuilder piece : pieceViews) {
+            PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), DEFAULT_PIECE_STYLE, piece.getLocation());
+            pieceList.add(newPiece);
+            this.getChildren().add(newPiece);
         }
-        for (Turn.PieceMove move : turn.getMoves()) {
-            movePiece(move.getStartLocation(), move.getEndLocation());
-        }
+//        for (Location removed : turn.getRemoved()) {
+//            removePiece(removed);
+//        }
+//        for (Turn.PieceMove move : turn.getMoves()) {
+//            movePiece(move.getStartLocation(), move.getEndLocation());
+//        }
     }
 
     @Override
