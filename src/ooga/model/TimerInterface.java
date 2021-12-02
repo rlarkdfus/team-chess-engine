@@ -11,7 +11,9 @@ public interface TimerInterface {
 
     void setIncrement(int seconds);
 
-    void incrementTime();
+    void incrementTimeUserInterface();
+
+    void incrementTime(int specifiedTime);
 
     void toggle();
 

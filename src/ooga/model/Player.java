@@ -54,12 +54,13 @@ public class Player implements PlayerInterface {
     }
 
     @Override
-    public void incrementTime() {
-        moveTimer.incrementTime();
+    public void incrementTimeUserInterface() {
+        moveTimer.incrementTimeUserInterface();
     }
 
-
-
+    public void incrementTime(Integer specifiedTime){
+        moveTimer.incrementTime(specifiedTime);
+    }
 
     /**
      * remove a piece from the player's possession
