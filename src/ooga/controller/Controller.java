@@ -33,7 +33,9 @@ public class Controller implements ControllerInterface {
   private GameOverScreen gameOverScreen;
 
   public Controller() {
-    initializeLogin();
+    startGame();
+//    initializeLogin();
+
   }
 
   public void handleLoginAttempt(String username, String password) throws Exception {
@@ -174,7 +176,7 @@ public class Controller implements ControllerInterface {
     view.initializeDisplay(boardBuilder.getInitialPieceViews());
   }
   private void startGame() {
-    loginView.hideDisplay();
+//    loginView.hideDisplay();
     view = new View(this);
     try {
       jsonFile = DEFAULT_CHESS_CONFIGURATION;

@@ -61,7 +61,6 @@ class EliminationEndConditionHandlerTest {
     GameState ret = e.isGameOver(players);
     assertEquals(GameState.CHECKMATE, ret, "game should be over");
     assertEquals("b", e.getWinner(), "black should win");
-
   }
 
   @Test

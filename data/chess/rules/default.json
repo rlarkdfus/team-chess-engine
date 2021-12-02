@@ -1,4 +1,4 @@
 {
-  "gameType": "Elimination",
-  "pieceType": ["K"]
+  "gameType": "Checkmate",
+  "pieceType":["K"]
 }

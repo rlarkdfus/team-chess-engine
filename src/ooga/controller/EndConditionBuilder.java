@@ -26,6 +26,7 @@ public class EndConditionBuilder {
   }
   public EndConditionInterface buildEndConditionHandler(String ruleJsonFile, List<PlayerInterface> playerList)
       throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidGameConfigException, InvalidEndGameConfigException {
+    System.out.println(ruleJsonFile);
     EndConditionInterface endCondition;
     this.playerList = playerList;
 

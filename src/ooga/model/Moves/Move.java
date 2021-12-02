@@ -79,7 +79,7 @@ public abstract class Move {
      * @param attackingPieces is the list of pieces attacking the king
      * @return true if the king is under attack from list of pieces
      */
-    public boolean underAttack(Location location, List<PieceInterface> attackingPieces, List<PieceInterface> allPieces) {
+    protected boolean underAttack(Location location, List<PieceInterface> attackingPieces, List<PieceInterface> allPieces) {
         for(PieceInterface attackingPiece : attackingPieces) {
             List<Move> attackingMoves = attackingPiece.getMoves();
             for(Move attackingMove : attackingMoves) {
