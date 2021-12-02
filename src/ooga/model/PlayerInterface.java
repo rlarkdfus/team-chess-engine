@@ -15,7 +15,7 @@ public interface PlayerInterface {
 
   void configTimer(int initialTime, int increment);
 
-  void incrementTime();
+  void incrementTimeUserInterface();
 
   void removePiece(Location location)
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
@@ -45,4 +45,6 @@ public interface PlayerInterface {
     void addTime(Integer seconds);
 
   PieceInterface createPiece(String pieceName) throws InvalidPieceException;
+
+  void incrementTime(Integer specifiedTime);
 }

@@ -56,7 +56,7 @@ public class MoveTimerTest {
         String expected = "10:00";
         moveTimer.setIncrement(seconds);
         moveTimer.reset();
-        moveTimer.incrementTime();
+        moveTimer.incrementTimeUserInterface();
         assertEquals(expected, moveTimer.getTimeLeft().getValue());
     }
 
@@ -66,7 +66,7 @@ public class MoveTimerTest {
         String expected = "10:07";
         moveTimer.setIncrement(seconds);
         moveTimer.reset();
-        moveTimer.incrementTime();
+        moveTimer.incrementTimeUserInterface();
         assertEquals(expected, moveTimer.getTimeLeft().getValue());
     }
 
@@ -78,7 +78,7 @@ public class MoveTimerTest {
         moveTimer.setIncrement(seconds);
         moveTimer.reset();
         for (int i = 0; i < numIncrements; i++) {
-            moveTimer.incrementTime();
+            moveTimer.incrementTimeUserInterface();
         }
         assertEquals(expected, moveTimer.getTimeLeft().getValue());
     }

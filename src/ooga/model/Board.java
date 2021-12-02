@@ -28,8 +28,10 @@ private static final int firstRow = 0;
     private EndConditionInterface endCondition;
     private int turnCount;
     private PlayerInterface currentPlayer;
-    private List<Location> promotionSquares;
     private GameState currGameState;
+
+    private List<Location> promotionSquares;
+    private List<Location> timerSquares;
 
     public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         this.players = players;
@@ -46,9 +48,18 @@ private static final int firstRow = 0;
         updateLegalMoves();
         promotionSquares = new ArrayList<>();
       initializePromotionSquares();
+        timerSquares = new ArrayList<>();
+        initializeTimeSquares();
     }
 
     private void initializePromotionSquares() {
+//        promotionSquares.add(new Location(4,0));
+    }
+    private void initializeTimeSquares(){
+//        timerSquares.add(new Location(4,0));
+//        timerSquares.add(new Location(3,0));
+//        timerSquares.add(new Location(2,0));
+
     }
     /**
      * this method returns the list of all players
@@ -106,6 +117,8 @@ private static final int firstRow = 0;
         //Check for pawn promotion
         checkPromotion(piece, end);
 
+        //Add time powerup
+        checkTime(piece,end);
         // increment turn
         turnCount++;
         toggleTimers();
@@ -129,6 +142,14 @@ private static final int firstRow = 0;
             }
         }
     }
+
+    private void checkTime(PieceInterface pieceInterface, Location end){
+        for(Location timerLocation: timerSquares){
+            if(end.equals(timerLocation)){
+                currentPlayer.incrementTime(100000);
+            }
+        }
+    }
     private void checkPawnPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InvalidPieceException {
         if(piece.getName().equals("P")){
             if(end.getRow() == firstRow || end.getRow() ==lastRow){
@@ -144,20 +165,21 @@ private static final int firstRow = 0;
     private void toggleTimers() {
         PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
         prevPlayer.toggleTimer();
-        prevPlayer.incrementTime();
+        prevPlayer.incrementTimeUserInterface();
         currentPlayer.toggleTimer();
     }
 
 
     private void promotePiece(PieceInterface pieceInterface, String newPieceName) throws InvalidPieceException {
         PieceInterface newPiece = currentPlayer.createPiece(newPieceName);
-        newPiece.moveTo(pieceInterface.getLocation());
 
         currentPlayer.removePiece(pieceInterface);
         allPieces.remove(pieceInterface);
 
+        newPiece.moveTo(pieceInterface.getLocation());
         allPieces.add(newPiece);
         currentPlayer.addPiece(newPiece);
+        System.out.println(this);
 
     }
 
