@@ -26,37 +26,19 @@ public class LoginUI extends GridPane implements UIInterface {
     public void createUI() {
         this.add(viewUtility.makeLabel("welcome"), 0, 0, 1, 1);
         this.add(viewUtility.makeLabel("username"), 0, 1, 1, 1);
-        this.add(viewUtility.makeTextField("username_field",  e -> {
-            try {
-                handleKeyPressed(e);
-            } catch (Exception ex) {
-                ex.getMessage();
-            }
-        }), 0, 2, 1, 1);
+        this.add(viewUtility.makeTextField("username_field",  e -> handleKeyPressed(e)), 0, 2, 1, 1);
         this.add(viewUtility.makeLabel("password"), 0, 3, 1, 1);
-        this.add(viewUtility.makePasswordField("password_field", e -> {
-            try {
-                handleKeyPressed(e);
-            } catch (Exception ex) {
-                ex.getMessage();
-            }
-        }), 0, 4, 1, 1);
-        this.add(viewUtility.makeButton("login", e -> {
-            try {
-                handleLoginAction();
-            } catch (Exception ex) {
-                ex.getMessage();
-            }
-        }), 0, 5, 1, 1);
+        this.add(viewUtility.makePasswordField("password_field", e -> handleKeyPressed(e)), 0, 4, 1, 1);
+        this.add(viewUtility.makeButton("login", e -> handleLoginAction()), 0, 5, 1, 1);
     }
 
-    private void handleKeyPressed(KeyEvent e) throws Exception {
+    private void handleKeyPressed(KeyEvent e) {
         if (e.getCode() == KeyCode.ENTER) {
             handleLoginAction();
         }
     }
 
-    private void handleLoginAction() throws Exception {
+    private void handleLoginAction() {
         String username = ((TextField) lookup("#username_field")).getText();
         String password = ((PasswordField) lookup("#password_field")).getText();
         controller.handleLoginAttempt(username, password);
