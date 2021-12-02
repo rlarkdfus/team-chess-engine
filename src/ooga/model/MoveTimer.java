@@ -110,10 +110,11 @@ public class MoveTimer implements TimerInterface {
      * decrements the amount of time by one second
      */
     private void decrementTime() {
-        seconds--;
-        if (seconds == 0) {
+        if (seconds <= 0) {
             timer.cancel();
+            return;
         }
+        seconds--;
         timeLeft.setValue(timeToString(seconds));
     }
 
@@ -146,6 +147,6 @@ public class MoveTimer implements TimerInterface {
      */
     private String formatTime(int time) {
         String result = String.valueOf(time);
-        return result.length() == 1 ? "0" + result : result;
+        return result.length() == 1 ? String.format("0%s", result) : result;
     }
 }

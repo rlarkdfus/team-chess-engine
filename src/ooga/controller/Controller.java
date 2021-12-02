@@ -37,12 +37,16 @@ public class Controller implements ControllerInterface {
     initializeLogin();
   }
 
-  public void handleLoginAttempt(String username, String password) throws Exception {
-    if (loginController.isValidLogin(username, password)) {
-      startGame();
-    }
-    else {
-      // handle incorrect password label;
+  public void handleLoginAttempt(String username, String password) {
+    try {
+      if (loginController.isValidLogin(username, password)) {
+        startGame();
+      }
+      else {
+        // handle incorrect password label;
+      }
+    } catch (Exception e) {
+      loginView.showError(e.getMessage());
     }
   }
 
@@ -121,7 +125,6 @@ public class Controller implements ControllerInterface {
     return model.getLegalMoves(location);
   }
 
-
   public void downloadGame(String filePath) {
     try {
       JSONWriter jsonWriter = new JSONWriter();
@@ -131,7 +134,6 @@ public class Controller implements ControllerInterface {
     } catch (IOException ignored) {
     }
   }
-
 
   /**
    * gets the amount of time left on a player's timer
@@ -172,8 +174,9 @@ public class Controller implements ControllerInterface {
     model = new Board(boardBuilder.getInitialPlayers());
     timeController.configTimers(model.getPlayers());
     model.setEndCondition(boardBuilder.getEndConditionHandler());
-    view.initializeDisplay(boardBuilder.getInitialPieceViews());
+    //view.initializeDisplay(boardBuilder.getInitialPieceViews());
   }
+
   private void startGame() {
     loginView.hideDisplay();
     view = new View(this);
