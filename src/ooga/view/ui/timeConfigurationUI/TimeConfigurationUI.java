@@ -22,7 +22,7 @@ public class TimeConfigurationUI extends GridPane implements UIInterface {
     public void createUI() {
         this.add(viewUtility.makeLabel("time_control"), 0, 1);
         this.add(viewUtility.makeLabel("minutes_label"), 0, 2);
-        this.add(viewUtility.makeSlider("minutes_slider", 1, 20, 10, this::handleMinutesSliderAction), 1, 2);
+        this.add(viewUtility.makeSlider("minutes_slider", 1, 9, 5, this::handleMinutesSliderAction), 1, 2);
         this.add(viewUtility.makeLabel("minutes_slider_value"), 2, 2);
         this.add(viewUtility.makeLabel("increment_label"), 0, 3);
         this.add(viewUtility.makeSlider("increment_slider", 0, 20, 10, this::handleIncrementSliderAction), 1, 3);

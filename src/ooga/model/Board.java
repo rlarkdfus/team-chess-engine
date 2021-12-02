@@ -117,7 +117,7 @@ private static final int firstRow = 0;
         return turn;
     }
 
-    private void checkPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private void checkPromotion(PieceInterface piece, Location end) {
         //check pawn promotion specifically
 
         checkPawnPromotion(piece, end);
@@ -129,7 +129,7 @@ private static final int firstRow = 0;
             }
         }
     }
-    private void checkPawnPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private void checkPawnPromotion(PieceInterface piece, Location end) {
         if(piece.getName().equals("P")){
             if(end.getRow() == firstRow || end.getRow() ==lastRow){
                 System.out.println("pawn at end");
@@ -142,13 +142,14 @@ private static final int firstRow = 0;
      * pause current player timer, add increment, start next player time
      */
     private void toggleTimers() {
+        System.out.println("toggling timers");
         PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
         prevPlayer.toggleTimer();
         prevPlayer.incrementTime();
         currentPlayer.toggleTimer();
     }
 
-    private void promotePiece(PieceInterface pieceInterface) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException{
+    private void promotePiece(PieceInterface pieceInterface) {
         PieceInterface newPiece = currentPlayer.createQueen();
         newPiece.moveTo(pieceInterface.getLocation());
 
@@ -192,7 +193,6 @@ private static final int firstRow = 0;
     public List<Location> getLegalMoves(Location location){
         for(PieceInterface piece : allPieces) {
             if(piece.getLocation().equals(location)) {
-//                System.out.println(piece.getName() + " " + piece.getTeam());
                 return piece.getEndLocations();
             }
         }
@@ -225,8 +225,7 @@ private static final int firstRow = 0;
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn) % players.size());
-
+        currentPlayer = players.get((turn + 1) % players.size());
         return players.get(turn % players.size());
     }
 
@@ -239,7 +238,7 @@ private static final int firstRow = 0;
         StringBuilder str = new StringBuilder();
         str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
         for(int i = 0; i < 8; i++) {
-            str.append(i+"\t|");
+            str.append(i).append("\t|");
 //            str.append("|");
             for(int j = 0; j < 8; j++) {
                 Location location = new Location(i, j);
@@ -247,7 +246,7 @@ private static final int firstRow = 0;
 
                 for(PieceInterface piece : allPieces) {
                     if(piece.getLocation().equals(location)) {
-                        str.append(piece.toString() + "\t");
+                        str.append(piece).append("\t");
                         found = true;
                     }
                 }

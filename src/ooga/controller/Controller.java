@@ -19,7 +19,7 @@ import ooga.view.ViewInterface;
 public class Controller implements ControllerInterface {
 
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
-  public static final int DEFAULT_INITIAL_TIME = 10;
+  public static final int DEFAULT_INITIAL_TIME = 5;
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
   private Engine model;
