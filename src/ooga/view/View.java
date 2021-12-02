@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import ooga.Turn;
 import ooga.controller.Controller;
 import ooga.controller.PieceViewBuilder;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
@@ -73,8 +72,8 @@ public class View implements ViewInterface {
     }
 
     @Override
-    public void updateDisplay(Turn turn) {
-        boardView.updateBoardView(turn);
+    public void updateDisplay(List<PieceViewBuilder> pieceViewList) {
+        boardView.updateBoardView(pieceViewList);
     }
 
     @Override

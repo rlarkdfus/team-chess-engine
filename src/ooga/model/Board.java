@@ -34,7 +34,7 @@ private static final int firstRow = 0;
     private List<Location> timerSquares;
     private List<Location> skipSquares;
 
-    public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    public Board(List<PlayerInterface> players) {
         this.players = players;
         turnCount = 0;
         allPieces = new ArrayList<>();
@@ -96,7 +96,7 @@ private static final int firstRow = 0;
      * @param start is piece initial location
      * @param end is piece new location
      */
-    public Turn movePiece(Location start, Location end) throws FileNotFoundException, InvocationTargetException, InvalidPieceConfigException, NoSuchMethodException, IllegalAccessException, InvalidPieceException {
+    public List<PieceInterface> movePiece(Location start, Location end) {
         // pause current player timer, start next player time
         PieceInterface piece = null;
         for(PieceInterface p : allPieces) {
@@ -131,14 +131,14 @@ private static final int firstRow = 0;
         turnCount++;
         toggleTimers();
 
-        checkSkip(piece, end);
+//        checkSkip(piece, end);
         //update game data
         updateLegalMoves();
-        currGameState = endCondition.isGameOver(players);
-        return turn;
+//        currGameState = endCondition.isGameOver(players);
+        return allPieces;
     }
 
-    private void checkPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InvalidPieceException {
+    private void checkPromotion(PieceInterface piece, Location end) {
         //check pawn promotion specifically
 
         checkPawnPromotion(piece, end);
@@ -166,7 +166,7 @@ private static final int firstRow = 0;
             }
         }
     }
-    private void checkPawnPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, InvalidPieceException {
+    private void checkPawnPromotion(PieceInterface piece, Location end) {
         if(piece.getName().equals("P")){
             if(end.getRow() == firstRow || end.getRow() ==lastRow){
                 System.out.println("pawn at end");
@@ -185,9 +185,13 @@ private static final int firstRow = 0;
         currentPlayer.toggleTimer();
     }
 
-
-    private void promotePiece(PieceInterface pieceInterface, String newPieceName) throws InvalidPieceException {
-        PieceInterface newPiece = currentPlayer.createPiece(newPieceName);
+    private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
+        PieceInterface newPiece = null;
+        try {
+            newPiece = currentPlayer.createPiece(newPieceName);
+        } catch (InvalidPieceException e) {
+            e.printStackTrace();
+        }
 
         currentPlayer.removePiece(pieceInterface);
         allPieces.remove(pieceInterface);

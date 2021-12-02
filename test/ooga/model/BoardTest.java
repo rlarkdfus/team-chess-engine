@@ -3,43 +3,50 @@ package ooga.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ooga.Location;
-import ooga.Turn;
-import ooga.Turn.PieceMove;
-import ooga.controller.InvalidPieceConfigException;
+import ooga.controller.BoardBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 
 class BoardTest {
-  private Board board;
+  private Engine board;
 
   @BeforeEach
   void setUp() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    board = new Board(new ArrayList<>());
+    board = ModelTestHelper.createBoard();
   }
 
   @Test
-  void testRemovingPiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException, InvalidPieceException {
-    Location loc1 = new Location(0,1);
-    Location loc2 = new Location(0,7);
-    Turn turn = board.movePiece(loc1, loc2);
-    int expected = 1;
-    int test = turn.getRemoved().size();
-    assertEquals(expected, test);
+  void testRemovingPiece() {
+    List<Location[]> moves = List.of(
+            new Location[]{new Location(6, 4), new Location(5, 4)},
+            new Location[]{new Location(1, 1), new Location(3, 1)},
+            new Location[]{new Location(7, 5), new Location(3, 1)}
+    );
+    int before = board.movePiece(new Location(7, 6), new Location(5, 5)).size();
+    board.movePiece(new Location(5, 5), new Location(7, 6)).size();
+    int after = 0;
+    for(Location[] move : moves) {
+      after = board.movePiece(move[0], move[1]).size();
+    }
+    assertEquals(1, before - after);
   }
 
   @Test
-  void testMovesCorrectly() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException, InvalidPieceException {
-    Location end = new Location(3,3);
-    Location loc1 = new Location(1,3);
-    Location loc2 = new Location(3,3);
+  void testMovesCorrectly() {
+    Location start = new Location(1,0);
+    Location end = new Location(2,0);
 
-    Turn turn = board.movePiece(loc1, loc2);
-    PieceMove pieceMove = turn.getMoves().get(0);
+    List<Location> pieceLocations = new ArrayList<>();
+    for(PieceInterface piece : board.movePiece(start, end)) {
+      pieceLocations.add(piece.getLocation());
+    }
 
-    assertTrue(end.equals(pieceMove.getEndLocation()));
+    assertFalse(start.inList(pieceLocations));
+    assertTrue(end.inList(pieceLocations));
   }
 }
