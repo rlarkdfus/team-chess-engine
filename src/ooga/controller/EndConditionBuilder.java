@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 import org.json.JSONArray;
@@ -24,17 +25,27 @@ public class EndConditionBuilder {
     this.jsonParser = jsonParser;
     mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
   }
-  public EndConditionInterface buildEndConditionHandler(String ruleJsonFile, List<PlayerInterface> playerList)
+  public EndConditionRunner getEndConditions(String ruleJsonFile, List<PlayerInterface> playerList)
       throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidGameConfigException, InvalidEndGameConfigException {
-    EndConditionInterface endCondition;
+    EndConditionRunner endConditionsHandler = new EndConditionRunner();
     this.playerList = playerList;
 
-    JSONObject rules = jsonParser.loadFile(new File(ruleJsonFile));
-    String type = rules.getString(mappings.getString("gameType"));
+    JSONObject endConditions = jsonParser.loadFile(new File(ruleJsonFile));
+    for (String key : endConditions.keySet()){
+      JSONObject endConditionsJSONObject = endConditions.getJSONObject(key);
+      endConditionsHandler.add(buildEndCondition(playerList, endConditionsJSONObject));
+    }
+    return endConditionsHandler;
+  }
+
+  private EndConditionInterface buildEndCondition(List<PlayerInterface> playerList, JSONObject endConditionsJSONObject)
+      throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InvalidEndGameConfigException, InvalidGameConfigException {
+    EndConditionInterface endCondition;
+    String type = endConditionsJSONObject.getString(mappings.getString("gameType"));
     String[] keys = mappings.getString(type+"RuleKeys").split(mappings.getString("jsonDelimiter"));
     Map<String, List<String>> endConditionProperties = new HashMap<>();
     for (String key : keys){
-      endConditionProperties.put(key, convertJSONArrayOfStrings(rules.getJSONArray(key)));
+      endConditionProperties.put(key, convertJSONArrayOfStrings(endConditionsJSONObject.getJSONArray(key)));
     }
     Class<?> clazz = Class.forName("ooga.model.EndConditionHandler." + type + "EndCondition");
     endCondition = (EndConditionInterface) clazz.getDeclaredConstructor().newInstance();

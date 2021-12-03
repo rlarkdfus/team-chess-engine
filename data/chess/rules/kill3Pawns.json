@@ -1,17 +1,10 @@
 {
   "endCon1": {
-    "gameType": "Location",
+    "gameType": "Elimination",
     "pieceType": [
       "P",
       "P",
-      "P",
       "P"
-    ],
-    "location": [
-      "4,0",
-      "4,1",
-      "4,2",
-      "4,3"
     ]
   },
   "endCon2": {

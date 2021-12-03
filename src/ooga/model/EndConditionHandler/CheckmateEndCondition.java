@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import ooga.Location;
-import ooga.model.Board.GameState;
 import ooga.model.Moves.Move;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
@@ -18,16 +17,17 @@ public class CheckmateEndCondition implements EndConditionInterface {
   }
 
   @Override
-  public GameState isGameOver(List<PlayerInterface> players) {
+  public String foundWinner(List<PlayerInterface> players) {
     this.players = players;
     if (check()) {
       if (getTotalLegalMoves() == 0) {
-        return GameState.CHECKMATE;
-      }else{
-        return GameState.CHECK;
+        return winner;
       }
+//      else{
+//        return GameState.CHECK;
+//      }
     }
-    return GameState.RUNNING;
+    return null;
   }
 
   private int getTotalLegalMoves() {
@@ -110,16 +110,11 @@ public class CheckmateEndCondition implements EndConditionInterface {
   }
 
   private PieceInterface findKing(String team, List<PieceInterface> pieces) {
-    for(PieceInterface piece : pieces) {
-      if(team.equals(piece.getTeam()) && piece.getName().equals("K")) {
+    for (PieceInterface piece : pieces) {
+      if (team.equals(piece.getTeam()) && piece.getName().equals("K")) {
         return piece;
       }
     }
     return null;
-  }
-
-  @Override
-  public String getWinner(){
-    return winner;
   }
 }

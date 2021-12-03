@@ -1,4 +1,14 @@
 {
-  "gameType": "Elimination",
-  "pieceType": ["P"]
+  "endCon1": {
+    "gameType": "Elimination",
+    "pieceType": [
+      "P"
+    ]
+  },
+  "endCon2": {
+    "gameType": "Checkmate",
+    "pieceType": [
+      "K"
+    ]
+  }
 }

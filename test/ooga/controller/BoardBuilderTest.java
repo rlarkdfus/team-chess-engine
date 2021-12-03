@@ -10,8 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-import ooga.model.EndConditionHandler.EliminationEndCondition;
-import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.EnPassantMove;
 import ooga.model.Moves.Move;
 import ooga.model.Moves.PawnMove;
@@ -47,13 +45,13 @@ class BoardBuilderTest {
     jp = new JsonParser();
   }
 
-  @Test
-  void testEndCondition()   {
-    //EndGameBuilder Test
-    EndConditionInterface endConditionHandler = boardBuilder.getEndConditionHandler();
-    boolean correctEndCondition = endConditionHandler.getClass() == new EliminationEndCondition().getClass();
-    assertEquals(true, correctEndCondition);
-  }
+//  @Test
+//  void testEndCondition()   {
+//    //EndGameBuilder Test
+//    EndConditionInterface endConditionHandler = boardBuilder.getEndConditionHandler();
+//    boolean correctEndCondition = endConditionHandler.getClass() == new EliminationEndCondition().getClass();
+//    assertEquals(true, correctEndCondition);
+//  }
 
   @Test
   void testInvalidEndCondition()   {

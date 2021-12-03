@@ -1,4 +1,8 @@
 {
-  "gameType": "Checkmate",
-  "pieceType":["K"]
+  "endCon1": {
+    "gameType": "Checkmate",
+    "pieceType": [
+      "K"
+    ]
+  }
 }

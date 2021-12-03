@@ -7,16 +7,10 @@ import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
 public class Check {
-
-  public Check() {
-
-  }
-
-  public boolean exists(List<PlayerInterface> players){
+  public boolean check(List<PlayerInterface> players){
     List<PieceInterface> allPieces = getAllPieces(players);
     for (PlayerInterface player : players){
       PieceInterface king = findKing(player.getTeam(), allPieces);
-//      System.out.println(player.getTeam() + " " + king.getLocation());
       List<PieceInterface> attackingPieces = getAttackingPieces(player.getTeam(), allPieces);
       if (underAttack(king.getLocation(), attackingPieces, allPieces)){
         return true;

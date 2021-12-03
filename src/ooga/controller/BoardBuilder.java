@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Piece;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
@@ -46,7 +46,7 @@ public class BoardBuilder implements Builder {
   private final LocationParser locationParser;
   private final JsonParser jsonParser;
   private PieceBuilder pieceBuilder;
-  private EndConditionInterface endCondition;
+  private EndConditionRunner endCondition;
 
   /**
    * Constructor for the BoardBuilder Object.
@@ -90,7 +90,7 @@ public class BoardBuilder implements Builder {
     pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     EndConditionBuilder endConditionBuilder= new EndConditionBuilder(jsonParser);
     iterateCSVData();
-    endCondition = endConditionBuilder.buildEndConditionHandler(gameJson.getString(RULES),playerList);
+    endCondition = endConditionBuilder.getEndConditions(gameJson.getString(RULES),playerList);
   }
 
   /**
@@ -118,7 +118,7 @@ public class BoardBuilder implements Builder {
    * @return an EndConditionInterface Object which is used by the model to determine when the game is over
    */
   @Override
-  public EndConditionInterface getEndConditionHandler() {
+  public EndConditionRunner getEndConditionHandler() {
     return endCondition;
   }
 

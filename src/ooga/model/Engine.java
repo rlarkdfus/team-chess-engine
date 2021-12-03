@@ -1,14 +1,12 @@
 package ooga.model;
 
-import ooga.Location;
-import ooga.Turn;
-
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
+import ooga.Location;
+import ooga.Turn;
 import ooga.controller.InvalidPieceConfigException;
-import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.EndConditionHandler.EndConditionRunner;
 
 public interface Engine {
     /**
@@ -32,7 +30,7 @@ public interface Engine {
 
     List<PlayerInterface> getPlayers();
 
-    void setEndCondition(EndConditionInterface endCondition);
+    void setEndCondition(EndConditionRunner endCondition);
 
   String getWinner();
 

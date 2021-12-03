@@ -7,7 +7,7 @@ import java.util.List;
 import ooga.Location;
 import ooga.Turn;
 import ooga.controller.InvalidPieceConfigException;
-import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Check;
 import ooga.model.Moves.Move;
 
@@ -28,7 +28,7 @@ public class Board implements Engine {
 
   private List<PlayerInterface> players;
   private List<PieceInterface> allPieces;
-  private EndConditionInterface endCondition;
+  private EndConditionRunner endCondition;
   private int turnCount;
   private PlayerInterface currentPlayer;
   private List<Location> promotionSquares;
@@ -72,7 +72,7 @@ public class Board implements Engine {
    *
    * @param endCondition
    */
-  public void setEndCondition(EndConditionInterface endCondition) {
+  public void setEndCondition(EndConditionRunner endCondition) {
     this.endCondition = endCondition;
   }
 
@@ -123,9 +123,9 @@ public class Board implements Engine {
 
     //update game data
     updateLegalMoves();
-    currGameState = endCondition.isGameOver(players);
-    isChecked = check.exists(players);
-    System.out.println("check: "+isChecked);
+    currGameState = endCondition.satisfiedEndCondition(players);
+//    isChecked = check.exists(players);
+//    System.out.println("check: "+isChecked);
     return turn;
   }
 
