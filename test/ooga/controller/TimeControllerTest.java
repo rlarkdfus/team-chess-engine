@@ -65,7 +65,7 @@ public class TimeControllerTest {
         timeController.configTimers(players);
         timeController.resetTimers(players);
         for (PlayerInterface player : players) {
-            player.incrementTime();
+            player.incrementTimeUserInterface();
             assertEquals(expected, player.getTimeLeft().getValue());
         }
     }
@@ -78,7 +78,7 @@ public class TimeControllerTest {
         timeController.configTimers(players);
         timeController.resetTimers(players);
         for (PlayerInterface player : players) {
-            player.incrementTime();
+            player.incrementTimeUserInterface();
             assertEquals(expected, player.getTimeLeft().getValue());
         }
     }

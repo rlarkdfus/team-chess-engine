@@ -1,3 +1,11 @@
+.root {
+    -fx-font-family: "Segoe UI Semibold";
+    /*-fx-background: cornsilk;*/
+    /* define variables to avoid duplicating values */
+    text_color: black;
+    background_color: lightgray;
+}
+
 . SettingsUI {
     -fx-hgap: 10px;
     -fx-vgap: 10px;
@@ -24,4 +32,22 @@
     -fx-vgap: 10px;
     -fx-padding: 20px;
     -fx-background-color: lightpink;
+}
+
+. LoginUI {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: tan;
+}
+
+. EndScreenUI {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 20px;
+    -fx-background-color: lightgrey;
+}
+
+#WinnerText {
+    -fx-font: bold 20pt "Arial";
 }

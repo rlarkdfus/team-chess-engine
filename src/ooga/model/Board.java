@@ -1,20 +1,20 @@
 package ooga.model;
 
+
 import ooga.Location;
 import ooga.Turn;
 import ooga.controller.BoardBuilder;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
+import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
 
 import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import ooga.Location;
 import ooga.Turn;
-import ooga.controller.BoardBuilder;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
@@ -22,14 +22,16 @@ import ooga.model.Moves.Move;
 //import static ooga.controller.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
 
 public class Board implements Engine {
+
     private static final int Rows = 8;
     private static final int Cols = 8;
+    private static final int lastRow = Rows -1;
+    private static final int firstRow = 0;
 
     public enum GameState {
         RUNNING,
         CHECKMATE,
         STALEMATE,
-        CHECK
     }
 
     private List<PlayerInterface> players;
@@ -37,6 +39,11 @@ public class Board implements Engine {
     private EndConditionInterface endCondition;
     private int turnCount;
     private PlayerInterface currentPlayer;
+    private GameState currGameState;
+
+    private List<Location> promotionSquares;
+    private List<Location> timerSquares;
+    private List<Location> skipSquares;
 
     public Board(List<PlayerInterface> players) {
         this.players = players;
@@ -45,15 +52,34 @@ public class Board implements Engine {
         for(PlayerInterface player : players) {
             allPieces.addAll(player.getPieces());
         }
-        System.out.println(this);
 
         for (PieceInterface piece : allPieces){
             piece.updateMoves(allPieces);
         }
         System.out.println(this);
         updateLegalMoves();
+        promotionSquares = new ArrayList<>();
+      initializePromotionSquares();
+        timerSquares = new ArrayList<>();
+        initializeTimeSquares();
+        skipSquares = new ArrayList<>();
+        initializeSkipSquares();
+
     }
 
+    private void initializePromotionSquares() {
+//        promotionSquares.add(new Location(4,0));
+    }
+    private void initializeTimeSquares(){
+//        timerSquares.add(new Location(4,0));
+//        timerSquares.add(new Location(3,0));
+//        timerSquares.add(new Location(2,0));
+
+    }
+
+    private void initializeSkipSquares(){
+//        skipSquares.add(new Location(4,0));
+    }
     /**
      * this method returns the list of all players
      * @return
@@ -81,7 +107,7 @@ public class Board implements Engine {
      * @param start is piece initial location
      * @param end is piece new location
      */
-    public Turn movePiece(Location start, Location end) {
+    public List<PieceInterface> movePiece(Location start, Location end) {
         // pause current player timer, start next player time
         PieceInterface piece = null;
         for(PieceInterface p : allPieces) {
@@ -107,101 +133,94 @@ public class Board implements Engine {
         for(Location removeLocation : turn.getRemoved()){
             for(PlayerInterface player : players){
                 for(PieceInterface p : player.getPieces()){
-                    if (p.getLocation().equals(removeLocation)) {
+                    if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
                         player.removePiece(p);
                     }
                 }
             }
         }
 
-//        //Check for pawn promotion
-//        if(piece.getName().equals("P")){
-//            if(end.getRow() == 0 || end.getRow() ==Rows-1){
-//                System.out.println("pawn at end");
-//                promotePiece(piece);
-//            }
-//        }
 
+        //Check for pawn promotion
+        checkPromotion(piece, end);
+
+        //Add time powerup
+        checkTime(piece,end);
         // increment turn
         turnCount++;
         toggleTimers();
+
+//        checkSkip(piece, end);
+        //update game data
         updateLegalMoves();
-        System.out.println(findPlayerTurn(turnCount).getTeam() + " turn");
-        return turn;
+//        currGameState = endCondition.isGameOver(players);
+        return allPieces;
+    }
+
+    private void checkPromotion(PieceInterface piece, Location end) {
+        //check pawn promotion specifically
+
+        checkPawnPromotion(piece, end);
+
+        //Check piece promotion specifically
+        for(Location promotionLocation: promotionSquares){
+            if(end.equals(promotionLocation)){
+                promotePiece(piece,"Q");
+            }
+        }
+    }
+
+    private void checkTime(PieceInterface pieceInterface, Location end){
+        for(Location timerLocation: timerSquares){
+            if(end.equals(timerLocation)){
+                currentPlayer.incrementTime(100000);
+            }
+        }
+    }
+
+    private void checkSkip(PieceInterface pieceInterface, Location end) {
+        for (Location skipLocation : skipSquares) {
+            if (end.equals(skipLocation)) {
+                turnCount++;
+            }
+        }
+    }
+    private void checkPawnPromotion(PieceInterface piece, Location end) {
+        if(piece.getName().equals("P")){
+            if(end.getRow() == firstRow || end.getRow() ==lastRow){
+                System.out.println("pawn at end");
+                promotePiece(piece, "Q");
+            }
+        }
     }
 
     /**
      * pause current player timer, add increment, start next player time
      */
     private void toggleTimers() {
-        PlayerInterface currentPlayer = findPlayerTurn(turnCount-1);
-        PlayerInterface nextPlayer = findPlayerTurn(turnCount);
+        PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
+        prevPlayer.toggleTimer();
+        prevPlayer.incrementTimeUserInterface();
         currentPlayer.toggleTimer();
-        currentPlayer.incrementTime();
-        nextPlayer.toggleTimer();
     }
 
+    private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
+        PieceInterface newPiece = null;
+        try {
+            newPiece = currentPlayer.createPiece(newPieceName);
+        } catch (InvalidPieceException e) {
+            e.printStackTrace();
+        }
 
-//    private void promotePiece(PieceInterface pieceInterface) {
-////        //need to initial
-////        PlayerInterface currentPlayer = null;
-////        for(PlayerInterface playerInterface: players){
-////            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
-////                currentPlayer = playerInterface;
-////            }
-////        }
-//        BoardBuilder builder = new BoardBuilder();
-//        PieceInterface newPiece = null;
-//        try {
-//            newPiece = builder.convertPiece(pieceInterface,"Q");
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (InvalidPieceConfigException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-//            Field f = newPiece.getClass().getDeclaredField("moves");
-//            f.setAccessible(true);
-//            List<Move> moves = (List<Move>) f.get(newPiece);
-//            System.out.println(moves);
-//        } catch (NoSuchFieldException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        System.out.println(currentPlayer.getScore());
-//        System.out.println("^ Score before removing");
-//
-//
-//        currentPlayer.removePiece(pieceInterface);
-//        allPieces.remove(pieceInterface);
-//        allPieces.add(newPiece);
-//        System.out.println(currentPlayer.getScore());
-//        System.out.println("^Score after removing");
-//
-//        System.out.println("Ne piece name: " + newPiece.getName());
-//        currentPlayer.addPiece(newPiece);
-//        System.out.println("New piece team: " + newPiece.getTeam());
-//        System.out.println("^Score with new piece added");
-//        System.out.println(currentPlayer.getScore());
-//        System.out.println("Current player team" + currentPlayer.getTeam());
-//        for (PieceInterface p : currentPlayer.getPieces()){
-//            System.out.println(p.getName());
-//        }
-//    }
+        currentPlayer.removePiece(pieceInterface);
+        allPieces.remove(pieceInterface);
 
-//    private void promotePiece2(PieceInterface pieceInterface){
-//        //Should make currentPlayer a private reference variable instead
-//        PlayerInterface currentPlayer = null;
-//        for(PlayerInterface playerInterface: players){
-//            if(playerInterface.getTeam().equals(pieceInterface.getTeam())){
-//                currentPlayer = playerInterface;
-//            }
-//        }
-//
-//    }
+        newPiece.moveTo(pieceInterface.getLocation());
+        allPieces.add(newPiece);
+        currentPlayer.addPiece(newPiece);
+        System.out.println(this);
+
+    }
 
 
     /**
@@ -210,7 +229,7 @@ public class Board implements Engine {
      */
     @Override
     public GameState checkGameState() {
-        if (endCondition.isGameOver(players).equals(GameState.CHECKMATE)){
+        if (currGameState == GameState.CHECKMATE){
             return GameState.CHECKMATE;
         }
         int totalLegalMoves = 0;
@@ -240,11 +259,20 @@ public class Board implements Engine {
         return null;
     }
 
-    /**
-     * determine whether player selects their own piece on their turn
-     * @param location
-     * @return
-     */
+    @Override
+    public String getWinner() {
+        if (currGameState == GameState.CHECKMATE){
+            return endCondition.getWinner();
+        }
+        return null;
+    }
+
+
+        /**
+         * determine whether player selects their own piece on their turn
+         * @param location
+         * @return
+         */
     public boolean canMovePiece(Location location) {
         String turn = findPlayerTurn(turnCount).getTeam();
         for(PieceInterface piece : allPieces) {
@@ -252,18 +280,13 @@ public class Board implements Engine {
                 return true;
             }
         }
-//        for(PieceInterface piece : findPlayerTurn(turnCount).getPieces()) {
-//            if(piece.getLocation().equals(location)) {
-//                return true;
-//            }
-//        }
+
         return false;
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn+1) % players.size());
-        //FIXME: check if you can return this
-//        return currentPlayer;
+        currentPlayer = players.get((turn) % players.size());
+
         return players.get(turn % players.size());
     }
 

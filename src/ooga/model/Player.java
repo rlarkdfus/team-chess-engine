@@ -2,7 +2,6 @@ package ooga.model;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
-import ooga.model.Moves.Move;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ public class Player implements PlayerInterface {
     private final String team;
     private int score;
     private TimerInterface moveTimer;
+    private List<PieceInterface> initialPieces;
 
     public Player(String team) {
         this.team = team;
@@ -24,6 +24,7 @@ public class Player implements PlayerInterface {
         score = 0;
         this.killedPieces = new ArrayList<>();
         this.moveTimer = new MoveTimer();
+        this.initialPieces = new ArrayList<>();
     }
 
     @Override
@@ -53,8 +54,12 @@ public class Player implements PlayerInterface {
     }
 
     @Override
-    public void incrementTime() {
-        moveTimer.incrementTime();
+    public void incrementTimeUserInterface() {
+        moveTimer.incrementTimeUserInterface();
+    }
+
+    public void incrementTime(Integer specifiedTime){
+        moveTimer.incrementTime(specifiedTime);
     }
 
     /**
@@ -97,8 +102,12 @@ public class Player implements PlayerInterface {
     @Override
     public void addPiece(PieceInterface piece){
         remainingPieces.put(piece, new ArrayList<>());
+        initialPieces.add(piece);
         score += piece.getScore();
     }
+
+    //FIXME: add to interface
+
 
     /**
      * remove a piece from player's possession
@@ -117,6 +126,34 @@ public class Player implements PlayerInterface {
     @Override
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public PieceInterface createQueen() {
+            PieceInterface queen = null;
+            for(PieceInterface pieceInterface: initialPieces){
+                if(pieceInterface.getName().equals("Q")){
+                    queen = pieceInterface;
+                }
+            }
+            return queen;
+
+    }
+
+    //FIXME:
+    //Needs to be in initial Piece List
+    public PieceInterface createPiece(String pieceName) throws InvalidPieceException {
+        for(PieceInterface pieceInterace: initialPieces){
+            if(pieceInterace.getName().equals(pieceName)){
+                return pieceInterace;
+            }
+        }
+        throw new InvalidPieceException(pieceName);
+    }
+
+    @Override
+    public void addTime(Integer seconds) {
+
     }
 
     /**

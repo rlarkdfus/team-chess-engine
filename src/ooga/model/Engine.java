@@ -21,7 +21,7 @@ public interface Engine {
      * @param start is piece initial location
      * @param end is piece new location
      */
-    Turn movePiece(Location start, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException;
+    List<PieceInterface> movePiece(Location start, Location end);
 
     /**
      * Determine whether the win condition of the game is satisfied, and declare a winner.
@@ -33,6 +33,8 @@ public interface Engine {
     List<PlayerInterface> getPlayers();
 
     void setEndCondition(EndConditionInterface endCondition);
-    
-    boolean canMovePiece(Location location);
+
+  String getWinner();
+
+  boolean canMovePiece(Location location);
 }
