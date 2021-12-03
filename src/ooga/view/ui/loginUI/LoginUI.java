@@ -5,18 +5,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.input.KeyEvent;
-import ooga.controller.Controller;
 import ooga.controller.LoginController;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
 
 public class LoginUI extends GridPane implements UIInterface {
 
-    Controller controller;
+    LoginController loginController;
     ViewUtility viewUtility;
 
-    public LoginUI(Controller controller) {
-        this.controller = controller;
+    public LoginUI(LoginController loginController) {
+        this.loginController = loginController;
         this.viewUtility = new ViewUtility();
         this.getStyleClass().add("LoginUI");
         createUI();
@@ -33,15 +32,15 @@ public class LoginUI extends GridPane implements UIInterface {
             } catch (Exception ex) {
                 ex.getMessage();
             }
-        }), 0, 3, 1, 1);
-        this.add(viewUtility.makeLabel("password"), 0, 4, 1, 1);
+        }), 0, 3, 3, 1);
+        this.add(viewUtility.makeLabel("password"), 0, 4, 3, 1);
         this.add(viewUtility.makePasswordField("password_field", e -> {
             try {
                 handleKeyPressed(e);
             } catch (Exception ex) {
                 ex.getMessage();
             }
-        }), 0, 5, 1, 1);
+        }), 0, 5, 3, 1);
         this.add(viewUtility.makeLabel("whiteTeam"), 0, 6, 1, 1);
         this.add(viewUtility.makeLabel("username"), 0, 7, 1, 1);
         this.add(viewUtility.makeTextField("username_field",  e -> {
@@ -50,7 +49,7 @@ public class LoginUI extends GridPane implements UIInterface {
             } catch (Exception ex) {
                 ex.getMessage();
             }
-        }), 0, 8, 1, 1);
+        }), 0, 8, 3, 1);
         this.add(viewUtility.makeLabel("password"), 0, 9, 1, 1);
         this.add(viewUtility.makePasswordField("password_field", e -> {
             try {
@@ -58,7 +57,7 @@ public class LoginUI extends GridPane implements UIInterface {
             } catch (Exception ex) {
                 ex.getMessage();
             }
-        }), 0, 10, 1, 1);
+        }), 0, 10, 3, 1);
         this.add(viewUtility.makeButton("login", e -> {
             try {
                 handleLoginAction();
@@ -66,22 +65,23 @@ public class LoginUI extends GridPane implements UIInterface {
                 ex.getMessage();
             }
         }), 0, 11, 1, 1);
-        this.add(viewUtility.makeLabel("username"), 0, 1, 1, 1);
-        this.add(viewUtility.makeTextField("username_field",  e -> handleKeyPressed(e)), 0, 2, 1, 1);
-        this.add(viewUtility.makeLabel("password"), 0, 3, 1, 1);
-        this.add(viewUtility.makePasswordField("password_field", e -> handleKeyPressed(e)), 0, 4, 1, 1);
-        this.add(viewUtility.makeButton("login", e -> handleLoginAction()), 0, 5, 1, 1);
+
+        this.add(viewUtility.makeButton("guest", e -> handleGuestKeyPressed()), 1, 11, 1, 1);
     }
 
-    private void handleKeyPressed(KeyEvent e) {
+    private void handleKeyPressed(KeyEvent e) throws Exception {
         if (e.getCode() == KeyCode.ENTER) {
             handleLoginAction();
         }
     }
 
-    private void handleLoginAction() {
+    private void handleGuestKeyPressed() {
+        loginController.handleGuestLogin();
+    }
+
+    private void handleLoginAction() throws Exception {
         String username = ((TextField) lookup("#username_field")).getText();
         String password = ((PasswordField) lookup("#password_field")).getText();
-        controller.handleLoginAttempt(username, password);
+        loginController.handleLoginAttempt(username, password);
     }
 }

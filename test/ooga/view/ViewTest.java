@@ -6,6 +6,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ooga.controller.Controller;
+import ooga.controller.LoginController;
 import org.junit.jupiter.api.Test;
 import org.testfx.service.query.EmptyNodeQueryException;
 import util.DukeApplicationTest;
@@ -26,7 +27,7 @@ public class ViewTest extends DukeApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Controller controller = new Controller();
+        LoginController controller = new LoginController();
         controller.handleLoginAttempt("Luis", "password");
     }
 

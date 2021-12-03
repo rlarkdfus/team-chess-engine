@@ -11,7 +11,6 @@ import ooga.Turn;
 import ooga.model.Board;
 import ooga.model.Board.GameState;
 import ooga.model.Engine;
-import ooga.view.LoginView;
 import ooga.view.GameOverScreen;
 import ooga.view.View;
 import ooga.view.ViewInterface;
@@ -27,25 +26,23 @@ public class Controller implements ControllerInterface {
   private LocationWriter locationWriter;
   private Builder boardBuilder;
   private TimeController timeController;
-  private LoginController loginController;
   private File jsonFile;
-  private LoginView loginView;
   private GameOverScreen gameOverScreen;
 
   public Controller() {
-    initializeLogin();
-  }
-
-  public void handleLoginAttempt(String username, String password) {
+    view = new View(this);
     try {
-      if (loginController.isValidLogin(username, password)) {
-        startGame();
-      }
-      else {
-        // handle incorrect password label;
-      }
-    } catch (Exception e) {
-      loginView.showError(e.getMessage());
+      jsonFile = DEFAULT_CHESS_CONFIGURATION;
+      boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+      timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+      locationWriter = new LocationWriter();
+      buildGame(boardBuilder);
+      timeController.configTimers(model.getPlayers());
+      startTimersForNewGame();
+      view.initializeDisplay(boardBuilder.getInitialPieceViews());
+    }
+    catch (Exception e){
+      view.showError(e.getMessage());
     }
   }
 
@@ -162,36 +159,11 @@ public class Controller implements ControllerInterface {
     timeController.setIncrement(seconds);
   }
 
-  private void initializeLogin() {
-    loginController = new LoginController();
-    loginView = new LoginView(this);
-    loginView.initializeDisplay();
-  }
-
   private void buildGame(Builder boardBuilder) throws
       InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     model = new Board(boardBuilder.getInitialPlayers());
     timeController.configTimers(model.getPlayers());
     model.setEndCondition(boardBuilder.getEndConditionHandler());
-    //view.initializeDisplay(boardBuilder.getInitialPieceViews());
-  }
-
-  private void startGame() {
-    loginView.hideDisplay();
-    view = new View(this);
-    try {
-      jsonFile = DEFAULT_CHESS_CONFIGURATION;
-      boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-      timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
-      locationWriter = new LocationWriter();
-      buildGame(boardBuilder);
-      timeController.configTimers(model.getPlayers());
-      startTimersForNewGame();
-      view.initializeDisplay(boardBuilder.getInitialPieceViews());
-    }
-    catch (Exception e){
-      view.showError(e.getMessage());
-    }
   }
 
 }
