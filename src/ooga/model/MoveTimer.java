@@ -122,8 +122,14 @@ public class MoveTimer implements TimerInterface {
      * increments the amount of time by the increment value
      */
     @Override
-    public void incrementTime() {
-        seconds += increment;
+    public void incrementTimeUserInterface() {
+        incrementTime(increment);
+//        seconds += increment;
+//        timeLeft.setValue(timeToString(seconds));
+    }
+
+    public void incrementTime(int specifiedTime){
+        seconds+=specifiedTime;
         timeLeft.setValue(timeToString(seconds));
     }
 

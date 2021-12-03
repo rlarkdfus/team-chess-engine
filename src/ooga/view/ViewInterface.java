@@ -9,7 +9,7 @@ public interface ViewInterface {
     /**
      * Updates position of pieces on the board
      */
-    void updateDisplay(Turn turn);
+    void updateDisplay(List<PieceViewBuilder> pieceViewList);
 
     void initializeDisplay(List<PieceViewBuilder> pieceViewList);
 

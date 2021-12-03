@@ -58,6 +58,7 @@ public class EndConditionBuilder {
         playerPieces.put(p.getName(),playerPieces.get(p.getName())+1);
       }
       for (String p : endGamePieces){
+        playerPieces.putIfAbsent(p,0);
         playerPieces.put(p,playerPieces.get(p)-1);
       }
       for (String key : playerPieces.keySet()){

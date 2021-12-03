@@ -10,7 +10,7 @@ public interface BoardViewInterface {
     /**
      * Update pieces based on model
      */
-    void updateBoardView(Turn turn);
+    void updateBoardView(List<PieceViewBuilder> pieceViews);
 
 //    /**
 //     * Initializes the Board View

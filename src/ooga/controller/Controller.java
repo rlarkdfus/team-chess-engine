@@ -4,13 +4,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.Turn;
 import ooga.model.Board;
 import ooga.model.Board.GameState;
 import ooga.model.Engine;
+import ooga.model.InvalidPieceException;
+import ooga.model.PieceInterface;
+import ooga.view.LoginView;
 import ooga.view.GameOverScreen;
 import ooga.view.View;
 import ooga.view.ViewInterface;
@@ -106,10 +113,16 @@ public class Controller implements ControllerInterface {
    * @throws IllegalAccessException
    */
   @Override
-  public void movePiece(Location start, Location end) throws
-      InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
-    Turn turn = model.movePiece(start, end);
-    view.updateDisplay(turn);
+  public void movePiece(Location start, Location end) {
+//    Turn turn = model.movePiece(start, end);
+    List<PieceViewBuilder> pieceViewList = new ArrayList<>();
+    for(PieceInterface piece : model.movePiece(start, end)){
+      pieceViewList.add(new PieceViewBuilder(piece));
+    }
+
+    view.updateDisplay(pieceViewList);
+
+
     GameState gameState = model.checkGameState();
     if (gameState != Board.GameState.RUNNING) {
       String winner = model.getWinner();

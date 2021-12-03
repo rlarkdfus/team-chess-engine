@@ -15,15 +15,16 @@ public interface PieceInterface {
     Location getLocation();
     void moveTo(Location location);
     void tryMove(Location location);
-    int getUniqueId();
-    void setEliminated(boolean state);
+//    int getUniqueId();
+//    void setEliminated(boolean state);
     List<Location> getEndLocations();
     boolean hasMoved();
     boolean isFirstMove();
-    Piece copy();
-    List<Location> getAllEndLocations();
+    void transform(PieceInterface newPiece);
+//    List<Location> getAllEndLocations();
     Move getMove(Location end);
     void updateMoves(List<PieceInterface> pieces);
     List<Move> getMoves();
     boolean isSameTeam(PieceInterface piece);
+    boolean canTransform();
 }

@@ -1,5 +1,14 @@
 package ooga.model;
 
+
+import ooga.Location;
+import ooga.Turn;
+import ooga.controller.BoardBuilder;
+import ooga.controller.InvalidPieceConfigException;
+import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.Moves.Move;
+import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
+
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -10,12 +19,14 @@ import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
 
-public class Board implements Engine {
-private static final int Rows = 8;
-private static final int Cols = 8;
-private static final int lastRow = Rows -1;
-private static final int firstRow = 0;
+//import static ooga.controller.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
 
+public class Board implements Engine {
+
+    private static final int Rows = 8;
+    private static final int Cols = 8;
+    private static final int lastRow = Rows -1;
+    private static final int firstRow = 0;
 
     public enum GameState {
         RUNNING,
@@ -28,10 +39,13 @@ private static final int firstRow = 0;
     private EndConditionInterface endCondition;
     private int turnCount;
     private PlayerInterface currentPlayer;
-    private List<Location> promotionSquares;
     private GameState currGameState;
 
-    public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private List<Location> promotionSquares;
+    private List<Location> timerSquares;
+    private List<Location> skipSquares;
+
+    public Board(List<PlayerInterface> players) {
         this.players = players;
         turnCount = 0;
         allPieces = new ArrayList<>();
@@ -46,9 +60,25 @@ private static final int firstRow = 0;
         updateLegalMoves();
         promotionSquares = new ArrayList<>();
       initializePromotionSquares();
+        timerSquares = new ArrayList<>();
+        initializeTimeSquares();
+        skipSquares = new ArrayList<>();
+        initializeSkipSquares();
+
     }
 
     private void initializePromotionSquares() {
+//        promotionSquares.add(new Location(4,0));
+    }
+    private void initializeTimeSquares(){
+//        timerSquares.add(new Location(4,0));
+//        timerSquares.add(new Location(3,0));
+//        timerSquares.add(new Location(2,0));
+
+    }
+
+    private void initializeSkipSquares(){
+//        skipSquares.add(new Location(4,0));
     }
     /**
      * this method returns the list of all players
@@ -77,7 +107,7 @@ private static final int firstRow = 0;
      * @param start is piece initial location
      * @param end is piece new location
      */
-    public Turn movePiece(Location start, Location end) throws FileNotFoundException, InvocationTargetException, InvalidPieceConfigException, NoSuchMethodException, IllegalAccessException {
+    public List<PieceInterface> movePiece(Location start, Location end) {
         // pause current player timer, start next player time
         PieceInterface piece = null;
         for(PieceInterface p : allPieces) {
@@ -90,6 +120,14 @@ private static final int firstRow = 0;
         Move move = piece.getMove(end);
         Turn turn = move.getTurn();
         move.executeMove(piece, allPieces, end);
+
+//        for(Move move : piece.getMove(end)) {
+//            System.out.println(move.getClass());
+//            turn.addTurn(move.getTurn());
+//            move.executeMove(piece, allPieces, end);
+//        }
+
+        System.out.println(this);
 
         // remove piece from player if needed after turn
         for(Location removeLocation : turn.getRemoved()){
@@ -106,18 +144,20 @@ private static final int firstRow = 0;
         //Check for pawn promotion
         checkPromotion(piece, end);
 
+        //Add time powerup
+        checkTime(piece,end);
         // increment turn
         turnCount++;
         toggleTimers();
 
+//        checkSkip(piece, end);
         //update game data
         updateLegalMoves();
-        currGameState = endCondition.isGameOver(players);
-
-        return turn;
+//        currGameState = endCondition.isGameOver(players);
+        return allPieces;
     }
 
-    private void checkPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private void checkPromotion(PieceInterface piece, Location end) {
         //check pawn promotion specifically
 
         checkPawnPromotion(piece, end);
@@ -125,15 +165,31 @@ private static final int firstRow = 0;
         //Check piece promotion specifically
         for(Location promotionLocation: promotionSquares){
             if(end.equals(promotionLocation)){
-                promotePiece(piece);
+                promotePiece(piece,"Q");
             }
         }
     }
-    private void checkPawnPromotion(PieceInterface piece, Location end) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+
+    private void checkTime(PieceInterface pieceInterface, Location end){
+        for(Location timerLocation: timerSquares){
+            if(end.equals(timerLocation)){
+                currentPlayer.incrementTime(100000);
+            }
+        }
+    }
+
+    private void checkSkip(PieceInterface pieceInterface, Location end) {
+        for (Location skipLocation : skipSquares) {
+            if (end.equals(skipLocation)) {
+                turnCount++;
+            }
+        }
+    }
+    private void checkPawnPromotion(PieceInterface piece, Location end) {
         if(piece.getName().equals("P")){
             if(end.getRow() == firstRow || end.getRow() ==lastRow){
                 System.out.println("pawn at end");
-                promotePiece(piece);
+                promotePiece(piece, "Q");
             }
         }
     }
@@ -144,23 +200,27 @@ private static final int firstRow = 0;
     private void toggleTimers() {
         PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
         prevPlayer.toggleTimer();
-        prevPlayer.incrementTime();
+        prevPlayer.incrementTimeUserInterface();
         currentPlayer.toggleTimer();
     }
 
-    private void promotePiece(PieceInterface pieceInterface) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException{
-        PieceInterface newPiece = currentPlayer.createQueen();
-        newPiece.moveTo(pieceInterface.getLocation());
+    private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
+        PieceInterface newPiece = null;
+        try {
+            newPiece = currentPlayer.createPiece(newPieceName);
+        } catch (InvalidPieceException e) {
+            e.printStackTrace();
+        }
 
         currentPlayer.removePiece(pieceInterface);
         allPieces.remove(pieceInterface);
 
+        newPiece.moveTo(pieceInterface.getLocation());
         allPieces.add(newPiece);
         currentPlayer.addPiece(newPiece);
+        System.out.println(this);
 
     }
-
-
 
 
     /**
@@ -258,7 +318,7 @@ private static final int firstRow = 0;
             }
             str.append("\n");
         }
-        str.append("__________________________________\n");
+        str.append("____________________________________\n");
         return str.toString();
     }
 }

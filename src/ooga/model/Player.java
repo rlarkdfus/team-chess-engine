@@ -2,7 +2,6 @@ package ooga.model;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
-import ooga.model.Moves.Move;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -55,12 +54,13 @@ public class Player implements PlayerInterface {
     }
 
     @Override
-    public void incrementTime() {
-        moveTimer.incrementTime();
+    public void incrementTimeUserInterface() {
+        moveTimer.incrementTimeUserInterface();
     }
 
-
-
+    public void incrementTime(Integer specifiedTime){
+        moveTimer.incrementTime(specifiedTime);
+    }
 
     /**
      * remove a piece from the player's possession
@@ -72,7 +72,7 @@ public class Player implements PlayerInterface {
                 //Fixme: added for testing purposes
 //                System.out.println("A Piece Has been Killed (you have reached the inside of the if conditional)");
 //                System.out.println(piece.getEndState());
-                piece.setEliminated(true);
+//                piece.setEliminated(true);
                 //Fixme: added for testing purposes
 //                System.out.println(piece.getEndState());
                 killedPieces.add(piece);
@@ -140,6 +140,17 @@ public class Player implements PlayerInterface {
 
     }
 
+    //FIXME:
+    //Needs to be in initial Piece List
+    public PieceInterface createPiece(String pieceName) throws InvalidPieceException {
+        for(PieceInterface pieceInterace: initialPieces){
+            if(pieceInterace.getName().equals(pieceName)){
+                return pieceInterace;
+            }
+        }
+        throw new InvalidPieceException(pieceName);
+    }
+
     @Override
     public void addTime(Integer seconds) {
 
@@ -174,41 +185,41 @@ public class Player implements PlayerInterface {
      * @param location
      * @return
      */
-    @Override
-    public PieceInterface getPiece(Location location) {
-        List<PieceInterface> p = new ArrayList<>();
-        for(PieceInterface piece : remainingPieces.keySet()) {
-            if(piece.getLocation().equals(location)) {
-                p.add(piece);
-//                return piece;
-            }
-        }
-        if(p.size() > 0){
-            if(p.size() > 1){
-                System.out.println("Player.getPiece " + p.size() + " pieces " + p + " at " + location);
-            }
-            return p.get(0);
-        }
-        return null;
-    }
+//    @Override
+//    public PieceInterface getPiece(Location location) {
+//        List<PieceInterface> p = new ArrayList<>();
+//        for(PieceInterface piece : remainingPieces.keySet()) {
+//            if(piece.getLocation().equals(location)) {
+//                p.add(piece);
+////                return piece;
+//            }
+//        }
+//        if(p.size() > 0){
+//            if(p.size() > 1){
+//                System.out.println("Player.getPiece " + p.size() + " pieces " + p + " at " + location);
+//            }
+//            return p.get(0);
+//        }
+//        return null;
+//    }
 
     /**
      * return the legal moves of a piece at location
      * @param location
      * @return
      */
-    public List<Location> getLegalMoves(Location location){
-        return remainingPieces.get(getPiece(location));
-    }
+//    public List<Location> getLegalMoves(Location location){
+//        return remainingPieces.get(getPiece(location));
+//    }
 
     /**
      * set the legal moves of a piece
      * @param piece
      * @param moves
      */
-    public void setLegalMoves(PieceInterface piece, List<Location> moves){
-        remainingPieces.put(piece, moves);
-    }
+//    public void setLegalMoves(PieceInterface piece, List<Location> moves){
+//        remainingPieces.put(piece, moves);
+//    }
 
     /**
      * get score of all pieces
