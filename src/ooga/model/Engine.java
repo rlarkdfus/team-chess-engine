@@ -1,11 +1,7 @@
 package ooga.model;
 
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import ooga.Location;
-import ooga.Turn;
-import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 
 public interface Engine {
@@ -33,6 +29,8 @@ public interface Engine {
     void setEndCondition(EndConditionRunner endCondition);
 
   String getWinner();
+
+  PieceInterface getCheckedKing();
 
   boolean canMovePiece(Location location);
 }

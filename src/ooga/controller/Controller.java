@@ -1,21 +1,16 @@
 package ooga.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Board.GameState;
 import ooga.model.Engine;
 import ooga.model.PieceInterface;
-
 import ooga.view.GameOverScreen;
 import ooga.view.View;
 import ooga.view.ViewInterface;
@@ -120,11 +115,14 @@ public class Controller implements ControllerInterface {
 
     view.updateDisplay(pieceViewList);
 
-
     GameState gameState = model.checkGameState();
+    System.out.println(gameState);
     if (gameState == GameState.CHECKMATE || gameState == GameState.STALEMATE) {
       String winner = model.getWinner();
       gameOverScreen = new GameOverScreen(this, winner);
+    }
+    if (gameState == GameState.CHECK){
+      view.showCheck(model.getCheckedKing().getLocation());
     }
   }
 

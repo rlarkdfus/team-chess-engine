@@ -1,22 +1,10 @@
 package ooga.model;
 
 
-import ooga.Location;
-import ooga.Turn;
-import ooga.controller.BoardBuilder;
-import ooga.controller.InvalidPieceConfigException;
-import ooga.model.EndConditionHandler.EndConditionInterface;
-import ooga.model.Moves.Move;
-
-import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
-
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import ooga.Location;
 import ooga.Turn;
-import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
 
@@ -43,7 +31,7 @@ public class Board implements Engine {
   private PlayerInterface currentPlayer;
   private GameState currGameState;
   private Check check;
-  private boolean isChecked;
+  private PieceInterface checkedPiece;
 
   private List<Location> promotionSquares;
   private List<Location> timerSquares;
@@ -164,11 +152,12 @@ public class Board implements Engine {
     //update game data
     updateLegalMoves();
     currGameState = endCondition.satisfiedEndCondition(players);
-    isChecked = check.isTrue(players);
-    if (isChecked) {
+    checkedPiece = null;
+    if (check.isTrue(players)) {
       for (PieceInterface p : allPieces) {
-        if (p.getName().equals("K") && !p.toString().equals(check.getWinner())) {
-          turn.addCheckedSquare(p.getLocation());
+        if (p.getName().equals("K") && !p.getTeam().equals(check.getWinner())) {
+//          turn.addCheckedSquare(p.getLocation());
+          checkedPiece = p;
         }
       }
     }
@@ -261,7 +250,8 @@ public class Board implements Engine {
       return GameState.STALEMATE;
     }
 
-    if (isChecked) {
+    if (checkedPiece != null) {
+      currGameState = GameState.CHECK;
       return GameState.CHECK;
     }
 
@@ -288,6 +278,14 @@ public class Board implements Engine {
   public String getWinner() {
     if (currGameState == GameState.CHECKMATE) {
       return endCondition.getWinner();
+    }
+    return null;
+  }
+
+  @Override
+  public PieceInterface getCheckedKing() {
+    if (currGameState == GameState.CHECK) {
+      return checkedPiece;
     }
     return null;
   }

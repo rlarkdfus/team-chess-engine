@@ -4,13 +4,11 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
-import ooga.Turn;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
 import ooga.controller.InvalidPieceConfigException;
@@ -209,7 +207,7 @@ public class BoardView extends Group implements BoardViewInterface {
         }
     }
 
-    private void showCheck(Location location){
+    public void showCheck(Location location){
         background[location.getRow()][location.getCol()].check();
     }
 }

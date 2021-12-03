@@ -25,7 +25,6 @@ public class CheckmateEndCondition implements EndConditionInterface {
       if (getTotalLegalMoves() == 0) {
         return winner;
       }
-      System.out.println("asdfasdf");
     }
     return null;
   }
@@ -35,7 +34,6 @@ public class CheckmateEndCondition implements EndConditionInterface {
     for (PieceInterface piece : checkedPlayer().getPieces()) {
       totalLegalMoves += numLegalMoves(piece);
     }
-    System.out.println(totalLegalMoves);
     return totalLegalMoves;
   }
 
