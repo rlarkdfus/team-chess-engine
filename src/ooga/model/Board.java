@@ -16,7 +16,7 @@ public class Board implements Engine {
   private static final int COLS = 8;
   private static final int LAST_ROW = ROWS - 1;
   private static final int FIRST_ROW = 0;
-  private static final String Queen = "Q";
+  private static final String QUEEN = "Q";
   private static final String KING = "K";
   private static final String PAWN = "P";
 
@@ -126,8 +126,6 @@ public class Board implements Engine {
 
 
 
-    System.out.println(this);
-
     // remove piece from player if needed after turn
     for (Location removeLocation : turn.getRemoved()) {
       for (PlayerInterface player : players) {
@@ -173,7 +171,7 @@ public class Board implements Engine {
     //Check piece promotion specifically
     for (Location promotionLocation : promotionSquares) {
       if (end.equals(promotionLocation)) {
-        promotePiece(piece, Queen);
+        promotePiece(piece, QUEEN);
       }
     }
   }
@@ -197,7 +195,10 @@ public class Board implements Engine {
   private void checkPawnPromotion(PieceInterface piece, Location end) {
     if (piece.getName().equals(PAWN)) {
       if (end.getRow() == FIRST_ROW || end.getRow() == LAST_ROW) {
-        promotePiece(piece, Queen);
+
+        System.out.println(currentPlayer.getPieces().size());
+        promotePiece(piece, QUEEN);
+        System.out.println(currentPlayer.getPieces().size());
       }
     }
   }
