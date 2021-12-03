@@ -5,16 +5,30 @@ import ooga.view.LoginView;
 import org.json.JSONObject;
 
 public class LoginController {
-//    private LoginView loginView;
-//    private Controller controller;
+    private LoginView loginView;
     private JsonParser jsonParser;
 
+    public LoginController() {
+        loginView = new LoginView(this);
+        loginView.initializeDisplay();
+    }
 
-//    public void hideLoginView() {
-//        loginView.hideDisplay();
-//    }
+    public void handleLoginAttempt(String username, String password) throws Exception {
+        if (isValidLogin(username, password)) {
+            new Controller();
 
-    public boolean isValidLogin(String username, String password) throws Exception {
+        }
+    }
+
+    public void handleGuestLogin() {
+        new Controller();
+    }
+
+    public void hideLoginView() {
+        loginView.hideDisplay();
+    }
+
+    private boolean isValidLogin(String username, String password) throws Exception {
         System.out.println("validating login");
         try {
             jsonParser = new JsonParser();
