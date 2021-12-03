@@ -12,10 +12,13 @@ import ooga.model.Moves.Move;
 
 public class Board implements Engine {
 
-  private static final int Rows = 8;
-  private static final int Cols = 8;
-  private static final int lastRow = Rows - 1;
-  private static final int firstRow = 0;
+  private static final int ROWS = 8;
+  private static final int COLS = 8;
+  private static final int LAST_ROW = ROWS - 1;
+  private static final int FIRST_ROW = 0;
+  private static final String Queen = "Q";
+  private static final String KING = "K";
+  private static final String PAWN = "P";
 
   public enum GameState {
     RUNNING,
@@ -52,12 +55,14 @@ public class Board implements Engine {
     System.out.println(this);
     updateLegalMoves();
     promotionSquares = new ArrayList<>();
-    initializePromotionSquares();
     timerSquares = new ArrayList<>();
-    initializeTimeSquares();
     skipSquares = new ArrayList<>();
+    initializePowerUpSquares();
+  }
+  private void initializePowerUpSquares(){
+    initializeTimeSquares();
     initializeSkipSquares();
-
+    initializePromotionSquares();
   }
 
   private void initializePromotionSquares() {
@@ -119,11 +124,7 @@ public class Board implements Engine {
     Turn turn = move.getTurn();
     move.executeMove(piece, allPieces, end);
 
-//        for(Move move : piece.getMove(end)) {
-//            System.out.println(move.getClass());
-//            turn.addTurn(move.getTurn());
-//            move.executeMove(piece, allPieces, end);
-//        }
+
 
     System.out.println(this);
 
@@ -147,7 +148,7 @@ public class Board implements Engine {
     turnCount++;
     toggleTimers();
 
-//        checkSkip(piece, end);
+        checkSkip(piece, end);
 
     //update game data
     updateLegalMoves();
@@ -155,7 +156,7 @@ public class Board implements Engine {
     checkedPiece = null;
     if (check.isTrue(players)) {
       for (PieceInterface p : allPieces) {
-        if (p.getName().equals("K") && !p.getTeam().equals(check.getWinner())) {
+        if (p.getName().equals(KING) && !p.getTeam().equals(check.getWinner())) {
 //          turn.addCheckedSquare(p.getLocation());
           checkedPiece = p;
         }
@@ -167,13 +168,12 @@ public class Board implements Engine {
 
   private void checkPromotion(PieceInterface piece, Location end) {
     //check pawn promotion specifically
-
     checkPawnPromotion(piece, end);
 
     //Check piece promotion specifically
     for (Location promotionLocation : promotionSquares) {
       if (end.equals(promotionLocation)) {
-        promotePiece(piece, "Q");
+        promotePiece(piece, Queen);
       }
     }
   }
@@ -195,10 +195,9 @@ public class Board implements Engine {
   }
 
   private void checkPawnPromotion(PieceInterface piece, Location end) {
-    if (piece.getName().equals("P")) {
-      if (end.getRow() == firstRow || end.getRow() == lastRow) {
-        System.out.println("pawn at end");
-        promotePiece(piece, "Q");
+    if (piece.getName().equals(PAWN)) {
+      if (end.getRow() == FIRST_ROW || end.getRow() == LAST_ROW) {
+        promotePiece(piece, Queen);
       }
     }
   }
@@ -228,7 +227,6 @@ public class Board implements Engine {
     allPieces.add(newPiece);
     currentPlayer.addPiece(newPiece);
     System.out.println(this);
-
   }
 
   /**
@@ -309,8 +307,7 @@ public class Board implements Engine {
 
   private PlayerInterface findPlayerTurn(int turn) {
     currentPlayer = players.get((turn) % players.size());
-
-    return players.get(turn % players.size());
+    return currentPlayer;
   }
 
   /**
