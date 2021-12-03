@@ -11,11 +11,11 @@ import java.util.Map;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
-import ooga.Turn;
 import ooga.model.Board;
 import ooga.model.Board.GameState;
 import ooga.model.Engine;
 import ooga.model.PieceInterface;
+
 import ooga.view.GameOverScreen;
 import ooga.view.View;
 import ooga.view.ViewInterface;
