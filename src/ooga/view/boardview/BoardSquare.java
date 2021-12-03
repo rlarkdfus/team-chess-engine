@@ -1,4 +1,4 @@
-package ooga.view;
+package ooga.view.boardview;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;

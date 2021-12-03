@@ -39,6 +39,7 @@ public class Player implements PlayerInterface {
 
     @Override
     public void resetTimer() {
+        System.out.println("resetting timer: " + team);
         moveTimer.reset();
     }
 

@@ -15,7 +15,7 @@ public class LoginController {
 
     public boolean handleLoginAttempt(String username1, String password1, String username2, String password2) throws Exception {
         if (isValidLogin(username1, password1) && isValidLogin(username2, password2)) {
-            new Controller();
+            new GameController();
             hideLoginView();
             return true;
         }
@@ -23,7 +23,7 @@ public class LoginController {
     }
 
     public void handleGuestLogin() {
-        new Controller();
+        new GameController();
     }
 
     public void hideLoginView() {
