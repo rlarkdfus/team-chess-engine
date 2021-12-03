@@ -29,6 +29,7 @@ public class EditorController extends Controller {
     protected void start() {
         model = new Board(boardBuilder.getInitialPlayers());
         editorView = new EditorView(this);
+        editorView.initializeDisplay(boardBuilder.getInitialPieceViews());
     }
 
     @Override
@@ -39,5 +40,15 @@ public class EditorController extends Controller {
     @Override
     public List<Location> getLegalMoves(Location location) {
         return null;
+    }
+
+    @Override
+    public void setInitialTime(int minutes) {
+
+    }
+
+    @Override
+    public void setIncrement(int seconds) {
+
     }
 }

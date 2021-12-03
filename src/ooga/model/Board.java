@@ -44,6 +44,7 @@ public class Board implements Engine {
 
   public Board(List<PlayerInterface> players) {
     this.players = players;
+    this.endCondition = new EndConditionRunner();
     turnCount = 0;
     check = new Check();
     allPieces = new ArrayList<>();
@@ -62,7 +63,6 @@ public class Board implements Engine {
     initializeTimeSquares();
     skipSquares = new ArrayList<>();
     initializeSkipSquares();
-
   }
 
   private void initializePromotionSquares() {
@@ -213,9 +213,10 @@ public class Board implements Engine {
      */
     private void toggleTimers() {
         PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
+        PlayerInterface currPlayer = findPlayerTurn(turnCount);
         prevPlayer.toggleTimer();
         prevPlayer.incrementTimeUserInterface();
-        currentPlayer.toggleTimer();
+        currPlayer.toggleTimer();
     }
 
   private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
@@ -352,5 +353,3 @@ public class Board implements Engine {
     return str.toString();
   }
 }
-
-

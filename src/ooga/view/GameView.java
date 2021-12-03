@@ -2,9 +2,11 @@ package ooga.view;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import ooga.Location;
 import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
 import ooga.controller.PieceViewBuilder;
+import ooga.view.boardview.EditorBoardView;
 import ooga.view.boardview.GameBoardView;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
 import ooga.view.ui.gameSettingsUI.GameSettingsUI;
@@ -45,5 +47,13 @@ public class GameView extends View {
         root.add(gameSettingsInfoUI, 0 , 1, 1, 2);
         root.add(timeConfigurationUI, 2, 2, 1, 1);
     }
+
+    @Override
+    public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
+        this.boardView = new GameBoardView(controller, pieceViewList, 8, 8);
+        super.resetDisplay(pieceViewList);
+    }
+
+
 }
 

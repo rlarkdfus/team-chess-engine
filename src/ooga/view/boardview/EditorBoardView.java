@@ -18,6 +18,7 @@ public class EditorBoardView extends BoardView {
     @Override
     protected void clickBoard(Location clickLocation) {
         // if editor piece is chosen
+        System.out.println("click board!");
 
         if (getSelectedLocation() == null) {
             selectPiece(clickLocation);

@@ -24,8 +24,13 @@ public class GameController extends Controller {
     @Override
     public void start() {
         try {
-            buildGame();
+            //buildGame() is the 3 lines below
+            model = new Board(boardBuilder.getInitialPlayers());
+            view = new GameView(this);
             view.initializeDisplay(boardBuilder.getInitialPieceViews());
+
+            timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+            timeController.configTimers(model.getPlayers());
             startTimersForNewGame();
         } catch (Exception E) {
             E.printStackTrace();
@@ -33,15 +38,9 @@ public class GameController extends Controller {
         }
     }
 
-    private void buildGame() {
-        model = new Board(boardBuilder.getInitialPlayers());
-        //timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
-        view = new GameView(this);
-    }
-
     public void movePiece(Location start, Location end) {
         List<PieceViewBuilder> pieceViewList = new ArrayList<>();
-        for(PieceInterface piece : model.movePiece(start, end)){
+        for (PieceInterface piece : model.movePiece(start, end)) {
             pieceViewList.add(new PieceViewBuilder(piece));
         }
         view.updateDisplay(pieceViewList);
@@ -75,6 +74,7 @@ public class GameController extends Controller {
      * reset timers for a new game and start the first player's timer
      */
     private void startTimersForNewGame() {
+        System.out.println("starting timers");
         timeController.resetTimers(model.getPlayers());
         timeController.startPlayer1Timer(model.getPlayers());
     }
@@ -84,6 +84,7 @@ public class GameController extends Controller {
      *
      * @param minutes the new initial time (min)
      */
+    @Override
     public void setInitialTime(int minutes) {
         timeController.setInitialTime(minutes);
     }
@@ -93,8 +94,8 @@ public class GameController extends Controller {
      *
      * @param seconds the new increment (s)
      */
+    @Override
     public void setIncrement(int seconds) {
         timeController.setIncrement(seconds);
     }
-
 }

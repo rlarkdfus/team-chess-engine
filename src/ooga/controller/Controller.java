@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javafx.beans.property.StringProperty;
 import ooga.Location;
+import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.view.LoginView;
 
@@ -23,6 +25,7 @@ public abstract class Controller implements ControllerInterface {
 
   public Controller() {
     boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+    model = new Board(boardBuilder.getInitialPlayers());
     start();
   }
 
@@ -101,8 +104,11 @@ public abstract class Controller implements ControllerInterface {
    * @param side the side of the player
    * @return a StringProperty ("mm:ss") representing the amount of time left
    */
-//  public StringProperty getTimeLeft(int side) {
-//    return model.getPlayers().get(side).getTimeLeft();
-//  }
+    public StringProperty getTimeLeft(int side) {
+      return model.getPlayers().get(side).getTimeLeft();
+    }
 
+    public abstract void setInitialTime(int minutes);
+
+    public abstract void setIncrement(int seconds);
 }

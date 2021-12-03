@@ -25,11 +25,11 @@ public class GameSettingsUI extends GridPane implements UIInterface {
     @Override
     public void createUI() {
         this.add(viewUtility.makeLabel("black_time_label"), 0, 0);
-//        this.add(viewUtility.makeText("black_timer_display", controller.getTimeLeft(BLACK_INDEX)), 0, 1);
+        this.add(viewUtility.makeText("black_timer_display", controller.getTimeLeft(BLACK_INDEX)), 0, 1);
         this.add(viewUtility.makeLabel("move_history_label"), 0, 2);
         this.add(viewUtility.makeGridPane("move_history_gridpane"), 0, 3);
         this.add(viewUtility.makeButton("download_game", e -> controller.downloadGame(viewUtility.saveJSONPath())), 0, 4);
         this.add(viewUtility.makeLabel("white_time_label"), 0, 5);
-//        this.add(viewUtility.makeText("white_timer_display", controller.getTimeLeft(WHITE_INDEX)), 0, 6);
+        this.add(viewUtility.makeText("white_timer_display", controller.getTimeLeft(WHITE_INDEX)), 0, 6);
     }
 }

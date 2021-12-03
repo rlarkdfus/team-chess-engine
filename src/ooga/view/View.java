@@ -64,7 +64,6 @@ public abstract class View implements ViewInterface {
     
     @Override
     public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
-        this.boardView = new GameBoardView(controller, pieceViewList, 8, 8);
         createResettableUIs();
         stage.setScene(setupDisplay());
         stage.show();

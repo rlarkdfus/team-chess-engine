@@ -32,13 +32,13 @@ public class TimeConfigurationUI extends GridPane implements UIInterface {
 
     private void handleMinutesSliderAction(Double minutes) {
         int initialTime = (int)(Math.round(minutes));
-//        controller.setInitialTime(initialTime);
+        controller.setInitialTime(initialTime);
         ((Label) lookup("#minutes_slider_value")).setText(String.valueOf(initialTime));
     }
 
     private void handleIncrementSliderAction(Double seconds) {
         int increment = (int)(Math.round(seconds));
-//        controller.setIncrement(increment);
+        controller.setIncrement(increment);
         ((Label) lookup("#increment_slider_value")).setText(String.valueOf(increment));
     }
  }

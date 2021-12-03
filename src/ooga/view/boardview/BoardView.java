@@ -132,4 +132,8 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     protected Location getSelectedLocation() {
         return selectedLocation;
     }
+
+    public void showCheck(Location location) {
+        findBoardSquare(location).check();
+    }
 }
