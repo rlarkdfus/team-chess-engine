@@ -15,13 +15,12 @@ public class LoginController {
 
     public void handleLoginAttempt(String username, String password) throws Exception {
         if (isValidLogin(username, password)) {
-            new Controller();
-
+            new GameController();
         }
     }
 
     public void handleGuestLogin() {
-        new Controller();
+        new GameController();
     }
 
     public void hideLoginView() {

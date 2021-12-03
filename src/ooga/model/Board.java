@@ -1,6 +1,11 @@
 package ooga.model;
 
 
+import ooga.Location;
+import ooga.Turn;
+import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.Moves.Move;
+
 import java.util.ArrayList;
 import java.util.List;
 import ooga.Location;
@@ -42,6 +47,7 @@ public class Board implements Engine {
 
   public Board(List<PlayerInterface> players) {
     this.players = players;
+    this.endCondition = new EndConditionRunner();
     turnCount = 0;
     check = new Check();
     allPieces = new ArrayList<>();
@@ -203,15 +209,16 @@ public class Board implements Engine {
     }
   }
 
-  /**
-   * pause current player timer, add increment, start next player time
-   */
-  private void toggleTimers() {
-    PlayerInterface prevPlayer = findPlayerTurn(turnCount - 1);
-    prevPlayer.toggleTimer();
-    prevPlayer.incrementTimeUserInterface();
-    currentPlayer.toggleTimer();
-  }
+    /**
+     * pause current player timer, add increment, start next player time
+     */
+    private void toggleTimers() {
+        PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
+        PlayerInterface currPlayer = findPlayerTurn(turnCount);
+        prevPlayer.toggleTimer();
+        prevPlayer.incrementTimeUserInterface();
+        currPlayer.toggleTimer();
+    }
 
   private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
     PieceInterface newPiece = null;
@@ -345,4 +352,3 @@ public class Board implements Engine {
     return str.toString();
   }
 }
-

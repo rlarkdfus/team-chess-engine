@@ -9,20 +9,19 @@ import ooga.model.InvalidPieceException;
 
 public interface ControllerInterface {
 
-//    /**
-//     * View updates pieces on the board
-//     */
-//    void updateView();
-
     /**
      * Resets a game to its initial/default state
      */
-    void resetGame();
+    void reset();
 
     /**
      * View calls loadFile to choose a file to load a game
      */
     void uploadConfiguration(File file) throws Exception;
+
+    void downloadGame(String filePath);
+
+    void quit();
 
     /**
      * View calls movePiece when user moves piece on GUI, which moves piece in model
@@ -32,8 +31,6 @@ public interface ControllerInterface {
      */
     void movePiece(Location start, Location end);
 
-  void quit();
-
   /**
      * Returns true if the piece at the location of user click can be moved
      * @param location is the location of piece
@@ -41,5 +38,4 @@ public interface ControllerInterface {
     boolean canMovePiece(Location location);
 
     List<Location> getLegalMoves(Location location);
-
 }
