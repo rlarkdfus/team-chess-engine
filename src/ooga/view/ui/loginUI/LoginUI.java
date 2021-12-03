@@ -6,16 +6,17 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.input.KeyEvent;
 import ooga.controller.Controller;
+import ooga.controller.ControllerInterface;
 import ooga.controller.LoginController;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
 
 public class LoginUI extends GridPane implements UIInterface {
 
-    Controller controller;
+    ControllerInterface controller;
     ViewUtility viewUtility;
 
-    public LoginUI(Controller controller) {
+    public LoginUI(ControllerInterface controller) {
         this.controller = controller;
         this.viewUtility = new ViewUtility();
         this.getStyleClass().add("LoginUI");

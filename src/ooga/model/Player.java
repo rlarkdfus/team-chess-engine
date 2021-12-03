@@ -2,7 +2,6 @@ package ooga.model;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
-import ooga.model.Moves.Move;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -55,12 +54,13 @@ public class Player implements PlayerInterface {
     }
 
     @Override
-    public void incrementTime() {
-        moveTimer.incrementTime();
+    public void incrementTimeUserInterface() {
+        moveTimer.incrementTimeUserInterface();
     }
 
-
-
+    public void incrementTime(Integer specifiedTime){
+        moveTimer.incrementTime(specifiedTime);
+    }
 
     /**
      * remove a piece from the player's possession
@@ -138,6 +138,17 @@ public class Player implements PlayerInterface {
             }
             return queen;
 
+    }
+
+    //FIXME:
+    //Needs to be in initial Piece List
+    public PieceInterface createPiece(String pieceName) throws InvalidPieceException {
+        for(PieceInterface pieceInterace: initialPieces){
+            if(pieceInterace.getName().equals(pieceName)){
+                return pieceInterace;
+            }
+        }
+        throw new InvalidPieceException(pieceName);
     }
 
     @Override

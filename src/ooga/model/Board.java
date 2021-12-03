@@ -28,10 +28,13 @@ private static final int firstRow = 0;
     private EndConditionInterface endCondition;
     private int turnCount;
     private PlayerInterface currentPlayer;
-    private List<Location> promotionSquares;
     private GameState currGameState;
 
-    public Board(List<PlayerInterface> players) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    private List<Location> promotionSquares;
+    private List<Location> timerSquares;
+    private List<Location> skipSquares;
+
+    public Board(List<PlayerInterface> players) {
         this.players = players;
         turnCount = 0;
         allPieces = new ArrayList<>();
@@ -46,9 +49,25 @@ private static final int firstRow = 0;
         updateLegalMoves();
         promotionSquares = new ArrayList<>();
       initializePromotionSquares();
+        timerSquares = new ArrayList<>();
+        initializeTimeSquares();
+        skipSquares = new ArrayList<>();
+        initializeSkipSquares();
+
     }
 
     private void initializePromotionSquares() {
+//        promotionSquares.add(new Location(4,0));
+    }
+    private void initializeTimeSquares(){
+//        timerSquares.add(new Location(4,0));
+//        timerSquares.add(new Location(3,0));
+//        timerSquares.add(new Location(2,0));
+
+    }
+
+    private void initializeSkipSquares(){
+//        skipSquares.add(new Location(4,0));
     }
     /**
      * this method returns the list of all players
@@ -77,7 +96,7 @@ private static final int firstRow = 0;
      * @param start is piece initial location
      * @param end is piece new location
      */
-    public Turn movePiece(Location start, Location end) throws FileNotFoundException, InvocationTargetException, InvalidPieceConfigException, NoSuchMethodException, IllegalAccessException {
+    public List<PieceInterface> movePiece(Location start, Location end) {
         // pause current player timer, start next player time
         PieceInterface piece = null;
         for(PieceInterface p : allPieces) {
@@ -106,15 +125,17 @@ private static final int firstRow = 0;
         //Check for pawn promotion
         checkPromotion(piece, end);
 
+        //Add time powerup
+        checkTime(piece,end);
         // increment turn
         turnCount++;
         toggleTimers();
 
+//        checkSkip(piece, end);
         //update game data
         updateLegalMoves();
-        currGameState = endCondition.isGameOver(players);
-
-        return turn;
+//        currGameState = endCondition.isGameOver(players);
+        return allPieces;
     }
 
     private void checkPromotion(PieceInterface piece, Location end) {
@@ -125,7 +146,23 @@ private static final int firstRow = 0;
         //Check piece promotion specifically
         for(Location promotionLocation: promotionSquares){
             if(end.equals(promotionLocation)){
-                promotePiece(piece);
+                promotePiece(piece,"Q");
+            }
+        }
+    }
+
+    private void checkTime(PieceInterface pieceInterface, Location end){
+        for(Location timerLocation: timerSquares){
+            if(end.equals(timerLocation)){
+                currentPlayer.incrementTime(100000);
+            }
+        }
+    }
+
+    private void checkSkip(PieceInterface pieceInterface, Location end) {
+        for (Location skipLocation : skipSquares) {
+            if (end.equals(skipLocation)) {
+                turnCount++;
             }
         }
     }
@@ -133,7 +170,7 @@ private static final int firstRow = 0;
         if(piece.getName().equals("P")){
             if(end.getRow() == firstRow || end.getRow() ==lastRow){
                 System.out.println("pawn at end");
-                promotePiece(piece);
+                promotePiece(piece, "Q");
             }
         }
     }
@@ -142,22 +179,27 @@ private static final int firstRow = 0;
      * pause current player timer, add increment, start next player time
      */
     private void toggleTimers() {
-        System.out.println("toggling timers");
         PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
         prevPlayer.toggleTimer();
-        prevPlayer.incrementTime();
+        prevPlayer.incrementTimeUserInterface();
         currentPlayer.toggleTimer();
     }
 
-    private void promotePiece(PieceInterface pieceInterface) {
-        PieceInterface newPiece = currentPlayer.createQueen();
-        newPiece.moveTo(pieceInterface.getLocation());
+    private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
+        PieceInterface newPiece = null;
+        try {
+            newPiece = currentPlayer.createPiece(newPieceName);
+        } catch (InvalidPieceException e) {
+            e.printStackTrace();
+        }
 
         currentPlayer.removePiece(pieceInterface);
         allPieces.remove(pieceInterface);
 
+        newPiece.moveTo(pieceInterface.getLocation());
         allPieces.add(newPiece);
         currentPlayer.addPiece(newPiece);
+        System.out.println(this);
 
     }
 
@@ -193,6 +235,7 @@ private static final int firstRow = 0;
     public List<Location> getLegalMoves(Location location){
         for(PieceInterface piece : allPieces) {
             if(piece.getLocation().equals(location)) {
+//                System.out.println(piece.getName() + " " + piece.getTeam());
                 return piece.getEndLocations();
             }
         }
@@ -225,7 +268,8 @@ private static final int firstRow = 0;
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn + 1) % players.size());
+        currentPlayer = players.get((turn) % players.size());
+
         return players.get(turn % players.size());
     }
 
@@ -238,7 +282,7 @@ private static final int firstRow = 0;
         StringBuilder str = new StringBuilder();
         str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
         for(int i = 0; i < 8; i++) {
-            str.append(i).append("\t|");
+            str.append(i+"\t|");
 //            str.append("|");
             for(int j = 0; j < 8; j++) {
                 Location location = new Location(i, j);
@@ -246,7 +290,7 @@ private static final int firstRow = 0;
 
                 for(PieceInterface piece : allPieces) {
                     if(piece.getLocation().equals(location)) {
-                        str.append(piece).append("\t");
+                        str.append(piece.toString() + "\t");
                         found = true;
                     }
                 }

@@ -1,8 +1,5 @@
 package ooga.view;
 
-import java.util.List;
-import java.util.Objects;
-
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -14,10 +11,14 @@ import ooga.view.boardview.GameBoardView;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
 import ooga.view.ui.gameSettingsUI.GameSettingsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
+import ooga.view.ui.PieceViewMenuUI;
 import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
 import ooga.view.util.ViewUtility;
 
-public class View implements ViewInterface {
+import java.util.List;
+import java.util.Objects;
+
+public class BoardEditorView implements ViewInterface {
 
     public static final String DEFAULT_RESOURCE_PACKAGE = View.class.getPackageName() + ".resources.";
     public static final String STYLE_PACKAGE = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
@@ -35,22 +36,21 @@ public class View implements ViewInterface {
     private SettingsUI settingsUI; // right
     private GameInfoUI gameInfoUI; // left
     private GameSettingsUI gameSettingsInfoUI; // top
+    private PieceViewMenuUI pieceViewMenuUI;
     private TimeConfigurationUI timeConfigurationUI;
 
-    public View(Controller controller) {
+    public BoardEditorView(Controller controller) {
         this.controller = controller;
         this.viewController = new ViewController();
         this.viewUtility = new ViewUtility();
         this.stage = new Stage();
-        viewController.setView(this);
+        //viewController.setView(this);
     }
 
     private Scene setupDisplay() {
         GridPane root = new GridPane();
-        root.add(settingsUI, 2, 1);
         root.add(timeConfigurationUI, 2, 2, 1, 1);
         root.add(gameSettingsInfoUI, 0 , 1, 1, 2);
-        root.add(gameInfoUI, 0, 0, 3, 1);
         root.add(boardView, 1, 1, 1, 2);
         Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(DEFAULT_STYLESHEET)).toExternalForm());
@@ -59,35 +59,38 @@ public class View implements ViewInterface {
 
     @Override
     public void initializeDisplay(List<PieceViewBuilder> pieceViewList) {
-        this.timeConfigurationUI = new TimeConfigurationUI(controller);
-        resetDisplay(pieceViewList);
-    }
-
-    @Override
-    public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
+        //this.timeConfigurationUI = new TimeConfigurationUI(controller);
         this.settingsUI = new SettingsUI(controller, viewController);
         this.boardView = new GameBoardView(controller, pieceViewList, 8, 8);
         this.gameInfoUI = new GameInfoUI();
         this.gameSettingsInfoUI = new GameSettingsUI(controller, viewController);
+
         stage.setScene(setupDisplay());
         stage.show();
     }
 
     @Override
     public void updateDisplay(List<PieceViewBuilder> pieceViewList) {
-        boardView.updateBoardView(pieceViewList);
+
+    }
+
+    @Override
+    public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
+
     }
 
     @Override
     public void changeBoardColor(Color color1, Color color2) {
-        boardView.changeColors(color1, color2);
+
     }
 
     @Override
     public void changePieceStyle(String style) {
-        boardView.changePieceStyle(style);
+
     }
 
     @Override
-    public void showError(String message) {viewUtility.showError(message);}
+    public void showError(String message) {
+
+    }
 }

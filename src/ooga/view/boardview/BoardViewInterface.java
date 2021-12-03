@@ -1,4 +1,4 @@
-package ooga.view;
+package ooga.view.boardview;
 
 import java.util.List;
 import javafx.scene.paint.Color;
@@ -10,14 +10,7 @@ public interface BoardViewInterface {
     /**
      * Update pieces based on model
      */
-    void updateBoardView(Turn turn);
-
-//    /**
-//     * Initializes the Board View
-//      */
-//    void initializeBoardView(int row, int col);
-
-    void initializeBoardView(List<PieceViewBuilder> pieceViews, int row, int col);
+    void updateBoardView(List<PieceViewBuilder> pieceViews);
 
     /**
      * Checkered pattern board colors
@@ -31,11 +24,4 @@ public interface BoardViewInterface {
      * @param style
      */
     void changePieceStyle(String style);
-
-    void resetBoard();
-
-    /**
-     * Highlights squares on the board that are legal
-     */
-    void showLegalMoves(Location location);
 }
