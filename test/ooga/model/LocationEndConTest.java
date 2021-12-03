@@ -73,9 +73,9 @@ public class LocationEndConTest {
     board.movePiece(new Location(4, 7), new Location(6, 7)); //queen eats
     board.movePiece(new Location(6, 7), new Location(6, 6)); //queen eats
     board.movePiece(new Location(6, 6), new Location(6, 5)); //queen eats
-    assertEquals(GameState.RUNNING, board.checkGameState());
+    assertEquals(GameState.CHECK, board.checkGameState());
     board.movePiece(new Location(6, 5), new Location(6, 4)); //queen eats
-    assertEquals(GameState.RUNNING, board.checkGameState());
+    assertEquals(GameState.CHECK, board.checkGameState());
     board.movePiece(new Location(6, 4), new Location(6, 3)); //queen eats
 
     assertEquals(GameState.CHECKMATE, board.checkGameState());
@@ -90,9 +90,9 @@ public class LocationEndConTest {
     board.movePiece(new Location(3, 7), new Location(1, 7)); //queen eats
     board.movePiece(new Location(1, 7), new Location(1, 6)); //queen eats
     board.movePiece(new Location(1, 6), new Location(1, 5)); //queen eats
-    assertEquals(GameState.RUNNING, board.checkGameState());
+    assertEquals(GameState.CHECK, board.checkGameState());
     board.movePiece(new Location(1, 5), new Location(1, 4)); //queen eats
-    assertEquals(GameState.RUNNING, board.checkGameState());
+    assertEquals(GameState.CHECK, board.checkGameState());
     board.movePiece(new Location(1, 4), new Location(1, 3)); //queen eats
 
     assertEquals(GameState.CHECKMATE, board.checkGameState());
