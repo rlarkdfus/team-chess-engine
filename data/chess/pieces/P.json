@@ -13,6 +13,10 @@
     "TakeOnlyMove": [
       "1, -1,takes,limited",
       "1, 1,takes,limited"
+    ],
+    "PromoteMove": [
+      "0, -1, takes, limited",
+      "7, -1, takes, limited"
     ]
   },
   "attributes": {

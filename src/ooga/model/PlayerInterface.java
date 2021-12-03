@@ -32,11 +32,11 @@ public interface PlayerInterface {
 
   void tryMove(PieceInterface piece, Location end);
 
-  PieceInterface getPiece(Location location);
+//  PieceInterface getPiece(Location location);
 
-  List<Location> getLegalMoves(Location location);
-
-  void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
+//  List<Location> getLegalMoves(Location location);
+//
+//  void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
 
   void removePiece(PieceInterface piece);
 

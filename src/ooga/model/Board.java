@@ -1,5 +1,14 @@
 package ooga.model;
 
+
+import ooga.Location;
+import ooga.Turn;
+import ooga.controller.BoardBuilder;
+import ooga.controller.InvalidPieceConfigException;
+import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.Moves.Move;
+import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
+
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -10,12 +19,14 @@ import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
 
-public class Board implements Engine {
-private static final int Rows = 8;
-private static final int Cols = 8;
-private static final int lastRow = Rows -1;
-private static final int firstRow = 0;
+//import static ooga.controller.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
 
+public class Board implements Engine {
+
+    private static final int Rows = 8;
+    private static final int Cols = 8;
+    private static final int lastRow = Rows -1;
+    private static final int firstRow = 0;
 
     public enum GameState {
         RUNNING,
@@ -110,6 +121,14 @@ private static final int firstRow = 0;
         Turn turn = move.getTurn();
         move.executeMove(piece, allPieces, end);
 
+//        for(Move move : piece.getMove(end)) {
+//            System.out.println(move.getClass());
+//            turn.addTurn(move.getTurn());
+//            move.executeMove(piece, allPieces, end);
+//        }
+
+        System.out.println(this);
+
         // remove piece from player if needed after turn
         for(Location removeLocation : turn.getRemoved()){
             for(PlayerInterface player : players){
@@ -202,8 +221,6 @@ private static final int firstRow = 0;
         System.out.println(this);
 
     }
-
-
 
 
     /**
@@ -301,7 +318,7 @@ private static final int firstRow = 0;
             }
             str.append("\n");
         }
-        str.append("__________________________________\n");
+        str.append("____________________________________\n");
         return str.toString();
     }
 }
