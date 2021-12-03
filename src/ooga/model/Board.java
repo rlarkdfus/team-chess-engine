@@ -125,7 +125,7 @@ public class Board implements Engine {
     updateLegalMoves();
     currGameState = endCondition.isGameOver(players);
     isChecked = check.exists(players);
-    System.out.println(isChecked);
+    System.out.println("check: "+isChecked);
     return turn;
   }
 
