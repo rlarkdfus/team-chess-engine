@@ -4,9 +4,9 @@
   "boardSize": "8x8",
   "boardColors": ["#f3dab0", "#bb885b"],
   "players": ["w", "b"],
+  "rules": "data/chess/rules/timertest.json",
+  "style": "companion",
   "time": 10,
   "timeIncrement": 5,
-  "rules": "data/chess/rules/notEnoughPieces.json",
-  "style": "companion",
   "csv": "data/chess/locations/chess.csv"
 }
