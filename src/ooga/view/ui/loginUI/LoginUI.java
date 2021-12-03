@@ -87,8 +87,8 @@ public class LoginUI extends GridPane implements UIInterface {
     private void handleLoginAction() throws Exception {
         String whiteUsername = ((TextField) lookup("#white_username_field")).getText();
         String whitePassword = ((PasswordField) lookup("#white_password_field")).getText();
-        String blackUsername = ((TextField) lookup("#white_username_field")).getText();
-        String blackPassword = ((PasswordField) lookup("#white_password_field")).getText();
+        String blackUsername = ((TextField) lookup("#black_username_field")).getText();
+        String blackPassword = ((PasswordField) lookup("#black_password_field")).getText();
         boolean login = loginController.handleLoginAttempt(blackUsername, blackPassword, whiteUsername, whitePassword);
         System.out.println(login);
         if (!login) {
