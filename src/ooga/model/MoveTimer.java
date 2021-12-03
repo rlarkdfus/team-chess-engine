@@ -129,6 +129,9 @@ public class MoveTimer implements TimerInterface {
     }
 
     public void incrementTime(int specifiedTime){
+        if (seconds == 0){
+            return;
+        }
         seconds+=specifiedTime;
         timeLeft.setValue(timeToString(seconds));
     }
