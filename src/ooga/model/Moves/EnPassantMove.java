@@ -21,20 +21,24 @@ public class EnPassantMove extends Move {
     protected boolean isLegal(PieceInterface pawn, Location potentialLocation, List<PieceInterface> pieces) {
         Location otherPawnLocation = new Location(pawn.getLocation().getRow(), potentialLocation.getCol());
 
-        PieceInterface otherPawn = pieceAt(otherPawnLocation, pieces);
-
-        if(pieceAt(potentialLocation, pieces) != null) {
+        if(pieceAt(potentialLocation, pieces) != null || pieceAt(otherPawnLocation, pieces) == null) {
             return false;
         }
-        if (otherPawn == null || !otherPawn.isFirstMove()){
+
+        PieceInterface otherPawn = pieceAt(otherPawnLocation, pieces);
+//        if(otherPawn != null) {
+//            System.out.println(pawn.toString() + " " + pawn.getLocation() + ", " + otherPawn.toString() + " " + otherPawnLocation);
+//        }
+
+        if (otherPawn == null || !otherPawn.getName().equals("P") || !otherPawn.isFirstMove()){
             return false;
         }
         return tryMove(pawn, potentialLocation, new ArrayList<>(pieces));
     }
 
     @Override
-    protected PieceInterface tryTakeMove(Location location, List<PieceInterface> pieces) {
-        Location otherPawnLocation = new Location(location.getRow() - getdRow(), location.getCol());
+    protected PieceInterface tryTakeMove(Location potentialLocation, List<PieceInterface> pieces) {
+        Location otherPawnLocation = new Location(potentialLocation.getRow() - getdRow(), potentialLocation.getCol());
         return pieceAt(otherPawnLocation, pieces);
     }
 }

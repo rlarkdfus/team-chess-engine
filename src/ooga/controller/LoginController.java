@@ -6,15 +6,30 @@ import org.json.JSONObject;
 
 public class LoginController {
     private LoginView loginView;
-    private Controller controller;
     private JsonParser jsonParser;
 
+    public LoginController() {
+        loginView = new LoginView(this);
+        loginView.initializeDisplay();
+    }
+
+    public void handleLoginAttempt(String username, String password) throws Exception {
+        if (isValidLogin(username, password)) {
+            new Controller();
+
+        }
+    }
+
+    public void handleGuestLogin() {
+        new Controller();
+    }
 
     public void hideLoginView() {
         loginView.hideDisplay();
     }
 
-    public boolean isValidLogin(String username, String password) throws Exception {
+    private boolean isValidLogin(String username, String password) throws Exception {
+        System.out.println("validating login");
         try {
             jsonParser = new JsonParser();
             File userFile = new File(String.format("data/chess/profiles/%s.json", username));
@@ -23,8 +38,8 @@ public class LoginController {
             return truePassword.equals(password);
         }
         catch (Exception e) {
+            System.out.println("invalid login");
             throw new Exception("Invalid username. Please login with an existing username or sign in to create an account");
         }
     }
-
 }

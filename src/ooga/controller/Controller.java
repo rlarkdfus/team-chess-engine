@@ -4,14 +4,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javafx.beans.property.StringProperty;
 import ooga.Location;
-import ooga.Turn;
 import ooga.model.Board;
 import ooga.model.Board.GameState;
 import ooga.model.Engine;
-import ooga.view.LoginView;
+import ooga.model.PieceInterface;
+
 import ooga.view.GameOverScreen;
 import ooga.view.View;
 import ooga.view.ViewInterface;
@@ -27,23 +31,23 @@ public class Controller implements ControllerInterface {
   private LocationWriter locationWriter;
   private Builder boardBuilder;
   private TimeController timeController;
-  private LoginController loginController;
   private File jsonFile;
-  private LoginView loginView;
   private GameOverScreen gameOverScreen;
 
   public Controller() {
-    startGame();
-//    initializeLogin();
-
-  }
-
-  public void handleLoginAttempt(String username, String password) throws Exception {
-    if (loginController.isValidLogin(username, password)) {
-      startGame();
+    view = new View(this);
+    try {
+      jsonFile = DEFAULT_CHESS_CONFIGURATION;
+      boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+      timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+      locationWriter = new LocationWriter();
+      buildGame(boardBuilder);
+      timeController.configTimers(model.getPlayers());
+      startTimersForNewGame();
+      view.initializeDisplay(boardBuilder.getInitialPieceViews());
     }
-    else {
-      // handle incorrect password label;
+    catch (Exception e){
+      view.showError(e.getMessage());
     }
   }
 
@@ -107,10 +111,16 @@ public class Controller implements ControllerInterface {
    * @throws IllegalAccessException
    */
   @Override
-  public void movePiece(Location start, Location end) throws
-      InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
-    Turn turn = model.movePiece(start, end);
-    view.updateDisplay(turn);
+  public void movePiece(Location start, Location end) {
+//    Turn turn = model.movePiece(start, end);
+    List<PieceViewBuilder> pieceViewList = new ArrayList<>();
+    for(PieceInterface piece : model.movePiece(start, end)){
+      pieceViewList.add(new PieceViewBuilder(piece));
+    }
+
+    view.updateDisplay(pieceViewList);
+
+
     GameState gameState = model.checkGameState();
     if (gameState == GameState.CHECKMATE || gameState == GameState.STALEMATE) {
       String winner = model.getWinner();
@@ -122,7 +132,6 @@ public class Controller implements ControllerInterface {
     return model.getLegalMoves(location);
   }
 
-
   public void downloadGame(String filePath) {
     try {
       JSONWriter jsonWriter = new JSONWriter();
@@ -132,7 +141,6 @@ public class Controller implements ControllerInterface {
     } catch (IOException ignored) {
     }
   }
-
 
   /**
    * gets the amount of time left on a player's timer
@@ -162,35 +170,11 @@ public class Controller implements ControllerInterface {
     timeController.setIncrement(seconds);
   }
 
-  private void initializeLogin() {
-    loginController = new LoginController();
-    loginView = new LoginView(this);
-    loginView.initializeDisplay();
-  }
-
   private void buildGame(Builder boardBuilder) throws
       InvocationTargetException, NoSuchMethodException, IllegalAccessException {
     model = new Board(boardBuilder.getInitialPlayers());
     timeController.configTimers(model.getPlayers());
     model.setEndCondition(boardBuilder.getEndConditionHandler());
-    view.initializeDisplay(boardBuilder.getInitialPieceViews());
-  }
-  private void startGame() {
-//    loginView.hideDisplay();
-    view = new View(this);
-    try {
-      jsonFile = DEFAULT_CHESS_CONFIGURATION;
-      boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-      timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
-      locationWriter = new LocationWriter();
-      buildGame(boardBuilder);
-      timeController.configTimers(model.getPlayers());
-      startTimersForNewGame();
-      view.initializeDisplay(boardBuilder.getInitialPieceViews());
-    }
-    catch (Exception e){
-      view.showError(e.getMessage());
-    }
   }
 
 }

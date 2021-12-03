@@ -15,7 +15,7 @@ public interface PlayerInterface {
 
   void configTimer(int initialTime, int increment);
 
-  void incrementTime();
+  void incrementTimeUserInterface();
 
   void removePiece(Location location)
       throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
@@ -32,15 +32,19 @@ public interface PlayerInterface {
 
   void tryMove(PieceInterface piece, Location end);
 
-  PieceInterface getPiece(Location location);
+//  PieceInterface getPiece(Location location);
 
-  List<Location> getLegalMoves(Location location);
-
-  void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
+//  List<Location> getLegalMoves(Location location);
+//
+//  void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
 
   void removePiece(PieceInterface piece);
 
     int getScore();
     PieceInterface createQueen();
     void addTime(Integer seconds);
+
+  PieceInterface createPiece(String pieceName) throws InvalidPieceException;
+
+  void incrementTime(Integer specifiedTime);
 }

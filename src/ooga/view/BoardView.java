@@ -15,6 +15,7 @@ import ooga.controller.Controller;
 import ooga.controller.ControllerInterface;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.controller.PieceViewBuilder;
+import ooga.model.InvalidPieceException;
 
 public class BoardView extends Group implements BoardViewInterface {
 
@@ -47,11 +48,13 @@ public class BoardView extends Group implements BoardViewInterface {
                 fileNotFoundException.printStackTrace();
             } catch (InvalidPieceConfigException invalidPieceConfigException) {
                 invalidPieceConfigException.printStackTrace();
+            } catch (InvalidPieceException invalidPieceException) {
+                invalidPieceException.printStackTrace();
             }
         });
     }
 
-    private void clickBoard(MouseEvent mouse) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
+    private void clickBoard(MouseEvent mouse) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException, InvalidPieceException {
         Location clickLocation = new Location((int) mouse.getY() / 60, (int) mouse.getX() / 60);
         if (mouse.getButton() == MouseButton.SECONDARY) {
             background[clickLocation.getRow()][clickLocation.getCol()].annotate();
@@ -103,7 +106,6 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     private void removePiece(Location location) {
-
         for(PieceView pieceView : pieceList){
             if(pieceView.location.equals(location) ){
                 this.getChildren().remove(pieceView);
@@ -180,16 +182,22 @@ public class BoardView extends Group implements BoardViewInterface {
     }
 
     @Override
-    public void updateBoardView(Turn turn) {
-        for (Location removed : turn.getRemoved()) {
-            removePiece(removed);
+    public void updateBoardView(List<PieceViewBuilder> pieceViews) {
+        this.getChildren().removeAll(pieceList);
+        for(PieceViewBuilder piece : pieceViews) {
+            PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), DEFAULT_PIECE_STYLE, piece.getLocation());
+            pieceList.add(newPiece);
+            this.getChildren().add(newPiece);
         }
-        for (Turn.PieceMove move : turn.getMoves()) {
-            movePiece(move.getStartLocation(), move.getEndLocation());
-        }
-        if (turn.getCheckedSquare() != null){
-          showCheck(turn.getCheckedSquare());
-        }
+//        if (turn.getCheckedSquare() != null){
+//          showCheck(turn.getCheckedSquare());
+//        }
+//        for (Location removed : turn.getRemoved()) {
+//            removePiece(removed);
+//        }
+//        for (Turn.PieceMove move : turn.getMoves()) {
+//            movePiece(move.getStartLocation(), move.getEndLocation());
+//        }
     }
 
     @Override

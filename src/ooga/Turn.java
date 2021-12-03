@@ -63,6 +63,15 @@ public class Turn {
         return removedPieces;
     }
 
+    /**
+     * combines multiple turns into one
+     * @param turn
+     */
+    public void addTurn(Turn turn) {
+        moves.addAll(turn.getMoves());
+        removedPieces.addAll(turn.getRemoved());
+    }
+
     public class PieceMove {
         private Location start;
         private Location end;
