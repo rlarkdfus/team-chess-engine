@@ -73,7 +73,13 @@ public class TranslationMoveTest {
 
   private void makePiece(String file) {
     builder = new BoardBuilder(new File(file));
-    PieceInterface piece = builder.getInitialPlayers().get(1).getPiece(new Location(0,0));
+      PieceInterface piece = null;
+      for (PieceInterface playerPiece : builder.getInitialPlayers().get(1).getPieces()) {
+          if (playerPiece.getLocation().equals(new Location(0, 0))){
+              piece = playerPiece;
+              break;
+          }
+      }
     assertEquals("b",piece.getTeam());
     assertEquals("N",piece.getName());
     this.p = piece;
