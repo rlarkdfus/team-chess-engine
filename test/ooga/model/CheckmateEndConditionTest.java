@@ -47,6 +47,7 @@ class CheckmateEndConditionTest {
     board.movePiece(new Location(7,3),new Location(5, 5)); //queen
     board.movePiece(new Location(7,5),new Location(4,2)); //bishop
     board.movePiece(new Location(5,5),new Location(1, 5)); //queen
+    System.out.println(board.toString());
     assertEquals(GameState.CHECKMATE, board.checkGameState());
     assertEquals("w", board.getWinner());
   }
