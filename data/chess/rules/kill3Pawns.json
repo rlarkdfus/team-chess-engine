@@ -2,8 +2,9 @@
   "endCon1": {
     "gameType": "Elimination",
     "pieceType": [
-      "K",
-      "K"
+      "P",
+      "P",
+      "P"
     ]
   },
   "endCon2": {

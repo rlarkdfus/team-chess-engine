@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.PlayerInterface;
 
 public interface Builder {
@@ -15,7 +15,7 @@ public interface Builder {
 
   List<PlayerInterface> getInitialPlayers();
 
-  EndConditionInterface getEndConditionHandler();
+  EndConditionRunner getEndConditionHandler();
 
 //  PieceInterface convertPiece(PieceInterface piece, String pieceType)
 //      throws FileNotFoundException, InvalidPieceConfigException;

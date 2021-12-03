@@ -102,6 +102,7 @@ public class BoardSquare extends StackPane {
      */
     public void check() {
         this.getChildren().add(checkFilter);
+        System.out.println("CHECKED SQUARE SHOULD HAPPEN");
     }
 
     private Rectangle createHighlight(Color color, double opacity) {

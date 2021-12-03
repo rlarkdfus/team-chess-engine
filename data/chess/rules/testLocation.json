@@ -1,5 +1,19 @@
 {
-  "gameType": "Location",
-  "pieceType": ["P","P"],
-  "location": ["1,0","2,0"]
+  "endCon1": {
+    "gameType": "Location",
+    "pieceType": [
+      "P",
+      "P"
+    ],
+    "location": [
+      "1,0",
+      "2,0"
+    ]
+  },
+  "endCon2": {
+    "gameType": "Checkmate",
+    "pieceType": [
+      "K"
+    ]
+  }
 }

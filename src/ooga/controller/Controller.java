@@ -4,11 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.model.Engine;
 import ooga.view.LoginView;
-import ooga.view.View;
 
 public abstract class Controller implements ControllerInterface {
 

@@ -2,11 +2,11 @@ package ooga.view;
 
 import java.util.List;
 import java.util.Objects;
-
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import ooga.Location;
 import ooga.controller.Controller;
 import ooga.controller.PieceViewBuilder;
 import ooga.view.boardview.BoardView;
@@ -87,4 +87,9 @@ public abstract class View implements ViewInterface {
 
     @Override
     public void showError(String message) {viewUtility.showError(message);}
+
+    @Override
+    public void showCheck(Location location) {
+        boardView.showCheck(location);
+    }
 }

@@ -47,9 +47,13 @@ public class GameController extends Controller {
         view.updateDisplay(pieceViewList);
 
         Board.GameState gameState = model.checkGameState();
-        if (gameState != Board.GameState.RUNNING) {
+        System.out.println(gameState);
+        if (gameState == Board.GameState.CHECKMATE || gameState == Board.GameState.STALEMATE) {
             String winner = model.getWinner();
             gameOverScreen = new GameOverScreen(this, winner);
+        }
+        if (gameState == Board.GameState.CHECK){
+            view.showCheck(model.getCheckedKing().getLocation());
         }
     }
 

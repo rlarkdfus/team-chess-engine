@@ -8,108 +8,121 @@ import ooga.model.Moves.Move;
 
 import java.util.ArrayList;
 import java.util.List;
+import ooga.Location;
+import ooga.Turn;
+import ooga.model.EndConditionHandler.EndConditionRunner;
+import ooga.model.Moves.Move;
 
 //import static ooga.controller.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
 
 public class Board implements Engine {
 
-    private static final int Rows = 8;
-    private static final int Cols = 8;
-    private static final int lastRow = Rows -1;
-    private static final int firstRow = 0;
+  private static final int Rows = 8;
+  private static final int Cols = 8;
+  private static final int lastRow = Rows - 1;
+  private static final int firstRow = 0;
 
-    public enum GameState {
-        RUNNING,
-        CHECKMATE,
-        STALEMATE,
+  public enum GameState {
+    RUNNING,
+    CHECKMATE,
+    STALEMATE,
+    CHECK
+  }
+
+  private List<PlayerInterface> players;
+  private List<PieceInterface> allPieces;
+  private EndConditionRunner endCondition;
+  private int turnCount;
+  private PlayerInterface currentPlayer;
+  private GameState currGameState;
+  private Check check;
+  private PieceInterface checkedPiece;
+
+  private List<Location> promotionSquares;
+  private List<Location> timerSquares;
+  private List<Location> skipSquares;
+
+  public Board(List<PlayerInterface> players) {
+    this.players = players;
+    turnCount = 0;
+    check = new Check();
+    allPieces = new ArrayList<>();
+    for (PlayerInterface player : players) {
+      allPieces.addAll(player.getPieces());
     }
 
-    private List<PlayerInterface> players;
-    private List<PieceInterface> allPieces;
-    private EndConditionInterface endCondition;
-    private int turnCount;
-    private PlayerInterface currentPlayer;
-    private GameState currGameState;
-
-    private List<Location> promotionSquares;
-    private List<Location> timerSquares;
-    private List<Location> skipSquares;
-
-    public Board(List<PlayerInterface> players) {
-        this.players = players;
-        turnCount = 0;
-        allPieces = new ArrayList<>();
-        for(PlayerInterface player : players) {
-            allPieces.addAll(player.getPieces());
-        }
-
-        for (PieceInterface piece : allPieces){
-            piece.updateMoves(allPieces);
-        }
-        System.out.println(this);
-        updateLegalMoves();
-        promotionSquares = new ArrayList<>();
-      initializePromotionSquares();
-        timerSquares = new ArrayList<>();
-        initializeTimeSquares();
-        skipSquares = new ArrayList<>();
-        initializeSkipSquares();
-
+    for (PieceInterface piece : allPieces) {
+      piece.updateMoves(allPieces);
     }
+    System.out.println(this);
+    updateLegalMoves();
+    promotionSquares = new ArrayList<>();
+    initializePromotionSquares();
+    timerSquares = new ArrayList<>();
+    initializeTimeSquares();
+    skipSquares = new ArrayList<>();
+    initializeSkipSquares();
 
-    private void initializePromotionSquares() {
+  }
+
+  private void initializePromotionSquares() {
 //        promotionSquares.add(new Location(4,0));
-    }
-    private void initializeTimeSquares(){
+  }
+
+  private void initializeTimeSquares() {
 //        timerSquares.add(new Location(4,0));
 //        timerSquares.add(new Location(3,0));
 //        timerSquares.add(new Location(2,0));
 
-    }
+  }
 
-    private void initializeSkipSquares(){
+  private void initializeSkipSquares() {
 //        skipSquares.add(new Location(4,0));
+  }
+
+  /**
+   * this method returns the list of all players
+   *
+   * @return
+   */
+  public List<PlayerInterface> getPlayers() {
+    return players;
+  }
+
+  /**
+   * this method sets the end conditions of the board
+   *
+   * @param endCondition
+   */
+  public void setEndCondition(EndConditionRunner endCondition) {
+    this.endCondition = endCondition;
+  }
+
+  private void updateLegalMoves() {
+    for (PieceInterface piece : allPieces) {
+      piece.updateMoves(new ArrayList<>(allPieces));
     }
-    /**
-     * this method returns the list of all players
-     * @return
-     */
-    public List<PlayerInterface> getPlayers() {
-        return players;
+  }
+
+  /**
+   * Moves piece from start to end and updates the board
+   *
+   * @param start is piece initial location
+   * @param end   is piece new location
+   */
+  public List<PieceInterface> movePiece(Location start, Location end) {
+    // pause current player timer, start next player time
+    PieceInterface piece = null;
+    for (PieceInterface p : allPieces) {
+      if (p.getLocation().equals(start)) {
+        piece = p;
+        break;
+      }
     }
 
-    /**
-     * this method sets the end conditions of the board
-     * @param endCondition
-     */
-    public void setEndCondition(EndConditionInterface endCondition) {
-        this.endCondition = endCondition;
-    }
-
-    private void updateLegalMoves() {
-        for(PieceInterface piece : allPieces) {
-            piece.updateMoves(new ArrayList<>(allPieces));
-        }
-    }
-
-    /**
-     * Moves piece from start to end and updates the board
-     * @param start is piece initial location
-     * @param end is piece new location
-     */
-    public List<PieceInterface> movePiece(Location start, Location end) {
-        // pause current player timer, start next player time
-        PieceInterface piece = null;
-        for(PieceInterface p : allPieces) {
-            if(p.getLocation().equals(start)) {
-                piece = p;
-                break;
-            }
-        }
-
-        Move move = piece.getMove(end);
-        Turn turn = move.getTurn();
-        move.executeMove(piece, allPieces, end);
+    Move move = piece.getMove(end);
+    Turn turn = move.getTurn();
+    move.executeMove(piece, allPieces, end);
 
 //        for(Move move : piece.getMove(end)) {
 //            System.out.println(move.getClass());
@@ -117,72 +130,83 @@ public class Board implements Engine {
 //            move.executeMove(piece, allPieces, end);
 //        }
 
-        System.out.println(this);
+    System.out.println(this);
 
-        // remove piece from player if needed after turn
-        for(Location removeLocation : turn.getRemoved()){
-            for(PlayerInterface player : players){
-                for(PieceInterface p : player.getPieces()){
-                    if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
-                        player.removePiece(p);
-                    }
-                }
-            }
+    // remove piece from player if needed after turn
+    for (Location removeLocation : turn.getRemoved()) {
+      for (PlayerInterface player : players) {
+        for (PieceInterface p : player.getPieces()) {
+          if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
+            player.removePiece(p);
+          }
         }
+      }
+    }
 
+    //Check for pawn promotion
+    checkPromotion(piece, end);
 
-        //Check for pawn promotion
-        checkPromotion(piece, end);
-
-        //Add time powerup
-        checkTime(piece,end);
-        // increment turn
-        turnCount++;
-        toggleTimers();
+    //Add time powerup
+    checkTime(piece, end);
+    // increment turn
+    turnCount++;
+    toggleTimers();
 
 //        checkSkip(piece, end);
-        //update game data
-        updateLegalMoves();
-//        currGameState = endCondition.isGameOver(players);
-        return allPieces;
-    }
 
-    private void checkPromotion(PieceInterface piece, Location end) {
-        //check pawn promotion specifically
-
-        checkPawnPromotion(piece, end);
-
-        //Check piece promotion specifically
-        for(Location promotionLocation: promotionSquares){
-            if(end.equals(promotionLocation)){
-                promotePiece(piece,"Q");
-            }
+    //update game data
+    updateLegalMoves();
+    currGameState = endCondition.satisfiedEndCondition(players);
+    checkedPiece = null;
+    if (check.isTrue(players)) {
+      for (PieceInterface p : allPieces) {
+        if (p.getName().equals("K") && !p.getTeam().equals(check.getWinner())) {
+//          turn.addCheckedSquare(p.getLocation());
+          checkedPiece = p;
         }
+      }
     }
+    return allPieces;
+  }
 
-    private void checkTime(PieceInterface pieceInterface, Location end){
-        for(Location timerLocation: timerSquares){
-            if(end.equals(timerLocation)){
-                currentPlayer.incrementTime(100000);
-            }
-        }
-    }
 
-    private void checkSkip(PieceInterface pieceInterface, Location end) {
-        for (Location skipLocation : skipSquares) {
-            if (end.equals(skipLocation)) {
-                turnCount++;
-            }
-        }
+  private void checkPromotion(PieceInterface piece, Location end) {
+    //check pawn promotion specifically
+
+    checkPawnPromotion(piece, end);
+
+    //Check piece promotion specifically
+    for (Location promotionLocation : promotionSquares) {
+      if (end.equals(promotionLocation)) {
+        promotePiece(piece, "Q");
+      }
     }
-    private void checkPawnPromotion(PieceInterface piece, Location end) {
-        if(piece.getName().equals("P")){
-            if(end.getRow() == firstRow || end.getRow() ==lastRow){
-                System.out.println("pawn at end");
-                promotePiece(piece, "Q");
-            }
-        }
+  }
+
+  private void checkTime(PieceInterface pieceInterface, Location end) {
+    for (Location timerLocation : timerSquares) {
+      if (end.equals(timerLocation)) {
+        currentPlayer.incrementTime(100000);
+      }
     }
+  }
+
+  private void checkSkip(PieceInterface pieceInterface, Location end) {
+    for (Location skipLocation : skipSquares) {
+      if (end.equals(skipLocation)) {
+        turnCount++;
+      }
+    }
+  }
+
+  private void checkPawnPromotion(PieceInterface piece, Location end) {
+    if (piece.getName().equals("P")) {
+      if (end.getRow() == firstRow || end.getRow() == lastRow) {
+        System.out.println("pawn at end");
+        promotePiece(piece, "Q");
+      }
+    }
+  }
 
     /**
      * pause current player timer, add increment, start next player time
@@ -191,125 +215,142 @@ public class Board implements Engine {
         PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
         prevPlayer.toggleTimer();
         prevPlayer.incrementTimeUserInterface();
-
         currentPlayer.toggleTimer();
     }
 
-    private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
-        PieceInterface newPiece = null;
-        try {
-            newPiece = currentPlayer.createPiece(newPieceName);
-        } catch (InvalidPieceException e) {
-            e.printStackTrace();
-        }
-
-        currentPlayer.removePiece(pieceInterface);
-        allPieces.remove(pieceInterface);
-
-        newPiece.moveTo(pieceInterface.getLocation());
-        allPieces.add(newPiece);
-        currentPlayer.addPiece(newPiece);
-        System.out.println(this);
-
+  private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
+    PieceInterface newPiece = null;
+    try {
+      newPiece = currentPlayer.createPiece(newPieceName);
+    } catch (InvalidPieceException e) {
+      e.printStackTrace();
     }
 
+    currentPlayer.removePiece(pieceInterface);
+    allPieces.remove(pieceInterface);
 
-    /**
-     * see if the game is still running or if its over
-     * @return
-     */
-    @Override
-    public GameState checkGameState() {
-        if (currGameState == GameState.CHECKMATE){
-            return GameState.CHECKMATE;
-        }
-        int totalLegalMoves = 0;
-        for (PieceInterface piece : findPlayerTurn(turnCount).getPieces()){
-            totalLegalMoves += getLegalMoves(piece.getLocation()).size();
-        }
+    newPiece.moveTo(pieceInterface.getLocation());
+    allPieces.add(newPiece);
+    currentPlayer.addPiece(newPiece);
+    System.out.println(this);
 
-        if (totalLegalMoves == 0){
-            return GameState.STALEMATE;
-        }
-        // game still going
-        return GameState.RUNNING;
+  }
+
+  /**
+   * see if the game is still running or if its over
+   *
+   * @return
+   */
+  @Override
+  public GameState checkGameState() {
+    if (currGameState == GameState.CHECKMATE) {
+      return GameState.CHECKMATE;
+    }
+    int totalLegalMoves = 0;
+    for (PieceInterface piece : findPlayerTurn(turnCount).getPieces()) {
+      totalLegalMoves += getLegalMoves(piece.getLocation()).size();
     }
 
-    /**
-     * return a list of all legal moves for a piece at a location
-     * @param location
-     * @return
-     */
-    public List<Location> getLegalMoves(Location location){
-        for(PieceInterface piece : allPieces) {
-            if(piece.getLocation().equals(location)) {
-//                System.out.println(piece.getName() + " " + piece.getTeam());
-                return piece.getEndLocations();
-            }
-        }
-        return null;
+    if (totalLegalMoves == 0) {
+      return GameState.STALEMATE;
     }
 
-    @Override
-    public String getWinner() {
-        if (currGameState == GameState.CHECKMATE){
-            return endCondition.getWinner();
-        }
-        return null;
+    if (checkedPiece != null) {
+      currGameState = GameState.CHECK;
+      return GameState.CHECK;
     }
 
+    // game still going
+    return GameState.RUNNING;
+  }
 
-        /**
-         * determine whether player selects their own piece on their turn
-         * @param location
-         * @return
-         */
-    public boolean canMovePiece(Location location) {
-        String turn = findPlayerTurn(turnCount).getTeam();
-        for(PieceInterface piece : allPieces) {
-            if(piece.getTeam().equals(turn) && piece.getLocation().equals(location)) {
-                return true;
-            }
-        }
+  /**
+   * return a list of all legal moves for a piece at a location
+   *
+   * @param location
+   * @return
+   */
+  public List<Location> getLegalMoves(Location location) {
+    for (PieceInterface piece : allPieces) {
+      if (piece.getLocation().equals(location)) {
+        return piece.getEndLocations();
+      }
+    }
+    return null;
+  }
 
-        return false;
+  @Override
+  public String getWinner() {
+    if (currGameState == GameState.CHECKMATE) {
+      return endCondition.getWinner();
+    }
+    return null;
+  }
+
+  @Override
+  public PieceInterface getCheckedKing() {
+    if (currGameState == GameState.CHECK) {
+      return checkedPiece;
+    }
+    return null;
+  }
+
+  /**
+   * determine whether player selects their own piece on their turn
+   *
+   * @param location
+   * @return
+   */
+  public boolean canMovePiece(Location location) {
+    String turn = findPlayerTurn(turnCount).getTeam();
+    for (PieceInterface piece : allPieces) {
+      if (piece.getTeam().equals(turn) && piece.getLocation().equals(location)) {
+        return true;
+      }
     }
 
-    private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn) % players.size());
+    return false;
+  }
 
-        return players.get(turn % players.size());
-    }
+  private PlayerInterface findPlayerTurn(int turn) {
+    currentPlayer = players.get((turn) % players.size());
 
-    /**
-     * this method overrides toString and prints out the current board state in an easily digestable format
-     * @return
-     */
-    @Override
-    public String toString(){
-        StringBuilder str = new StringBuilder();
-        str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
-        for(int i = 0; i < 8; i++) {
-            str.append(i+"\t|");
+    return players.get(turn % players.size());
+  }
+
+  /**
+   * this method overrides toString and prints out the current board state in an easily digestable
+   * format
+   *
+   * @return
+   */
+  @Override
+  public String toString() {
+    StringBuilder str = new StringBuilder();
+    str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
+    for (int i = 0; i < 8; i++) {
+      str.append(i + "\t|");
 //            str.append("|");
-            for(int j = 0; j < 8; j++) {
-                Location location = new Location(i, j);
-                boolean found = false;
+      for (int j = 0; j < 8; j++) {
+        Location location = new Location(i, j);
+        boolean found = false;
 
-                for(PieceInterface piece : allPieces) {
-                    if(piece.getLocation().equals(location)) {
-                        str.append(piece.toString() + "\t");
-                        found = true;
-                    }
-                }
-                if(!found){
-                    str.append("\t");
-                }
-                str.append("|");
-            }
-            str.append("\n");
+        for (PieceInterface piece : allPieces) {
+          if (piece.getLocation().equals(location)) {
+            str.append(piece.toString() + "\t");
+            found = true;
+          }
         }
-        str.append("____________________________________\n");
-        return str.toString();
+        if (!found) {
+          str.append("\t");
+        }
+        str.append("|");
+      }
+      str.append("\n");
     }
+    str.append("____________________________________\n");
+    return str.toString();
+  }
 }
+
+
