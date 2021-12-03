@@ -16,6 +16,7 @@ public class Piece implements PieceInterface {
   private Location location;
   private boolean moved;
   private boolean firstMove = false;
+  private boolean firstMoveUpdate = false;
 
   private Map<String, Boolean> attributes;
   private boolean isEliminated;
@@ -27,14 +28,14 @@ public class Piece implements PieceInterface {
 
   private List<Move> moves;
 
-  public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
-    this.location = location;
-    this.team = team;
-    this.moved = false;
-    this.score = score;
-    this.name = name;
-    this.attributes = attributes;
-  }
+//  public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
+//    this.location = location;
+//    this.team = team;
+//    this.moved = false;
+//    this.score = score;
+//    this.name = name;
+//    this.attributes = attributes;
+//  }
   //Todo: make this the default constructor
   public Piece(String team, String name, Location location, List<Move> moves, Map<String, Boolean> attributes, int score) {
     this.location = location;
@@ -101,6 +102,9 @@ public class Piece implements PieceInterface {
   @Override
     public void moveTo(Location location) {
       firstMove = !firstMove && !moved;
+      if(firstMove) {
+        System.out.println(this);
+      }
       moved = true;
       tryMove(location);
     }
@@ -118,19 +122,19 @@ public class Piece implements PieceInterface {
    * return the unique id of a piece
    * @return
    */
-  @Override
-  public int getUniqueId() {
-    return this.uniqueID;
-  }
+//  @Override
+//  public int getUniqueId() {
+//    return this.uniqueID;
+//  }
 
   /**
    * set a piece to be eliminated
    * @param state
    */
-  @Override
-  public void setEliminated(boolean state) {
-    isEliminated = state;
-  }
+//  @Override
+//  public void setEliminated(boolean state) {
+//    isEliminated = state;
+//  }
 
   /**
    * override toString to print out piece information
@@ -196,7 +200,7 @@ public class Piece implements PieceInterface {
    */
   @Override
   public boolean isFirstMove() {
-    return firstMove;
+    return (firstMove || firstMoveUpdate);
   }
 
   /**
@@ -204,22 +208,25 @@ public class Piece implements PieceInterface {
    * @return
    */
   @Override
-  public Piece copy() {
-    return new Piece(this.team, this.name, this.location, this.moves, this.attributes, this.score);
+  public void transform(PieceInterface newPiece) {
+    this.name = newPiece.getName();
+    this.moves = newPiece.getMoves();
+    this.attributes.put("canTransform", false);
+    this.score = newPiece.getScore();
   }
 
-  /**
-   * return all the end locations of a piece
-   * @return
-   */
-  @Override
-  public List<Location> getAllEndLocations() {
-    List<Location> endLocations = new ArrayList<>();
-    for(Move move : moves) {
-      endLocations.addAll(move.getEndLocations());
-    }
-    return endLocations;
-  }
+//  /**
+//   * return all the end locations of a piece
+//   * @return
+//   */
+//  @Override
+//  public List<Location> getAllEndLocations() {
+//    List<Location> endLocations = new ArrayList<>();
+//    for(Move move : moves) {
+//      endLocations.addAll(move.getEndLocations());
+//    }
+//    return endLocations;
+//  }
 
   /**
    * this method returns the move that results in a piece being at the end location
@@ -242,6 +249,7 @@ public class Piece implements PieceInterface {
    */
   @Override
   public void updateMoves(List<PieceInterface> pieces) {
+    firstMoveUpdate = firstMove && moved;
     firstMove = false;
     for(Move move : moves) {
       move.updateMoveLocations(this, pieces);
@@ -261,5 +269,9 @@ public class Piece implements PieceInterface {
   @Override
   public boolean isSameTeam(PieceInterface piece){
     return team.equals(piece.getTeam());
+  }
+
+  public boolean canTransform(){
+    return this.attributes.getOrDefault("canTransform", false);
   }
 }

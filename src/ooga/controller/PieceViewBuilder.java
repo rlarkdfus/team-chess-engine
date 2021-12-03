@@ -2,6 +2,7 @@ package ooga.controller;
 
 import ooga.Location;
 import ooga.model.Piece;
+import ooga.model.PieceInterface;
 
 public class PieceViewBuilder {
 
@@ -9,7 +10,7 @@ public class PieceViewBuilder {
   private String name;
   private Location location;
 
-  public PieceViewBuilder(Piece piece) {
+  public PieceViewBuilder(PieceInterface piece) {
     this.team = piece.getTeam();
     this.name = piece.getName();
     this.location = piece.getLocation();
