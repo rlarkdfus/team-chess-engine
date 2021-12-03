@@ -1,17 +1,17 @@
 package ooga;
 
-import ooga.Location;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Turn {
     private List<PieceMove> moves;
     private List<Location> removedPieces;
+    private Location checkedSquare;
 
     public Turn() {
         moves = new ArrayList<>();
         removedPieces = new ArrayList<>();
+        checkedSquare = null;
     }
 
     /**
@@ -29,6 +29,22 @@ public class Turn {
      */
     public void removePiece(Location location) {
         removedPieces.add(location);
+    }
+
+    /**
+     * add square to be highlighed when checked
+     * @param location
+     */
+    public void addCheckedSquare(Location location) {
+        checkedSquare = location;
+    }
+
+    /**
+     * return the moved pieces
+     * @return
+     */
+    public Location getCheckedSquare(){
+        return checkedSquare;
     }
 
     /**

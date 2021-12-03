@@ -112,7 +112,7 @@ public class Controller implements ControllerInterface {
     Turn turn = model.movePiece(start, end);
     view.updateDisplay(turn);
     GameState gameState = model.checkGameState();
-    if (gameState != Board.GameState.RUNNING) {
+    if (gameState == GameState.CHECKMATE || gameState == GameState.STALEMATE) {
       String winner = model.getWinner();
       gameOverScreen = new GameOverScreen(this, winner);
     }

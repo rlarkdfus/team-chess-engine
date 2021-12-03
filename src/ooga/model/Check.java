@@ -1,10 +1,9 @@
-package ooga.model.Moves;
+package ooga.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import ooga.Location;
-import ooga.model.PieceInterface;
-import ooga.model.PlayerInterface;
+import ooga.model.Moves.Move;
 
 public class Check {
   List<PlayerInterface> players;

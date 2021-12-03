@@ -187,6 +187,9 @@ public class BoardView extends Group implements BoardViewInterface {
         for (Turn.PieceMove move : turn.getMoves()) {
             movePiece(move.getStartLocation(), move.getEndLocation());
         }
+        if (turn.getCheckedSquare() != null){
+          showCheck(turn.getCheckedSquare());
+        }
     }
 
     @Override
@@ -196,5 +199,9 @@ public class BoardView extends Group implements BoardViewInterface {
             BoardSquare square = background[squareLoc.getRow()][squareLoc.getCol()];
             square.highlight();
         }
+    }
+
+    private void showCheck(Location location){
+        background[location.getRow()][location.getCol()].check();
     }
 }

@@ -8,7 +8,6 @@ import ooga.Location;
 import ooga.Turn;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionRunner;
-import ooga.model.Moves.Check;
 import ooga.model.Moves.Move;
 
 public class Board implements Engine {
@@ -124,8 +123,15 @@ public class Board implements Engine {
     //update game data
     updateLegalMoves();
     currGameState = endCondition.satisfiedEndCondition(players);
-//    isChecked = check.exists(players);
-//    System.out.println("check: "+isChecked);
+    isChecked = check.isTrue(players);
+    if (isChecked){
+      for (PieceInterface p : allPieces){
+        if (p.getName().equals("K") && !p.toString().equals(check.getWinner())){
+          turn.addCheckedSquare(p.getLocation());
+        }
+      }
+    }
+    System.out.println("check: "+isChecked);
     return turn;
   }
 
@@ -194,12 +200,11 @@ public class Board implements Engine {
     }
 
     if (totalLegalMoves == 0) {
-//      System.out.println(isChecked);
-//      if (isChecked){
-//        System.out.println("hadfadf");
-//        return GameState.CHECKMATE;
-//      }
       return GameState.STALEMATE;
+    }
+
+    if (isChecked){
+      return GameState.CHECK;
     }
     // game still going
     return GameState.RUNNING;
@@ -214,7 +219,6 @@ public class Board implements Engine {
   public List<Location> getLegalMoves(Location location) {
     for (PieceInterface piece : allPieces) {
       if (piece.getLocation().equals(location)) {
-//                System.out.println(piece.getName() + " " + piece.getTeam());
         return piece.getEndLocations();
       }
     }

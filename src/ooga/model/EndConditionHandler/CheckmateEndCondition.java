@@ -2,7 +2,7 @@ package ooga.model.EndConditionHandler;
 
 import java.util.List;
 import java.util.Map;
-import ooga.model.Moves.Check;
+import ooga.model.Check;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
