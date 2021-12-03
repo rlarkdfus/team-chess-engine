@@ -209,7 +209,8 @@ public class BoardView extends Group implements BoardViewInterface {
         }
     }
 
-    private void showCheck(Location location){
+    public void showCheck(Location location){
+        System.out.println(location);
         background[location.getRow()][location.getCol()].check();
     }
 }

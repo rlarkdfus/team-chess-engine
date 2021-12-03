@@ -39,6 +39,8 @@ public class BoardBuilder implements Builder {
   private List<Integer> boardSize;
   private List<String> boardColors;
   private String bottomColor;
+  private int time;
+  private int timeIncrement;
   private List<List<String>> csvData;
   private List<PlayerInterface> playerList;
   private List<PieceViewBuilder> pieceList;
@@ -122,26 +124,6 @@ public class BoardBuilder implements Builder {
     return endCondition;
   }
 
-//  /**
-//   * This method takes in a piece and converts it into a converted piece of a different type
-//   * An example use case for this is in promotion, where a pawn turns into a promoted version of the
-//   * piece
-//   * @param piece from the board that will be changed to another kind of piece
-//   * @param pieceType The kind of piece that this will be changed to
-//   * @return -
-//   * @throws FileNotFoundException
-//   * @throws InvalidPieceConfigException
-//   */
-//  @Override
-//  public PieceInterface convertPiece(PieceInterface piece, String pieceType)
-//      throws FileNotFoundException, InvalidPieceConfigException {
-//    String pieceTeam = piece.getTeam();
-//    String[] pieceData = new String[]{pieceTeam, pieceType};
-//    int pieceRow = piece.getLocation().getRow();
-//    int pieceColumn = piece.getLocation().getCol();
-//    return pieceBuilder.buildPiece(pieceData, pieceRow, pieceColumn);
-//  }
-
   /**
    * Iterates through the list<list> as given by the csvParser. Create pieces and adds them to the
    * pieceGrid
@@ -200,6 +182,8 @@ public class BoardBuilder implements Builder {
     try{
       gameType = jsonObject.getString(mappings.getString(TYPE));
       boardShape = jsonObject.getString(mappings.getString(BOARD));
+      time = jsonObject.getInt(mappings.getString("time"));
+      timeIncrement = jsonObject.getInt(mappings.getString("timeIncrement"));
 
       boardSize = new ArrayList<>();
       for (String dimension : jsonObject.getString(mappings.getString("boardSize")).split("x")){
@@ -211,7 +195,9 @@ public class BoardBuilder implements Builder {
 
       for (String player : convertJSONArrayOfStrings(
           jsonObject.getJSONArray(mappings.getString("players")))) {
-        playerList.add(new Player(player));
+        PlayerInterface newPlayer = new Player(player);
+        newPlayer.configTimer(time,timeIncrement);
+        playerList.add(newPlayer);
       }
       bottomColor = playerList.get(0).getTeam(); //assumes that bottom player is the first player
 
