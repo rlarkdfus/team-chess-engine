@@ -3,21 +3,11 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
-import ooga.controller.BoardBuilder;
-import ooga.controller.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
-import static ooga.controller.Controller.DEFAULT_CHESS_CONFIGURATION;
 
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import ooga.Location;
-import ooga.Turn;
-import ooga.controller.InvalidPieceConfigException;
-import ooga.model.EndConditionHandler.EndConditionInterface;
-import ooga.model.Moves.Move;
 
 //import static ooga.controller.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
 
@@ -201,6 +191,7 @@ public class Board implements Engine {
         PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
         prevPlayer.toggleTimer();
         prevPlayer.incrementTimeUserInterface();
+
         currentPlayer.toggleTimer();
     }
 

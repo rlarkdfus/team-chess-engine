@@ -4,7 +4,6 @@ import ooga.Location;
 import ooga.controller.Controller;
 import ooga.controller.PieceViewBuilder;
 
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class EditorBoardView extends BoardView {
@@ -18,6 +17,8 @@ public class EditorBoardView extends BoardView {
 
     @Override
     protected void clickBoard(Location clickLocation) {
+        // if editor piece is chosen
+
         if (getSelectedLocation() == null) {
             selectPiece(clickLocation);
         }

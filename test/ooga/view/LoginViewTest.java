@@ -5,6 +5,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import ooga.controller.Controller;
+import ooga.controller.LoginController;
 import org.junit.jupiter.api.Test;
 import util.DukeApplicationTest;
 
@@ -16,7 +17,7 @@ public class LoginViewTest extends DukeApplicationTest {
 
     @Override
     public void start(Stage stage) {
-        new Controller();
+        new LoginController();
         usernameField = lookup("#username_field").query();
         passwordField = lookup("#password_field").query();
         login = lookup("#login").queryButton();

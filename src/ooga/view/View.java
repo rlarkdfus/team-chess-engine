@@ -17,7 +17,7 @@ import ooga.view.ui.settingsUI.SettingsUI;
 import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
 import ooga.view.util.ViewUtility;
 
-public class View implements ViewInterface {
+public abstract class View implements ViewInterface {
 
     public static final String DEFAULT_RESOURCE_PACKAGE = View.class.getPackageName() + ".resources.";
     public static final String STYLE_PACKAGE = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
@@ -26,17 +26,14 @@ public class View implements ViewInterface {
     public static final int STAGE_WIDTH = 1000;
     public static final int STAGE_HEIGHT = 700;
 
-    private Controller controller;
-    private ViewController viewController;
-    private ViewUtility viewUtility;
+    protected Controller controller;
+    protected ViewController viewController;
+    protected ViewUtility viewUtility;
     private Stage stage;
 
-    private BoardView boardView;
-    private SettingsUI settingsUI; // right
-    private GameInfoUI gameInfoUI; // left
-    private GameSettingsUI gameSettingsInfoUI; // top
-    private TimeConfigurationUI timeConfigurationUI;
-
+    //TODO: change protected
+    protected BoardView boardView;
+    
     public View(Controller controller) {
         this.controller = controller;
         this.viewController = new ViewController();
@@ -44,35 +41,35 @@ public class View implements ViewInterface {
         this.stage = new Stage();
         viewController.setView(this);
     }
-
-    private Scene setupDisplay() {
+    
+    protected Scene setupDisplay() {
         GridPane root = new GridPane();
-        root.add(settingsUI, 2, 1);
-        root.add(timeConfigurationUI, 2, 2, 1, 1);
-        root.add(gameSettingsInfoUI, 0 , 1, 1, 2);
-        root.add(gameInfoUI, 0, 0, 3, 1);
-        root.add(boardView, 1, 1, 1, 2);
+        addUIs(root);
         Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(DEFAULT_STYLESHEET)).toExternalForm());
         return scene;
     }
+    
+    protected abstract void createResettableUIs();
 
+    protected abstract void createStaticUIs();
+    
+    protected abstract void addUIs(GridPane root);
+    
     @Override
     public void initializeDisplay(List<PieceViewBuilder> pieceViewList) {
-        this.timeConfigurationUI = new TimeConfigurationUI(controller);
+        createStaticUIs();
         resetDisplay(pieceViewList);
     }
-
+    
     @Override
     public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
-        this.settingsUI = new SettingsUI(controller, viewController);
         this.boardView = new GameBoardView(controller, pieceViewList, 8, 8);
-        this.gameInfoUI = new GameInfoUI();
-        this.gameSettingsInfoUI = new GameSettingsUI(controller, viewController);
+        createResettableUIs();
         stage.setScene(setupDisplay());
         stage.show();
     }
-
+    
     @Override
     public void updateDisplay(List<PieceViewBuilder> pieceViewList) {
         boardView.updateBoardView(pieceViewList);

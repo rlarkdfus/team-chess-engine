@@ -1,10 +1,7 @@
 package ooga.view.boardview;
 
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import ooga.Location;
 import ooga.controller.Controller;
-import ooga.controller.InvalidPieceConfigException;
 import ooga.controller.PieceViewBuilder;
 import java.util.List;
 
