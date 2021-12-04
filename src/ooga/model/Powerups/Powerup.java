@@ -1,6 +1,7 @@
 package ooga.model.Powerups;
 
 import ooga.Location;
+import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.InvalidPieceConfigException;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
@@ -36,6 +37,6 @@ public abstract class Powerup implements PowerupInterface{
         System.out.println(powerupLocations.remove(targetLocation));
     }
 
-     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException;
+     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException, InvalidPieceConfigException;
 
 }

@@ -1,7 +1,7 @@
 package ooga.model.Powerups;
 
 import ooga.Location;
-import ooga.controller.InvalidPieceConfigException;
+import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
