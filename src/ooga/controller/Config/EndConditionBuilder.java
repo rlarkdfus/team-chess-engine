@@ -2,8 +2,8 @@ package ooga.controller.Config;
 
 import static ooga.controller.Config.BoardBuilder.JSON_DELIMITER;
 import static ooga.controller.Config.BoardBuilder.PIECE_TYPE;
-import static ooga.controller.Config.BoardBuilder.PROPERTIES_FILE;
 import static ooga.controller.Config.BoardBuilder.RULE_TYPE;
+import static ooga.controller.Config.BoardBuilder.mappings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.PieceInterface;
@@ -38,8 +37,6 @@ public class EndConditionBuilder {
 
   public static final String ENDCONDITION_PREFIX = "ooga.model.EndConditionHandler.";
   public static final String ENDCONDITION_SUFFIX = "EndCondition";
-  private static JsonParser jsonParser;
-  private static ResourceBundle mappings;
   public static final String INVALID_ENDCONDITION = "invalidEndConditionMessage";
   public static final String RULEKEYS = "RuleKeys";
 
@@ -55,8 +52,6 @@ public class EndConditionBuilder {
    */
   public static EndConditionRunner getEndConditions(String ruleJsonFilepath, List<PlayerInterface> playerList)
       throws InvalidEndGameConfigException {
-    jsonParser = new JsonParser();
-    mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
 
     try {
       return buildEndConditionHandler(ruleJsonFilepath, playerList);
@@ -74,7 +69,7 @@ public class EndConditionBuilder {
 
     EndConditionRunner endConditionsHandler = new EndConditionRunner();
 
-    JSONObject RulesJSONObject = jsonParser.loadFile(new File(ruleJsonFilepath));
+    JSONObject RulesJSONObject = JsonParser.loadFile(new File(ruleJsonFilepath));
 
     for (String endCondition : RulesJSONObject.keySet()) {
       JSONObject endConditionsJSONObject = RulesJSONObject.getJSONObject(endCondition);
