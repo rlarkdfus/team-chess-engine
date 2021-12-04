@@ -1,13 +1,14 @@
 package ooga.controller;
 
 import static java.lang.Integer.parseInt;
+import static ooga.controller.PieceBuilder.buildPiece;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Piece;
 import ooga.model.Player;
@@ -17,11 +18,14 @@ import org.json.JSONObject;
 
 /**
  * @Authors Albert, Luis
- *
- * This class builds all the in-game specific objects that the game uses to run.
- * We assume that the file is .json since there is a filter when a file is chosen.
- * Users will call .build(File) with their file, and then use the 3 getter methods:
- *  getInitialPieceViews, getInitialPlayers, and getEndConditionHandler
+ * purpose - this class builds objects that will be used by the model to run the game. It builds all
+ *  the different pieces, and it builds the endConditions that determine when the game ends.
+ * assumptions - we assume that the file is a json and formatted with the proper keys. If any of this
+ *  isn't there, then we throw exceptions that get caught and sent to the view.
+ * dependencies - this class depends on the EndConditionBuilder, the PieceBuilder, and the JsonParser,
+ *  and the LocationParser (aka the csv parser)
+ * To use - The user will call build() with a File object. Then to get the objects, the user will call the
+ *  3 getter methods.
  */
 public class BoardBuilder implements Builder {
 
@@ -30,7 +34,14 @@ public class BoardBuilder implements Builder {
   public static final String CSV_DELIMITER = "csvDelimiter";
   public static final String RULES = "rules";
   public static final String TYPE = "type";
-  public static final String BOARD = "board";
+  public static final String BOARD = "board"; //unused
+  public static final String TIME = "time";
+  public static final String TIME_INCREMENT = "timeIncrement";
+  public static final String BOARD_SIZE = "boardSize";
+  public static final String X = "x";
+  public static final String BOARD_COLORS = "boardColors"; //unused
+  public static final String PLAYERS = "players";
+  public static final String CSV = "csv";
 
   private final ResourceBundle mappings;
 
@@ -47,7 +58,6 @@ public class BoardBuilder implements Builder {
 
   private final LocationParser locationParser;
   private final JsonParser jsonParser;
-  private PieceBuilder pieceBuilder;
   private EndConditionRunner endCondition;
 
   /**
@@ -83,13 +93,12 @@ public class BoardBuilder implements Builder {
    */
   @Override
   public void build(File file)
-      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException {
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
     JSONObject gameJson = jsonParser.loadFile(file);
     extractJSONObj(gameJson);
 
-    pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     EndConditionBuilder endConditionBuilder= new EndConditionBuilder(jsonParser);
     iterateCSVData();
     endCondition = endConditionBuilder.getEndConditions(gameJson.getString(RULES),playerList);
@@ -134,7 +143,7 @@ public class BoardBuilder implements Builder {
       for (int c = 0; c < boardSize.get(1); c++) {
         String[] square = pieceInformation(r, c);
         if (square == null){continue;}
-        Piece piece = pieceBuilder.buildPiece(square, r, c);
+        Piece piece = buildPiece(square[0], square[1],new Location(r,c));
         pieceList.add(new PieceViewBuilder(piece));
         playerList.get(determinePlayer(r, c, square[0])).addPiece(piece);
       }
@@ -182,26 +191,27 @@ public class BoardBuilder implements Builder {
     try{
       gameType = jsonObject.getString(mappings.getString(TYPE));
       boardShape = jsonObject.getString(mappings.getString(BOARD));
-      time = jsonObject.getInt(mappings.getString("time"));
-      timeIncrement = jsonObject.getInt(mappings.getString("timeIncrement"));
+
+      time = jsonObject.getInt(mappings.getString(TIME));
+      timeIncrement = jsonObject.getInt(mappings.getString(TIME_INCREMENT));
 
       boardSize = new ArrayList<>();
-      for (String dimension : jsonObject.getString(mappings.getString("boardSize")).split("x")){
+      for (String dimension : jsonObject.getString(mappings.getString(BOARD_SIZE)).split(X)){
         boardSize.add(parseInt(dimension));
       }
 
       boardColors = convertJSONArrayOfStrings(
-          jsonObject.getJSONArray(mappings.getString("boardColors")));
+          jsonObject.getJSONArray(mappings.getString(BOARD_COLORS)));
 
       for (String player : convertJSONArrayOfStrings(
-          jsonObject.getJSONArray(mappings.getString("players")))) {
+          jsonObject.getJSONArray(mappings.getString(PLAYERS)))) {
         PlayerInterface newPlayer = new Player(player);
         newPlayer.configTimer(time,timeIncrement);
         playerList.add(newPlayer);
       }
       bottomColor = playerList.get(0).getTeam(); //assumes that bottom player is the first player
 
-      String csv = jsonObject.getString(mappings.getString("csv"));
+      String csv = jsonObject.getString(mappings.getString(CSV));
       csvData = locationParser.getInitialLocations(csv);
 
     }catch (Exception e){
