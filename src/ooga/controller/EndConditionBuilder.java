@@ -3,7 +3,6 @@ package ooga.controller;
 import static ooga.controller.BoardBuilder.PROPERTIES_FILE;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,16 +25,20 @@ public class EndConditionBuilder {
     mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
   }
   public EndConditionRunner getEndConditions(String ruleJsonFile, List<PlayerInterface> playerList)
-      throws FileNotFoundException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InvalidGameConfigException, InvalidEndGameConfigException {
-    EndConditionRunner endConditionsHandler = new EndConditionRunner();
-    this.playerList = playerList;
+      throws InvalidEndGameConfigException {
+    try{
+      EndConditionRunner endConditionsHandler = new EndConditionRunner();
+      this.playerList = playerList;
 
-    JSONObject endConditions = jsonParser.loadFile(new File(ruleJsonFile));
-    for (String key : endConditions.keySet()){
-      JSONObject endConditionsJSONObject = endConditions.getJSONObject(key);
-      endConditionsHandler.add(buildEndCondition(playerList, endConditionsJSONObject));
+      JSONObject endConditions = jsonParser.loadFile(new File(ruleJsonFile));
+      for (String key : endConditions.keySet()) {
+        JSONObject endConditionsJSONObject = endConditions.getJSONObject(key);
+        endConditionsHandler.add(buildEndCondition(playerList, endConditionsJSONObject));
+      }
+      return endConditionsHandler;
+    }catch (Exception e){
+      throw new InvalidEndGameConfigException(e.getClass());
     }
-    return endConditionsHandler;
   }
 
   private EndConditionInterface buildEndCondition(List<PlayerInterface> playerList, JSONObject endConditionsJSONObject)

@@ -1,0 +1,25 @@
+{
+  "moves": {
+    "TranslationMove": [
+      "1, -1,takes, limited",
+      "1, 1,takes, limited",
+      "-1, -1,takes, limited",
+      "-1, 1,takes, limited",
+      "1, 0,takes, limited",
+      "0, 1,takes, limited",
+      "-1, 0,takes, limited",
+      "0, -1,takes, limited"
+    ],
+    "ShortCastleMove": [
+      "0,2,false, limited"
+    ],
+    "LongCastleMove": [
+      "0,-2,false,limited"
+    ]
+  },
+  "attributes": {
+    "limited": true,
+    "canTransform": false
+  },
+  "value": 0
+}

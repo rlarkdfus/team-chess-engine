@@ -3,15 +3,11 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
-import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Moves.Move;
 
 import java.util.ArrayList;
 import java.util.List;
-import ooga.Location;
-import ooga.Turn;
 import ooga.model.EndConditionHandler.EndConditionRunner;
-import ooga.model.Moves.Move;
 
 //import static ooga.controller.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
 
@@ -58,7 +54,7 @@ public class Board implements Engine {
     for (PieceInterface piece : allPieces) {
       piece.updateMoves(allPieces);
     }
-    System.out.println(this);
+//    System.out.println(this);
     updateLegalMoves();
     promotionSquares = new ArrayList<>();
     timerSquares = new ArrayList<>();
@@ -217,9 +213,9 @@ public class Board implements Engine {
     if (piece.getName().equals(PAWN)) {
       if (end.getRow() == FIRST_ROW || end.getRow() == LAST_ROW) {
 
-        System.out.println(currentPlayer.getPieces());
+//        System.out.println(currentPlayer.getPieces().size());
         promotePiece(piece, QUEEN);
-        System.out.println(currentPlayer.getPieces());
+//        System.out.println(currentPlayer.getPieces().size());
       }
     }
   }
@@ -249,7 +245,7 @@ public class Board implements Engine {
     newPiece.moveTo(pieceInterface.getLocation());
     allPieces.add(newPiece);
     currentPlayer.addPiece(newPiece);
-    System.out.println(this);
+//    System.out.println(this);
   }
 
   /**

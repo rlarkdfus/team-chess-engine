@@ -30,7 +30,7 @@ public class GameController extends Controller {
             view.initializeDisplay(boardBuilder.getInitialPieceViews());
 
             timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
-            timeController.configTimers(model.getPlayers());
+//            timeController.configTimers(model.getPlayers()); this is done in boardbuilder
             startTimersForNewGame();
         } catch (Exception E) {
             E.printStackTrace();

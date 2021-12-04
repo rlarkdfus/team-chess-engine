@@ -4,7 +4,9 @@
   "boardSize": "8x8",
   "boardColors": ["#f3dab0", "#bb885b"],
   "players": ["w", "b"],
-  "rules": "data/chess/rules/killAllPawns.json",
+  "rules": "data/chess/rules/kill3Pawns.json",
   "style": "companion",
+  "time": 10,
+  "timeIncrement": 5,
   "csv": "data/chess/locations/chess.csv"
 }
