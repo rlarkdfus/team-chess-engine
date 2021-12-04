@@ -97,7 +97,7 @@ public class EliminationEndCondition implements EndConditionInterface {
       targetPiecesRemaining.putIfAbsent(team, 0);
       targetPiecesRemaining.put(team, targetPiecesRemaining.get(team) + piecesLeft);
     }
-    System.out.println(targetPiecesRemaining);
+//    System.out.println(targetPiecesRemaining);
     return targetPiecesRemaining;
   }
 

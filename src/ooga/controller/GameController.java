@@ -27,6 +27,7 @@ public class GameController extends Controller {
         try {
             //buildGame() is the 3 lines below
             model = new Board(boardBuilder.getInitialPlayers());
+            model.setEndCondition(boardBuilder.getEndConditionHandler());
             view = new GameView(this);
             view.initializeDisplay(boardBuilder.getInitialPieceViews());
 
@@ -45,7 +46,6 @@ public class GameController extends Controller {
             pieceViewList.add(new PieceViewBuilder(piece));
         }
         view.updateDisplay(pieceViewList);
-
         GameState gameState = model.checkGameState();
         if(gameState != GameState.RUNNING) {
             gameOverScreen = new GameOverScreen(this, gameState.toString());
