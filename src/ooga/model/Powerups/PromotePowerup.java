@@ -20,14 +20,14 @@ public class PromotePowerup extends Powerup{
 //FIXME: add promotionLogic with piece builder;
     @Override
     void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException {
-        if(pieceInterface.getName().equals(Board.KING)){
+        if(pieceInterface.getName().equals("K")){
             return;
         }
 //        int randomPieceIndex = (int) (Math.random()*availablePieces.length);
 //        String randomPieceName = availablePieces[randomPieceIndex-1];
         PieceInterface additionalPiece = null;
         try {
-            additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(), Board.QUEEN,endLocation);
+            additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(), "Q",endLocation);
         } catch (InvalidPieceConfigException e) {
             e.printStackTrace();
         }

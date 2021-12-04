@@ -45,10 +45,10 @@ public abstract class Move {
      * @param king piece location
      * @param pieces all pieces
      */
-    public void updateMoveLocations(PieceInterface king, List<PieceInterface> pieces) {
+    public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
         resetMove();
-        for(Location location : findAllEndLocations(king, pieces)) {
-            if(isLegal(king, location, pieces)) {
+        for(Location location : findAllEndLocations(piece, pieces)) {
+            if(isLegal(piece, location, pieces)) {
                 addEndLocation(location);
             }
         }
