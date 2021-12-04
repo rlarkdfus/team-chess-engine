@@ -179,9 +179,9 @@ public class ViewUtility {
      */
     public String saveJSONPath() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(
-                JSON_FILE_EXTENSION_DESCRIPTION, JSON_EXTENSION);
-        fileChooser.getExtensionFilters().addAll(fileExtension);
+//        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(
+//                JSON_FILE_EXTENSION_DESCRIPTION, JSON_EXTENSION);
+//        fileChooser.getExtensionFilters().addAll(fileExtension);
         File file = fileChooser.showSaveDialog(new Stage());
         return file != null ? file.getAbsolutePath() : EMPTY_FILE_PATH;
     }

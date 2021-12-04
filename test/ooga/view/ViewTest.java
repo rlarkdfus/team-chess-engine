@@ -28,7 +28,7 @@ public class ViewTest extends DukeApplicationTest {
     @Override
     public void start(Stage stage) throws Exception {
         LoginController controller = new LoginController();
-        controller.handleLoginAttempt("Luis", "password");
+        controller.handleLoginAttempt("Luis", "password", "Luis", "password");
     }
 
     @Test
