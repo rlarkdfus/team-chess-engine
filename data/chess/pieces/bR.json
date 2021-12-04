@@ -7,9 +7,5 @@
       "0,-1,takes,unlimited"
     ]
   },
-  "attributes":{
-    "limited": false,
-    "canTransform": false
-  },
   "value": 5
 }
