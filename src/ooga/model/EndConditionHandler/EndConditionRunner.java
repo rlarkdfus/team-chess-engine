@@ -17,11 +17,10 @@ public class EndConditionRunner {
   }
 
   public GameState satisfiedEndCondition(List<PlayerInterface> players){
-//    endConditions = List.of(new CheckmateEndCondition());
-//    System.out.println("endcondition size" + endConditions.size());
     for (EndConditionInterface endCondition : endConditions){
       GameState winner = endCondition.isSatisfied(players);
       if(winner != null) {
+        System.out.println("win triggered by "+endCondition.getClass());
         return winner;
       }
     }

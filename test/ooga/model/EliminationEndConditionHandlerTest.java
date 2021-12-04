@@ -15,7 +15,6 @@ import ooga.controller.Builder;
 import ooga.controller.InvalidEndGameConfigException;
 import ooga.controller.InvalidGameConfigException;
 import ooga.controller.InvalidPieceConfigException;
-import ooga.model.GameState;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +46,6 @@ class EliminationEndConditionHandlerTest {
     board.movePiece(new Location(6,7),new Location(6, 6)); //queen eats
     board.movePiece(new Location(6,6),new Location(6, 5)); //queen eats
     assertEquals(GameState.BLACK, board.checkGameState());
-//    assertEquals("b", board.getWinner());
   }
 
   @Test
@@ -59,7 +57,6 @@ class EliminationEndConditionHandlerTest {
       board.movePiece(new Location(1,7),new Location(1, 6)); //queen eats
       board.movePiece(new Location(1,6),new Location(1, 5)); //queen eats
       assertEquals(GameState.WHITE, board.checkGameState());
-//      assertEquals("w", board.getWinner());
   }
 
   @Test

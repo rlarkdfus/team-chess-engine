@@ -18,7 +18,8 @@ public class CheckmateEndCondition implements EndConditionInterface {
   public GameState isSatisfied(List<PlayerInterface> players) {
     List<PieceInterface> pieces = getAllPieces(players);
     for(PlayerInterface player : players){
-      if(getTotalLegalMoves(player) == 0) {
+      int numlegalmoves = getTotalLegalMoves(player);
+      if(numlegalmoves == 0) {
         return MoveUtility.inCheck(player.getTeam(), pieces) ? GameState.ENDED.getLoser(player.getTeam()) : GameState.DRAW;
       }
     }
