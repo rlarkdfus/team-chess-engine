@@ -30,7 +30,7 @@ class PlayerInterfaceTest {
 
     @Test
     void removePiece() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        player.removePiece(piece.getLocation());
+        player.removePiece(piece);
         Assertions.assertEquals(player.getPieces().size(), 0);
     }
 

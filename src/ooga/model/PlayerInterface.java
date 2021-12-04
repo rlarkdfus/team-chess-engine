@@ -17,16 +17,11 @@ public interface PlayerInterface {
 
   void incrementTimeUserInterface();
 
-  void removePiece(Location location)
-      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException;
-
   List<PieceInterface> getPieces();
 
   void addPiece(PieceInterface piece);
 
   String getTeam();
-
-  PieceInterface getKing();
 
   void movePiece(PieceInterface piece, Location end);
 
