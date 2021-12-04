@@ -1,6 +1,7 @@
 package ooga.controller;
 
 import ooga.Location;
+import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.Board;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;

@@ -1,9 +1,10 @@
 package ooga.view.boardview;
 
 import ooga.Location;
+import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.PieceViewBuilder;
 import ooga.controller.Controller;
-import ooga.controller.InvalidPieceConfigException;
-import ooga.controller.PieceViewBuilder;
+
 
 import java.io.FileNotFoundException;
 import java.util.List;
