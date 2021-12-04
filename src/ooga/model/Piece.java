@@ -29,14 +29,6 @@ public class Piece implements PieceInterface {
   private List<Move> moves;
 
   /**
-   * get the attributes of a piece
-   * @return map of <string, boolean> attributes
-   */
-  public Map<String, Boolean> getAttributes() {
-    return attributes;
-  }
-
-  /**
    * create a piece object with the following parameters
    * @param team team name
    * @param name piece name
@@ -45,14 +37,13 @@ public class Piece implements PieceInterface {
    * @param attributes attributes map
    * @param score value of a piece
    */
-  public Piece(String team, String name, Location location, List<Move> moves, Map<String, Boolean> attributes, int score) {
+  public Piece(String team, String name, Location location, List<Move> moves, int score) {
     this.location = location;
     this.team = team;
     this.moved = false;
     this.moves = moves;
     this.score = score;
     this.name = name;
-    this.attributes = attributes;
   }
 
   /**
@@ -63,16 +54,6 @@ public class Piece implements PieceInterface {
   @Override
   public String getTeam() {
     return team;
-  }
-
-  /**
-   * returns whether a piece is able to move in a limited fashion
-   *
-   * @return whether a piece is limited
-   */
-  @Override
-  public boolean isLimited() {
-    return attributes.getOrDefault("limited", true);
   }
 
   /**
@@ -187,7 +168,6 @@ public class Piece implements PieceInterface {
   public void transform(PieceInterface newPiece) {
     this.name = newPiece.getName();
     this.moves = newPiece.getMoves();
-    this.attributes.put("canTransform", false);
     this.score = newPiece.getScore();
   }
 
@@ -236,13 +216,5 @@ public class Piece implements PieceInterface {
   @Override
   public boolean isSameTeam(PieceInterface piece){
     return team.equals(piece.getTeam());
-  }
-
-  /**
-   * return whether a piece can transform into other pieces
-   * @return whether a piece can transform into another type
-   */
-  public boolean canTransform(){
-    return this.attributes.getOrDefault("canTransform", false);
   }
 }

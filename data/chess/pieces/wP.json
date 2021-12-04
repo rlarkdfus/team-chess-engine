@@ -18,15 +18,5 @@
       "0, -1, takes, limited"
     ]
   },
-  "attributes": {
-    "limited": true,
-    "canTransform": true
-  },
-  "value": 1,
-  "transform": [
-    "Q",
-    "R",
-    "N",
-    "B"
-  ]
+  "value": 1
 }
