@@ -1,7 +1,9 @@
 package ooga.model;
 
+import java.io.FileNotFoundException;
 import ooga.Location;
 
+import ooga.controller.Config.InvalidPieceConfigException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
