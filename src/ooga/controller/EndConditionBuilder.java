@@ -17,16 +17,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class EndConditionBuilder {
+
   JsonParser jsonParser;
   ResourceBundle mappings;
   List<PlayerInterface> playerList;
-  public EndConditionBuilder(JsonParser jsonParser){
+
+  public EndConditionBuilder(JsonParser jsonParser) {
     this.jsonParser = jsonParser;
     mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
   }
+
   public EndConditionRunner getEndConditions(String ruleJsonFile, List<PlayerInterface> playerList)
       throws InvalidEndGameConfigException {
-    try{
+    try {
       EndConditionRunner endConditionsHandler = new EndConditionRunner();
       this.playerList = playerList;
 
@@ -36,52 +39,62 @@ public class EndConditionBuilder {
         endConditionsHandler.add(buildEndCondition(playerList, endConditionsJSONObject));
       }
       return endConditionsHandler;
-    }catch (Exception e){
+    } catch (Exception e) {
+//      e.printStackTrace();
       throw new InvalidEndGameConfigException(e.getClass());
     }
   }
 
-  private EndConditionInterface buildEndCondition(List<PlayerInterface> playerList, JSONObject endConditionsJSONObject)
+  private EndConditionInterface buildEndCondition(List<PlayerInterface> playerList,
+      JSONObject endConditionsJSONObject)
       throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InvalidEndGameConfigException, InvalidGameConfigException {
     EndConditionInterface endCondition;
     String type = endConditionsJSONObject.getString(mappings.getString("gameType"));
-    String[] keys = mappings.getString(type+"RuleKeys").split(mappings.getString("jsonDelimiter"));
+
+    String[] keys = mappings.getString(type + "RuleKeys")
+        .split(mappings.getString("jsonDelimiter"));
+
     Map<String, List<String>> endConditionProperties = new HashMap<>();
-    for (String key : keys){
-      endConditionProperties.put(key, convertJSONArrayOfStrings(endConditionsJSONObject.getJSONArray(key)));
+    for (String key : keys) {
+      endConditionProperties.put(key,
+          convertJSONArrayOfStrings(endConditionsJSONObject.getJSONArray(key)));
     }
     Class<?> clazz = Class.forName("ooga.model.EndConditionHandler." + type + "EndCondition");
-    endCondition = (EndConditionInterface) clazz.getDeclaredConstructor().newInstance();
     List<PieceInterface> initialPieces = new ArrayList<>();
-    for (PlayerInterface p : playerList){
+
+    for (PlayerInterface p : playerList) {
       initialPieces.addAll(p.getPieces());
     }
-//    endCondition.setArgs(endConditionProperties, initialPieces); // FIXME
+
+    endCondition = (EndConditionInterface) clazz.getDeclaredConstructor(Map.class,List.class)
+        .newInstance(endConditionProperties, initialPieces);
+
     checkValidEndCondition(endConditionProperties);
     return endCondition;
   }
 
-  private void checkValidEndCondition(Map<String,List<String>> endConditionProperties)
+  private void checkValidEndCondition(Map<String, List<String>> endConditionProperties)
       throws InvalidEndGameConfigException {
     String pieceKey = mappings.getString("pieceType");
     List<String> endGamePieces = endConditionProperties.get(pieceKey);
-    for (PlayerInterface player : playerList){
+    for (PlayerInterface player : playerList) {
       HashMap<String, Integer> playerPieces = new HashMap<>();
-      for (PieceInterface p : player.getPieces()){
-        playerPieces.putIfAbsent(p.getName(),0);
-        playerPieces.put(p.getName(),playerPieces.get(p.getName())+1);
+      for (PieceInterface p : player.getPieces()) {
+        playerPieces.putIfAbsent(p.getName(), 0);
+        playerPieces.put(p.getName(), playerPieces.get(p.getName()) + 1);
       }
-      for (String p : endGamePieces){
-        playerPieces.putIfAbsent(p,0);
-        playerPieces.put(p,playerPieces.get(p)-1);
+      for (String p : endGamePieces) {
+        playerPieces.putIfAbsent(p, 0);
+        playerPieces.put(p, playerPieces.get(p) - 1);
       }
-      for (String key : playerPieces.keySet()){
-        if (playerPieces.get(key) < 0){
+      for (String key : playerPieces.keySet()) {
+        if (playerPieces.get(key) < 0) {
           throw new InvalidEndGameConfigException("not enough pieces to be eliminated");
         }
       }
     }
   }
+
   private List<String> convertJSONArrayOfStrings(JSONArray jsonArray) {
     List<String> ret = new ArrayList<>();
     for (int i = 0; i < jsonArray.length(); i++) {

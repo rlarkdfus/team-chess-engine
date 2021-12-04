@@ -24,8 +24,7 @@ public class JumpMoveTest {
   void setUp() {
     String testFile = "data/chess/oneBlackKnight.json";
     makePiece(testFile);
-    move = new JumpMove();
-    move.setMove(2,1,true,true);
+    move = new JumpMove(2,1,true,true);
     makeAllpieces();
   }
 
@@ -49,15 +48,13 @@ public class JumpMoveTest {
     List<Location> endLocationList;
 
     //no other pieces and limited
-    move = new JumpMove();
-    move.setMove(0, 1, true, true);
+    move = new JumpMove(0, 1, true, true);
     move.updateMoveLocations(p, allpieces);
     endLocationList = move.getEndLocations();
     assertEquals(1, endLocationList.size(), "should have 1 end locations because limited");
 
     //no other pieces and unlimited
-    move = new JumpMove();
-    move.setMove(2, 1, true, false);
+    move = new JumpMove(2, 1, true, false);
     move.updateMoveLocations(p, allpieces);
     endLocationList = move.getEndLocations();
     assertEquals(3, endLocationList.size(), "should have 3 end locations because unlimited");
@@ -68,18 +65,16 @@ public class JumpMoveTest {
     List<Location> endLocationList;
 
     //jump over ally pieces and unlimited
-    move = new JumpMove();
+    move = new JumpMove(0,2,true,false);
     allpieces.add(new Piece("b","P",new Location(0,1), new ArrayList<>(), new HashMap<>(),1));
-    move.setMove(0,2,true,false);
     move.updateMoveLocations(p,allpieces);
     endLocationList =  move.getEndLocations();
     assertEquals(3, endLocationList.size(), "should have 3 end locations because unlimited and jumps over ally");
 
     //jump over enemy pieces and unlimited
-    move = new JumpMove();
+    move = new JumpMove(0,2,true,false);
     allpieces.remove(2);
     allpieces.add(new Piece("w","P",new Location(0,1), new ArrayList<>(), new HashMap<>(),1));
-    move.setMove(0,2,true,false);
     move.updateMoveLocations(p,allpieces);
     endLocationList =  move.getEndLocations();
     assertEquals(3, endLocationList.size(), "should have 3 end locations because unlimited and jumps over ally");
@@ -91,16 +86,15 @@ public class JumpMoveTest {
     List<Location> endLocationList;
 
     //ally piece in the way and unlimited.
-    move = new JumpMove();
-    move.setMove(2,1,true,false);
+    move = new JumpMove(2,1,true,false);
     allpieces.add(new Piece("b","P",new Location(2,1), new ArrayList<>(), new HashMap<>(),1));
     move.updateMoveLocations(p,allpieces);
     endLocationList =  move.getEndLocations();
     assertEquals(0, endLocationList.size(), "should have 0 end locations because unlimited and ally");
 
     //enemy piece in the way and limited.
-    move = new JumpMove();
-    move.setMove(0,1,true,true);
+    move = new JumpMove(0,1,true,true);
+
     allpieces.remove(2);
     allpieces.add(new Piece("w","P",new Location(0,2), new ArrayList<>(), new HashMap<>(),1));
     move.updateMoveLocations(p,allpieces);

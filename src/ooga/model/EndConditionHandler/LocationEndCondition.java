@@ -21,11 +21,21 @@ public class LocationEndCondition implements EndConditionInterface{
   private Set<String> teams;
   private ResourceBundle resourceBundle;
   private String winner;
-  public LocationEndCondition(){
+
+  public LocationEndCondition(Map<String, List<String>> properties, List<PieceInterface> allpieces)
+      throws InvalidEndGameConfigException {
     targetLocations = new HashMap<>();
     minPieceAmounts = new HashMap<>();
     teams = new HashSet<>();
     resourceBundle = ResourceBundle.getBundle("JSONMappings");
+
+    String[] keys = resourceBundle.getString("LocationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
+    List<String> pieces = properties.get(keys[0]);
+    List<String> locations = properties.get(keys[1]);
+    if (pieces.size() != locations.size()){throw new InvalidEndGameConfigException("missing location for pieces");}
+    buildTargetLocations(pieces, locations);
+    buildMinPieceAmounts();
+    buildTeams(allpieces);
   }
 
   @Override
@@ -104,17 +114,6 @@ public class LocationEndCondition implements EndConditionInterface{
       }
     }
     return alivePieces;
-  }
-
-  public LocationEndCondition(Map<String, List<String>> properties, List<PieceInterface> allpieces)
-      throws InvalidEndGameConfigException {
-    String[] keys = resourceBundle.getString("LocationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
-    List<String> pieces = properties.get(keys[0]);
-    List<String> locations = properties.get(keys[1]);
-    if (pieces.size() != locations.size()){throw new InvalidEndGameConfigException("missing location for pieces");}
-    buildTargetLocations(pieces, locations);
-    buildMinPieceAmounts();
-    buildTeams(allpieces);
   }
 
   private void buildTeams(List<PieceInterface> allpieces) {

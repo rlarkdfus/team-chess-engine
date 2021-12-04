@@ -3,12 +3,15 @@ package ooga.model.EndConditionHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import ooga.model.*;
+import ooga.model.GameState;
 import ooga.model.Moves.MoveUtility;
+import ooga.model.PieceInterface;
+import ooga.model.PlayerInterface;
 
 public class CheckmateEndCondition implements EndConditionInterface {
-  public CheckmateEndCondition() {
+
+  public CheckmateEndCondition(Map<String, List<String>> properties, List<PieceInterface> allpieces) {
+
   }
 
   @Override
