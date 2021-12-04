@@ -1,6 +1,5 @@
 package ooga.model;
 
-
 import ooga.Location;
 import ooga.Turn;
 import ooga.controller.Config.InvalidPieceConfigException;
@@ -9,236 +8,134 @@ import ooga.model.Moves.Move;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import ooga.model.EndConditionHandler.EndConditionRunner;
+import ooga.model.Moves.MoveUtility;
 import ooga.model.Powerups.PowerupInterface;
 import ooga.model.Powerups.PromotePowerup;
-import ooga.model.Powerups.TimerPowerup;
 
-//import static ooga.controller.Parsing.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
+public abstract class Board implements Engine {
 
-public class Board implements Engine {
+    protected List<PlayerInterface> players;
+    protected List<PieceInterface> allPieces;
+    protected List<PowerupInterface> powerupInterfaceList;
+    protected PlayerInterface currentPlayer;
 
-  public static final int ROWS = 8;
-  public static final int COLS = 8;
-  public static final int LAST_ROW = ROWS - 1;
-  public static final int FIRST_ROW = 0;
-  public static final String QUEEN = "Q";
-  public static final String KING = "K";
-  public static final String PAWN = "P";
-
-
-
-  private List<PlayerInterface> players;
-  private List<PieceInterface> allPieces;
-  private EndConditionRunner endCondition;
-  private int turnCount;
-  private PlayerInterface currentPlayer;
-
-
-
-  List<PowerupInterface> powerupInterfaces;
-
-  public Board(List<PlayerInterface> players) {
-    this.players = players;
-    this.endCondition = new EndConditionRunner();
-    turnCount = 0;
-    allPieces = new ArrayList<>();
-    for (PlayerInterface player : players) {
-      allPieces.addAll(player.getPieces());
-    }
-
-    for (PieceInterface piece : allPieces) {
-      piece.updateMoves(allPieces);
-    }
-
-    updateLegalMoves();
-
-    powerupInterfaces = new ArrayList<>();
-    List<Location> testLocations = new ArrayList<>();
-    testLocations.add(new Location(4,2));
-    testLocations.add(new Location(4,0));
-
-
-    PromotePowerup promotePowerup = new PromotePowerup(testLocations);
-    TimerPowerup timerPowerup = new TimerPowerup(testLocations);
-    powerupInterfaces.add(promotePowerup);
-    powerupInterfaces.add(timerPowerup);
-
-  }
-
-
-
-
-
-
-
-
-  /**
-   * this method returns the list of all players
-   *
-   * @return
-   */
-  public List<PlayerInterface> getPlayers() {
-    return players;
-  }
-
-  /**
-   * this method sets the end conditions of the board
-   *
-   * @param endCondition
-   */
-  public void setEndCondition(EndConditionRunner endCondition) {
-    this.endCondition = endCondition;
-  }
-
-  private void updateLegalMoves() {
-    for (PieceInterface piece : allPieces) {
-      piece.updateMoves(new ArrayList<>(allPieces));
-    }
-  }
-
-  /**
-   * Moves piece from start to end and updates the board
-   *
-   * @param start is piece initial location
-   * @param end   is piece new location
-   */
-  public List<PieceInterface> movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
-    // pause current player timer, start next player time
-    PieceInterface piece = null;
-    for (PieceInterface p : allPieces) {
-      if (p.getLocation().equals(start)) {
-        piece = p;
-        break;
-      }
-    }
-
-    Move move = piece.getMove(end);
-    Turn turn = move.getTurn();
-    move.executeMove(piece, allPieces, end);
-
-
-
-    // remove piece from player if needed after turn
-    for (Location removeLocation : turn.getRemoved()) {
-      for (PlayerInterface player : players) {
-        for (PieceInterface p : player.getPieces()) {
-          if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
-            player.removePiece(p);
-          }
+    public Board(List<PlayerInterface> players) {
+        this.players = players;
+        allPieces = new ArrayList<>();
+        for (PlayerInterface player : players) {
+            allPieces.addAll(player.getPieces());
         }
-      }
+        powerupInterfaceList = new ArrayList<>();
+        List<Location> powerupLocations = new ArrayList<>();
+        powerupLocations.add(new Location(4,0));
+        PromotePowerup test = new PromotePowerup(powerupLocations);
+        powerupInterfaceList.add(test);
     }
-    ;
-
-    for(PowerupInterface powerupInterface: powerupInterfaces){
-      powerupInterface.checkPowerUp(piece,end,currentPlayer,allPieces);
-    }
-
-
-    // increment turn
-    turnCount++;
-    toggleTimers();
-
-
-    //update game data
-    updateLegalMoves();
-    return allPieces;
-  }
-
-
-
 
     /**
-     * pause current player timer, add increment, start next player time
+     * this method returns the list of all players
+     *
+     * @return
      */
-    private void toggleTimers() {
-        PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
-        PlayerInterface currPlayer = findPlayerTurn(turnCount);
-        prevPlayer.toggleTimer();
-        prevPlayer.incrementTimeUserInterface();
-        currPlayer.toggleTimer();
+    public List<PlayerInterface> getPlayers() {
+        return players;
     }
 
-
-  /**
-   * see if the game is still running or if its over
-   *
-   * @return
-   */
-  @Override
-  public GameState checkGameState() {
-    return endCondition.satisfiedEndCondition(players);
-  }
-
-  /**
-   * return a list of all legal moves for a piece at a location
-   *
-   * @param location
-   * @return
-   */
-  public List<Location> getLegalMoves(Location location) {
-    for (PieceInterface piece : allPieces) {
-      if (piece.getLocation().equals(location)) {
-        return piece.getEndLocations();
-      }
-    }
-    return null;
-  }
-
-  /**
-   * determine whether player selects their own piece on their turn
-   *
-   * @param location
-   * @return
-   */
-  public boolean canMovePiece(Location location) {
-    String turn = findPlayerTurn(turnCount).getTeam();
-    for (PieceInterface piece : allPieces) {
-      if (piece.getTeam().equals(turn) && piece.getLocation().equals(location)) {
-        return true;
-      }
+    /**
+     * Moves piece from start to end and updates the board
+     *
+     * @param start is piece initial location
+     * @param end   is piece new location
+     */
+    public List<PieceInterface> movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
+        PieceInterface piece = MoveUtility.pieceAt(start, allPieces);
+        Move move = getMove(end, piece);
+        move.executeMove(piece, allPieces, end);
+        updatePlayerPieces(piece, move.getTurn());
+        updateGameRules();
+        for(PowerupInterface powerupInterface: powerupInterfaceList){
+            powerupInterface.checkPowerUp(piece,end,currentPlayer,allPieces);
+        }
+        updateLegalMoves();
+        return allPieces;
     }
 
-    return false;
-  }
+    protected abstract Move getMove(Location end, PieceInterface piece);
 
-  private PlayerInterface findPlayerTurn(int turn) {
-    currentPlayer = players.get((turn) % players.size());
-    return currentPlayer;
-  }
+    private void updatePlayerPieces(PieceInterface piece, Turn turn) {
+        for (Location removeLocation : turn.getRemoved()) {
+            for (PlayerInterface player : players) {
+                for (PieceInterface p : player.getPieces()) {
+                    if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
+                        player.removePiece(p);
+                    }
+                }
+            }
+        }
+    }
 
-  /**
-   * this method overrides toString and prints out the current board state in an easily digestable
-   * format
-   *
-   * @return
-   */
-  @Override
-  public String toString() {
-    StringBuilder str = new StringBuilder();
-    str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
-    for (int i = 0; i < 8; i++) {
-      str.append(i + "\t|");
-//            str.append("|");
-      for (int j = 0; j < 8; j++) {
-        Location location = new Location(i, j);
-        boolean found = false;
+    protected abstract void updateGameRules();
 
+    protected void updateLegalMoves() {
         for (PieceInterface piece : allPieces) {
-          if (piece.getLocation().equals(location)) {
-            str.append(piece.toString() + "\t");
-            found = true;
-          }
+            piece.updateMoves(new ArrayList<>(allPieces));
         }
-        if (!found) {
-          str.append("\t");
-        }
-        str.append("|");
-      }
-      str.append("\n");
     }
-    str.append("____________________________________\n");
-    return str.toString();
-  }
+
+    /**
+     * see if the game is still running or if its over
+     *
+     * @return
+     */
+    @Override
+    public abstract GameState checkGameState();
+
+    /**
+     * determine whether player selects their own piece on their turn
+     *
+     * @param location
+     * @return
+     */
+    public abstract boolean canMovePiece(Location location);
+
+    /**
+     * return a list of all legal moves for a piece at a location
+     *
+     * @param location
+     * @return
+     */
+    public abstract List<Location> getLegalMoves(Location location);
+
+    /**
+     * this method overrides toString and prints out the current board state in an easily digestable
+     * format
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
+        for (int i = 0; i < 8; i++) {
+            str.append(i + "\t|");
+            for (int j = 0; j < 8; j++) {
+                Location location = new Location(i, j);
+                boolean found = false;
+
+                for (PieceInterface piece : allPieces) {
+                    if (piece.getLocation().equals(location)) {
+                        str.append(piece.toString() + "\t");
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    str.append("\t");
+                }
+                str.append("|");
+            }
+            str.append("\n");
+        }
+        str.append("____________________________________\n");
+        return str.toString();
+    }
 }

@@ -1,14 +1,16 @@
 package ooga.view.boardview;
 
 import ooga.Location;
+import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Controller;
 import ooga.controller.Config.PieceViewBuilder;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class EditorBoardView extends BoardView {
 
-    Controller controller;
+    private Controller controller;
 
     public EditorBoardView(Controller controller, List<PieceViewBuilder> pieceViews, int row, int col) {
         super(pieceViews, row, col);
@@ -16,15 +18,30 @@ public class EditorBoardView extends BoardView {
     }
 
     @Override
-    protected void clickBoard(Location clickLocation) {
-        // if editor piece is chosen
-        System.out.println("click board!");
+    protected void clickBoard(Location clickLocation) throws FileNotFoundException, InvalidPieceConfigException {
+        Location startLocation = getSelectedLocation();
 
-        if (getSelectedLocation() == null) {
-            selectPiece(clickLocation);
+        if (startLocation == null) {
+            if (controller.canMovePiece(clickLocation)) {
+                selectPiece(clickLocation);
+                showLegalMoves(controller.getLegalMoves(clickLocation));
+            } else {
+                unselectPiece();
+            }
+        } else {
+            if (isLegalMove(clickLocation, controller.getLegalMoves(clickLocation))) { //user clicks new location
+                controller.movePiece(startLocation, clickLocation);
+                unselectPiece();
+            }
         }
-        else {
-            unselectPiece();
-        }
+
+
+//        if (getSelectedLocation() == null) {
+//            selectPiece(clickLocation);
+//        }
+//        else {
+//            controller.movePiece(getSelectedLocation(), clickLocation);
+//            unselectPiece();
+//        }
     }
 }

@@ -7,32 +7,26 @@ import java.util.List;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
-import ooga.controller.Config.BoardBuilder;
-import ooga.controller.Config.Builder;
-import ooga.controller.Config.InvalidPieceConfigException;
-import ooga.controller.Config.JSONWriter;
-import ooga.controller.Config.LocationWriter;
-import ooga.model.Board;
 import ooga.model.Engine;
+import ooga.view.LoginView;
+import ooga.controller.Config.*;
 
-/**
- * This class abstracts some common complexities of handling interactions between the model and the
- * view so that subclasses extenidng th
- */
 public abstract class Controller implements ControllerInterface {
 
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
 
   //TODO: change protected
   protected Engine model;
+//  private ViewInterface view;
   private LocationWriter locationWriter;
   protected Builder boardBuilder;
+  private LoginController loginController;
   private File jsonFile;
+  private LoginView loginView;
 
   public Controller() {
     jsonFile = DEFAULT_CHESS_CONFIGURATION;
     boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-    model = new Board(boardBuilder.getInitialPlayers());
     start();
   }
 
@@ -61,7 +55,11 @@ public abstract class Controller implements ControllerInterface {
    * @return whether the piece can be moved
    */
   @Override
-  public abstract boolean canMovePiece(Location location);
+  public boolean canMovePiece(Location location) {
+    return model.canMovePiece(location);
+  }
+
+
 
   /**
    * sets up a new game with the initial configuration file
@@ -92,7 +90,9 @@ public abstract class Controller implements ControllerInterface {
   @Override
   public abstract void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException;
 
-  public abstract List<Location> getLegalMoves(Location location);
+  public List<Location> getLegalMoves(Location location) {
+    return model.getLegalMoves(location);
+  }
 
   @Override
   public void downloadGame(String filePath) {

@@ -96,6 +96,16 @@ public abstract class BoardView extends Group implements BoardViewInterface {
         findBoardSquare(location).select();
     }
 
+    protected boolean isLegalMove(Location clickLocation, List<Location> legalMoves) {
+        return clickLocation.inList(legalMoves);
+    }
+
+    protected void showLegalMoves(List<Location> legalMoves) {
+        for (Location squareLoc : legalMoves) {
+            highlightBoardSquare(squareLoc);
+        }
+    }
+
     protected void unselectPiece() {
         selectedLocation = null;
         for (BoardSquare boardSquare : background) {
