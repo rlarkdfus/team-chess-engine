@@ -28,15 +28,23 @@ public class Piece implements PieceInterface {
 
   private List<Move> moves;
 
-  public Piece(Piece piece){
-    this(piece.getTeam(),piece.getName(),piece.getLocation(),piece.getMoves(),piece.getAttributes(), piece.getScore());
-  }
-
+  /**
+   * get the attributes of a piece
+   * @return map of <string, boolean> attributes
+   */
   public Map<String, Boolean> getAttributes() {
     return attributes;
   }
 
-  //Todo: make this the default constructor
+  /**
+   * create a piece object with the following parameters
+   * @param team team name
+   * @param name piece name
+   * @param location location of piece
+   * @param moves list of all moves available to piece
+   * @param attributes attributes map
+   * @param score value of a piece
+   */
   public Piece(String team, String name, Location location, List<Move> moves, Map<String, Boolean> attributes, int score) {
     this.location = location;
     this.team = team;
@@ -50,7 +58,7 @@ public class Piece implements PieceInterface {
   /**
    * gets white or black team, used for modifying move vector
    *
-   * @return
+   * @return the team name
    */
   @Override
   public String getTeam() {
@@ -60,7 +68,7 @@ public class Piece implements PieceInterface {
   /**
    * returns whether a piece is able to move in a limited fashion
    *
-   * @return
+   * @return whether a piece is limited
    */
   @Override
   public boolean isLimited() {
@@ -70,7 +78,7 @@ public class Piece implements PieceInterface {
   /**
    * returns the value of a piece
    *
-   * @return
+   * @return the score of a piece
    */
   @Override
   public int getScore() {
@@ -79,7 +87,7 @@ public class Piece implements PieceInterface {
 
   /**
    * returns the name of a piece
-   * @return
+   * @return the name of a piece
    */
     @Override
     public String getName() {
@@ -88,7 +96,7 @@ public class Piece implements PieceInterface {
 
   /**
    * returns the location of a piece
-   * @return
+   * @return location of a piece
    */
   @Override
     public Location getLocation() {
@@ -97,7 +105,7 @@ public class Piece implements PieceInterface {
 
   /**
    * moves piece and updates first move and moved flags
-   * @param location
+   * @param location location to move a piece to
    */
   @Override
     public void moveTo(Location location) {
@@ -111,7 +119,7 @@ public class Piece implements PieceInterface {
 
   /**
    * set a piece location
-   * @param location
+   * @param location move a piece to location
    */
   @Override
     public void tryMove(Location location) {
@@ -121,7 +129,7 @@ public class Piece implements PieceInterface {
   /**
    * override toString to print out piece information
    *
-   * @return
+   * @return string representation of team and piece
    */
   @Override
   public String toString() {
@@ -130,8 +138,8 @@ public class Piece implements PieceInterface {
 
   /**
    * override equals to check if pieces have same score, location, name, and team
-   * @param o
-   * @return
+   * @param o other piece
+   * @return whether pieces have same score, location, team, and name
    */
   @Override
   public boolean equals(Object o) {
@@ -142,17 +150,8 @@ public class Piece implements PieceInterface {
   }
 
   /**
-   * gets a hash code of piece
-   * @return
-   */
-  @Override
-  public int hashCode() {
-    return Objects.hash(initialLocation, team, score, name);
-  }
-
-  /**
    * get all the locations a piece can move to
-   * @return
+   * @return list of all end locations of a piece's moves
    */
   @Override
   public List<Location> getEndLocations() {
@@ -165,7 +164,7 @@ public class Piece implements PieceInterface {
 
   /**
    * return whether a piece has moved
-   * @return
+   * @return whether a piece has moved
    */
   @Override
   public boolean hasMoved() {
@@ -174,7 +173,7 @@ public class Piece implements PieceInterface {
 
   /**
    * return whether a piece has just done its first move
-   * @return
+   * @return whether a piece has just done its first move
    */
   @Override
   public boolean isFirstMove() {
@@ -182,8 +181,7 @@ public class Piece implements PieceInterface {
   }
 
   /**
-   * return a new copy of the same piece
-   * @return
+   * Transform a piece from one type to another
    */
   @Override
   public void transform(PieceInterface newPiece) {
@@ -195,8 +193,8 @@ public class Piece implements PieceInterface {
 
   /**
    * this method returns the move that results in a piece being at the end location
-   * @param end
-   * @return
+   * @param end location of a move
+   * @return the move that goes to end location
    */
   @Override
   public Move getMove(Location end) {
@@ -210,7 +208,7 @@ public class Piece implements PieceInterface {
 
   /**
    * this method updates the move locations of all pieces
-   * @param pieces
+   * @param pieces all pieces
    */
   @Override
   public void updateMoves(List<PieceInterface> pieces) {
@@ -223,7 +221,7 @@ public class Piece implements PieceInterface {
 
   /**
    * return the moves of a piece
-   * @return
+   * @return list of all moves of a piece
    */
   @Override
   public List<Move> getMoves(){
@@ -232,8 +230,8 @@ public class Piece implements PieceInterface {
 
   /**
    * return whether this piece and another piece are on the same team
-   * @param piece
-   * @return
+   * @param piece other piece
+   * @return whether piece and other piece are on the same team
    */
   @Override
   public boolean isSameTeam(PieceInterface piece){
@@ -242,7 +240,7 @@ public class Piece implements PieceInterface {
 
   /**
    * return whether a piece can transform into other pieces
-   * @return
+   * @return whether a piece can transform into another type
    */
   public boolean canTransform(){
     return this.attributes.getOrDefault("canTransform", false);

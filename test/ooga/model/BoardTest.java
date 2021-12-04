@@ -3,12 +3,11 @@ package ooga.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ooga.Location;
-import ooga.controller.BoardBuilder;
-import ooga.controller.InvalidPieceConfigException;
+
+import ooga.controller.Config.InvalidPieceConfigException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

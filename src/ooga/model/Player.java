@@ -18,6 +18,10 @@ public class Player implements PlayerInterface {
     private TimerInterface moveTimer;
     private List<PieceInterface> initialPieces;
 
+    /**
+     * creates a player object
+     * @param team player's team
+     */
     public Player(String team) {
         this.team = team;
         remainingPieces = new HashMap<>();
@@ -27,16 +31,26 @@ public class Player implements PlayerInterface {
         this.initialPieces = new ArrayList<>();
     }
 
+    /**
+     * get the amount of time remaining on a player's timer
+     * @return the time left
+     */
     @Override
     public StringProperty getTimeLeft() {
         return moveTimer.getTimeLeft();
     }
 
+    /**
+     * start or stop a player's timer
+     */
     @Override
     public void toggleTimer() {
         moveTimer.toggle();
     }
 
+    /**
+     * reset the player's timer
+     */
     @Override
     public void resetTimer() {
         System.out.println("resetting timer: " + team);
@@ -54,43 +68,25 @@ public class Player implements PlayerInterface {
         moveTimer.setIncrement(incrementSeconds);
     }
 
+    /**
+     * this increments the timer user interface
+     */
     @Override
     public void incrementTimeUserInterface() {
         moveTimer.incrementTimeUserInterface();
     }
 
+    /**
+     * this updates the timer increment
+     * @param specifiedTime the new time increment
+     */
     public void incrementTime(Integer specifiedTime){
         moveTimer.incrementTime(specifiedTime);
     }
 
     /**
-     * remove a piece from the player's possession
-     * @param location
-     */
-    public void removePiece(Location location) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-        for(PieceInterface piece : remainingPieces.keySet()) {
-            if(piece.getLocation().equals(location)) {
-                //Fixme: added for testing purposes
-//                System.out.println("A Piece Has been Killed (you have reached the inside of the if conditional)");
-//                System.out.println(piece.getEndState());
-//                piece.setEliminated(true);
-                //Fixme: added for testing purposes
-//                System.out.println(piece.getEndState());
-                killedPieces.add(piece);
-                //Fixme: added for testing purposes
-//                System.out.println(piece.getName() + " " + piece.getTeam() + " " +  piece.getUniqueId() + "" + piece.getEliminatedState());
-                remainingPieces.remove(piece);
-                score -= piece.getScore();
-
-                return;
-            }
-        }
-    }
-
-
-    /**
      * get the list of pieces that a player has
-     * @return
+     * @return list of all pieces held by a player
      */
     public List<PieceInterface> getPieces(){
         return new ArrayList<>(remainingPieces.keySet());
@@ -98,7 +94,7 @@ public class Player implements PlayerInterface {
 
     /**
      * adds a piece to players list of pieces
-     * @param piece
+     * @param piece piece to add to a players list of remaining pieces
      */
     @Override
     public void addPiece(PieceInterface piece){
@@ -112,7 +108,7 @@ public class Player implements PlayerInterface {
 
     /**
      * remove a piece from player's possession
-     * @param piece
+     * @param piece remove a piece from player's posession
      */
     @Override
     public void removePiece(PieceInterface piece){
@@ -122,25 +118,34 @@ public class Player implements PlayerInterface {
 
     /**
      * return a player's score
-     * @return
+     * @return score
      */
     @Override
     public int getScore() {
         return score;
     }
 
+    /**
+     * get a queen piece
+     * @return queen
+     */
     @Override
     public PieceInterface createQueen() {
-            PieceInterface queen = null;
-            for(PieceInterface pieceInterface: initialPieces){
-                if(pieceInterface.getName().equals("Q")){
-                    queen = pieceInterface;
-                }
+        PieceInterface queen = null;
+        for(PieceInterface pieceInterface: initialPieces){
+            if(pieceInterface.getName().equals("Q")){
+                queen = pieceInterface;
             }
-            return queen;
-
+        }
+        return queen;
     }
 
+    /**
+     * create another piece
+     * @param pieceName piece to create
+     * @return new piece
+     * @throws InvalidPieceException if pieceName is invalid
+     */
     //FIXME:
     //Needs to be in initial Piece List
     public PieceInterface createPiece(String pieceName) throws InvalidPieceException {
@@ -152,6 +157,10 @@ public class Player implements PlayerInterface {
         throw new InvalidPieceException(pieceName);
     }
 
+    /**
+     * add time to a player
+     * @param seconds amount of time to add
+     */
     @Override
     public void addTime(Integer seconds) {
 
@@ -159,20 +168,11 @@ public class Player implements PlayerInterface {
 
     /**
      * returns the player team
-     * @return
+     * @return player's team
      */
     @Override
     public String getTeam(){
         return team;
-    }
-
-    /**
-     * return the player's king
-     * @return
-     */
-    @Override
-    public PieceInterface getKing() {
-        return null;
     }
 
     /**
