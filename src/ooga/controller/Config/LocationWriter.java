@@ -17,6 +17,7 @@ import ooga.model.PlayerInterface;
  * Assumptions: The file path passed to save file will be a correct path to the user's local
  * computer
  * Dependencies: PlayerInterface API, and the ability to get all the pieces from this.
+ * @author Luis Pereda
  */
 public class LocationWriter {
   public static final String TEAM_PIECETYPE_FORMAT = "%s_%s";
@@ -29,7 +30,7 @@ public class LocationWriter {
    * initialize a new game. This uses the PlayerInterface API to get all the pieces from the players.
    * @param filePath String representing the path where the file will be saved.
    * @param players API representing the players of the game, each holding the pieces of one team.
-   * @throws IOException 
+   * @throws IOException
    */
   public void saveCSV(String filePath, List<PlayerInterface> players) throws IOException {
     makeGrid(players);

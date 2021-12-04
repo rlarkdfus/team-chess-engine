@@ -13,6 +13,7 @@ import org.json.JSONObject;
  * filePath that exists on the local computer. We also assume the LocationWriter will effectively
  * write a csv file detailing the states of the pieces.
  * Dependencies: JsonParser
+ * @author Luis Pereda
  */
 public class JSONWriter {
   public static final String CSV = "csv";
