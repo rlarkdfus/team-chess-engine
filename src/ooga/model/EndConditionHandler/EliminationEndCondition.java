@@ -36,7 +36,7 @@ public class EliminationEndCondition implements EndConditionInterface {
     while(pieceIter.hasNext()) {
       String pieceType = pieceIter.next();
       for (String team : teams){
-        String key = team+"_"+pieceType;
+        String key = team + "_" + pieceType;
         piecesToEliminate.putIfAbsent(key, 0);
         piecesToEliminate.put(key, piecesToEliminate.get(key)+1);
       }
@@ -108,6 +108,7 @@ public class EliminationEndCondition implements EndConditionInterface {
       targetPiecesRemaining.putIfAbsent(team, 0);
       targetPiecesRemaining.put(team, targetPiecesRemaining.get(team) + piecesLeft);
     }
+    System.out.println(targetPiecesRemaining);
     return targetPiecesRemaining;
   }
 

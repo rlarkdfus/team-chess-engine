@@ -8,7 +8,6 @@ import ooga.model.*;
 import ooga.model.Moves.MoveUtility;
 
 public class CheckmateEndCondition implements EndConditionInterface {
-
   public CheckmateEndCondition() {
   }
 
