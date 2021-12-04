@@ -7,6 +7,7 @@ import ooga.model.PlayerInterface;
 import ooga.view.View;
 import ooga.view.EditorView;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class EditorController extends Controller {
     }
 
     @Override
-    public void movePiece(Location start, Location end) {
+    public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
         model.movePiece(start, end);
     }
 

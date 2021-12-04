@@ -10,6 +10,7 @@ import ooga.view.GameOverScreen;
 import ooga.view.GameView;
 import ooga.view.View;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class GameController extends Controller {
         }
     }
 
-    public void movePiece(Location start, Location end) {
+    public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
         List<PieceViewBuilder> pieceViewList = new ArrayList<>();
         for (PieceInterface piece : model.movePiece(start, end)) {
             pieceViewList.add(new PieceViewBuilder(piece));
