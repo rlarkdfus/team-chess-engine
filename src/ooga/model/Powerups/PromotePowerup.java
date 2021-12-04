@@ -1,14 +1,13 @@
 package ooga.model.Powerups;
 
 import ooga.Location;
-import ooga.controller.InvalidPieceConfigException;
-import ooga.controller.PieceBuilder;
+import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.PieceBuilder;
 import ooga.model.Board;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class PromotePowerup extends Powerup{
@@ -26,7 +25,12 @@ public class PromotePowerup extends Powerup{
         }
 //        int randomPieceIndex = (int) (Math.random()*availablePieces.length);
 //        String randomPieceName = availablePieces[randomPieceIndex-1];
-        PieceInterface additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.QUEEN,endLocation);
+        PieceInterface additionalPiece = null;
+        try {
+            additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(), Board.QUEEN,endLocation);
+        } catch (InvalidPieceConfigException e) {
+            e.printStackTrace();
+        }
         currentPlayer.addPiece(additionalPiece);
         allPieces.add(additionalPiece);
         currentPlayer.removePiece(pieceInterface);

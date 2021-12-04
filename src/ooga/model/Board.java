@@ -3,7 +3,7 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
-import ooga.controller.InvalidPieceConfigException;
+import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.Moves.Move;
 
 import java.io.FileNotFoundException;
