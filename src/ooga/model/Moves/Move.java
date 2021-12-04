@@ -9,18 +9,16 @@ import java.util.List;
 
 public abstract class Move {
 
+    private final int dRow;
+    private final int dCol;
+    private final boolean take;
+    private final boolean limited;
+
     private Turn turn;
-    private int dRow;
-    private int dCol;
-    private boolean take;
     private List<Location> endLocations;
-    private boolean limited;
 
-    public Move() {
+    public Move(int dRow, int dCol, boolean take, boolean limited) {
         resetMove();
-    }
-
-    public void setMove(int dRow, int dCol, boolean take, boolean limited){
         this.dRow = dRow;
         this.dCol = dCol;
         this.take = take;
