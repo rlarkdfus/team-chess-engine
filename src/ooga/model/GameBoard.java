@@ -3,6 +3,8 @@ package ooga.model;
 import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
+import ooga.model.Powerups.PowerupInterface;
+import ooga.model.Powerups.TimerPowerup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +21,7 @@ public class GameBoard extends Board {
     private EndConditionRunner endCondition;
     private int turnCount;
 
-    private List<Location> promotionSquares;
-    private List<Location> timerSquares;
-    private List<Location> skipSquares;
+
 
     public GameBoard(List<PlayerInterface> players) {
         super(players);
@@ -31,9 +31,8 @@ public class GameBoard extends Board {
             piece.updateMoves(allPieces);
         }
         updateLegalMoves();
-        promotionSquares = new ArrayList<>();
-        timerSquares = new ArrayList<>();
-        skipSquares = new ArrayList<>();
+
+
     }
 
     @Override
@@ -43,6 +42,7 @@ public class GameBoard extends Board {
 
     @Override
     protected void updateGameRules() {
+
         turnCount++;
         toggleTimers();
     }
@@ -95,26 +95,10 @@ public class GameBoard extends Board {
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        return players.get((turn) % players.size());
+        currentPlayer = players.get((turn) % players.size());
+        return currentPlayer;
     }
 
-//    private void checkTime(PieceInterface pieceInterface, Location end) {
-//        for (Location timerLocation : timerSquares) {
-//            if (end.equals(timerLocation)) {
-//                findPlayerTurn(turnCount).incrementTime(100000);
-//                timerSquares.remove(timerLocation);
-//            }
-//        }
-//    }
-//
-//    private void checkSkip(PieceInterface pieceInterface, Location end) {
-//        for (Location skipLocation : skipSquares) {
-//            if (end.equals(skipLocation)) {
-//                turnCount++;
-//                skipSquares.remove(skipLocation);
-//            }
-//        }
-//    }
 
     @Override
     public GameState checkGameState() {
