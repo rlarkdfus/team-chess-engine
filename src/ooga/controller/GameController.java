@@ -1,17 +1,12 @@
 package ooga.controller;
 
 import ooga.Location;
-import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Config.PieceViewBuilder;
-import ooga.model.Board;
-import ooga.model.Engine;
-import ooga.model.GameState;
-import ooga.model.PieceInterface;
+import ooga.model.*;
 import ooga.view.GameOverScreen;
 import ooga.view.GameView;
 import ooga.view.View;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,14 +17,13 @@ public class GameController extends Controller {
 
     private GameOverScreen gameOverScreen;
     private View view;
-    private Engine model;
     private TimeController timeController;
 
     @Override
     public void start() {
         try {
             //buildGame() is the 3 lines below
-            model = new Board(boardBuilder.getInitialPlayers());
+            model = new GameBoard(boardBuilder.getInitialPlayers());
             model.setEndCondition(boardBuilder.getEndConditionHandler());
             view = new GameView(this);
             view.initializeDisplay(boardBuilder.getInitialPieceViews());
@@ -43,7 +37,7 @@ public class GameController extends Controller {
         }
     }
 
-    public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
+    public void movePiece(Location start, Location end) {
         List<PieceViewBuilder> pieceViewList = new ArrayList<>();
         for (PieceInterface piece : model.movePiece(start, end)) {
             pieceViewList.add(new PieceViewBuilder(piece));
@@ -55,18 +49,6 @@ public class GameController extends Controller {
         }
     }
 
-    /**
-     * @param location is the desired destination of the move
-     * @return whether the piece can be moved to the location
-     */
-    @Override
-    public boolean canMovePiece(Location location) {
-        return model.canMovePiece(location);
-    }
-
-    public java.util.List<Location> getLegalMoves(Location location) {
-        return model.getLegalMoves(location);
-    }
 
     //TODO: TIMER
     /**
