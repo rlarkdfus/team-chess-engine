@@ -27,7 +27,6 @@ public abstract class Controller implements ControllerInterface {
   public Controller() {
     jsonFile = DEFAULT_CHESS_CONFIGURATION;
     boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-    model = new GameBoard(boardBuilder.getInitialPlayers());
     start();
   }
 

@@ -16,7 +16,6 @@ public class GameController extends Controller {
 
     private GameOverScreen gameOverScreen;
     private View view;
-    private Engine model;
     private TimeController timeController;
 
     @Override

@@ -30,12 +30,10 @@ public class GameBoard extends Board {
         for (PieceInterface piece : allPieces) {
             piece.updateMoves(allPieces);
         }
-//    System.out.println(this);
         updateLegalMoves();
         promotionSquares = new ArrayList<>();
         timerSquares = new ArrayList<>();
         skipSquares = new ArrayList<>();
-//    initializePowerUpSquares();
     }
 
     @Override
@@ -100,23 +98,23 @@ public class GameBoard extends Board {
         return players.get((turn) % players.size());
     }
 
-    private void checkTime(PieceInterface pieceInterface, Location end) {
-        for (Location timerLocation : timerSquares) {
-            if (end.equals(timerLocation)) {
-                findPlayerTurn(turnCount).incrementTime(100000);
-                timerSquares.remove(timerLocation);
-            }
-        }
-    }
-
-    private void checkSkip(PieceInterface pieceInterface, Location end) {
-        for (Location skipLocation : skipSquares) {
-            if (end.equals(skipLocation)) {
-                turnCount++;
-                skipSquares.remove(skipLocation);
-            }
-        }
-    }
+//    private void checkTime(PieceInterface pieceInterface, Location end) {
+//        for (Location timerLocation : timerSquares) {
+//            if (end.equals(timerLocation)) {
+//                findPlayerTurn(turnCount).incrementTime(100000);
+//                timerSquares.remove(timerLocation);
+//            }
+//        }
+//    }
+//
+//    private void checkSkip(PieceInterface pieceInterface, Location end) {
+//        for (Location skipLocation : skipSquares) {
+//            if (end.equals(skipLocation)) {
+//                turnCount++;
+//                skipSquares.remove(skipLocation);
+//            }
+//        }
+//    }
 
     @Override
     public GameState checkGameState() {

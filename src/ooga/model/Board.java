@@ -1,14 +1,10 @@
 package ooga.model;
 
-
 import ooga.Location;
 import ooga.Turn;
 import ooga.model.Moves.Move;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.MoveUtility;
 
 public abstract class Board implements Engine {
@@ -107,7 +103,6 @@ public abstract class Board implements Engine {
         str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
         for (int i = 0; i < 8; i++) {
             str.append(i + "\t|");
-//            str.append("|");
             for (int j = 0; j < 8; j++) {
                 Location location = new Location(i, j);
                 boolean found = false;

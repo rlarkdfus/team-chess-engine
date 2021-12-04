@@ -3,7 +3,6 @@ package ooga.model;
 import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
-import ooga.model.Moves.MoveUtility;
 import ooga.model.Moves.NoRestrictionMove;
 
 import java.util.ArrayList;

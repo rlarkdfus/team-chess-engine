@@ -27,7 +27,7 @@ public class GameBoardView extends BoardView {
                 unselectPiece();
             }
         } else { //user selects new location with piece
-            if (isLegalMove(clickLocation, controller.getLegalMoves(clickLocation))) { //user clicks new location
+            if (isLegalMove(clickLocation, controller.getLegalMoves(startLocation))) { //user clicks new location
                 controller.movePiece(startLocation, clickLocation);
                 unselectPiece();
             } else if (controller.canMovePiece(clickLocation)) {

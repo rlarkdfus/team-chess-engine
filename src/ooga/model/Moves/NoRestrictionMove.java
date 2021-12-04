@@ -17,19 +17,14 @@ public class NoRestrictionMove extends TranslationMove {
         List<Location> locations = new ArrayList<>();
         int row = 0;
         int col = 0;
-        for(int i = 0; i < 8; i++) {
-            for(int j = 0; j < 8; j++) {
-                locations.add(new Location(i, j));
+        while (MoveUtility.inBounds(row, col)) {
+            while (MoveUtility.inBounds(row, col)) {
+                locations.add(new Location(row, col));
+                col++;
             }
+            col = 0;
+            row++;
         }
-//        while (MoveUtility.inBounds(row, col)) {
-//            col = 0;
-//            while (MoveUtility.inBounds(row, col)) {
-//                locations.add(new Location(row, col));
-//                col++;
-//            }
-//            row++;
-//        }
         System.out.println("move size: " + locations.size());
 
         return locations;
