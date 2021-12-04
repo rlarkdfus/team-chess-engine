@@ -20,7 +20,8 @@ public class PieceBuilder {
 
   private static ResourceBundle mappings;
 
-  public static Piece buildPiece(String team, String pieceName, Location location) throws FileNotFoundException, InvalidPieceConfigException {
+  public static Piece buildPiece(String team, String pieceName, Location location)
+      throws FileNotFoundException, InvalidPieceConfigException {
     mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
     JsonParser jsonParser = new JsonParser();
 
@@ -60,34 +61,44 @@ public class PieceBuilder {
       throws Throwable {
     List<Move> moves = new ArrayList<>();
     for (int i = 0; i < arguments.length(); i++) {
-      Move newMove = makeMove(moveType);
+      Move newMove = makeMove(moveType,arguments.getString(i));
       if (newMove == null) {
         continue;
       }
-      setMoveArgs(newMove, arguments.getString(i));
       moves.add(newMove);
     }
     return moves;
   }
 
-  private static Move makeMove(String moveType) throws Throwable {
-    Class<?> clazz = Class.forName("ooga.model.Moves." + moveType);
-    Move newMove = (Move) clazz.getDeclaredConstructor().newInstance();
-    return newMove;
-  }
-
-  private static void setMoveArgs(Move newMove, String arg) throws Exception {
+  private static Move makeMove(String moveType, String arg) throws Throwable {
     String[] args = arg.split(mappings.getString("jsonDelimiter"));
     if (args.length == BoardBuilder.ARG_LENGTH) {
       int dRow = parseInt(args[0].strip());
       int dCol = parseInt(args[1].strip());
       boolean takes = args[2].strip().equals(mappings.getString("takes"));
       boolean limited = args[3].strip().equals(mappings.getString("limited"));
-      newMove.setMove(dRow, dCol, takes, limited);
+      Class<?> clazz = Class.forName("ooga.model.Moves." + moveType);
+      Move newMove = (Move) clazz.getDeclaredConstructor(int.class, int.class, int.class, int.class)
+          .newInstance(dRow,dCol,takes,limited);
+      return newMove;
     } else {
       throw new Exception();
     }
   }
+
+//  private static void setMoveArgs(Move newMove, String arg) throws Exception {
+//    String[] args = arg.split(mappings.getString("jsonDelimiter"));
+//    if (args.length == BoardBuilder.ARG_LENGTH) {
+//      int dRow = parseInt(args[0].strip());
+//      int dCol = parseInt(args[1].strip());
+//      boolean takes = args[2].strip().equals(mappings.getString("takes"));
+//      boolean limited = args[3].strip().equals(mappings.getString("limited"));
+//      newMove.setMove(dRow, dCol, takes, limited);
+//    } else {
+//      throw new Exception();
+//    }
+//  }
+
   /**
    * @param pieceJSON - JSON object of the piece
    * @return a map of all the attributes and their values

@@ -51,12 +51,13 @@ public class EndConditionBuilder {
       endConditionProperties.put(key, convertJSONArrayOfStrings(endConditionsJSONObject.getJSONArray(key)));
     }
     Class<?> clazz = Class.forName("ooga.model.EndConditionHandler." + type + "EndCondition");
-    endCondition = (EndConditionInterface) clazz.getDeclaredConstructor().newInstance();
     List<PieceInterface> initialPieces = new ArrayList<>();
+
     for (PlayerInterface p : playerList){
       initialPieces.addAll(p.getPieces());
     }
-    endCondition.setArgs(endConditionProperties, initialPieces);
+
+    endCondition = (EndConditionInterface) clazz.getDeclaredConstructor(Map.class, List.class).newInstance(endConditionProperties,initialPieces);
     checkValidEndCondition(endConditionProperties);
     return endCondition;
   }
