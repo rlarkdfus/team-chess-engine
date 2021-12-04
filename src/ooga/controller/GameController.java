@@ -3,6 +3,7 @@ package ooga.controller;
 import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
+import ooga.model.GameState;
 import ooga.model.PieceInterface;
 import ooga.view.GameOverScreen;
 import ooga.view.GameView;
@@ -45,14 +46,9 @@ public class GameController extends Controller {
         }
         view.updateDisplay(pieceViewList);
 
-        Board.GameState gameState = model.checkGameState();
-        System.out.println(gameState);
-        if (gameState == Board.GameState.CHECKMATE || gameState == Board.GameState.STALEMATE) {
-            String winner = model.getWinner();
-            gameOverScreen = new GameOverScreen(this, winner);
-        }
-        if (gameState == Board.GameState.CHECK){
-            view.showCheck(model.getCheckedKing().getLocation());
+        GameState gameState = model.checkGameState();
+        if(gameState != GameState.RUNNING) {
+            gameOverScreen = new GameOverScreen(this, gameState.toString());
         }
     }
 

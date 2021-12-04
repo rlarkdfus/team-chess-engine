@@ -53,7 +53,7 @@ public class EndConditionBuilder {
     for (PlayerInterface p : playerList){
       initialPieces.addAll(p.getPieces());
     }
-    endCondition.setArgs(endConditionProperties, initialPieces);
+//    endCondition.setArgs(endConditionProperties, initialPieces); // FIXME
     checkValidEndCondition(endConditionProperties);
     return endCondition;
   }

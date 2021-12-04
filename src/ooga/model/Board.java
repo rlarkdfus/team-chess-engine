@@ -25,12 +25,7 @@ public class Board implements Engine {
   private static final String KING = "K";
   private static final String PAWN = "P";
 
-  public enum GameState {
-    RUNNING,
-    CHECKMATE,
-    STALEMATE,
-    CHECK
-  }
+
 
   private List<PlayerInterface> players;
   private List<PieceInterface> allPieces;
@@ -39,7 +34,6 @@ public class Board implements Engine {
   private PlayerInterface currentPlayer;
   private GameState currGameState;
   private Check check;
-  private PieceInterface checkedPiece;
 
   private List<Location> promotionSquares;
   private List<Location> timerSquares;
@@ -157,15 +151,6 @@ public class Board implements Engine {
     //update game data
     updateLegalMoves();
     currGameState = endCondition.satisfiedEndCondition(players);
-    checkedPiece = null;
-    if (check.isTrue(players)) {
-      for (PieceInterface p : allPieces) {
-        if (p.getName().equals(KING) && !p.getTeam().equals(check.getWinner())) {
-//          turn.addCheckedSquare(p.getLocation());
-          checkedPiece = p;
-        }
-      }
-    }
     return allPieces;
   }
 
@@ -244,25 +229,7 @@ public class Board implements Engine {
    */
   @Override
   public GameState checkGameState() {
-    if (currGameState == GameState.CHECKMATE) {
-      return GameState.CHECKMATE;
-    }
-    int totalLegalMoves = 0;
-    for (PieceInterface piece : findPlayerTurn(turnCount).getPieces()) {
-      totalLegalMoves += getLegalMoves(piece.getLocation()).size();
-    }
-
-    if (totalLegalMoves == 0) {
-      return GameState.STALEMATE;
-    }
-
-    if (checkedPiece != null) {
-      currGameState = GameState.CHECK;
-      return GameState.CHECK;
-    }
-
-    // game still going
-    return GameState.RUNNING;
+    return endCondition.satisfiedEndCondition(players);
   }
 
   /**
@@ -276,22 +243,6 @@ public class Board implements Engine {
       if (piece.getLocation().equals(location)) {
         return piece.getEndLocations();
       }
-    }
-    return null;
-  }
-
-  @Override
-  public String getWinner() {
-    if (currGameState == GameState.CHECKMATE) {
-      return endCondition.getWinner();
-    }
-    return null;
-  }
-
-  @Override
-  public PieceInterface getCheckedKing() {
-    if (currGameState == GameState.CHECK) {
-      return checkedPiece;
     }
     return null;
   }

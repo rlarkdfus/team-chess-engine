@@ -10,7 +10,7 @@ public class TakeOnlyMove extends TranslationMove {
 
     @Override
     protected boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
-        if(pieceAt(potentialLocation, pieces) == null) {
+        if(MoveUtility.pieceAt(potentialLocation, pieces) == null) {
             return false;
         }
         return tryMove(piece, potentialLocation, new ArrayList<>(pieces));

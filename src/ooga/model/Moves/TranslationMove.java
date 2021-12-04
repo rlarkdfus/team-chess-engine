@@ -10,7 +10,7 @@ public class TranslationMove extends Move {
 
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        PieceInterface takenPiece = pieceAt(end, pieces);
+        PieceInterface takenPiece = MoveUtility.pieceAt(end, pieces);
         if(takenPiece != null) {
             removePiece(takenPiece, pieces);
         }

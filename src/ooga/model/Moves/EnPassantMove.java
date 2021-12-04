@@ -11,9 +11,9 @@ public class EnPassantMove extends Move {
     public void executeMove(PieceInterface pawn, List<PieceInterface> pieces, Location end) {
         Location enemyPawnLocation = new Location(end.getRow() - getdRow(), end.getCol());
 
-        Location removeFrom = pieceAt(enemyPawnLocation, pieces) == null ? end : enemyPawnLocation;
-        System.out.println("EnPassantMove.executeMove removed " + pieceAt(removeFrom, pieces));
-        removePiece(pieceAt(removeFrom, pieces), pieces);
+        Location removeFrom = MoveUtility.pieceAt(enemyPawnLocation, pieces) == null ? end : enemyPawnLocation;
+        System.out.println("EnPassantMove.executeMove removed " + MoveUtility.pieceAt(removeFrom, pieces));
+        removePiece(MoveUtility.pieceAt(removeFrom, pieces), pieces);
         movePiece(pawn, end);
     }
 
@@ -21,11 +21,11 @@ public class EnPassantMove extends Move {
     protected boolean isLegal(PieceInterface pawn, Location potentialLocation, List<PieceInterface> pieces) {
         Location otherPawnLocation = new Location(pawn.getLocation().getRow(), potentialLocation.getCol());
 
-        if(pieceAt(potentialLocation, pieces) != null || pieceAt(otherPawnLocation, pieces) == null) {
+        if(MoveUtility.pieceAt(potentialLocation, pieces) != null || MoveUtility.pieceAt(otherPawnLocation, pieces) == null) {
             return false;
         }
 
-        PieceInterface otherPawn = pieceAt(otherPawnLocation, pieces);
+        PieceInterface otherPawn = MoveUtility.pieceAt(otherPawnLocation, pieces);
 //        if(otherPawn != null) {
 //            System.out.println(pawn.toString() + " " + pawn.getLocation() + ", " + otherPawn.toString() + " " + otherPawnLocation);
 //        }
@@ -39,6 +39,6 @@ public class EnPassantMove extends Move {
     @Override
     protected PieceInterface tryTakeMove(Location potentialLocation, List<PieceInterface> pieces) {
         Location otherPawnLocation = new Location(potentialLocation.getRow() - getdRow(), potentialLocation.getCol());
-        return pieceAt(otherPawnLocation, pieces);
+        return MoveUtility.pieceAt(otherPawnLocation, pieces);
     }
 }

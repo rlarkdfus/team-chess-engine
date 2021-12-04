@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import ooga.model.GameState;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
@@ -21,8 +23,7 @@ public class EliminationEndCondition implements EndConditionInterface {
   private Map<String, Integer> piecesToEliminate;
   private String winner;
 
-  @Override
-  public void setArgs(Map<String, List<String>> propertiesMap, List<PieceInterface> allpieces) {
+  public EliminationEndCondition(Map<String, List<String>> propertiesMap, List<PieceInterface> allpieces) {
 
     Set<String> teams = new HashSet<>();
     previousTurnPieces = new ArrayList<>();
@@ -43,7 +44,7 @@ public class EliminationEndCondition implements EndConditionInterface {
   }
 
   @Override
-  public String foundWinner(List<PlayerInterface> players) {
+  public GameState isSatisfied(List<PlayerInterface> players) {
     List<PieceInterface> alivePieces = new ArrayList<>();
     for (PlayerInterface player : players){
       for (PieceInterface piece : player.getPieces()){
@@ -56,7 +57,7 @@ public class EliminationEndCondition implements EndConditionInterface {
     findMissingPiece(alivePieces);
     previousTurnPieces = alivePieces;
     if(eliminatedAllTargets()){
-      return winner;
+      return null; //FIXME
     }
     return null;
   }

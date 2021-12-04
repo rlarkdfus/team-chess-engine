@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import ooga.controller.InvalidEndGameConfigException;
+import ooga.model.GameState;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
@@ -28,12 +29,12 @@ public class LocationEndCondition implements EndConditionInterface{
   }
 
   @Override
-  public String foundWinner(List<PlayerInterface> players) {
+  public GameState isSatisfied(List<PlayerInterface> players) {
     currTeamLocations = new HashMap();
     List<PieceInterface> alivePieces = getAlivePieces(players);
 
     if (notEnoughPieces(alivePieces)){
-      return winner;
+      return null; //FIXME
     }
     boolean foundLocation;
     for (ooga.Location l : targetLocations.keySet()){
@@ -53,7 +54,7 @@ public class LocationEndCondition implements EndConditionInterface{
     for (String team : currTeamLocations.keySet()){
       if (currTeamLocations.get(team).equals(targetLocations.size())){
         winner = team;
-        return winner;
+        return null; //FIXME
       }
     }
     return null;

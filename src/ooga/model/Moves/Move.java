@@ -52,12 +52,12 @@ public abstract class Move {
 
         Location potentialLocation = new Location(row, col);
 
-        while(inBounds(row, col)){
-            if(pieceAt(potentialLocation, pieces) != null) {
-                if(pieceAt(potentialLocation, pieces).isSameTeam(piece) || !take) {
-                    break;
+        while(MoveUtility.inBounds(row, col)){
+            PieceInterface targetPiece = MoveUtility.pieceAt(potentialLocation, pieces);
+            if(targetPiece != null) {
+                if(!targetPiece.isSameTeam(piece) && take) {
+                    endLocations.add(potentialLocation);
                 }
-                endLocations.add(potentialLocation);
                 break;
             }
 
@@ -67,39 +67,11 @@ public abstract class Move {
                 break;
             }
 
-            row += getdRow();
-            col += getdCol();
+            row += dRow;
+            col += dCol;
             potentialLocation = new Location(row, col);
         }
         return endLocations;
-    }
-
-    /**
-     * Checks if the king is under attack from enemy pieces
-     * @param attackingPieces is the list of pieces attacking the king
-     * @return true if the king is under attack from list of pieces
-     */
-    protected boolean underAttack(Location location, List<PieceInterface> attackingPieces, List<PieceInterface> allPieces) {
-        for(PieceInterface attackingPiece : attackingPieces) {
-            List<Move> attackingMoves = attackingPiece.getMoves();
-            for(Move attackingMove : attackingMoves) {
-                if(location.inList(attackingMove.findAllEndLocations(attackingPiece, allPieces))) {
-                    return true;
-                }
-            }
-
-        }
-        return false;
-    }
-
-    protected boolean isClear(List<Location> locations, List<PieceInterface> pieces) {
-        for(PieceInterface piece : pieces) {
-            if(piece.getLocation().inList(locations)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     protected void movePiece(PieceInterface piece, Location end) {
@@ -110,15 +82,6 @@ public abstract class Move {
     protected void removePiece(PieceInterface removedPiece, List<PieceInterface> pieces) {
         turn.removePiece(removedPiece.getLocation());
         pieces.remove(removedPiece);
-    }
-
-    public PieceInterface pieceAt(Location location, List<PieceInterface> pieces) {
-        for(PieceInterface piece : pieces) {
-            if(piece.getLocation().equals(location)) {
-                return piece;
-            }
-        }
-        return null;
     }
 
     /**
@@ -137,53 +100,13 @@ public abstract class Move {
         }
         //move piece to new location
         piece.tryMove(potentialLocation);
-
-        return !inCheck(piece, pieces, originalLocation);
-    }
-
-    private boolean inCheck(PieceInterface piece, List<PieceInterface> pieces, Location originalLocation) {
-        // look for checks
-        List<PieceInterface> attackingPieces = getAttackingPieces(piece, pieces);
-
-        // if the king is in check, undo move and return false
-        if(findKing(piece, pieces) == null) {
-            return true;
-        }
-        if(underAttack(findKing(piece, pieces).getLocation(), attackingPieces, pieces)) {
-            piece.tryMove(originalLocation);
-            return true;
-        }
-
-        //otherwise undo the move and return true
+        boolean inCheck = MoveUtility.inCheck(piece.getTeam(), pieces);
         piece.tryMove(originalLocation);
-        return false;
+        return !inCheck;
     }
 
     protected PieceInterface tryTakeMove(Location location, List<PieceInterface> pieces) {
-        return pieceAt(location, pieces);
-    }
-
-    protected List<PieceInterface> getAttackingPieces(PieceInterface attackedPiece, List<PieceInterface> allPieces) {
-        List<PieceInterface> attackingPieces = new ArrayList<>();
-        for(PieceInterface piece : allPieces) {
-            if(!piece.isSameTeam(attackedPiece)) {
-                attackingPieces.add(piece);
-            }
-        }
-        return attackingPieces;
-    }
-
-    protected PieceInterface findKing(PieceInterface teamPiece, List<PieceInterface> pieces) {
-        for(PieceInterface piece : pieces) {
-            if(teamPiece.isSameTeam(piece) && piece.getName().equals("K")) {
-                return piece;
-            }
-        }
-        return null;
-    }
-
-    protected boolean inBounds(int newRow, int newCol) {
-        return (newRow < 8 && newCol < 8 && newRow >= 0 && newCol >= 0); //FIXME: hardcoded row col
+        return MoveUtility.pieceAt(location, pieces);
     }
 
     protected void resetMove() {
