@@ -21,8 +21,6 @@ public class Board implements Engine {
   private static final String KING = "K";
   private static final String PAWN = "P";
 
-
-
   private List<PlayerInterface> players;
   private List<PieceInterface> allPieces;
   private EndConditionRunner endCondition;
@@ -33,6 +31,10 @@ public class Board implements Engine {
   private List<Location> timerSquares;
   private List<Location> skipSquares;
 
+  /**
+   * create board object
+   * @param players list of all players
+   */
   public Board(List<PlayerInterface> players) {
     this.players = players;
     this.endCondition = new EndConditionRunner();
@@ -52,6 +54,7 @@ public class Board implements Engine {
     skipSquares = new ArrayList<>();
     initializePowerUpSquares();
   }
+
   private void initializePowerUpSquares(){
     initializeTimeSquares();
     initializeSkipSquares();
@@ -76,8 +79,7 @@ public class Board implements Engine {
 
   /**
    * this method returns the list of all players
-   *
-   * @return
+   * @return list of all players
    */
   public List<PlayerInterface> getPlayers() {
     return players;
@@ -85,8 +87,7 @@ public class Board implements Engine {
 
   /**
    * this method sets the end conditions of the board
-   *
-   * @param endCondition
+   * @param endCondition end condition
    */
   public void setEndCondition(EndConditionRunner endCondition) {
     this.endCondition = endCondition;
@@ -100,9 +101,9 @@ public class Board implements Engine {
 
   /**
    * Moves piece from start to end and updates the board
-   *
    * @param start is piece initial location
    * @param end   is piece new location
+   * @return list of all pieces
    */
   public List<PieceInterface> movePiece(Location start, Location end) {
     // pause current player timer, start next player time
@@ -146,7 +147,6 @@ public class Board implements Engine {
     updateLegalMoves();
     return allPieces;
   }
-
 
   private void checkPromotion(PieceInterface piece, Location end) {
     //check pawn promotion specifically
@@ -201,16 +201,16 @@ public class Board implements Engine {
     }
   }
 
-    /**
-     * pause current player timer, add increment, start next player time
-     */
-    private void toggleTimers() {
-        PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
-        PlayerInterface currPlayer = findPlayerTurn(turnCount);
-        prevPlayer.toggleTimer();
-        prevPlayer.incrementTimeUserInterface();
-        currPlayer.toggleTimer();
-    }
+  /**
+   * pause current player timer, add increment, start next player time
+   */
+  private void toggleTimers() {
+      PlayerInterface prevPlayer = findPlayerTurn(turnCount-1);
+      PlayerInterface currPlayer = findPlayerTurn(turnCount);
+      prevPlayer.toggleTimer();
+      prevPlayer.incrementTimeUserInterface();
+      currPlayer.toggleTimer();
+  }
 
   private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
     PieceInterface newPiece = null;
@@ -231,8 +231,7 @@ public class Board implements Engine {
 
   /**
    * see if the game is still running or if its over
-   *
-   * @return
+   * @return gamestate
    */
   @Override
   public GameState checkGameState() {
@@ -241,9 +240,8 @@ public class Board implements Engine {
 
   /**
    * return a list of all legal moves for a piece at a location
-   *
-   * @param location
-   * @return
+   * @param location piece location to get legal moves from
+   * @return list of all legal moves if any
    */
   public List<Location> getLegalMoves(Location location) {
     for (PieceInterface piece : allPieces) {
@@ -256,9 +254,8 @@ public class Board implements Engine {
 
   /**
    * determine whether player selects their own piece on their turn
-   *
-   * @param location
-   * @return
+   * @param location of piece selected
+   * @return whether piece belongs to current player
    */
   public boolean canMovePiece(Location location) {
     String turn = findPlayerTurn(turnCount).getTeam();
@@ -267,7 +264,6 @@ public class Board implements Engine {
         return true;
       }
     }
-
     return false;
   }
 
@@ -279,8 +275,7 @@ public class Board implements Engine {
   /**
    * this method overrides toString and prints out the current board state in an easily digestable
    * format
-   *
-   * @return
+   * @return string representation of the board
    */
   @Override
   public String toString() {
