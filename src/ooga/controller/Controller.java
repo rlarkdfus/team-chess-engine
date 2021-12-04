@@ -6,10 +6,9 @@ import java.util.List;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
-import ooga.model.Board;
 import ooga.model.Engine;
-import ooga.model.GameBoard;
 import ooga.view.LoginView;
+import ooga.controller.Config.*;
 
 public abstract class Controller implements ControllerInterface {
 

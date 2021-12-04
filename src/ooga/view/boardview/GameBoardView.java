@@ -1,8 +1,12 @@
 package ooga.view.boardview;
 
 import ooga.Location;
+import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.PieceViewBuilder;
 import ooga.controller.Controller;
-import ooga.controller.PieceViewBuilder;
+
+
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class GameBoardView extends BoardView {
@@ -15,7 +19,7 @@ public class GameBoardView extends BoardView {
     }
 
     @Override
-    protected void clickBoard(Location clickLocation) {
+    protected void clickBoard(Location clickLocation) throws FileNotFoundException, InvalidPieceConfigException {
         Location startLocation = getSelectedLocation();
         //user doesn't have piece selected and clicks on new piece
         //And add logic and is the same team
@@ -34,9 +38,10 @@ public class GameBoardView extends BoardView {
                 unselectPiece();
                 selectPiece(clickLocation);
                 showLegalMoves(controller.getLegalMoves(clickLocation));
+            } else {
+                unselectPiece();
+
             }
-            // if user clicks an illegal move
-            unselectPiece();
         }
     }
 }

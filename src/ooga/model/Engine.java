@@ -1,7 +1,9 @@
 package ooga.model;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import ooga.Location;
+import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 
 public interface Engine {

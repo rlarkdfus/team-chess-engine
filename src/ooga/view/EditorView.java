@@ -1,15 +1,10 @@
 package ooga.view;
 
-import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import ooga.controller.Controller;
-import ooga.controller.PieceViewBuilder;
+import ooga.controller.Config.PieceViewBuilder;
 import ooga.view.boardview.EditorBoardView;
-import ooga.view.boardview.GameBoardView;
-import ooga.view.ui.gameInfoUI.GameInfoUI;
-import ooga.view.ui.gameSettingsUI.GameSettingsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
-import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
 
 import java.util.List;
 

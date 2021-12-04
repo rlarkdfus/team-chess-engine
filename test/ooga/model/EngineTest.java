@@ -1,15 +1,13 @@
 package ooga.model;
 
+import java.io.FileNotFoundException;
 import ooga.Location;
-import ooga.Turn;
-import ooga.controller.InvalidPieceConfigException;
 
-import ooga.controller.PieceViewBuilder;
+import ooga.controller.Config.InvalidPieceConfigException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -21,7 +19,7 @@ class EngineTest {
     }
 
     @Test
-    void movePiece() {
+    void movePiece() throws FileNotFoundException, InvalidPieceConfigException {
         Location start = new Location(6, 0);
         Location end = new Location(5, 0);
         List<PieceInterface> pieces = board.movePiece(start, end);
