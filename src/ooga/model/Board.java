@@ -28,8 +28,6 @@ public class Board implements Engine {
   private EndConditionRunner endCondition;
   private int turnCount;
   private PlayerInterface currentPlayer;
-  private GameState currGameState;
-  private Check check;
 
   private List<Location> promotionSquares;
   private List<Location> timerSquares;
@@ -39,7 +37,6 @@ public class Board implements Engine {
     this.players = players;
     this.endCondition = new EndConditionRunner();
     turnCount = 0;
-    check = new Check();
     allPieces = new ArrayList<>();
     for (PlayerInterface player : players) {
       allPieces.addAll(player.getPieces());
@@ -146,7 +143,6 @@ public class Board implements Engine {
 
     //update game data
     updateLegalMoves();
-    currGameState = endCondition.satisfiedEndCondition(players);
     return allPieces;
   }
 

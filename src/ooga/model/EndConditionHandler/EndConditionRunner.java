@@ -21,6 +21,7 @@ public class EndConditionRunner {
       GameState winner = endCondition.isSatisfied(players);
       if(winner != null) {
         System.out.println("win triggered by "+endCondition.getClass());
+        System.out.println("runner print: "+ winner);
         return winner;
       }
     }
