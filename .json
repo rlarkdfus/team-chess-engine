@@ -1,1 +1,1 @@
-{"boardSize":"8x8","players":["w","b"],"csv":".csv","rules":"data/chess/rules/default.json","style":"companion","type":"chess","boardColors":["#f3dab0","#bb885b"],"board":"square"}
+{"boardSize":"8x8","players":["w","b"],"csv":".csv","rules":"data/chess/rules/default.json","style":"companion","time":10,"type":"chess","timeIncrement":5,"boardColors":["#f3dab0","#bb885b"],"board":"square"}
