@@ -27,10 +27,10 @@ public abstract class Move {
 
     public abstract void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
 
-    public void updateMoveLocations(PieceInterface king, List<PieceInterface> pieces) {
+    public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
         resetMove();
-        for(Location location : findAllEndLocations(king, pieces)) {
-            if(isLegal(king, location, pieces)) {
+        for(Location location : findAllEndLocations(piece, pieces)) {
+            if(isLegal(piece, location, pieces)) {
                 addEndLocation(location);
             }
         }

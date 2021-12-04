@@ -24,7 +24,7 @@ public class MoveUtility {
         return null;
     }
 
-    static PieceInterface pieceAt(Location location, List<PieceInterface> pieces) {
+    public static PieceInterface pieceAt(Location location, List<PieceInterface> pieces) {
         for(PieceInterface piece : pieces) {
             if(piece.getLocation().equals(location)) {
                 return piece;

@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.model.Board;
 import ooga.model.Engine;
+import ooga.model.GameBoard;
 import ooga.view.LoginView;
 
 public abstract class Controller implements ControllerInterface {
@@ -26,7 +27,7 @@ public abstract class Controller implements ControllerInterface {
   public Controller() {
     jsonFile = DEFAULT_CHESS_CONFIGURATION;
     boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-    model = new Board(boardBuilder.getInitialPlayers());
+    model = new GameBoard(boardBuilder.getInitialPlayers());
     start();
   }
 
@@ -55,7 +56,11 @@ public abstract class Controller implements ControllerInterface {
    * @return whether the piece can be moved
    */
   @Override
-  public abstract boolean canMovePiece(Location location);
+  public boolean canMovePiece(Location location) {
+    return model.canMovePiece(location);
+  }
+
+
 
   /**
    * sets up a new game with the initial configuration file
@@ -86,7 +91,9 @@ public abstract class Controller implements ControllerInterface {
   @Override
   public abstract void movePiece(Location start, Location end);
 
-  public abstract List<Location> getLegalMoves(Location location);
+  public List<Location> getLegalMoves(Location location) {
+    return model.getLegalMoves(location);
+  }
 
   @Override
   public void downloadGame(String filePath) {
