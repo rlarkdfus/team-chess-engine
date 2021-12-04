@@ -1,27 +1,33 @@
 package ooga.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
+import ooga.controller.Config.BoardBuilder;
+import ooga.controller.Config.Builder;
+import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.JSONWriter;
+import ooga.controller.Config.LocationWriter;
 import ooga.model.Board;
 import ooga.model.Engine;
-import ooga.view.LoginView;
 
+/**
+ * This class abstracts some common complexities of handling interactions between the model and the
+ * view so that subclasses extenidng th
+ */
 public abstract class Controller implements ControllerInterface {
 
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
 
   //TODO: change protected
   protected Engine model;
-//  private ViewInterface view;
   private LocationWriter locationWriter;
   protected Builder boardBuilder;
-  private LoginController loginController;
   private File jsonFile;
-  private LoginView loginView;
 
   public Controller() {
     jsonFile = DEFAULT_CHESS_CONFIGURATION;
@@ -84,7 +90,7 @@ public abstract class Controller implements ControllerInterface {
    * @param end   is final location of moved piece
    */
   @Override
-  public abstract void movePiece(Location start, Location end);
+  public abstract void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException;
 
   public abstract List<Location> getLegalMoves(Location location);
 

@@ -1,4 +1,4 @@
-package ooga.controller;
+package ooga.controller.Config;
 
 public class InvalidGameConfigException extends Exception {
 

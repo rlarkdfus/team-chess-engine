@@ -8,13 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ooga.Location;
 import ooga.controller.Controller;
-import ooga.controller.PieceViewBuilder;
+import ooga.controller.Config.PieceViewBuilder;
 import ooga.view.boardview.BoardView;
-import ooga.view.boardview.GameBoardView;
-import ooga.view.ui.gameInfoUI.GameInfoUI;
-import ooga.view.ui.gameSettingsUI.GameSettingsUI;
-import ooga.view.ui.settingsUI.SettingsUI;
-import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
 import ooga.view.util.ViewUtility;
 
 public abstract class View implements ViewInterface {

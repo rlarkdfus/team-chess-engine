@@ -1,7 +1,7 @@
 package ooga.model;
 
 import ooga.Location;
-import ooga.controller.BoardBuilder;
+import ooga.controller.Config.BoardBuilder;
 
 import java.io.File;
 import java.util.ArrayList;

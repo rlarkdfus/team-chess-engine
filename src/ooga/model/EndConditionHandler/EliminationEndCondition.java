@@ -1,5 +1,7 @@
 package ooga.model.EndConditionHandler;
 
+import static ooga.controller.Config.BoardBuilder.PIECE_TYPE;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,15 +15,12 @@ import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
 public class EliminationEndCondition implements EndConditionInterface {
-  public static final String PIECE_TYPE = "pieceType";
-  public static final String AMOUNT = "amount";
   public static final String UNDERSCORE = "_";
   public static final String PIECE_TEAM_TYPE_FORMAT = "%s_%s";
-  private final String NO_WINNER = "noWinner";
 
   private List<PieceInterface> previousTurnPieces;
   private Map<String, Integer> piecesToEliminate;
-  private String winner;
+
 
   public EliminationEndCondition(Map<String, List<String>> propertiesMap, List<PieceInterface> allpieces) {
 

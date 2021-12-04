@@ -1,10 +1,10 @@
 {
   "endCon1": {
-    "gameType": "Timer",
+    "ruleType": "Timer",
     "pieceType": []
   },
   "endCon2": {
-    "gameType": "Checkmate",
+    "ruleType": "Checkmate",
     "pieceType": [
       "K"
     ]

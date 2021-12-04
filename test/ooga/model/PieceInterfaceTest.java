@@ -1,7 +1,7 @@
 package ooga.model;
 
-import ooga.controller.BoardBuilder;
-import ooga.controller.Builder;
+import ooga.controller.Config.BoardBuilder;
+import ooga.controller.Config.Builder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

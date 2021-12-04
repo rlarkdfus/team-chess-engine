@@ -1,6 +1,9 @@
 package ooga.model.Moves;
 
+import java.io.FileNotFoundException;
 import ooga.Location;
+import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.PieceBuilder;
 import ooga.model.PieceInterface;
 
 import java.util.List;
@@ -36,11 +39,13 @@ public class PromoteMove extends Move {
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         System.out.println("Execute promote move");
-        for(PieceInterface newPiece : pieces) {
-            if(newPiece.getName().equals("Q") && newPiece.isSameTeam(piece)) { // TODO Q or whatever other otp
-                piece.transform(newPiece);
-            }
+        PieceInterface newPiece = null;
+        try {
+            newPiece = PieceBuilder.buildPiece(piece.getTeam(), "Q",end);
+        } catch (FileNotFoundException | InvalidPieceConfigException e) {
+            e.printStackTrace();
         }
+        piece.transform(newPiece);
     }
 
     /**
@@ -52,7 +57,7 @@ public class PromoteMove extends Move {
     @Override
     protected boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
         return (piece.getLocation().getRow() == getdRow() || getdRow() == -1) &&
-                (piece.getLocation().getCol() == getdCol() || getdCol() == -1) &&
-                piece.canTransform();
+            (piece.getLocation().getCol() == getdCol() || getdCol() == -1) &&
+            piece.canTransform();
     }
 }

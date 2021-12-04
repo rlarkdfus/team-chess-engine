@@ -1,7 +1,7 @@
-package ooga.controller;
+package ooga.controller.Config;
 
 import static java.lang.Integer.parseInt;
-import static ooga.controller.BoardBuilder.PROPERTIES_FILE;
+import static ooga.controller.Config.BoardBuilder.mappings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 import ooga.Location;
 import ooga.model.Moves.Move;
 import ooga.model.Piece;
@@ -18,15 +17,11 @@ import org.json.JSONObject;
 
 public class PieceBuilder {
 
-  private static ResourceBundle mappings;
-
   public static Piece buildPiece(String team, String pieceName, Location location)
       throws FileNotFoundException, InvalidPieceConfigException {
-    mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
-    JsonParser jsonParser = new JsonParser();
 
     String pieceJsonPath = "data/chess/pieces/" + team + pieceName + ".json";
-    JSONObject pieceJSON = jsonParser.loadFile(new File(pieceJsonPath));
+    JSONObject pieceJSON = JsonParser.loadFile(new File(pieceJsonPath));
 
     List<Move> moves;
     Map<String, Boolean> attributes;

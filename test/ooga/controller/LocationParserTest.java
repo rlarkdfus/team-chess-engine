@@ -3,6 +3,7 @@ package ooga.controller;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import ooga.controller.Config.LocationParser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

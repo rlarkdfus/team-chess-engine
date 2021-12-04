@@ -1,6 +1,6 @@
 {
   "endCon1": {
-    "gameType": "Location",
+    "ruleType": "Location",
     "pieceType": [
       "P",
       "P"
@@ -11,7 +11,7 @@
     ]
   },
   "endCon2": {
-    "gameType": "Checkmate",
+    "ruleType": "Checkmate",
     "pieceType": [
       "K"
     ]
