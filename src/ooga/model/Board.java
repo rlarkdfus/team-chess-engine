@@ -13,13 +13,13 @@ import ooga.model.EndConditionHandler.EndConditionRunner;
 
 public class Board implements Engine {
 
-  private static final int ROWS = 8;
-  private static final int COLS = 8;
-  private static final int LAST_ROW = ROWS - 1;
-  private static final int FIRST_ROW = 0;
-  private static final String QUEEN = "Q";
-  private static final String KING = "K";
-  private static final String PAWN = "P";
+  public static final int ROWS = 8;
+  public static final int COLS = 8;
+  public static final int LAST_ROW = ROWS - 1;
+  public static final int FIRST_ROW = 0;
+  public static final String QUEEN = "Q";
+  public static final String KING = "K";
+  public static final String PAWN = "P";
 
   public enum GameState {
     RUNNING,
@@ -54,7 +54,7 @@ public class Board implements Engine {
     for (PieceInterface piece : allPieces) {
       piece.updateMoves(allPieces);
     }
-//    System.out.println(this);
+
     updateLegalMoves();
     promotionSquares = new ArrayList<>();
     timerSquares = new ArrayList<>();
@@ -183,10 +183,7 @@ public class Board implements Engine {
     }
     if(promotionPieceHit){
       Location testLocation = new Location(4,0);
-      System.out.println(promotionSquares.get(0).equals(end));
-      System.out.println(promotionSquares.get(0).equals(testLocation));
       System.out.println(promotionSquares.remove(end));
-      System.out.println(promotionSquares);
     }
 
   }
