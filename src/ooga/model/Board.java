@@ -35,8 +35,7 @@ public class Board implements Engine {
   private PlayerInterface currentPlayer;
 
 
-  private PromotePowerup promotePowerup;
-  private TimerPowerup timerPowerup;
+
   List<PowerupInterface> powerupInterfaces;
 
   public Board(List<PlayerInterface> players) {
@@ -60,8 +59,8 @@ public class Board implements Engine {
     testLocations.add(new Location(4,0));
 
 
-    promotePowerup = new PromotePowerup(testLocations);
-    timerPowerup = new TimerPowerup(testLocations);
+    PromotePowerup promotePowerup = new PromotePowerup(testLocations);
+    TimerPowerup timerPowerup = new TimerPowerup(testLocations);
     powerupInterfaces.add(promotePowerup);
     powerupInterfaces.add(timerPowerup);
 
