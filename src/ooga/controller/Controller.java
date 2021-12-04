@@ -1,6 +1,7 @@
 package ooga.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -88,7 +89,7 @@ public abstract class Controller implements ControllerInterface {
    * @param end   is final location of moved piece
    */
   @Override
-  public abstract void movePiece(Location start, Location end);
+  public abstract void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException;
 
   public abstract List<Location> getLegalMoves(Location location);
 
