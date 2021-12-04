@@ -11,6 +11,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import ooga.model.EndConditionHandler.CheckmateEndCondition;
+import ooga.model.EndConditionHandler.EliminationEndCondition;
+import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.EnPassantMove;
 import ooga.model.Moves.Move;
 import ooga.model.Moves.PawnMove;
@@ -45,13 +49,21 @@ class BoardBuilderTest {
     jp = new JsonParser();
   }
 
-//  @Test
-//  void testEndCondition()   {
-//    //EndGameBuilder Test
-//    EndConditionInterface endConditionHandler = boardBuilder.getEndConditionHandler();
-//    boolean correctEndCondition = endConditionHandler.getClass() == new EliminationEndCondition().getClass();
-//    assertEquals(true, correctEndCondition);
-//  }
+  @Test
+  void testEndCondition() throws NoSuchFieldException, IllegalAccessException {
+    //EndGameBuilder Test
+    EndConditionRunner endConditionHandler = boardBuilder.getEndConditionHandler();
+    Field f = endConditionHandler.getClass().getDeclaredField("endConditions");
+    f.setAccessible(true);
+    List<EndConditionInterface> endConditions = (List<EndConditionInterface>) f.get(endConditionHandler);
+    List<Class> endConditionTypes = new ArrayList<>();
+    for (EndConditionInterface e : endConditions){
+      endConditionTypes.add(e.getClass());
+    }
+    assertEquals(true, endConditionTypes.contains(EliminationEndCondition.class));
+    assertEquals(true, endConditionTypes.contains(CheckmateEndCondition.class));
+
+  }
 
   @Test
   void testInvalidEndCondition() {
