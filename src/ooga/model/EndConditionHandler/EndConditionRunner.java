@@ -2,12 +2,11 @@ package ooga.model.EndConditionHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import ooga.model.Board.GameState;
 import ooga.model.PlayerInterface;
+import ooga.model.GameState;
 
 public class EndConditionRunner {
   private List<EndConditionInterface> endConditions;
-  private String winner;
 
   public EndConditionRunner(){
     endConditions = new ArrayList<>();
@@ -16,17 +15,15 @@ public class EndConditionRunner {
   public void add(EndConditionInterface endCondition){
     endConditions.add(endCondition);
   }
+
   public GameState satisfiedEndCondition(List<PlayerInterface> players){
     for (EndConditionInterface endCondition : endConditions){
-      winner = endCondition.foundWinner(players);
-      if (winner != null){
-        return GameState.CHECKMATE;
+      GameState winner = endCondition.isSatisfied(players);
+      if(winner != null) {
+        System.out.println("win triggered by "+endCondition.getClass());
+        return winner;
       }
     }
     return GameState.RUNNING;
-  }
-
-  public String getWinner() {
-    return winner;
   }
 }

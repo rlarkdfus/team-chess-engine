@@ -12,7 +12,6 @@ import ooga.controller.Builder;
 import ooga.controller.InvalidEndGameConfigException;
 import ooga.controller.InvalidGameConfigException;
 import ooga.controller.InvalidPieceConfigException;
-import ooga.model.Board.GameState;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,8 +46,7 @@ public class LocationEndConTest {
     board.movePiece(new Location(1, 3), new Location(3, 3));
     assertEquals(GameState.RUNNING, board.checkGameState());
     board.movePiece(new Location(3, 3), new Location(4, 3));
-    assertEquals(GameState.CHECKMATE, board.checkGameState());
-    assertEquals("b", board.getWinner());
+    assertEquals(GameState.BLACK, board.checkGameState());
   }
 
   @Test
@@ -60,8 +58,7 @@ public class LocationEndConTest {
     assertEquals(GameState.RUNNING, board.checkGameState());
     board.movePiece(new Location(6, 3), new Location(4, 3)); //pawn
 
-    assertEquals(GameState.CHECKMATE, board.checkGameState());
-    assertEquals("w", board.getWinner());
+    assertEquals(GameState.WHITE, board.checkGameState());
   }
 
   @Test
@@ -73,13 +70,10 @@ public class LocationEndConTest {
     board.movePiece(new Location(4, 7), new Location(6, 7)); //queen eats
     board.movePiece(new Location(6, 7), new Location(6, 6)); //queen eats
     board.movePiece(new Location(6, 6), new Location(6, 5)); //queen eats
-    assertEquals(GameState.CHECK, board.checkGameState());
     board.movePiece(new Location(6, 5), new Location(6, 4)); //queen eats
-    assertEquals(GameState.CHECK, board.checkGameState());
     board.movePiece(new Location(6, 4), new Location(6, 3)); //queen eats
 
-    assertEquals(GameState.CHECKMATE, board.checkGameState());
-    assertEquals("b", board.getWinner());
+    assertEquals(GameState.BLACK, board.checkGameState());
   }
 
   @Test
@@ -90,13 +84,10 @@ public class LocationEndConTest {
     board.movePiece(new Location(3, 7), new Location(1, 7)); //queen eats
     board.movePiece(new Location(1, 7), new Location(1, 6)); //queen eats
     board.movePiece(new Location(1, 6), new Location(1, 5)); //queen eats
-    assertEquals(GameState.CHECK, board.checkGameState());
     board.movePiece(new Location(1, 5), new Location(1, 4)); //queen eats
-    assertEquals(GameState.CHECK, board.checkGameState());
     board.movePiece(new Location(1, 4), new Location(1, 3)); //queen eats
 
-    assertEquals(GameState.CHECKMATE, board.checkGameState());
-    assertEquals("w", board.getWinner());
+    assertEquals(GameState.WHITE, board.checkGameState());
   }
 
   @Test

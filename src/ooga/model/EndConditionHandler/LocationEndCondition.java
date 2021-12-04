@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import ooga.controller.InvalidEndGameConfigException;
+import ooga.model.GameState;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
@@ -20,20 +21,31 @@ public class LocationEndCondition implements EndConditionInterface{
   private Set<String> teams;
   private ResourceBundle resourceBundle;
   private String winner;
-  public LocationEndCondition(){
+
+  public LocationEndCondition(Map<String, List<String>> properties, List<PieceInterface> allpieces)
+      throws InvalidEndGameConfigException {
     targetLocations = new HashMap<>();
     minPieceAmounts = new HashMap<>();
     teams = new HashSet<>();
     resourceBundle = ResourceBundle.getBundle("JSONMappings");
+
+    String[] keys = resourceBundle.getString("LocationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
+    List<String> pieces = properties.get(keys[0]);
+    List<String> locations = properties.get(keys[1]);
+    if (pieces.size() != locations.size()){throw new InvalidEndGameConfigException("missing location for pieces");}
+    buildTargetLocations(pieces, locations);
+    buildMinPieceAmounts();
+    buildTeams(allpieces);
   }
 
   @Override
-  public String foundWinner(List<PlayerInterface> players) {
+  public GameState isSatisfied(List<PlayerInterface> players) {
     currTeamLocations = new HashMap();
     List<PieceInterface> alivePieces = getAlivePieces(players);
 
-    if (notEnoughPieces(alivePieces)){
-      return winner;
+    if (notEnoughPieces(alivePieces) != GameState.RUNNING){
+      return notEnoughPieces(alivePieces);
+//      return null; //FIXME
     }
     boolean foundLocation;
     for (ooga.Location l : targetLocations.keySet()){
@@ -52,15 +64,16 @@ public class LocationEndCondition implements EndConditionInterface{
     }
     for (String team : currTeamLocations.keySet()){
       if (currTeamLocations.get(team).equals(targetLocations.size())){
-        winner = team;
-        return winner;
+        return GameState.ENDED.getWinner(team);
+//        winner = team;
+//        return null; //FIXME
       }
     }
     return null;
   }
 
-  private boolean notEnoughPieces(List<PieceInterface> alivePieces) {
-    String loser = null;
+  private GameState notEnoughPieces(List<PieceInterface> alivePieces) {
+//    String loser = null;
     Map<String, Integer> currentAmounts = new HashMap<>();
     for (PieceInterface alive : alivePieces){
       String team = alive.getTeam();
@@ -70,25 +83,27 @@ public class LocationEndCondition implements EndConditionInterface{
       currentAmounts.put(key,currentAmounts.get(key)+1);
     }
 
+    GameState loser = GameState.RUNNING;
     for (String piece : currentAmounts.keySet()){
       String pieceType = piece.split("_")[1];
       if (minPieceAmounts.containsKey(pieceType)){
         if (currentAmounts.get(piece) < minPieceAmounts.get(pieceType)){
           System.out.println("here");
-          loser = piece.split("_")[0];
+          loser = GameState.ENDED.getLoser(piece.split("_")[0]);
           break;
         }
       }
     }
-    if (loser != null){
-      for (String team : teams){
-        if (!team.equals(loser)){
-          winner = team;
-          return true;
-        }
-      }
-    }
-    return false;
+    return loser;
+//    if (loser != null){
+//      for (String team : teams){
+//        if (!team.equals(loser)){
+//          winner = team;
+//          return true;
+//        }
+//      }
+//    }
+//    return false;
   }
 
   private List<PieceInterface> getAlivePieces(List<PlayerInterface> players) {
@@ -99,17 +114,6 @@ public class LocationEndCondition implements EndConditionInterface{
       }
     }
     return alivePieces;
-  }
-
-  public void setArgs(Map<String, List<String>> properties, List<PieceInterface> allpieces)
-      throws InvalidEndGameConfigException {
-    String[] keys = resourceBundle.getString("LocationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
-    List<String> pieces = properties.get(keys[0]);
-    List<String> locations = properties.get(keys[1]);
-    if (pieces.size() != locations.size()){throw new InvalidEndGameConfigException("missing location for pieces");}
-    buildTargetLocations(pieces, locations);
-    buildMinPieceAmounts();
-    buildTeams(allpieces);
   }
 
   private void buildTeams(List<PieceInterface> allpieces) {

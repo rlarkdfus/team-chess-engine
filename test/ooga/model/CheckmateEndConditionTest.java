@@ -13,7 +13,6 @@ import ooga.controller.Builder;
 import ooga.controller.InvalidEndGameConfigException;
 import ooga.controller.InvalidGameConfigException;
 import ooga.controller.InvalidPieceConfigException;
-import ooga.model.Board.GameState;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ class CheckmateEndConditionTest {
   @BeforeEach
   void setUp()
       throws InvalidEndGameConfigException, InvalidGameConfigException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    String testFile = "data/chess/defaultChess.json";
+    String testFile = "data/chess/defaultChessNoTimer.json";
     Builder boardBuilder = new BoardBuilder(new File(testFile));
     players = boardBuilder.getInitialPlayers();
     endConRunner = boardBuilder.getEndConditionHandler();
@@ -48,8 +47,7 @@ class CheckmateEndConditionTest {
     board.movePiece(new Location(7,5),new Location(4,2)); //bishop
     board.movePiece(new Location(5,5),new Location(1, 5)); //queen
     System.out.println(board.toString());
-    assertEquals(GameState.CHECKMATE, board.checkGameState());
-    assertEquals("w", board.getWinner());
+    assertEquals(GameState.WHITE, board.checkGameState());
   }
 
   @Test
@@ -59,8 +57,7 @@ class CheckmateEndConditionTest {
     board.movePiece(new Location(0,3),new Location(2, 5)); //queen
     board.movePiece(new Location(0,5),new Location(3,2)); //bishop
     board.movePiece(new Location(2,5),new Location(6, 5)); //queen
-    assertEquals(GameState.CHECKMATE, board.checkGameState());
-    assertEquals("b", board.getWinner());
+    assertEquals(GameState.BLACK, board.checkGameState());
   }
 //
 //  @Test

@@ -8,9 +8,13 @@ import java.util.List;
 
 public class TakeOnlyMove extends TranslationMove {
 
+    public TakeOnlyMove(int dRow, int dCol, boolean take, boolean limited) {
+        super(dRow, dCol, take, limited);
+    }
+
     @Override
     protected boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
-        if(pieceAt(potentialLocation, pieces) == null) {
+        if(MoveUtility.pieceAt(potentialLocation, pieces) == null) {
             return false;
         }
         return tryMove(piece, potentialLocation, new ArrayList<>(pieces));
