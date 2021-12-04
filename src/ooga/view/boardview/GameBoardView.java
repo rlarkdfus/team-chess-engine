@@ -26,37 +26,22 @@ public class GameBoardView extends BoardView {
         if (startLocation == null) {
             if (controller.canMovePiece(clickLocation)) {
                 selectPiece(clickLocation);
-                showLegalMoves(clickLocation);
+                showLegalMoves(controller.getLegalMoves(clickLocation));
             } else {
                 unselectPiece();
             }
         } else { //user selects new location with piece
-            if (isLegalMove(clickLocation)) { //user clicks new location
+            if (isLegalMove(clickLocation, controller.getLegalMoves(startLocation))) { //user clicks new location
                 controller.movePiece(startLocation, clickLocation);
                 unselectPiece();
             } else if (controller.canMovePiece(clickLocation)) {
                 unselectPiece();
                 selectPiece(clickLocation);
-                showLegalMoves(clickLocation);
-            }
-            // if user clicks an illegal move
-            unselectPiece();
-        }
-    }
+                showLegalMoves(controller.getLegalMoves(clickLocation));
+            } else {
+                unselectPiece();
 
-    private void showLegalMoves(Location location) {
-        List<Location> legalMoves = controller.getLegalMoves(location);
-        for (Location squareLoc : legalMoves) {
-            highlightBoardSquare(squareLoc);
-        }
-    }
-
-    private boolean isLegalMove(Location clickLocation) {
-        for (Location legalSquare : controller.getLegalMoves(getSelectedLocation())) {
-            if (clickLocation.equals(legalSquare)) {
-                return true;
             }
         }
-        return false;
     }
 }

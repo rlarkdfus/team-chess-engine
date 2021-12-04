@@ -46,7 +46,7 @@ public class BoardBuilder implements Builder {
   public static final String PLAYERS = "players";
   public static final String CSV = "csv";
 
-  private final ResourceBundle mappings;
+  public static final ResourceBundle mappings= ResourceBundle.getBundle(PROPERTIES_FILE);
 
   private String gameType;
   private String boardShape;
@@ -57,9 +57,6 @@ public class BoardBuilder implements Builder {
   private List<List<String>> csvData;
   private List<PlayerInterface> playerList;
   private List<PieceViewBuilder> pieceList;
-
-  private final LocationParser locationParser;
-  private final JsonParser jsonParser;
   private EndConditionRunner endCondition;
 
   /**
@@ -68,9 +65,6 @@ public class BoardBuilder implements Builder {
    * @param defaultFile - a default file object that's defined in controller
    */
   public BoardBuilder(File defaultFile) {
-    mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
-    jsonParser = new JsonParser();
-    locationParser = new LocationParser();
     try {
       build(defaultFile);
     } catch (Exception e) {
@@ -98,7 +92,7 @@ public class BoardBuilder implements Builder {
       throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException {
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
-    JSONObject gameJson = jsonParser.loadFile(file);
+    JSONObject gameJson = JsonParser.loadFile(file);
     extractJSONObj(gameJson);
 
     iterateCSVData();
@@ -224,7 +218,7 @@ public class BoardBuilder implements Builder {
 
       errorKey = CSV;
       String csv = jsonObject.getString(mappings.getString(CSV));
-      csvData = locationParser.getInitialLocations(csv);
+      csvData = LocationParser.getInitialLocations(csv);
 
     }catch (Exception e){
       throw new InvalidGameConfigException(errorKey);

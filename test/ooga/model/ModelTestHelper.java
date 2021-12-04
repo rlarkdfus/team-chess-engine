@@ -12,7 +12,7 @@ public class ModelTestHelper {
 
     public static Engine createBoard() {
         BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-        return new Board(boardBuilder.getInitialPlayers());
+        return new GameBoard(boardBuilder.getInitialPlayers());
     }
 
     public static List<Location> getPieceLocations(List<PieceInterface> pieces) {

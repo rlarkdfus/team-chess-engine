@@ -21,10 +21,16 @@ public class MoveTimer implements TimerInterface {
 
     private Timer timer;
 
+    /**
+     * default move timer with 00:00 minutes:seconds
+     */
     public MoveTimer() {
         this(0, 0);
     }
 
+    /**
+     * create move timer object to keep track of remaining time for each player
+     */
     public MoveTimer(int initialTimeMinutes, int initialIncrementSeconds) {
         setInitialTime(initialTimeMinutes);
         setIncrement(initialIncrementSeconds);
@@ -34,21 +40,37 @@ public class MoveTimer implements TimerInterface {
         timer = new Timer();
     }
 
+    /**
+     * return the time left on a player's timer
+     * @return
+     */
     @Override
     public StringProperty getTimeLeft() {
         return timeLeft;
     }
 
+    /**
+     * return whether the current timer is out of time
+     * @return
+     */
     @Override
     public boolean isOutOfTime() {
         return seconds == 0;
     }
 
+    /**
+     * set the initial time of the timer in minutes
+     * @param minutes time to set
+     */
     @Override
     public void setInitialTime(int minutes) {
         initialTime = Math.max(60 * minutes, 0);
     }
 
+    /**
+     * set the amount of time to be added after a move is made
+     * @param seconds time to be added
+     */
     @Override
     public void setIncrement(int seconds) {
         increment = Math.max(seconds, 0);
@@ -88,6 +110,9 @@ public class MoveTimer implements TimerInterface {
         isPlaying = false;
     }
 
+    /**
+     * reset the state of the timer
+     */
     @Override
     public void reset() {
         timer.cancel();
@@ -128,6 +153,10 @@ public class MoveTimer implements TimerInterface {
 //        timeLeft.setValue(timeToString(seconds));
     }
 
+    /**
+     * add time to the timer
+     * @param specifiedTime time to add
+     */
     public void incrementTime(int specifiedTime){
         if (seconds == 0){
             return;

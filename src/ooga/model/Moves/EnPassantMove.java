@@ -6,11 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnPassantMove extends Move {
-
+    /**
+     * en passant move for pawns to indirectly take other pawns
+     * @param dRow delta row
+     * @param dCol delta col
+     * @param take move takes
+     * @param limited move is limited
+     */
     public EnPassantMove(int dRow, int dCol, boolean take, boolean limited) {
         super(dRow, dCol, take, limited);
     }
 
+    /**
+     * @param pawn piece to move
+     * @param pieces all pieces
+     * @param end end location
+     */
     @Override
     public void executeMove(PieceInterface pawn, List<PieceInterface> pieces, Location end) {
         Location enemyPawnLocation = new Location(end.getRow() - getdRow(), end.getCol());
@@ -21,6 +32,12 @@ public class EnPassantMove extends Move {
         movePiece(pawn, end);
     }
 
+    /**
+     * @param pawn piece to move
+     * @param potentialLocation location to move to
+     * @param pieces all pieces
+     * @return whether a location is a legal move for a pawn
+     */
     @Override
     protected boolean isLegal(PieceInterface pawn, Location potentialLocation, List<PieceInterface> pieces) {
         Location otherPawnLocation = new Location(pawn.getLocation().getRow(), potentialLocation.getCol());
@@ -40,6 +57,11 @@ public class EnPassantMove extends Move {
         return tryMove(pawn, potentialLocation, new ArrayList<>(pieces));
     }
 
+    /**
+     * @param potentialLocation location of pawn diagonal
+     * @param pieces all pieces
+     * @return piece if it exists
+     */
     @Override
     protected PieceInterface tryTakeMove(Location potentialLocation, List<PieceInterface> pieces) {
         Location otherPawnLocation = new Location(potentialLocation.getRow() - getdRow(), potentialLocation.getCol());

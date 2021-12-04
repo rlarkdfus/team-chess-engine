@@ -17,6 +17,13 @@ public abstract class Move {
     private Turn turn;
     private List<Location> endLocations;
 
+    /**
+     * The move class defines how moves are executed and whether they are legal
+     * @param dRow delta row
+     * @param dCol delta col
+     * @param take whether a move takes
+     * @param limited whether a move is limited
+     */
     public Move(int dRow, int dCol, boolean take, boolean limited) {
         resetMove();
         this.dRow = dRow;
@@ -25,17 +32,35 @@ public abstract class Move {
         this.limited = limited;
     }
 
+    /**
+     * this method executes a move of a piece to an end location
+     * @param piece current piece
+     * @param pieces all pieces
+     * @param end end location
+     */
     public abstract void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end);
 
-    public void updateMoveLocations(PieceInterface king, List<PieceInterface> pieces) {
+    /**
+     * This method updates all the possible move locations of a piece
+     * @param king piece location
+     * @param pieces all pieces
+     */
+    public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
         resetMove();
-        for(Location location : findAllEndLocations(king, pieces)) {
-            if(isLegal(king, location, pieces)) {
+        for(Location location : findAllEndLocations(piece, pieces)) {
+            if(isLegal(piece, location, pieces)) {
                 addEndLocation(location);
             }
         }
     }
 
+    /**
+     * this method returns whether a location is a legal move for a piece
+     * @param piece current piece
+     * @param potentialLocation location to move to
+     * @param pieces all pieces
+     * @return whether location is legal
+     */
     protected abstract boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces);
 
     /**
@@ -72,11 +97,21 @@ public abstract class Move {
         return endLocations;
     }
 
+    /**
+     * this method moves a piece to an end location
+     * @param piece current piece
+     * @param end location to move to
+     */
     protected void movePiece(PieceInterface piece, Location end) {
         turn.movePiece(piece.getLocation(), end);
         piece.moveTo(end);
     }
 
+    /**
+     * remove a piece from the list of pieces
+     * @param removedPiece piece to remove
+     * @param pieces all pieces
+     */
     protected void removePiece(PieceInterface removedPiece, List<PieceInterface> pieces) {
         turn.removePiece(removedPiece.getLocation());
         pieces.remove(removedPiece);
@@ -103,39 +138,60 @@ public abstract class Move {
         return !inCheck;
     }
 
+    /**
+     * return a piece at a location if it exists
+     * @param location location to take piece at
+     * @param pieces all pieces
+     * @return piece if it exists
+     */
     protected PieceInterface tryTakeMove(Location location, List<PieceInterface> pieces) {
         return MoveUtility.pieceAt(location, pieces);
     }
 
+    /**
+     * reset the location and turn of a move
+     */
     protected void resetMove() {
         endLocations = new ArrayList<>();
         turn = new Turn();
     }
 
+    /**
+     * return the end locations of a move
+     * @return list of end locations
+     */
     public List<Location> getEndLocations() {
         return endLocations;
     }
 
+    /**
+     * add a location to the list of end locations
+     * @param location end location of move
+     */
     protected void addEndLocation(Location location) {
         endLocations.add(location);
     }
 
+    /**
+     * get the delta row of a move
+     * @return delta row
+     */
     protected int getdRow() {
         return dRow;
     }
 
+    /**
+     * get the delta column of a move
+     * @return delta col
+     */
     protected int getdCol() {
         return dCol;
     }
 
-    protected boolean canTake() {
-        return take;
-    }
-
-    protected boolean isLimited(){
-        return limited;
-    }
-
+    /**
+     * return the turn of a move
+     * @return turn
+     */
     public Turn getTurn() {
         return turn;
     }

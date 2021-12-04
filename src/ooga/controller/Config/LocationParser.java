@@ -16,7 +16,6 @@ import java.util.List;
  *  a list of lists of Strings.
  */
 public class LocationParser {
-  private List<List<String>> initialLocations;
 
   /**
    * This method takes in a filepath to a csv file and outputs a list of lists of Strings
@@ -25,14 +24,15 @@ public class LocationParser {
    *  of the element
    * @throws CsvException - if the filepath doesn't point to a valid csv
    */
-  public List<List<String>> getInitialLocations(String filePath) throws CsvException {
-    initialLocations = new ArrayList<>();
-    parseLocations(filePath);
-    return initialLocations;
+  public static List<List<String>> getInitialLocations(String filePath) throws CsvException {
+    return parseLocations(filePath);
   }
 
-  private void parseLocations(String filePath) throws CsvException {
-    clearLocations();
+  /**
+   * populates the initiallocations list with the data based on the current row and column
+   */
+  private static List<List<String>> parseLocations(String filePath) throws CsvException {
+    List<List<String>> initialLocations = new ArrayList<>();
     try {
       FileReader fileReader = new FileReader(filePath);
       CSVReader csvReader = new CSVReader(fileReader);
@@ -46,8 +46,6 @@ public class LocationParser {
     catch (Exception e) {
       throw new CsvException(initialLocations.size());
     }
-  }
-  private void clearLocations() {
-    initialLocations.clear();
+    return initialLocations;
   }
 }
