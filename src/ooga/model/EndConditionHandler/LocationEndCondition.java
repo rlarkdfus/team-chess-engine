@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import ooga.controller.InvalidEndGameConfigException;
+import ooga.controller.Config.InvalidEndGameConfigException;
 import ooga.model.GameState;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;

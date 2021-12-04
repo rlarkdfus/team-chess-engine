@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 
-//import static ooga.controller.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
+//import static ooga.controller.Parsing.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
 
 public class Board implements Engine {
 

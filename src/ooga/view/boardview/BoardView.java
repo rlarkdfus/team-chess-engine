@@ -8,7 +8,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
-import ooga.controller.PieceViewBuilder;
+import ooga.controller.Config.PieceViewBuilder;
 import ooga.view.PieceView;
 
 public abstract class BoardView extends Group implements BoardViewInterface {

@@ -3,7 +3,7 @@ package ooga.view;
 import java.util.List;
 import javafx.scene.paint.Color;
 import ooga.Location;
-import ooga.controller.PieceViewBuilder;
+import ooga.controller.Config.PieceViewBuilder;
 
 public interface ViewInterface {
     /**

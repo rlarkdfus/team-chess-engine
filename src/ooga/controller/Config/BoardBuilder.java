@@ -1,7 +1,7 @@
-package ooga.controller;
+package ooga.controller.Config;
 
 import static java.lang.Integer.parseInt;
-import static ooga.controller.PieceBuilder.buildPiece;
+import static ooga.controller.Config.PieceBuilder.buildPiece;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +32,10 @@ public class BoardBuilder implements Builder {
   public static final int ARG_LENGTH = 4;
   public static final String PROPERTIES_FILE = "JSONMappings";
   public static final String CSV_DELIMITER = "csvDelimiter";
+  public static final String JSON_DELIMITER = "jsonDelimiter";
+  public static final String RULE_TYPE = "ruleType";
+  public static final String PIECE_TYPE = "pieceType";
+
   public static final String RULES = "rules";
   public static final String TYPE = "type";
   public static final String BOARD = "board"; //unused
@@ -99,7 +103,7 @@ public class BoardBuilder implements Builder {
     JSONObject gameJson = jsonParser.loadFile(file);
     extractJSONObj(gameJson);
 
-    EndConditionBuilder endConditionBuilder= new EndConditionBuilder(jsonParser);
+    EndConditionBuilder endConditionBuilder= new EndConditionBuilder();
     iterateCSVData();
     endCondition = endConditionBuilder.getEndConditions(gameJson.getString(RULES),playerList);
   }

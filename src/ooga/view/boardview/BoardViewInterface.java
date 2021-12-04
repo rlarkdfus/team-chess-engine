@@ -2,9 +2,7 @@ package ooga.view.boardview;
 
 import java.util.List;
 import javafx.scene.paint.Color;
-import ooga.Location;
-import ooga.Turn;
-import ooga.controller.PieceViewBuilder;
+import ooga.controller.Config.PieceViewBuilder;
 
 public interface BoardViewInterface {
     /**

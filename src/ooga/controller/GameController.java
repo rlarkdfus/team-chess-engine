@@ -1,6 +1,7 @@
 package ooga.controller;
 
 import ooga.Location;
+import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.model.GameState;

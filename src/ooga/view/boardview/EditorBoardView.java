@@ -2,7 +2,7 @@ package ooga.view.boardview;
 
 import ooga.Location;
 import ooga.controller.Controller;
-import ooga.controller.PieceViewBuilder;
+import ooga.controller.Config.PieceViewBuilder;
 
 import java.util.List;
 

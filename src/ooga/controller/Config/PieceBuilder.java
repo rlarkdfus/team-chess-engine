@@ -1,7 +1,7 @@
-package ooga.controller;
+package ooga.controller.Config;
 
 import static java.lang.Integer.parseInt;
-import static ooga.controller.BoardBuilder.PROPERTIES_FILE;
+import static ooga.controller.Config.BoardBuilder.PROPERTIES_FILE;
 
 import java.io.File;
 import java.io.FileNotFoundException;

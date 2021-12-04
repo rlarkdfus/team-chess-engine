@@ -3,11 +3,9 @@ package ooga.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ooga.Location;
-import ooga.controller.BoardBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
