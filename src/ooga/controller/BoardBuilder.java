@@ -1,12 +1,14 @@
 package ooga.controller;
 
 import static java.lang.Integer.parseInt;
+import static ooga.controller.PieceBuilder.buildPiece;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Piece;
 import ooga.model.Player;
@@ -56,7 +58,6 @@ public class BoardBuilder implements Builder {
 
   private final LocationParser locationParser;
   private final JsonParser jsonParser;
-  private PieceBuilder pieceBuilder;
   private EndConditionRunner endCondition;
 
   /**
@@ -98,7 +99,6 @@ public class BoardBuilder implements Builder {
     JSONObject gameJson = jsonParser.loadFile(file);
     extractJSONObj(gameJson);
 
-    pieceBuilder = new PieceBuilder(mappings, gameType,bottomColor);
     EndConditionBuilder endConditionBuilder= new EndConditionBuilder(jsonParser);
     iterateCSVData();
     endCondition = endConditionBuilder.getEndConditions(gameJson.getString(RULES),playerList);
@@ -143,7 +143,7 @@ public class BoardBuilder implements Builder {
       for (int c = 0; c < boardSize.get(1); c++) {
         String[] square = pieceInformation(r, c);
         if (square == null){continue;}
-        Piece piece = pieceBuilder.buildPiece(square, r, c);
+        Piece piece = buildPiece(square[0], square[1],new Location(r,c));
         pieceList.add(new PieceViewBuilder(piece));
         playerList.get(determinePlayer(r, c, square[0])).addPiece(piece);
       }

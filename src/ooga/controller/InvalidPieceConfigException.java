@@ -1,7 +1,9 @@
 package ooga.controller;
 
+import ooga.Location;
+
 public class InvalidPieceConfigException extends Exception{
-  public InvalidPieceConfigException(int row, int col, String filepath, String errorKey){
-    super("Error found while making piece:\"" + filepath + "\" on row: " + row + ", column: " + col + " during creation of: " + errorKey);
+  public InvalidPieceConfigException(Location location, String filepath, String errorKey){
+    super("Error found while making piece:\"" + filepath + "\" on row: " + location.getRow() + ", column: " + location.getCol() + " during creation of: " + errorKey);
   }
 }
