@@ -1,12 +1,11 @@
 package ooga.view.util;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.StringProperty;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
@@ -143,9 +142,9 @@ public class ViewUtility {
     /**
      * makes a ColorPicker node
      *
-     * @param property the property for the ColorPicker
+     * @param property     the property for the ColorPicker
      * @param defaultColor the default ColorPicker color
-     * @param response the event to occur when the ColorPicker color changes
+     * @param response     the event to occur when the ColorPicker color changes
      * @return the ColorPicker created
      */
     public ColorPicker makeColorPicker(String property, Color defaultColor, Consumer<Color> response) {
@@ -180,9 +179,9 @@ public class ViewUtility {
      */
     public String saveJSONPath() {
         FileChooser fileChooser = new FileChooser();
-        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(
-                JSON_FILE_EXTENSION_DESCRIPTION, JSON_EXTENSION);
-        fileChooser.getExtensionFilters().addAll(fileExtension);
+//        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(
+//                JSON_FILE_EXTENSION_DESCRIPTION, JSON_EXTENSION);
+//        fileChooser.getExtensionFilters().addAll(fileExtension);
         File file = fileChooser.showSaveDialog(new Stage());
         return file != null ? file.getAbsolutePath() : EMPTY_FILE_PATH;
     }
@@ -209,5 +208,37 @@ public class ViewUtility {
         alert.setTitle(ERROR_ALERT_TITLE);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    /**
+     * makes a TextInputDialog without a cancel button
+     *
+     * @param headerText the header of the TextInputDialog
+     //* @param response the condition for allowing the text input dialog to close
+     * @return the TextInputDialog created
+     */
+    public TextInputDialog makeUncancellableTextInputDialog(String headerText) {
+        TextInputDialog result = new TextInputDialog();
+        result.setHeaderText(headerText);
+        result.getDialogPane().getButtonTypes().remove(ButtonType.CANCEL);
+        return result;
+    }
+
+    public void setTextInputDialogCloseRestrictions(TextInputDialog textInputDialog, Set<String> acceptableValues) {
+        Button okButton = (Button) textInputDialog.getDialogPane().lookupButton(ButtonType.OK);
+        TextField inputField = textInputDialog.getEditor();
+        BooleanBinding isInvalid = Bindings.createBooleanBinding(() -> !acceptableValues.contains(inputField.getText().toLowerCase()), inputField.textProperty());
+        okButton.disableProperty().bind(isInvalid);
+    }
+
+
+    /**
+     * Displays a TextInputDialog and gets the value inputted by a user
+     *
+     * @param textInputDialog the textInputDialog to display and retrieve a string from
+     * @return the String value inputted
+     */
+    public String getTextInputDialogResult(TextInputDialog textInputDialog) {
+        return textInputDialog.showAndWait().get();
     }
 }

@@ -28,6 +28,15 @@ public class Piece implements PieceInterface {
 
   private List<Move> moves;
 
+  public Piece(Piece piece){
+    this(piece.getTeam(),piece.getName(),piece.getLocation(),piece.getMoves(),piece.getAttributes(), piece.getScore());
+  }
+
+  public Map<String, Boolean> getAttributes() {
+    return attributes;
+  }
+
+  //Todo: make this the default constructor
   public Piece(String team, String name, Location location, List<Move> moves, Map<String, Boolean> attributes, int score) {
     this.location = location;
     this.team = team;

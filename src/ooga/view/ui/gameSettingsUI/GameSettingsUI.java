@@ -2,7 +2,6 @@ package ooga.view.ui.gameSettingsUI;
 
 import javafx.scene.layout.GridPane;
 import ooga.controller.Controller;
-import ooga.model.MoveTimer;
 import ooga.view.ViewController;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;

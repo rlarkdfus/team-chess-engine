@@ -1,14 +1,8 @@
 package ooga.model;
 
-import ooga.Location;
-import ooga.Turn;
-
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
-import ooga.controller.InvalidPieceConfigException;
-import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.Location;
+import ooga.model.EndConditionHandler.EndConditionRunner;
 
 public interface Engine {
     /**
@@ -26,15 +20,13 @@ public interface Engine {
     /**
      * Determine whether the win condition of the game is satisfied, and declare a winner.
      */
-    Board.GameState checkGameState();
+    GameState checkGameState();
 
     List<Location> getLegalMoves(Location location);
 
     List<PlayerInterface> getPlayers();
 
-    void setEndCondition(EndConditionInterface endCondition);
-
-  String getWinner();
+    void setEndCondition(EndConditionRunner endCondition);
 
   boolean canMovePiece(Location location);
 }

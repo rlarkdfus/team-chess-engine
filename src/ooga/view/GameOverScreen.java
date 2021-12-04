@@ -92,7 +92,7 @@ public class GameOverScreen {
   }
 
   private void playagain() {
-    controller.resetGame();
+    controller.reset();
     stage.close();
   }
 

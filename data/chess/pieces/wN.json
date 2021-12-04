@@ -1,0 +1,19 @@
+{
+  "moves": {
+    "JumpMove": [
+      "1, -2,takes,limited",
+      "1, 2,takes,limited",
+      "2, -1,takes,limited",
+      "2, 1,takes,limited",
+      "-1,-2,takes,limited",
+      "-1,2,takes,limited",
+      "-2,-1,takes,limited",
+      "-2,1,takes,limited"
+    ]
+  },
+  "attributes":{
+    "limited": true,
+    "canTransform": false
+  },
+  "value": 3
+}

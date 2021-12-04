@@ -6,5 +6,7 @@
   "players": ["w", "b"],
   "rules": "data/chess/rules/default.json",
   "style": "companion",
+  "time": 10,
+  "timeIncrement": 5,
   "csv": "data/chess/locations/oneBlackKnight.csv"
 }

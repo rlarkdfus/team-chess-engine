@@ -1,6 +1,8 @@
 package ooga.model;
 
 import java.util.List;
+import java.util.Map;
+
 import ooga.Location;
 import ooga.model.Moves.Move;
 
@@ -27,4 +29,6 @@ public interface PieceInterface {
     List<Move> getMoves();
     boolean isSameTeam(PieceInterface piece);
     boolean canTransform();
+
+    Map<String, Boolean> getAttributes();
 }

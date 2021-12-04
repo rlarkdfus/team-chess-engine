@@ -3,6 +3,7 @@ package ooga.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -11,84 +12,74 @@ import java.util.Map;
 import ooga.Location;
 import ooga.controller.BoardBuilder;
 import ooga.controller.Builder;
-import ooga.model.Board.GameState;
-import ooga.model.EndConditionHandler.EliminationEndCondition;
+import ooga.controller.InvalidEndGameConfigException;
+import ooga.controller.InvalidGameConfigException;
+import ooga.controller.InvalidPieceConfigException;
+import ooga.model.EndConditionHandler.EndConditionInterface;
+import ooga.model.EndConditionHandler.EndConditionRunner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class EliminationEndConditionHandlerTest {
 
-  EliminationEndCondition e;
+  EndConditionRunner endConRunner;
   List<PlayerInterface> players;
+  Board board;
 
   @BeforeEach
-  void setUp() {
-    e = new EliminationEndCondition();
-    String testFile = "data/chess/defaultChess.json";
+  void setUp()
+      throws InvalidEndGameConfigException, InvalidGameConfigException, InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+    String testFile = "data/chess/testEliminationEndCon.json";
     Builder boardBuilder = new BoardBuilder(new File(testFile));
     players = boardBuilder.getInitialPlayers();
-
-    e.setArgs(Map.of("pieceType", List.of("P","P", "K")), getAllPieces());
-  }
-
-  @Test
-  void testSetArgs() throws NoSuchFieldException, IllegalAccessException {
-    Field f;
-    f = e.getClass().getDeclaredField("previousTurnPieces");
-    f.setAccessible(true);
-    List<PieceInterface> previousTurnPieces = (List<PieceInterface>) f.get(e);
-    assertEquals(getAllPieces().size(), previousTurnPieces.size());
-
-    f = e.getClass().getDeclaredField("piecesToEliminate");
-    f.setAccessible(true);
-    Map<String, Integer> piecesToEliminate = (Map<String, Integer>) f.get(e);
-    assertEquals(4, piecesToEliminate.keySet().size());
-    assertEquals(true, piecesToEliminate.keySet().contains("b_P"),
-        "piecestoeliminate doesn't have b_P");
-    assertEquals(true, piecesToEliminate.keySet().contains("b_K"),
-        "piecestoeliminate doesn't have b_K");
-    assertEquals(true, piecesToEliminate.keySet().contains("w_P"),
-        "piecestoeliminate doesn't have w_P");
-    assertEquals(true, piecesToEliminate.keySet().contains("w_K"),
-        "piecestoeliminate doesn't have w_K");
-
+    endConRunner = boardBuilder.getEndConditionHandler();
+    board = new Board(players);
+    board.setEndCondition(endConRunner);
   }
 
   @Test
   void testBlackWin()
-      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    removePieces("w", List.of(new Location(7, 4), new Location(6, 0), new Location(6, 1)));
-    GameState ret = e.isGameOver(players);
-    assertEquals(GameState.CHECKMATE, ret, "game should be over");
-    assertEquals("b", e.getWinner(), "black should win");
-
+      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
+    board.movePiece(new Location(1,4),new Location(3,4)); //pawn
+    board.movePiece(new Location(0,3),new Location(4, 7)); //queen
+    board.movePiece(new Location(4,7),new Location(6, 7)); //queen eats
+    board.movePiece(new Location(6,7),new Location(6, 6)); //queen eats
+    board.movePiece(new Location(6,6),new Location(6, 5)); //queen eats
+    assertEquals(GameState.BLACK, board.checkGameState());
   }
 
   @Test
   void testWhiteWin()
-      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-
-    removePieces("b", List.of(new Location(0, 4), new Location(1, 0), new Location(1, 1)));
-    GameState ret = e.isGameOver(players);
-    assertEquals(GameState.CHECKMATE, ret, "game should end");
-    assertEquals("w", e.getWinner(), "white should win");
+      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
+      board.movePiece(new Location(6,4),new Location(4,4)); //pawn
+      board.movePiece(new Location(7,3),new Location(3, 7)); //queen
+      board.movePiece(new Location(3,7),new Location(1, 7)); //queen eats
+      board.movePiece(new Location(1,7),new Location(1, 6)); //queen eats
+      board.movePiece(new Location(1,6),new Location(1, 5)); //queen eats
+      assertEquals(GameState.WHITE, board.checkGameState());
   }
 
   @Test
   void testAlmostWin()
-      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    removePieces("b", List.of(new Location(0, 4), new Location(1, 0)));
-    GameState ret = e.isGameOver(players);
-    assertEquals(GameState.RUNNING, ret, "still need to remove 1 more b_pawn");
+      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
+    board.movePiece(new Location(6,4),new Location(4,4)); //pawn
+    board.movePiece(new Location(7,3),new Location(3, 7)); //wqueen
+    board.movePiece(new Location(3,7),new Location(1, 7)); //wqueen eats
+    board.movePiece(new Location(1,7),new Location(1, 6)); //wqueen eats
+    assertEquals(GameState.RUNNING, board.checkGameState());
   }
 
   @Test
   void testBothSidesPartiallyWin()
-      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    removePieces("b", List.of(new Location(0, 4), new Location(1, 0)));
-    removePieces("w",List.of(new Location(6, 1)));
-    GameState ret = e.isGameOver(players);
-    assertEquals(GameState.RUNNING, ret, "still need to remove 1 more b_pawn, 1 w_pawn, 1 w_king");
+      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException, FileNotFoundException, InvalidPieceConfigException {
+    board.movePiece(new Location(6,4),new Location(4,4)); //pawn
+    board.movePiece(new Location(7,3),new Location(3, 7)); //wqueen
+    board.movePiece(new Location(3,7),new Location(1, 7)); //wqueen eats
+    board.movePiece(new Location(1,7),new Location(1, 6)); //wqueen eats
+    board.movePiece(new Location(1,4),new Location(3,4)); //pawn
+    board.movePiece(new Location(0,3),new Location(4, 7)); //bqueen
+    board.movePiece(new Location(4,7),new Location(6, 7)); //bqueen eats
+    assertEquals(GameState.RUNNING, board.checkGameState());
   }
 
   private List<PieceInterface> getAllPieces() {
@@ -99,16 +90,36 @@ class EliminationEndConditionHandlerTest {
     return allpieces;
   }
 
-  private void removePieces(String team, List<Location> ToBeRemoved)
-      throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
-    for (PlayerInterface p : players) {
-      if (p.getTeam().equals(team)) {
-        int initSize = p.getPieces().size();
-        for (Location l : ToBeRemoved) {
-          p.removePiece(l);
-        }
-        assertEquals(initSize-ToBeRemoved.size(), p.getPieces().size());
+  @Test
+  void testSetArgs() throws NoSuchFieldException, IllegalAccessException {
+    EndConditionInterface e = getEndConObject();
+    Field f;
+    f = e.getClass().getDeclaredField("previousTurnPieces");
+    f.setAccessible(true);
+    List<PieceInterface> previousTurnPieces = (List<PieceInterface>) f.get(e);
+    assertEquals(getAllPieces().size(), previousTurnPieces.size());
+
+    f = e.getClass().getDeclaredField("piecesToEliminate");
+    f.setAccessible(true);
+    Map<String, Integer> piecesToEliminate = (Map<String, Integer>) f.get(e);
+    assertEquals(2, piecesToEliminate.keySet().size());
+    assertEquals(true, piecesToEliminate.keySet().contains("b_P"),
+        "piecestoeliminate doesn't have b_P");
+    assertEquals(true, piecesToEliminate.keySet().contains("w_P"),
+        "piecestoeliminate doesn't have w_P");
+  }
+
+  private EndConditionInterface getEndConObject()
+      throws NoSuchFieldException, IllegalAccessException {
+    Field f;
+    f = endConRunner.getClass().getDeclaredField("endConditions");
+    f.setAccessible(true);
+    List<EndConditionInterface> endConditionInterfaceList = (List<EndConditionInterface>) f.get(endConRunner);
+    for (EndConditionInterface e : endConditionInterfaceList){
+      if (e.getClass().toString().equals("class ooga.model.EndConditionHandler.EliminationEndCondition")){
+        return e;
       }
     }
+    return null;
   }
 }

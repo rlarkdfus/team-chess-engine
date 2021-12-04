@@ -1,0 +1,19 @@
+{
+  "moves": {
+    "TranslationMove": [
+      "1, -1,takes,unlimited",
+      "1, 1,takes,unlimited",
+      "-1, -1,takes,unlimited",
+      "-1, 1,takes,unlimited",
+      "1,0,takes,unlimited",
+      "0,1,takes,unlimited",
+      "-1,0,takes,unlimited",
+      "0,-1,takes,unlimited"
+    ]
+  },
+  "attributes":{
+    "limited": false,
+    "canTransform": false
+  },
+  "value": 9
+}

@@ -9,10 +9,10 @@ public class PieceView extends ImageView {
     public static final int PIECE_WIDTH = 60;
     public static final int PIECE_HEIGHT = 60;
 
-    String side;
-    String piece;
-    String style;
-    Location location;
+    private String side;
+    private String piece;
+    private String style;
+    private Location location;
 
     public PieceView(String side, String piece, String style, Location location) {
         super(String.format("images/%s/%s%s.png", style, side, piece));
@@ -41,5 +41,9 @@ public class PieceView extends ImageView {
 
     private void setId() {
         this.setId(String.format("pieceView_side(%s)_piece(%s)_location(%d,%d)_style(%s)", side, piece, location.getRow(), location.getCol(), style));
+    }
+    
+    public Location getLocation() {
+        return location;
     }
 }

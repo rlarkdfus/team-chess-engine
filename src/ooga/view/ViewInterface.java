@@ -2,7 +2,7 @@ package ooga.view;
 
 import java.util.List;
 import javafx.scene.paint.Color;
-import ooga.Turn;
+import ooga.Location;
 import ooga.controller.PieceViewBuilder;
 
 public interface ViewInterface {
@@ -20,4 +20,6 @@ public interface ViewInterface {
     void changePieceStyle(String style);
 
     void showError(String message);
+
+    void showCheck(Location location);
 }

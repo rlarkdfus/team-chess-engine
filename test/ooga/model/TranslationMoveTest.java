@@ -24,8 +24,7 @@ public class TranslationMoveTest {
   void setUp() {
     String testFile = "data/chess/oneBlackKnight.json";
     makePiece(testFile);
-    move = new TranslationMove();
-    move.setMove(0,1,true,true);
+    move = new TranslationMove(0,1,true,true);
     makeAllpieces();
   }
 
@@ -34,15 +33,14 @@ public class TranslationMoveTest {
     List<Location> endLocation;
 
     //no other pieces and limited
-    move = new TranslationMove();
-    move.setMove(0,1,true,true);
+    move = new TranslationMove(0,1,true,true);
+
     move.updateMoveLocations(p,allpieces);
     endLocation =  move.getEndLocations();
     assertEquals(1, endLocation.size(), "should have 1 end locations because limited");
 
     //no other pieces and unlimited
-    move = new TranslationMove();
-    move.setMove(0,1,true,false);
+    move = new TranslationMove(0,1,true,false);
     move.updateMoveLocations(p,allpieces);
     endLocation =  move.getEndLocations();
     assertEquals(6, endLocation.size(), "should have 6 end locations because unlimited and black king");
@@ -54,16 +52,15 @@ public class TranslationMoveTest {
     List<Location> endLocation;
 
     //ally piece in the way and unlimited.
-    move = new TranslationMove();
-    move.setMove(0,1,true,false);
+    move = new TranslationMove(0,1,true,false);
     allpieces.add(new Piece("b","P",new Location(0,2), new ArrayList<>(), new HashMap<>(),1));
     move.updateMoveLocations(p,allpieces);
     endLocation =  move.getEndLocations();
     assertEquals(1, endLocation.size(), "should have 0 end locations because unlimited and ally");
 
     //enemy piece in the way and unlimited.
-    move = new TranslationMove();
-    move.setMove(0,1,true,false);
+    move = new TranslationMove(0,1,true,false);
+
     allpieces.remove(2);
     allpieces.add(new Piece("w","P",new Location(0,2), new ArrayList<>(), new HashMap<>(),1));
     move.updateMoveLocations(p,allpieces);
