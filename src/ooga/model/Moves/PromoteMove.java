@@ -7,6 +7,10 @@ import java.util.List;
 
 public class PromoteMove extends Move {
 
+    public PromoteMove(int dRow, int dCol, boolean take, boolean limited) {
+        super(dRow, dCol, take, limited);
+    }
+
     @Override
     public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {
         if(isLegal(piece, null, pieces)) {

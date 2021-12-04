@@ -55,9 +55,10 @@ class BoardBuilderTest {
     EndConditionRunner endConditionHandler = boardBuilder.getEndConditionHandler();
     Field f = endConditionHandler.getClass().getDeclaredField("endConditions");
     f.setAccessible(true);
-    List<EndConditionInterface> endConditions = (List<EndConditionInterface>) f.get(endConditionHandler);
+    List<EndConditionInterface> endConditions = (List<EndConditionInterface>) f.get(
+        endConditionHandler);
     List<Class> endConditionTypes = new ArrayList<>();
-    for (EndConditionInterface e : endConditions){
+    for (EndConditionInterface e : endConditions) {
       endConditionTypes.add(e.getClass());
     }
     assertEquals(true, endConditionTypes.contains(EliminationEndCondition.class));
@@ -72,8 +73,6 @@ class BoardBuilderTest {
     assertThrowsExactly(InvalidEndGameConfigException.class, () -> {
       boardBuilder.build(new File(testFile));
     });
-
-
   }
 
   @Test
@@ -144,7 +143,8 @@ class BoardBuilderTest {
     //PieceBuilder Test
     Method getAttributes = PieceBuilder.class.getDeclaredMethod("getAttributes", JSONObject.class);
     getAttributes.setAccessible(true);
-    Map<String, Boolean> map = (Map<String, Boolean>) getAttributes.invoke(PieceBuilder.class,getPiece());
+    Map<String, Boolean> map = (Map<String, Boolean>) getAttributes.invoke(PieceBuilder.class,
+        getPiece());
 
     assertEquals(true, map.get("limited"), "limited should be true");
     assertEquals(true, map.get("canTransform"), "canTransform should be true");
@@ -157,44 +157,26 @@ class BoardBuilderTest {
     //PieceBuilder Test
 
     List<Move> actual;
-    List<Move> expected;
 
     Method getMoves = PieceBuilder.class
         .getDeclaredMethod("getMoves", JSONObject.class);
     getMoves.setAccessible(true);
 
     actual = (List<Move>) getMoves.invoke(PieceBuilder.class, getPiece());
+    List<Class> moveClassTypes = new ArrayList<>();
 
-    expected = List.of(new EnPassantMove(), new EnPassantMove(), new TakeOnlyMove(),
-        new TakeOnlyMove(), new PromoteMove(), new TranslationMove(), new PawnMove());
-
-    assertEquals(expected.size(), actual.size(), "wrong number of moves.");
-
-    for (int i = 0; i < actual.size(); i++) {
-      Class expectedClass = expected.get(i).getClass();
-      Class actualClass = actual.get(i).getClass();
-      assertEquals(expectedClass, actualClass,
-          "wrong type of Move! expected: " + expectedClass + ". got: " + actualClass);
+    for (Move m : actual) {
+      moveClassTypes.add(m.getClass());
     }
+    List<Class> expected = List.of(EnPassantMove.class, EnPassantMove.class, TakeOnlyMove.class,
+        TakeOnlyMove.class, PromoteMove.class, TranslationMove.class, PawnMove.class);
+
+    assertEquals(7, actual.size(), "wrong number of moves.");
+
+    assertEquals(true, moveClassTypes.containsAll(expected),
+        "wrong type of Move! expected: " + expected.stream().toArray() + ". got: " + actual.stream().toArray());
   }
 
-  //  @Test
-//  void testConvertingAPiece() throws FileNotFoundException, InvalidPieceConfigException {
-//    PlayerInterface player = boardBuilder.getInitialPlayers().get(1);
-//    List<PieceInterface> pieces = player.getPieces();
-//    PieceInterface piece = pieces.get(0);
-//
-//    PieceInterface newPiece = boardBuilder.convertPiece(piece, "Q");
-//
-//    String expectedTeam = "b";
-//    String expectedType = "Q";
-//
-//    String actualTeam = newPiece.getTeam();
-//    String actualType = newPiece.getName();
-//
-//    assertEquals(expectedTeam, actualTeam);
-//    assertEquals(expectedType, actualType);
-//  }
   @Test
   void testExceptions() {
     assertThrowsExactly(InvalidGameConfigException.class, () -> {

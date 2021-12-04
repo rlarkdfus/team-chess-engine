@@ -20,17 +20,13 @@ public interface Engine {
     /**
      * Determine whether the win condition of the game is satisfied, and declare a winner.
      */
-    Board.GameState checkGameState();
+    GameState checkGameState();
 
     List<Location> getLegalMoves(Location location);
 
     List<PlayerInterface> getPlayers();
 
     void setEndCondition(EndConditionRunner endCondition);
-
-  String getWinner();
-
-  PieceInterface getCheckedKing();
 
   boolean canMovePiece(Location location);
 }

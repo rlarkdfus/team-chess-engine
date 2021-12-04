@@ -8,12 +8,16 @@ import java.util.List;
 
 public abstract class CastleMove extends Move {
 
+    public CastleMove(int dRow, int dCol, boolean take, boolean limited) {
+        super(dRow, dCol, take, limited);
+    }
+
     protected abstract Location findRookLocation(PieceInterface piece);
 
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         // move rook as well
-        PieceInterface rook = pieceAt(findRookLocation(piece), pieces);
+        PieceInterface rook = MoveUtility.pieceAt(findRookLocation(piece), pieces);
 
         movePiece(piece, end);
         movePiece(rook, new Location(piece.getLocation().getRow(), piece.getLocation().getCol() - getdCol()/2));
@@ -21,7 +25,7 @@ public abstract class CastleMove extends Move {
 
     @Override
     protected boolean isLegal(PieceInterface king, Location potentialLocation, List<PieceInterface> pieces) {
-        PieceInterface rook = pieceAt(findRookLocation(king), pieces);
+        PieceInterface rook = MoveUtility.pieceAt(findRookLocation(king), pieces);
 
         if(rook == null) {
 //            System.out.println("rook not found");
@@ -36,15 +40,15 @@ public abstract class CastleMove extends Move {
 
         // construct location 1 above, and 2 above, make sure they're clear
         Location intermediateLocation = new Location(potentialLocation.getRow(), potentialLocation.getCol()-getdCol()/2);
-        if(!isClear(List.of(potentialLocation, intermediateLocation), pieces)) {
+        if(!MoveUtility.isClear(List.of(potentialLocation, intermediateLocation), pieces)) {
 //            System.out.println("not clear");
             return false;
         }
         // must make sure nothing in that row is under attack
         List<Location> kingLocations = List.of(king.getLocation(), potentialLocation, intermediateLocation);
-        List<PieceInterface> attackingPieces = getAttackingPieces(king, pieces);
+        List<PieceInterface> attackingPieces = MoveUtility.getAttackingPieces(king.getTeam(), pieces);
         for(Location loc : kingLocations){
-            if(underAttack(loc, attackingPieces, pieces)){
+            if(MoveUtility.underAttack(loc, attackingPieces, pieces)){
 //                System.out.println("under attack");
                 return false;
             }

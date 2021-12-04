@@ -1,59 +1,44 @@
 package ooga.model.EndConditionHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import ooga.model.Check;
+import ooga.model.GameState;
+import ooga.model.Moves.MoveUtility;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
 public class CheckmateEndCondition implements EndConditionInterface {
 
-  String winner;
-  List<PlayerInterface> players;
-  Check check;
+  public CheckmateEndCondition(Map<String, List<String>> properties, List<PieceInterface> allpieces) {
 
-  @Override
-  public void setArgs(Map<String, List<String>> propertiesMap, List<PieceInterface> allpieces) {
-    check = new Check();
   }
 
   @Override
-  public String foundWinner(List<PlayerInterface> players) {
-    this.players = players;
-    if (check.isTrue(players)) {
-      winner = check.getWinner();
-      if (getTotalLegalMoves() == 0) {
-        return winner;
+  public GameState isSatisfied(List<PlayerInterface> players) {
+    List<PieceInterface> pieces = getAllPieces(players);
+    for(PlayerInterface player : players){
+      if(getTotalLegalMoves(player) == 0) {
+        return MoveUtility.inCheck(player.getTeam(), pieces) ? GameState.ENDED.getWinner(player.getTeam()) : GameState.DRAW;
       }
     }
     return null;
   }
 
-  private int getTotalLegalMoves() {
+  private int getTotalLegalMoves(PlayerInterface player) {
     int totalLegalMoves = 0;
-    for (PieceInterface piece : checkedPlayer().getPieces()) {
-      totalLegalMoves += numLegalMoves(piece);
+    for (PieceInterface piece : player.getPieces()) {
+      totalLegalMoves += piece.getEndLocations().size();
     }
     return totalLegalMoves;
   }
 
-  private PlayerInterface checkedPlayer() {
-    for (PlayerInterface player : players) {
-      if (!player.getTeam().equals(winner)) {
-        return player;
-      }
-    }
-    return null;
-  }
 
-  private int numLegalMoves(PieceInterface currpiece) {
-    for (PlayerInterface player : players) {
-      for (PieceInterface piece : player.getPieces()) {
-        if (piece.getLocation().equals(currpiece.getLocation())) {
-          return piece.getEndLocations().size();
-        }
-      }
+  private List<PieceInterface> getAllPieces(List<PlayerInterface> players) {
+    List<PieceInterface> pieces = new ArrayList<>();
+    for(PlayerInterface player : players){
+      pieces.addAll(player.getPieces());
     }
-    return 0;
+    return pieces;
   }
 }

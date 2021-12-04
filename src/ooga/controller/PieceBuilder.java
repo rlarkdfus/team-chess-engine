@@ -78,7 +78,7 @@ public class PieceBuilder {
       boolean takes = args[2].strip().equals(mappings.getString("takes"));
       boolean limited = args[3].strip().equals(mappings.getString("limited"));
       Class<?> clazz = Class.forName("ooga.model.Moves." + moveType);
-      Move newMove = (Move) clazz.getDeclaredConstructor(int.class, int.class, int.class, int.class)
+      Move newMove = (Move) clazz.getDeclaredConstructor(int.class, int.class, boolean.class, boolean.class)
           .newInstance(dRow,dCol,takes,limited);
       return newMove;
     } else {

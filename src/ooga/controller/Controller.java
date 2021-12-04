@@ -24,6 +24,7 @@ public abstract class Controller implements ControllerInterface {
   private LoginView loginView;
 
   public Controller() {
+    jsonFile = DEFAULT_CHESS_CONFIGURATION;
     boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
     model = new Board(boardBuilder.getInitialPlayers());
     start();
@@ -92,7 +93,7 @@ public abstract class Controller implements ControllerInterface {
     try {
       JSONWriter jsonWriter = new JSONWriter();
       jsonWriter.saveFile(jsonFile, filePath);
-
+      locationWriter = new LocationWriter();
       locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
     } catch (IOException ignored) {
     }

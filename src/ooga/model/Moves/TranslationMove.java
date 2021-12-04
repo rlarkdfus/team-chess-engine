@@ -8,9 +8,13 @@ import java.util.List;
 
 public class TranslationMove extends Move {
 
+    public TranslationMove(int dRow, int dCol, boolean take, boolean limited) {
+        super(dRow, dCol, take, limited);
+    }
+
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        PieceInterface takenPiece = pieceAt(end, pieces);
+        PieceInterface takenPiece = MoveUtility.pieceAt(end, pieces);
         if(takenPiece != null) {
             removePiece(takenPiece, pieces);
         }
