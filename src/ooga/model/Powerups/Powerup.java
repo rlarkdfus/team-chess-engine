@@ -1,9 +1,11 @@
 package ooga.model.Powerups;
 
 import ooga.Location;
+import ooga.controller.InvalidPieceConfigException;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public abstract class Powerup implements PowerupInterface{
@@ -14,7 +16,7 @@ public abstract class Powerup implements PowerupInterface{
     }
 
     @Override
-    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) {
+    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException {
         if(hitPowerup(endLocation)){
             execute(pieceInterface,endLocation, currentPlayer, allPieces);
             removeUsedPowerup(endLocation);
@@ -31,9 +33,9 @@ public abstract class Powerup implements PowerupInterface{
     }
 //FIXME: need to test is removed actually removes the powerup.
     private void removeUsedPowerup(Location targetLocation) {
-        powerupLocations.remove(targetLocation);
+        System.out.println(powerupLocations.remove(targetLocation));
     }
 
-     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces);
+     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException;
 
 }

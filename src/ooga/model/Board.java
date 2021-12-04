@@ -3,11 +3,16 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
+import ooga.controller.InvalidPieceConfigException;
 import ooga.model.Moves.Move;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import ooga.model.EndConditionHandler.EndConditionRunner;
+import ooga.model.Powerups.PowerupInterface;
+import ooga.model.Powerups.PromotePowerup;
+import ooga.model.Powerups.TimerPowerup;
 
 //import static ooga.controller.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
 
@@ -29,9 +34,10 @@ public class Board implements Engine {
   private int turnCount;
   private PlayerInterface currentPlayer;
 
-  private List<Location> promotionSquares;
-  private List<Location> timerSquares;
-  private List<Location> skipSquares;
+
+  private PromotePowerup promotePowerup;
+  private TimerPowerup timerPowerup;
+  List<PowerupInterface> powerupInterfaces;
 
   public Board(List<PlayerInterface> players) {
     this.players = players;
@@ -47,32 +53,26 @@ public class Board implements Engine {
     }
 
     updateLegalMoves();
-    promotionSquares = new ArrayList<>();
-    timerSquares = new ArrayList<>();
-    skipSquares = new ArrayList<>();
-    initializePowerUpSquares();
-  }
-  private void initializePowerUpSquares(){
-    initializeTimeSquares();
-    initializeSkipSquares();
-    initializePromotionSquares();
-  }
 
-  private void initializePromotionSquares() {
-        promotionSquares.add(new Location(4,0));
-        promotionSquares.add(new Location(3,0));
-  }
+    powerupInterfaces = new ArrayList<>();
+    List<Location> testLocations = new ArrayList<>();
+    testLocations.add(new Location(4,2));
+    testLocations.add(new Location(4,0));
 
-  private void initializeTimeSquares() {
-//        timerSquares.add(new Location(4,0));
-//        timerSquares.add(new Location(3,0));
-//        timerSquares.add(new Location(2,0));
+
+    promotePowerup = new PromotePowerup(testLocations);
+    timerPowerup = new TimerPowerup(testLocations);
+    powerupInterfaces.add(promotePowerup);
+    powerupInterfaces.add(timerPowerup);
 
   }
 
-  private void initializeSkipSquares() {
-//        skipSquares.add(new Location(4,0));
-  }
+
+
+
+
+
+
 
   /**
    * this method returns the list of all players
@@ -104,7 +104,7 @@ public class Board implements Engine {
    * @param start is piece initial location
    * @param end   is piece new location
    */
-  public List<PieceInterface> movePiece(Location start, Location end) {
+  public List<PieceInterface> movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
     // pause current player timer, start next player time
     PieceInterface piece = null;
     for (PieceInterface p : allPieces) {
@@ -130,17 +130,17 @@ public class Board implements Engine {
         }
       }
     }
+    ;
 
-    //Check for pawn promotion
-    checkPromotion(piece, end);
+    for(PowerupInterface powerupInterface: powerupInterfaces){
+      powerupInterface.checkPowerUp(piece,end,currentPlayer,allPieces);
+    }
 
-    //Add time powerup
-    checkTime(piece, end);
+
     // increment turn
     turnCount++;
     toggleTimers();
 
-        checkSkip(piece, end);
 
     //update game data
     updateLegalMoves();
@@ -148,55 +148,7 @@ public class Board implements Engine {
   }
 
 
-  private void checkPromotion(PieceInterface piece, Location end) {
-    //check pawn promotion specifically
-    checkPawnPromotion(piece, end);
 
-    //Check piece promotion specifically
-    boolean promotionPieceHit =  false;
-    for (Location promotionLocation : promotionSquares) {
-//      System.out.println(promotionLocation);
-      if (end.equals(promotionLocation)) {
-        promotionPieceHit = true;
-        promotePiece(piece, QUEEN);
-        System.out.println("End square: " + end + " List of promotion squares: " + promotionSquares);
-      }
-    }
-    if(promotionPieceHit){
-      Location testLocation = new Location(4,0);
-      System.out.println(promotionSquares.remove(end));
-    }
-
-  }
-
-  private void checkTime(PieceInterface pieceInterface, Location end) {
-    for (Location timerLocation : timerSquares) {
-      if (end.equals(timerLocation)) {
-        currentPlayer.incrementTime(100000);
-        timerSquares.remove(timerLocation);
-      }
-    }
-  }
-
-  private void checkSkip(PieceInterface pieceInterface, Location end) {
-    for (Location skipLocation : skipSquares) {
-      if (end.equals(skipLocation)) {
-        turnCount++;
-        skipSquares.remove(skipLocation);
-      }
-    }
-  }
-
-  private void checkPawnPromotion(PieceInterface piece, Location end) {
-    if (piece.getName().equals(PAWN)) {
-      if (end.getRow() == FIRST_ROW || end.getRow() == LAST_ROW) {
-
-//        System.out.println(currentPlayer.getPieces().size());
-        promotePiece(piece, QUEEN);
-//        System.out.println(currentPlayer.getPieces().size());
-      }
-    }
-  }
 
     /**
      * pause current player timer, add increment, start next player time
@@ -209,22 +161,6 @@ public class Board implements Engine {
         currPlayer.toggleTimer();
     }
 
-  private void promotePiece(PieceInterface pieceInterface, String newPieceName) {
-    PieceInterface newPiece = null;
-    try {
-      newPiece = currentPlayer.createPiece(newPieceName);
-    } catch (InvalidPieceException e) {
-      e.printStackTrace();
-    }
-
-    currentPlayer.removePiece(pieceInterface);
-    allPieces.remove(pieceInterface);
-
-    newPiece.moveTo(pieceInterface.getLocation());
-    allPieces.add(newPiece);
-    currentPlayer.addPiece(newPiece);
-//    System.out.println(this);
-  }
 
   /**
    * see if the game is still running or if its over

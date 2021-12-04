@@ -21,7 +21,7 @@ class EngineTest {
     }
 
     @Test
-    void movePiece() {
+    void movePiece() throws FileNotFoundException, InvalidPieceConfigException {
         Location start = new Location(6, 0);
         Location end = new Location(5, 0);
         List<PieceInterface> pieces = board.movePiece(start, end);

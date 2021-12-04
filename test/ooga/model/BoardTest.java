@@ -4,10 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import ooga.Location;
 import ooga.controller.BoardBuilder;
+import ooga.controller.InvalidPieceConfigException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,7 @@ class BoardTest {
   }
 
   @Test
-  void testRemovingPiece() {
+  void testRemovingPiece() throws FileNotFoundException, InvalidPieceConfigException {
     List<Location[]> moves = List.of(
             new Location[]{new Location(6, 4), new Location(5, 4)},
             new Location[]{new Location(1, 1), new Location(3, 1)},
@@ -37,7 +39,7 @@ class BoardTest {
   }
 
   @Test
-  void testMovesCorrectly() {
+  void testMovesCorrectly() throws FileNotFoundException, InvalidPieceConfigException {
     Location start = new Location(1,0);
     Location end = new Location(2,0);
 
