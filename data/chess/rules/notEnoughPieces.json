@@ -1,13 +1,13 @@
 {
   "endCon1": {
-    "gameType": "Elimination",
+    "ruleType": "Elimination",
     "pieceType": [
       "K",
       "K"
     ]
   },
   "endCon2": {
-    "gameType": "Checkmate",
+    "ruleType": "Checkmate",
     "pieceType": [
       "K"
     ]

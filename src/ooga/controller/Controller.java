@@ -7,6 +7,10 @@ import java.util.List;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
+import ooga.controller.Config.BoardBuilder;
+import ooga.controller.Config.Builder;
+import ooga.controller.Config.JSONWriter;
+import ooga.controller.Config.LocationWriter;
 import ooga.model.Board;
 import ooga.model.Engine;
 import ooga.view.LoginView;

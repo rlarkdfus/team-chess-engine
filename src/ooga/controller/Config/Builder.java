@@ -1,4 +1,4 @@
-package ooga.controller;
+package ooga.controller.Config;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,38 +20,42 @@ import ooga.model.PlayerInterface;
 public interface Builder {
 
   /**
-   * Overridden interface method. First parses the input file then builds 3 things that will be used:
-   *  playerList - a list of players that is used in Board
-   *  pieceList - a list of PieceViewBuilder objects that is used in View to build PieceView Objects
-   *  endCondition - an EndConditionHandler Object that is used by Board to determine if the game is over
+   * Method that accepts an input file then builds things that will be used to run the game:
+   *  1) all the pieces in the game (type, location, mobility), which get assigned to each player
+   *  2) builds players that hold the pieces, and sets their timer values
+   *  2) an endcondition runner which contains 1 or multiple endCondition objects that determine how the game ends
    *
    * @param file - the file to be parsed and used to build the json object
-   * @throws CsvException - if the game's csv isn't 8x8
+   * @throws CsvException - if the game's csv isn't 8x8 or if square contains invalid piece data
    * @throws FileNotFoundException - if any files referenced in the game json aren't existent
    * @throws PlayerNotFoundException - if any pieces in the json are assigned to nonexistent players
    * @throws InvalidPieceConfigException - if any piece configuration jsons are invalid
    * @throws InvalidGameConfigException - if the game json is invalid
    * @throws InvalidEndGameConfigException - if the rule json is invalid
    */
-  /**
-   *
-   * @param file
-   * @throws FileNotFoundException
-   * @throws PlayerNotFoundException
-   * @throws InvalidPieceConfigException
-   * @throws InvalidGameConfigException
-   * @throws InvalidEndGameConfigException
-   * @throws CsvException
-   */
   void build(File file)
       throws FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, CsvException;
 
+  /**
+   * Getter method that is used in view.initializeDisplay() to build pieceView objects that are displayed
+   * in the view.
+   * @return a list of pieceViewBuilder which is a data class that is used to build PieceView objects in the view
+   */
   List<PieceViewBuilder> getInitialPieceViews();
 
+  /**
+   * Getter method that is used to construct the Board. This gives the board all the pieces that are in the
+   * game, which each have their own location, team, movement abilities.
+   * @return a list of players which contain the pieces
+   */
   List<PlayerInterface> getInitialPlayers();
 
+  /**
+   * Getter method that is used in board.setEndCondition() to help the board determine how the game ends
+   * and who wins.
+   * @return an EndConditionRunner object which holds 1 or multiple EndCondition objects and if any of them
+   * detect a winner, then it will return a GameState.Winner.
+   * */
   EndConditionRunner getEndConditionHandler();
 
-//  PieceInterface convertPiece(PieceInterface piece, String pieceType)
-//      throws FileNotFoundException, InvalidPieceConfigException;
 }

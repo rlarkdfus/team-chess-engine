@@ -1,15 +1,11 @@
 package ooga.model;
 
 import ooga.Location;
-import ooga.Turn;
-import ooga.controller.InvalidPieceConfigException;
 
-import ooga.controller.PieceViewBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 

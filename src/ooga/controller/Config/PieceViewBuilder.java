@@ -1,7 +1,6 @@
-package ooga.controller;
+package ooga.controller.Config;
 
 import ooga.Location;
-import ooga.model.Piece;
 import ooga.model.PieceInterface;
 
 public class PieceViewBuilder {

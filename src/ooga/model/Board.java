@@ -14,7 +14,7 @@ import ooga.model.Powerups.PowerupInterface;
 import ooga.model.Powerups.PromotePowerup;
 import ooga.model.Powerups.TimerPowerup;
 
-//import static ooga.controller.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
+//import static ooga.controller.Parsing.BoardBuilder.DEFAULT_CHESS_CONFIGURATION;
 
 public class Board implements Engine {
 

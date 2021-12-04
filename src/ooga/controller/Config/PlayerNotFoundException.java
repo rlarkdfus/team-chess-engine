@@ -1,4 +1,4 @@
-package ooga.controller;
+package ooga.controller.Config;
 
 public class PlayerNotFoundException extends Exception{
   public PlayerNotFoundException(int row, int col, String team){
