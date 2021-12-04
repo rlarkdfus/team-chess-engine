@@ -14,7 +14,7 @@ public class TimerEndCondition implements EndConditionInterface{
   public GameState isSatisfied(List<PlayerInterface> players) {
     for (PlayerInterface player : players){
       if (player.getTimeLeft().getValue().equals("00:00")){
-        return player.getTeam().equals("w") ? GameState.BLACK : GameState.WHITE;
+        return GameState.ENDED.getWinner(player.getTeam());
       }
     }
     return null;

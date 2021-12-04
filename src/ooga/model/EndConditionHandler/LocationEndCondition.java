@@ -102,7 +102,7 @@ public class LocationEndCondition implements EndConditionInterface{
     return alivePieces;
   }
 
-  public void setArgs(Map<String, List<String>> properties, List<PieceInterface> allpieces)
+  public LocationEndCondition(Map<String, List<String>> properties, List<PieceInterface> allpieces)
       throws InvalidEndGameConfigException {
     String[] keys = resourceBundle.getString("LocationRuleKeys").split(resourceBundle.getString("jsonDelimiter"));
     List<String> pieces = properties.get(keys[0]);

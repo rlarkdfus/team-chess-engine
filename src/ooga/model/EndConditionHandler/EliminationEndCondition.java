@@ -56,10 +56,11 @@ public class EliminationEndCondition implements EndConditionInterface {
     }
     findMissingPiece(alivePieces);
     previousTurnPieces = alivePieces;
-    if(eliminatedAllTargets()){
-      return null; //FIXME
-    }
-    return null;
+    return eliminatedAllTargets();
+//    if(eliminatedAllTargets()){
+//      return null; //FIXME
+//    }
+//    return null;
   }
 
   private void findMissingPiece(List<PieceInterface> alivePieces) {
@@ -79,24 +80,25 @@ public class EliminationEndCondition implements EndConditionInterface {
 
   }
 
-  private boolean eliminatedAllTargets() {
+  private GameState eliminatedAllTargets() {
     HashMap<String, Integer> targetPiecesRemaining = getTargetPiecesRemaining();
-    String loser = NO_WINNER;
+    GameState loser = GameState.RUNNING;
     for (String team : targetPiecesRemaining.keySet()){
       if (targetPiecesRemaining.get(team) <= 0){
-        loser = team;
+        loser = GameState.ENDED.getWinner(team);
         break;
       }
     }
-    if (loser != NO_WINNER){
-      for (String team : targetPiecesRemaining.keySet()){
-        if (!team.equals(loser)){
-          winner = team;
-          return true;
-        }
-      }
-    }
-    return false;
+    return (loser != GameState.RUNNING) ? loser : null;
+//    if (loser != NO_WINNER){
+//      for (String team : targetPiecesRemaining.keySet()){
+//        if (!team.equals(loser)){
+//          winner = team;
+//          return true;
+//        }
+//      }
+//    }
+//    return false;
   }
 
   private HashMap<String, Integer> getTargetPiecesRemaining() {
@@ -119,6 +121,4 @@ public class EliminationEndCondition implements EndConditionInterface {
     }
     piecesToEliminate.put(key,piecesToEliminate.get(key)-1);
   }
-
-
 }
