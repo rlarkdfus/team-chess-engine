@@ -166,61 +166,34 @@ public class Player implements PlayerInterface {
         return team;
     }
 
+    /**
+     * return the player's king
+     * @return
+     */
     @Override
     public PieceInterface getKing() {
         return null;
     }
 
+    /**
+     * perform a piece move to end location
+     * @param piece
+     * @param end
+     */
     @Override
     public void movePiece(PieceInterface piece, Location end) {
 
     }
 
+    /**
+     * test a piece move to end location
+     * @param piece
+     * @param end
+     */
     @Override
     public void tryMove(PieceInterface piece, Location end) {
 
     }
-
-    /**
-     * return the piece, if it exists, at a location
-     * @param location
-     * @return
-     */
-//    @Override
-//    public PieceInterface getPiece(Location location) {
-//        List<PieceInterface> p = new ArrayList<>();
-//        for(PieceInterface piece : remainingPieces.keySet()) {
-//            if(piece.getLocation().equals(location)) {
-//                p.add(piece);
-////                return piece;
-//            }
-//        }
-//        if(p.size() > 0){
-//            if(p.size() > 1){
-//                System.out.println("Player.getPiece " + p.size() + " pieces " + p + " at " + location);
-//            }
-//            return p.get(0);
-//        }
-//        return null;
-//    }
-
-    /**
-     * return the legal moves of a piece at location
-     * @param location
-     * @return
-     */
-//    public List<Location> getLegalMoves(Location location){
-//        return remainingPieces.get(getPiece(location));
-//    }
-
-    /**
-     * set the legal moves of a piece
-     * @param piece
-     * @param moves
-     */
-//    public void setLegalMoves(PieceInterface piece, List<Location> moves){
-//        remainingPieces.put(piece, moves);
-//    }
 
     /**
      * get score of all pieces

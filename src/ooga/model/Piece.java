@@ -30,21 +30,12 @@ public class Piece implements PieceInterface {
 
   public Piece(Piece piece){
     this(piece.getTeam(),piece.getName(),piece.getLocation(),piece.getMoves(),piece.getAttributes(), piece.getScore());
-
   }
 
   public Map<String, Boolean> getAttributes() {
     return attributes;
   }
 
-  //  public Piece(String team, String name, Location location, MoveVector moveVectors, Map<String, Boolean> attributes, int score) {
-//    this.location = location;
-//    this.team = team;
-//    this.moved = false;
-//    this.score = score;
-//    this.name = name;
-//    this.attributes = attributes;
-//  }
   //Todo: make this the default constructor
   public Piece(String team, String name, Location location, List<Move> moves, Map<String, Boolean> attributes, int score) {
     this.location = location;
@@ -128,24 +119,6 @@ public class Piece implements PieceInterface {
     }
 
   /**
-   * return the unique id of a piece
-   * @return
-   */
-//  @Override
-//  public int getUniqueId() {
-//    return this.uniqueID;
-//  }
-
-  /**
-   * set a piece to be eliminated
-   * @param state
-   */
-//  @Override
-//  public void setEliminated(boolean state) {
-//    isEliminated = state;
-//  }
-
-  /**
    * override toString to print out piece information
    *
    * @return
@@ -177,9 +150,6 @@ public class Piece implements PieceInterface {
     return Objects.hash(initialLocation, team, score, name);
   }
 
-
-
-
   /**
    * get all the locations a piece can move to
    * @return
@@ -188,7 +158,6 @@ public class Piece implements PieceInterface {
   public List<Location> getEndLocations() {
     List<Location> locations = new ArrayList<>();
     for(Move move : moves) {
-//      System.out.println(move.getClass());
       locations.addAll(move.getEndLocations());
     }
     return locations;
@@ -224,19 +193,6 @@ public class Piece implements PieceInterface {
     this.score = newPiece.getScore();
   }
 
-//  /**
-//   * return all the end locations of a piece
-//   * @return
-//   */
-//  @Override
-//  public List<Location> getAllEndLocations() {
-//    List<Location> endLocations = new ArrayList<>();
-//    for(Move move : moves) {
-//      endLocations.addAll(move.getEndLocations());
-//    }
-//    return endLocations;
-//  }
-
   /**
    * this method returns the move that results in a piece being at the end location
    * @param end
@@ -265,6 +221,10 @@ public class Piece implements PieceInterface {
     }
   }
 
+  /**
+   * return the moves of a piece
+   * @return
+   */
   @Override
   public List<Move> getMoves(){
     return moves;
@@ -280,6 +240,10 @@ public class Piece implements PieceInterface {
     return team.equals(piece.getTeam());
   }
 
+  /**
+   * return whether a piece can transform into other pieces
+   * @return
+   */
   public boolean canTransform(){
     return this.attributes.getOrDefault("canTransform", false);
   }
