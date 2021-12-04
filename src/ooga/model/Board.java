@@ -72,7 +72,8 @@ public class Board implements Engine {
   }
 
   private void initializePromotionSquares() {
-//        promotionSquares.add(new Location(4,0));
+        promotionSquares.add(new Location(4,0));
+        promotionSquares.add(new Location(3,0));
   }
 
   private void initializeTimeSquares() {
@@ -175,17 +176,30 @@ public class Board implements Engine {
     checkPawnPromotion(piece, end);
 
     //Check piece promotion specifically
+    boolean promotionPieceHit =  false;
     for (Location promotionLocation : promotionSquares) {
+//      System.out.println(promotionLocation);
       if (end.equals(promotionLocation)) {
+        promotionPieceHit = true;
         promotePiece(piece, QUEEN);
+        System.out.println("End square: " + end + " List of promotion squares: " + promotionSquares);
       }
     }
+    if(promotionPieceHit){
+      Location testLocation = new Location(4,0);
+      System.out.println(promotionSquares.get(0).equals(end));
+      System.out.println(promotionSquares.get(0).equals(testLocation));
+      System.out.println(promotionSquares.remove(end));
+      System.out.println(promotionSquares);
+    }
+
   }
 
   private void checkTime(PieceInterface pieceInterface, Location end) {
     for (Location timerLocation : timerSquares) {
       if (end.equals(timerLocation)) {
         currentPlayer.incrementTime(100000);
+        timerSquares.remove(timerLocation);
       }
     }
   }
@@ -194,6 +208,7 @@ public class Board implements Engine {
     for (Location skipLocation : skipSquares) {
       if (end.equals(skipLocation)) {
         turnCount++;
+        skipSquares.remove(skipLocation);
       }
     }
   }
@@ -202,9 +217,9 @@ public class Board implements Engine {
     if (piece.getName().equals(PAWN)) {
       if (end.getRow() == FIRST_ROW || end.getRow() == LAST_ROW) {
 
-        System.out.println(currentPlayer.getPieces().size());
+        System.out.println(currentPlayer.getPieces());
         promotePiece(piece, QUEEN);
-        System.out.println(currentPlayer.getPieces().size());
+        System.out.println(currentPlayer.getPieces());
       }
     }
   }
