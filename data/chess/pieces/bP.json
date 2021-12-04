@@ -1,0 +1,32 @@
+{
+  "moves": {
+    "TranslationMove": [
+      "1, 0,false,limited"
+    ],
+    "PawnMove": [
+      "2,0,false,limited"
+    ],
+    "EnPassantMove": [
+      "1, -1,takes,limited",
+      "1, 1,takes,limited"
+    ],
+    "TakeOnlyMove": [
+      "1, -1,takes,limited",
+      "1, 1,takes,limited"
+    ],
+    "PromoteMove": [
+      "7, -1, takes, limited"
+    ]
+  },
+  "attributes": {
+    "limited": true,
+    "canTransform": true
+  },
+  "value": 1,
+  "transform": [
+    "Q",
+    "R",
+    "N",
+    "B"
+  ]
+}

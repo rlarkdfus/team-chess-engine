@@ -1,22 +1,21 @@
 {
   "moves": {
     "TranslationMove": [
-      "1, 0,false,limited"
+      "-1, 0,false,limited"
     ],
     "PawnMove": [
-      "2,0,false,limited"
+      "-2,0,false,limited"
     ],
     "EnPassantMove": [
-      "1, -1,takes,limited",
-      "1, 1,takes,limited"
+      "-1, -1,takes,limited",
+      "-1, 1,takes,limited"
     ],
     "TakeOnlyMove": [
-      "1, -1,takes,limited",
-      "1, 1,takes,limited"
+      "-1, -1,takes,limited",
+      "-1, 1,takes,limited"
     ],
     "PromoteMove": [
       "0, -1, takes, limited",
-      "7, -1, takes, limited"
     ]
   },
   "attributes": {
