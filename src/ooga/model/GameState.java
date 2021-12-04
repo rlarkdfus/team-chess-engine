@@ -19,6 +19,9 @@ public enum GameState {
     }
 
     public GameState getWinner(String team){
+        return team.equals("w") ? WHITE : BLACK;
+    }
+    public GameState getLoser(String team) {
         return team.equals("w") ? BLACK : WHITE;
     }
 }

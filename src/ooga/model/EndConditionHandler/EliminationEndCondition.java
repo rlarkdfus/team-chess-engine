@@ -85,7 +85,7 @@ public class EliminationEndCondition implements EndConditionInterface {
     GameState loser = GameState.RUNNING;
     for (String team : targetPiecesRemaining.keySet()){
       if (targetPiecesRemaining.get(team) <= 0){
-        loser = GameState.ENDED.getWinner(team);
+        loser = GameState.ENDED.getLoser(team);
         break;
       }
     }

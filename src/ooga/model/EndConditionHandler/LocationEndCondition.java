@@ -33,8 +33,9 @@ public class LocationEndCondition implements EndConditionInterface{
     currTeamLocations = new HashMap();
     List<PieceInterface> alivePieces = getAlivePieces(players);
 
-    if (notEnoughPieces(alivePieces)){
-      return null; //FIXME
+    if (notEnoughPieces(alivePieces) != GameState.RUNNING){
+      return notEnoughPieces(alivePieces);
+//      return null; //FIXME
     }
     boolean foundLocation;
     for (ooga.Location l : targetLocations.keySet()){
@@ -53,15 +54,16 @@ public class LocationEndCondition implements EndConditionInterface{
     }
     for (String team : currTeamLocations.keySet()){
       if (currTeamLocations.get(team).equals(targetLocations.size())){
-        winner = team;
-        return null; //FIXME
+        return GameState.ENDED.getWinner(team);
+//        winner = team;
+//        return null; //FIXME
       }
     }
     return null;
   }
 
-  private boolean notEnoughPieces(List<PieceInterface> alivePieces) {
-    String loser = null;
+  private GameState notEnoughPieces(List<PieceInterface> alivePieces) {
+//    String loser = null;
     Map<String, Integer> currentAmounts = new HashMap<>();
     for (PieceInterface alive : alivePieces){
       String team = alive.getTeam();
@@ -71,25 +73,27 @@ public class LocationEndCondition implements EndConditionInterface{
       currentAmounts.put(key,currentAmounts.get(key)+1);
     }
 
+    GameState loser = GameState.RUNNING;
     for (String piece : currentAmounts.keySet()){
       String pieceType = piece.split("_")[1];
       if (minPieceAmounts.containsKey(pieceType)){
         if (currentAmounts.get(piece) < minPieceAmounts.get(pieceType)){
           System.out.println("here");
-          loser = piece.split("_")[0];
+          loser = GameState.ENDED.getLoser(piece.split("_")[0]);
           break;
         }
       }
     }
-    if (loser != null){
-      for (String team : teams){
-        if (!team.equals(loser)){
-          winner = team;
-          return true;
-        }
-      }
-    }
-    return false;
+    return loser;
+//    if (loser != null){
+//      for (String team : teams){
+//        if (!team.equals(loser)){
+//          winner = team;
+//          return true;
+//        }
+//      }
+//    }
+//    return false;
   }
 
   private List<PieceInterface> getAlivePieces(List<PlayerInterface> players) {
