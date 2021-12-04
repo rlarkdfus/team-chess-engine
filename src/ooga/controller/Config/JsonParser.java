@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import org.json.JSONObject;
 
+/**
+ *
+ */
 public class JsonParser implements ParserInterface {
 
   public JsonParser() {

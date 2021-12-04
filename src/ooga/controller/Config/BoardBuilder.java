@@ -35,7 +35,6 @@ public class BoardBuilder implements Builder {
   public static final String JSON_DELIMITER = "jsonDelimiter";
   public static final String RULE_TYPE = "ruleType";
   public static final String PIECE_TYPE = "pieceType";
-
   public static final String RULES = "rules";
   public static final String TYPE = "type";
   public static final String BOARD = "board"; //unused
@@ -53,7 +52,6 @@ public class BoardBuilder implements Builder {
   private String boardShape;
   private List<Integer> boardSize;
   private List<String> boardColors;
-  private String bottomColor;
   private int time;
   private int timeIncrement;
   private List<List<String>> csvData;
@@ -103,9 +101,8 @@ public class BoardBuilder implements Builder {
     JSONObject gameJson = jsonParser.loadFile(file);
     extractJSONObj(gameJson);
 
-    EndConditionBuilder endConditionBuilder= new EndConditionBuilder();
     iterateCSVData();
-    endCondition = endConditionBuilder.getEndConditions(gameJson.getString(RULES),playerList);
+    endCondition = EndConditionBuilder.getEndConditions(gameJson.getString(RULES),playerList);
   }
 
   /**
@@ -172,7 +169,8 @@ public class BoardBuilder implements Builder {
   }
 
   /**
-   * determines the index in playerList that matches team
+   * determines the index in playerList that matches team. This is used to figure out which player a
+   *  piece should be stored in
    */
   private int determinePlayer(int r, int c, String team) throws PlayerNotFoundException {
     int playerListIdx = -1;
@@ -192,34 +190,44 @@ public class BoardBuilder implements Builder {
    * if any values are missing, an exception is thrown
    */
   private void extractJSONObj(JSONObject jsonObject) throws InvalidGameConfigException {
+    String errorKey = null;
     try{
+      errorKey = TYPE;
       gameType = jsonObject.getString(mappings.getString(TYPE));
+
+      errorKey = BOARD;
       boardShape = jsonObject.getString(mappings.getString(BOARD));
 
+      errorKey = TIME;
       time = jsonObject.getInt(mappings.getString(TIME));
+
+      errorKey = TIME_INCREMENT;
       timeIncrement = jsonObject.getInt(mappings.getString(TIME_INCREMENT));
 
+      errorKey = BOARD_SIZE;
       boardSize = new ArrayList<>();
       for (String dimension : jsonObject.getString(mappings.getString(BOARD_SIZE)).split(X)){
         boardSize.add(parseInt(dimension));
       }
 
+      errorKey = BOARD_COLORS;
       boardColors = convertJSONArrayOfStrings(
           jsonObject.getJSONArray(mappings.getString(BOARD_COLORS)));
 
+      errorKey = PLAYERS;
       for (String player : convertJSONArrayOfStrings(
           jsonObject.getJSONArray(mappings.getString(PLAYERS)))) {
         PlayerInterface newPlayer = new Player(player);
         newPlayer.configTimer(time,timeIncrement);
         playerList.add(newPlayer);
       }
-      bottomColor = playerList.get(0).getTeam(); //assumes that bottom player is the first player
 
+      errorKey = CSV;
       String csv = jsonObject.getString(mappings.getString(CSV));
       csvData = locationParser.getInitialLocations(csv);
 
     }catch (Exception e){
-      throw new InvalidGameConfigException(e.toString());
+      throw new InvalidGameConfigException(errorKey);
     }
   }
 

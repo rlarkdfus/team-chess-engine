@@ -6,6 +6,7 @@ import static ooga.controller.Config.BoardBuilder.PROPERTIES_FILE;
 import static ooga.controller.Config.BoardBuilder.RULE_TYPE;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,19 +36,12 @@ import org.json.JSONObject;
  */
 public class EndConditionBuilder {
 
-  JsonParser jsonParser;
-  ResourceBundle mappings;
-  List<PlayerInterface> playerList;
+  public static final String ENDCONDITION_PREFIX = "ooga.model.EndConditionHandler.";
+  public static final String ENDCONDITION_SUFFIX = "EndCondition";
+  private static JsonParser jsonParser;
+  private static ResourceBundle mappings;
   public static final String INVALID_ENDCONDITION = "invalidEndConditionMessage";
-
-  /**
-   * This constructor creates a jsonparser that will be used to construct the end condition objects,
-   * as well as a resource bundle for getting strings values.
-   */
-  public EndConditionBuilder() {
-    jsonParser = new JsonParser();
-    mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
-  }
+  public static final String RULEKEYS = "RuleKeys";
 
   /**
    * This return the EndConditionRunner object that holds 1 or many EndCondition Objects. This will
@@ -59,75 +53,139 @@ public class EndConditionBuilder {
    * @throws InvalidEndGameConfigException - if anything in the rule json file isn't valid, this
    *  exception is thrown.
    */
-  public EndConditionRunner getEndConditions(String ruleJsonFilepath, List<PlayerInterface> playerList)
+  public static EndConditionRunner getEndConditions(String ruleJsonFilepath, List<PlayerInterface> playerList)
       throws InvalidEndGameConfigException {
-    try {
-      EndConditionRunner endConditionsHandler = new EndConditionRunner();
-      this.playerList = playerList;
+    jsonParser = new JsonParser();
+    mappings = ResourceBundle.getBundle(PROPERTIES_FILE);
 
-      JSONObject endConditions = jsonParser.loadFile(new File(ruleJsonFilepath));
-      for (String key : endConditions.keySet()) {
-        JSONObject endConditionsJSONObject = endConditions.getJSONObject(key);
-        endConditionsHandler.add(buildEndCondition(playerList, endConditionsJSONObject));
-      }
-      return endConditionsHandler;
+    try {
+      return buildEndConditionHandler(ruleJsonFilepath, playerList);
     } catch (Exception e) {
       throw new InvalidEndGameConfigException(e.getClass());
     }
   }
 
-  private EndConditionInterface buildEndCondition(List<PlayerInterface> playerList,
+  /**
+   * parses rule json file, builds the endcondition objects, and adds them to the runner
+   */
+  private static EndConditionRunner buildEndConditionHandler(String ruleJsonFilepath,
+      List<PlayerInterface> playerList)
+      throws FileNotFoundException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InvalidEndGameConfigException, InvalidGameConfigException {
+
+    EndConditionRunner endConditionsHandler = new EndConditionRunner();
+
+    JSONObject RulesJSONObject = jsonParser.loadFile(new File(ruleJsonFilepath));
+
+    for (String endCondition : RulesJSONObject.keySet()) {
+      JSONObject endConditionsJSONObject = RulesJSONObject.getJSONObject(endCondition);
+      endConditionsHandler.add(buildEndCondition(playerList, endConditionsJSONObject));
+    }
+    return endConditionsHandler;
+  }
+
+  /**
+   * builds the endcondition object using reflection
+   */
+  private static EndConditionInterface buildEndCondition(List<PlayerInterface> playerList,
       JSONObject endConditionsJSONObject)
       throws ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, InvalidEndGameConfigException, InvalidGameConfigException {
     EndConditionInterface endCondition;
 
-    String type = endConditionsJSONObject.getString(mappings.getString(RULE_TYPE));
+    String endConditionType = endConditionsJSONObject.getString(mappings.getString(RULE_TYPE));
 
-    String[] keys = mappings.getString(type + "RuleKeys")
+    String[] endConditionParameters = mappings.getString(endConditionType + RULEKEYS)
         .split(mappings.getString(JSON_DELIMITER));
 
-    Map<String, List<String>> endConditionProperties = new HashMap<>();
-    for (String key : keys) {
-      endConditionProperties.put(key,
-          convertJSONArrayOfStrings(endConditionsJSONObject.getJSONArray(key)));
-    }
-    Class<?> clazz = Class.forName("ooga.model.EndConditionHandler." + type + "EndCondition");
-    List<PieceInterface> initialPieces = new ArrayList<>();
+    Map<String, List<String>> endConditionProperties = makeProperties(
+        endConditionsJSONObject, endConditionParameters);
+    List<PieceInterface> initialPieces = makeInitialPieces(playerList);
 
-    for (PlayerInterface p : playerList) {
-      initialPieces.addAll(p.getPieces());
-    }
-
+    Class<?> clazz = Class.forName(ENDCONDITION_PREFIX + endConditionType + ENDCONDITION_SUFFIX);
     endCondition = (EndConditionInterface) clazz.getDeclaredConstructor(Map.class,List.class)
         .newInstance(endConditionProperties, initialPieces);
 
-    checkValidEndCondition(endConditionProperties);
+    checkValidEndCondition(endConditionProperties, playerList);
     return endCondition;
   }
 
-  private void checkValidEndCondition(Map<String, List<String>> endConditionProperties)
+  /**
+   * creates a list of all pieces from the given players
+   */
+  private static List<PieceInterface> makeInitialPieces(List<PlayerInterface> playerList) {
+    List<PieceInterface> initialPieces = new ArrayList<>();
+    for (PlayerInterface p : playerList) {
+      initialPieces.addAll(p.getPieces());
+    }
+    return initialPieces;
+  }
+
+  /**
+   * creates a map of all the property types to their values
+   */
+  private static Map<String, List<String>> makeProperties(JSONObject endConditionsJSONObject,
+      String[] endConditionParameters) {
+    Map<String, List<String>> endConditionProperties = new HashMap<>();
+    for (String argument : endConditionParameters) {
+      endConditionProperties.put(argument,
+          convertJSONArrayOfStrings(endConditionsJSONObject.getJSONArray(argument)));
+    }
+    return endConditionProperties;
+  }
+
+  /**
+   * checks that the endcondition is possible
+   */
+  private static void checkValidEndCondition(Map<String, List<String>> endConditionProperties, List<PlayerInterface> playerList)
       throws InvalidEndGameConfigException {
-    String pieceKey = mappings.getString(PIECE_TYPE);
-    List<String> endGamePieces = endConditionProperties.get(pieceKey);
+
+    List<String> targetPieces = endConditionProperties.get(mappings.getString(PIECE_TYPE));
     for (PlayerInterface player : playerList) {
-      HashMap<String, Integer> playerPieces = new HashMap<>();
-      for (PieceInterface p : player.getPieces()) {
-        playerPieces.putIfAbsent(p.getName(), 0);
-        playerPieces.put(p.getName(), playerPieces.get(p.getName()) + 1);
-      }
-      for (String p : endGamePieces) {
-        playerPieces.putIfAbsent(p, 0);
-        playerPieces.put(p, playerPieces.get(p) - 1);
-      }
-      for (String key : playerPieces.keySet()) {
-        if (playerPieces.get(key) < 0) {
-          throw new InvalidEndGameConfigException(mappings.getString(INVALID_ENDCONDITION));
-        }
+      HashMap<String, Integer> playerPieces = getNumberOfPlayerPieces(player);
+      tryEliminatingTargetPieces(targetPieces, playerPieces);
+      testNotEnoughPlayerPieces(playerPieces);
+    }
+  }
+
+  /**
+   * checks that the number of player pieces is greater or equal to the number of target pieces.
+   * throws an exception if this is not the case
+   */
+  private static void testNotEnoughPlayerPieces(HashMap<String, Integer> playerPieces)
+      throws InvalidEndGameConfigException {
+    for (String key : playerPieces.keySet()) {
+      if (playerPieces.get(key) < 0) {
+        throw new InvalidEndGameConfigException(mappings.getString(INVALID_ENDCONDITION));
       }
     }
   }
 
-  private List<String> convertJSONArrayOfStrings(JSONArray jsonArray) {
+  /**
+   * simulates eliminating all the target pieces. this is used to figure out if there are more
+   * target pieces than player pieces (the value of playerpieces will be negative if so)
+   */
+  private static void tryEliminatingTargetPieces(List<String> endGamePieces, HashMap<String, Integer> playerPieces) {
+    for (String p : endGamePieces) {
+      playerPieces.putIfAbsent(p, 0);
+      playerPieces.put(p, playerPieces.get(p) - 1);
+    }
+  }
+
+  /**
+   * creates a map of the players' pieces to the amount of each piece
+   */
+  private static HashMap<String, Integer> getNumberOfPlayerPieces(PlayerInterface player) {
+    HashMap<String, Integer> playerPieces = new HashMap<>();
+    for (PieceInterface p : player.getPieces()) {
+      playerPieces.putIfAbsent(p.getName(), 0);
+      playerPieces.put(p.getName(), playerPieces.get(p.getName()) + 1);
+    }
+    return playerPieces;
+  }
+
+  /**
+   * converts jsonarrays to a list of strings
+   */
+  private static List<String> convertJSONArrayOfStrings(JSONArray jsonArray) {
     List<String> ret = new ArrayList<>();
     for (int i = 0; i < jsonArray.length(); i++) {
       ret.add(jsonArray.getString(i));
