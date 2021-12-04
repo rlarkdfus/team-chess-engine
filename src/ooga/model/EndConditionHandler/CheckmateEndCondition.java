@@ -8,9 +8,9 @@ import ooga.model.PlayerInterface;
 
 public class CheckmateEndCondition implements EndConditionInterface {
 
-  String winner;
-  List<PlayerInterface> players;
-  Check check;
+  private String winner;
+  private List<PlayerInterface> players;
+  private Check check;
 
   @Override
   public void setArgs(Map<String, List<String>> propertiesMap, List<PieceInterface> allpieces) {
