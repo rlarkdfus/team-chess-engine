@@ -8,6 +8,10 @@ import java.util.List;
 
 public abstract class CastleMove extends Move {
 
+    public CastleMove(int dRow, int dCol, boolean take, boolean limited) {
+        super(dRow, dCol, take, limited);
+    }
+
     protected abstract Location findRookLocation(PieceInterface piece);
 
     @Override

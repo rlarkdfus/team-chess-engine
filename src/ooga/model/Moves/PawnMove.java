@@ -7,6 +7,10 @@ import ooga.model.PieceInterface;
 
 public class PawnMove extends Move { //TODO: pawn move takes in +-2 depending on side
 
+    public PawnMove(int dRow, int dCol, boolean take, boolean limited) {
+        super(dRow, dCol, take, limited);
+    }
+
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         movePiece(piece, end);

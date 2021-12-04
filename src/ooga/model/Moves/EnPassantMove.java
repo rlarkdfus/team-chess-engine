@@ -7,6 +7,10 @@ import java.util.List;
 
 public class EnPassantMove extends Move {
 
+    public EnPassantMove(int dRow, int dCol, boolean take, boolean limited) {
+        super(dRow, dCol, take, limited);
+    }
+
     @Override
     public void executeMove(PieceInterface pawn, List<PieceInterface> pieces, Location end) {
         Location enemyPawnLocation = new Location(end.getRow() - getdRow(), end.getCol());
