@@ -16,12 +16,9 @@ public abstract class Controller implements ControllerInterface {
 
   //TODO: change protected
   protected Engine model;
-//  private ViewInterface view;
   private LocationWriter locationWriter;
   protected Builder boardBuilder;
-  private LoginController loginController;
   private File jsonFile;
-  private LoginView loginView;
 
   public Controller() {
     jsonFile = DEFAULT_CHESS_CONFIGURATION;

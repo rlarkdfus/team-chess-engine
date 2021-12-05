@@ -27,9 +27,7 @@ public class GameController extends Controller {
             model.setEndCondition(boardBuilder.getEndConditionHandler());
             view = new GameView(this);
             view.initializeDisplay(boardBuilder.getInitialPieceViews());
-
             timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
-//            timeController.configTimers(model.getPlayers()); this is done in boardbuilder
             startTimersForNewGame();
         } catch (Exception E) {
             E.printStackTrace();
@@ -55,7 +53,6 @@ public class GameController extends Controller {
      * reset timers for a new game and start the first player's timer
      */
     private void startTimersForNewGame() {
-        System.out.println("starting timers");
         timeController.resetTimers(model.getPlayers());
         timeController.startPlayer1Timer(model.getPlayers());
     }

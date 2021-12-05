@@ -24,12 +24,10 @@ public class TimeController {
     }
 
     public void setInitialTime(int minutes) {
-        System.out.println("setting initial time: " + minutes);
         this.initialTime = minutes;
     }
 
     public void setIncrement(int seconds) {
-        System.out.println("setting initial increment: " + seconds);
         this.increment = seconds;
     }
 

@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
@@ -224,12 +225,48 @@ public class ViewUtility {
         return result;
     }
 
+    public Dialog makeDialog(List<Label> labels, List<TextField> textFields) {
+        Dialog dlg = new Dialog();
+        dlg.getDialogPane().setContent(makeLabelsFieldsGridPane(labels, textFields));
+        ButtonType buttonTypeOk = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
+        dlg.getDialogPane().getButtonTypes().add(buttonTypeOk);
+        dlg.setResultConverter(b -> b == buttonTypeOk ? getTextFieldStrings(textFields) : null);
+        return dlg;
+    }
+
+    // makes an n by 2 grid with labels in the first column, textfields in the second; n is number of rows
+    private GridPane makeLabelsFieldsGridPane(List<Label> labels, List<TextField> textFields) {
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(0, 10, 0, 10));
+        for (int row = 0; row < labels.size(); row++) {
+            grid.add(labels.get(row), 0, row);
+            grid.add(textFields.get(row), 1, row);
+        }
+        return grid;
+    }
+
+    private String[] getTextFieldStrings(List<TextField> textFields) {
+        String[] strings = new String[textFields.size()];
+        for (int i = 0; i < strings.length; i++) {
+            strings[i] = textFields.get(i).getText();
+        }
+        return strings;
+    }
+
+    public String[] getDialogResults(Dialog dlg) {
+        Optional<String[]> strArr = dlg.showAndWait();
+        return strArr.get();
+    }
+
     public void setTextInputDialogCloseRestrictions(TextInputDialog textInputDialog, Set<String> acceptableValues) {
         Button okButton = (Button) textInputDialog.getDialogPane().lookupButton(ButtonType.OK);
         TextField inputField = textInputDialog.getEditor();
         BooleanBinding isInvalid = Bindings.createBooleanBinding(() -> !acceptableValues.contains(inputField.getText().toLowerCase()), inputField.textProperty());
         okButton.disableProperty().bind(isInvalid);
     }
+
 
 
     /**
