@@ -26,10 +26,6 @@ public abstract class Board implements Engine {
             allPieces.addAll(player.getPieces());
         }
         powerupInterfaceList = new ArrayList<>();
-        List<Location> powerupLocations = new ArrayList<>();
-        powerupLocations.add(new Location(4,0));
-        PromotePowerup test = new PromotePowerup(powerupLocations);
-        powerupInterfaceList.add(test);
     }
 
     /**
