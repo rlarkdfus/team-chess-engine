@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.PlayerInterface;
+import ooga.model.Powerups.PowerupInterface;
 
 /**
  * @Authors Albert
@@ -32,9 +33,10 @@ public interface Builder {
    * @throws InvalidPieceConfigException - if any piece configuration jsons are invalid
    * @throws InvalidGameConfigException - if the game json is invalid
    * @throws InvalidEndGameConfigException - if the rule json is invalid
+   * @throws InvalidPowerupsConfigException - if the powerups json is invalid
    */
   void build(File file)
-      throws FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, CsvException;
+      throws FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, CsvException, InvalidPowerupsConfigException;
 
   /**
    * Getter method that is used in view.initializeDisplay() to build pieceView objects that are displayed
@@ -58,4 +60,10 @@ public interface Builder {
    * */
   EndConditionRunner getEndConditionHandler();
 
+  /**
+   * Getter method that is used in the board constructor to help the board determine when and what
+   * powerups are to be used.
+   * @return a list of powerups objects
+   * */
+  List<PowerupInterface> getPowerupsHandler();
 }

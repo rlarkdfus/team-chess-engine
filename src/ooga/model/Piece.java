@@ -17,15 +17,6 @@ public class Piece implements PieceInterface {
   private boolean moved;
   private boolean firstMove = false;
   private boolean firstMoveUpdate = false;
-
-  private Map<String, Boolean> attributes;
-  private boolean isEliminated;
-  private boolean endConditionSatisified;
-  private int uniqueID;
-  //Used to create a unique hash/id for each piece;
-  private Location initialLocation;
-  String endStateString = "eliminated";
-
   private List<Move> moves;
 
   /**

@@ -6,6 +6,7 @@
   ],
   "time": 10,
   "timeIncrement": 5,
+  "powerups": "data/chess/powerups/noPowerups.json",
   "csv": "/Users/luispereda/Documents/CS 307/Projects/ooga_team09/data/chess/dogandcat.csv",
   "rules": "data/chess/rules/default.json",
   "style": "companion",

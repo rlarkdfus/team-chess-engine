@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import ooga.Location;
 import ooga.controller.Config.InvalidPieceConfigException;
-import ooga.model.EndConditionHandler.EndConditionRunner;
 
 public interface Engine {
     /**
@@ -27,8 +26,6 @@ public interface Engine {
     List<Location> getLegalMoves(Location location);
 
     List<PlayerInterface> getPlayers();
-
-    void setEndCondition(EndConditionRunner endCondition);
 
   boolean canMovePiece(Location location);
 }

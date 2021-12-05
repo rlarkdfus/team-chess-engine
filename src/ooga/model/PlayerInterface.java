@@ -17,29 +17,21 @@ public interface PlayerInterface {
 
   void incrementTimeUserInterface();
 
+  void incrementTime(Integer specifiedTime);
+
   List<PieceInterface> getPieces();
 
   void addPiece(PieceInterface piece);
 
   String getTeam();
 
-  void movePiece(PieceInterface piece, Location end);
-
-  void tryMove(PieceInterface piece, Location end);
-
-//  PieceInterface getPiece(Location location);
-
-//  List<Location> getLegalMoves(Location location);
+//  void movePiece(PieceInterface piece, Location end);
 //
-//  void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
+//  void tryMove(PieceInterface piece, Location end);
 
   void removePiece(PieceInterface piece);
 
-    int getScore();
-    PieceInterface createQueen();
-    void addTime(Integer seconds);
+  int getScore();
 
-  PieceInterface createPiece(String pieceName) throws InvalidPieceException;
 
-  void incrementTime(Integer specifiedTime);
 }

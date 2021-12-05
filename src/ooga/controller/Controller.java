@@ -10,6 +10,7 @@ import ooga.Location;
 import ooga.model.Engine;
 import ooga.view.LoginView;
 import ooga.controller.Config.*;
+import org.json.JSONObject;
 
 public abstract class Controller implements ControllerInterface {
 
@@ -17,18 +18,18 @@ public abstract class Controller implements ControllerInterface {
 
   //TODO: change protected
   protected Engine model;
-//  private ViewInterface view;
   private LocationWriter locationWriter;
   protected Builder boardBuilder;
-  private LoginController loginController;
   private File jsonFile;
-  private LoginView loginView;
 
   public Controller() {
+    configureInitialGameSettings();
     jsonFile = DEFAULT_CHESS_CONFIGURATION;
     boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
     start();
   }
+
+  protected abstract void configureInitialGameSettings();
 
   protected abstract void start();
 
@@ -58,8 +59,6 @@ public abstract class Controller implements ControllerInterface {
   public boolean canMovePiece(Location location) {
     return model.canMovePiece(location);
   }
-
-
 
   /**
    * sets up a new game with the initial configuration file
@@ -98,7 +97,8 @@ public abstract class Controller implements ControllerInterface {
   public void downloadGame(String filePath) {
     try {
       JSONWriter jsonWriter = new JSONWriter();
-      jsonWriter.saveFile(jsonFile, filePath);
+      JSONObject jsonObject = JsonParser.loadFile(jsonFile);
+      jsonWriter.saveFile(jsonObject, filePath);
       locationWriter = new LocationWriter();
       locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
     } catch (IOException ignored) {

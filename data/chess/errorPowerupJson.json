@@ -1,0 +1,13 @@
+{
+  "csv": "data/chess/locations/oneBlackPawn.csv",
+  "type": "chess",
+  "board": "square",
+  "boardSize": "8x8",
+  "boardColors": ["#f3dab0", "#bb885b"],
+  "players": ["w", "b"],
+  "time": 10,
+  "timeIncrement": 5,
+  "powerups": "data/chess/powerups/errorPowerup.json",
+  "rules": "data/chess/rules/default.json",
+  "style": "companion"
+}

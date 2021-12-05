@@ -180,7 +180,7 @@ public class EndConditionBuilder {
   /**
    * converts jsonarrays to a list of strings
    */
-  private static List<String> convertJSONArrayOfStrings(JSONArray jsonArray) {
+  public static List<String> convertJSONArrayOfStrings(JSONArray jsonArray) {
     List<String> ret = new ArrayList<>();
     for (int i = 0; i < jsonArray.length(); i++) {
       ret.add(jsonArray.getString(i));

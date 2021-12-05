@@ -1,0 +1,10 @@
+{
+  "Luis": {
+    "password": "password",
+    "wins": 0
+  },
+  "Richard": {
+    "password": "123",
+    "wins": 0
+  }
+}
