@@ -1,12 +1,13 @@
 package ooga.controller;
 
 import ooga.Location;
+import ooga.controller.Config.Builder;
 import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.*;
 import ooga.view.GameOverScreen;
 import ooga.view.GameView;
-import ooga.view.View;
+import ooga.view.ViewInterface;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -17,37 +18,32 @@ public class GameController extends Controller {
     public static final int DEFAULT_INITIAL_TIME = 5;
     public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
-    private GameOverScreen gameOverScreen;
-    private View view;
     private TimeController timeController;
 
     @Override
-    public void start() {
-        try {
-            //buildGame() is the 3 lines below
-            model = new GameBoard(boardBuilder.getInitialPlayers());
-            model.setEndCondition(boardBuilder.getEndConditionHandler());
-            view = new GameView(this);
-            view.initializeDisplay(boardBuilder.getInitialPieceViews());
+    protected Engine initializeModel(Builder boardBuilder) {
+        List<PlayerInterface> players = boardBuilder.getInitialPlayers();
+        Engine model = new GameBoard(players);
+        model.setEndCondition(boardBuilder.getEndConditionHandler());
 
-            timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
-//            timeController.configTimers(model.getPlayers()); this is done in boardbuilder
-            startTimersForNewGame();
-        } catch (Exception E) {
-            E.printStackTrace();
-            //view.showError(E.toString());
-        }
+        timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+        startTimersForNewGame(players);
+        return model;
     }
 
+    @Override
+    protected ViewInterface initializeView(List<PieceViewBuilder> pieces) {
+        ViewInterface view = new GameView(this);
+        view.initializeDisplay(pieces);
+        return view;
+    }
+
+    @Override
     public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
-        List<PieceViewBuilder> pieceViewList = new ArrayList<>();
-        for (PieceInterface piece : model.movePiece(start, end)) {
-            pieceViewList.add(new PieceViewBuilder(piece));
-        }
-        view.updateDisplay(pieceViewList);
-        GameState gameState = model.checkGameState();
+        super.movePiece(start, end);
+        GameState gameState = getGameState();
         if(gameState != GameState.RUNNING) {
-            gameOverScreen = new GameOverScreen(this, gameState.toString());
+            new GameOverScreen(this, gameState.toString());
         }
     }
 
@@ -56,10 +52,9 @@ public class GameController extends Controller {
     /**
      * reset timers for a new game and start the first player's timer
      */
-    private void startTimersForNewGame() {
-        System.out.println("starting timers");
-        timeController.resetTimers(model.getPlayers());
-        timeController.startPlayer1Timer(model.getPlayers());
+    private void startTimersForNewGame(List<PlayerInterface> players) {
+        timeController.resetTimers(players);
+        timeController.startPlayer1Timer(players);
     }
 
     /**

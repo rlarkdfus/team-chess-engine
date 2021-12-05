@@ -1,54 +1,53 @@
 package ooga.controller;
 
+import javafx.beans.property.StringProperty;
+import ooga.Location;
+import ooga.controller.Config.*;
+import ooga.model.*;
+import ooga.view.ViewInterface;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-
-import javafx.beans.property.StringProperty;
-import ooga.Location;
-import ooga.model.Engine;
-import ooga.view.LoginView;
-import ooga.controller.Config.*;
 
 public abstract class Controller implements ControllerInterface {
 
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
 
   //TODO: change protected
-  protected Engine model;
-//  private ViewInterface view;
-  private LocationWriter locationWriter;
+  private Engine model;
+  private ViewInterface view;
   protected Builder boardBuilder;
-  private LoginController loginController;
   private File jsonFile;
-  private LoginView loginView;
+  private Location selectedLocation;
 
   public Controller() {
     jsonFile = DEFAULT_CHESS_CONFIGURATION;
     boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-    start();
+    model = initializeModel(boardBuilder);
+    view = initializeView(boardBuilder.getInitialPieceViews());
   }
 
-  protected abstract void start();
+  protected abstract Engine initializeModel(Builder boardBuilder);
+  protected abstract ViewInterface initializeView(List<PieceViewBuilder> pieces);
 
   /**
    * Reset the game with the default board configuration
    */
   @Override
   public void reset() {
-    try {
-      uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+    uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
   }
 
   /**
    * Quits the game
    */
   @Override
-  public void quit() {System.exit(0);}
+  public void quit() {
+    System.exit(0);
+  }
 
   /**
    * @param location is the desired destination of the move
@@ -60,7 +59,6 @@ public abstract class Controller implements ControllerInterface {
   }
 
 
-
   /**
    * sets up a new game with the initial configuration file
    *
@@ -69,16 +67,16 @@ public abstract class Controller implements ControllerInterface {
   @Override
   public void uploadConfiguration(File file) {
     try {
-      if (file == null) {
-        return;
-      }
-      jsonFile = file;
       boardBuilder.build(file);
-      start();
+    } catch (Exception e) {
+      view.showError("no");
+      e.printStackTrace();//FIXME
+      return;
     }
-    catch (Exception e) {
-      e.printStackTrace();
-    }
+
+    jsonFile = file;
+    model = initializeModel(boardBuilder);
+    view = initializeView(boardBuilder.getInitialPieceViews());
   }
 
   /**
@@ -88,7 +86,13 @@ public abstract class Controller implements ControllerInterface {
    * @param end   is final location of moved piece
    */
   @Override
-  public abstract void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException;
+  public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
+    List<PieceViewBuilder> pieceViewList = new ArrayList<>();
+    for (PieceInterface piece : model.movePiece(start, end)) {
+      pieceViewList.add(new PieceViewBuilder(piece));
+    }
+    view.updateDisplay(pieceViewList);
+  }
 
   public List<Location> getLegalMoves(Location location) {
     return model.getLegalMoves(location);
@@ -99,7 +103,8 @@ public abstract class Controller implements ControllerInterface {
     try {
       JSONWriter jsonWriter = new JSONWriter();
       jsonWriter.saveFile(jsonFile, filePath);
-      locationWriter = new LocationWriter();
+      //  private ViewInterface view;
+      LocationWriter locationWriter = new LocationWriter();
       locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
     } catch (IOException ignored) {
     }
@@ -111,11 +116,34 @@ public abstract class Controller implements ControllerInterface {
    * @param side the side of the player
    * @return a StringProperty ("mm:ss") representing the amount of time left
    */
-    public StringProperty getTimeLeft(int side) {
-      return model.getPlayers().get(side).getTimeLeft();
-    }
+  public StringProperty getTimeLeft(int side) {
+    return model.getPlayers().get(side).getTimeLeft();
+  }
 
-    public abstract void setInitialTime(int minutes);
+  public abstract void setInitialTime(int minutes);
 
-    public abstract void setIncrement(int seconds);
+  public abstract void setIncrement(int seconds);
+
+  public void selectPiece(Location location) {
+    selectedLocation = location;
+  }
+
+  public boolean hasPiece(Location location) {
+    return selectedLocation != null;
+  }
+
+  public void addPiece() {
+//        PieceViewBuilder selectedPiece = pieces.get(selectedLocation.getRow() * col + selectedLocation.getCol());
+//        PieceInterface newPiece = null;
+//        try {
+//            newPiece = PieceBuilder.buildPiece(selectedPiece.getTeam(), selectedPiece.getName(), selectedLocation);
+//        } catch (FileNotFoundException | InvalidPieceConfigException e) {
+//            e.printStackTrace();
+//        }
+//        model.addPiece(newPiece);
+  }
+
+  protected GameState getGameState() {
+    return model.checkGameState();
+  }
 }

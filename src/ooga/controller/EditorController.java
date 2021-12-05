@@ -1,34 +1,34 @@
 package ooga.controller;
 
 import ooga.Location;
+import ooga.controller.Config.Builder;
 import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.PieceBuilder;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.*;
 import ooga.view.View;
 import ooga.view.EditorView;
+import ooga.view.ViewInterface;
+import ooga.view.boardview.PieceMenuView;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EditorController extends Controller {
-    
-    private View editorView;
+
+    private List<PieceViewBuilder> pieces;
 
     @Override
-    protected void start() {
-        model = new EditorBoard(boardBuilder.getInitialPlayers());
-        editorView = new EditorView(this);
-        editorView.initializeDisplay(boardBuilder.getInitialPieceViews());
+    protected Engine initializeModel(Builder boardBuilder) {
+        return new EditorBoard(boardBuilder.getInitialPlayers());
     }
 
     @Override
-    public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
-        List<PieceViewBuilder> pieceViewList = new ArrayList<>();
-        for (PieceInterface piece : model.movePiece(start, end)) {
-            pieceViewList.add(new PieceViewBuilder(piece));
-        }
-        editorView.updateDisplay(pieceViewList);
+    protected ViewInterface initializeView(List<PieceViewBuilder> pieces) {
+        ViewInterface view = new EditorView(this);
+        view.initializeDisplay(pieces);
+        return view;
     }
 
     @Override
