@@ -3,10 +3,7 @@ package ooga.model;
 import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
-import ooga.model.Powerups.PowerupInterface;
-import ooga.model.Powerups.TimerPowerup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameBoard extends Board {
@@ -27,8 +24,8 @@ public class GameBoard extends Board {
         super(players);
         endCondition = new EndConditionRunner();
         turnCount = 0;
-        for (PieceInterface piece : allPieces) {
-            piece.updateMoves(allPieces);
+        for (PieceInterface piece : pieces) {
+            piece.updateMoves(pieces);
         }
         updateLegalMoves();
 
@@ -59,7 +56,7 @@ public class GameBoard extends Board {
     @Override
     public boolean canMovePiece(Location location) {
         String turn = findPlayerTurn(turnCount).getTeam();
-        for (PieceInterface piece : allPieces) {
+        for (PieceInterface piece : pieces) {
             if (piece.getTeam().equals(turn) && piece.getLocation().equals(location)) {
                 return true;
             }
@@ -75,7 +72,7 @@ public class GameBoard extends Board {
      */
     @Override
     public List<Location> getLegalMoves(Location location) {
-        for (PieceInterface piece : allPieces) {
+        for (PieceInterface piece : pieces) {
             if (piece.getLocation().equals(location)) {
                 return piece.getEndLocations();
             }

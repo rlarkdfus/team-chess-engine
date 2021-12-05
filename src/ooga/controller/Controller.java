@@ -3,7 +3,10 @@ package ooga.controller;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.controller.Config.*;
-import ooga.model.*;
+import ooga.model.Engine;
+import ooga.model.GameState;
+import ooga.model.PieceInterface;
+import ooga.model.PlayerInterface;
 import ooga.view.ViewInterface;
 
 import java.io.File;
@@ -14,23 +17,24 @@ import java.util.List;
 
 public abstract class Controller implements ControllerInterface {
 
-  public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
-
   //TODO: change protected
   private Engine model;
   private ViewInterface view;
-  protected Builder boardBuilder;
   private File jsonFile;
-  private Location selectedLocation;
+  private String selectedTeam;
+  private String selectedName;
 
   public Controller() {
-    jsonFile = DEFAULT_CHESS_CONFIGURATION;
-    boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
+    jsonFile = getDefaultConfiguration();
+    BoardBuilder boardBuilder = new BoardBuilder(jsonFile);
     model = initializeModel(boardBuilder);
     view = initializeView(boardBuilder.getInitialPieceViews());
   }
 
+  protected abstract File getDefaultConfiguration();
+
   protected abstract Engine initializeModel(Builder boardBuilder);
+
   protected abstract ViewInterface initializeView(List<PieceViewBuilder> pieces);
 
   /**
@@ -38,7 +42,7 @@ public abstract class Controller implements ControllerInterface {
    */
   @Override
   public void reset() {
-    uploadConfiguration(DEFAULT_CHESS_CONFIGURATION);
+    uploadConfiguration(getDefaultConfiguration());
   }
 
   /**
@@ -58,7 +62,6 @@ public abstract class Controller implements ControllerInterface {
     return model.canMovePiece(location);
   }
 
-
   /**
    * sets up a new game with the initial configuration file
    *
@@ -66,14 +69,7 @@ public abstract class Controller implements ControllerInterface {
    */
   @Override
   public void uploadConfiguration(File file) {
-    try {
-      boardBuilder.build(file);
-    } catch (Exception e) {
-      view.showError("no");
-      e.printStackTrace();//FIXME
-      return;
-    }
-
+    BoardBuilder boardBuilder = new BoardBuilder(file);
     jsonFile = file;
     model = initializeModel(boardBuilder);
     view = initializeView(boardBuilder.getInitialPieceViews());
@@ -124,23 +120,39 @@ public abstract class Controller implements ControllerInterface {
 
   public abstract void setIncrement(int seconds);
 
-  public void selectPiece(Location location) {
-    selectedLocation = location;
+  public boolean selectMenuPiece(String team, String name) {
+    if (selectedTeam == null) {
+      selectedTeam = team;
+      selectedName = name;
+      return true;
+    }
+    if (selectedTeam.equals(team) && selectedName.equals(name)) {
+      selectedTeam = null;
+      selectedName = null;
+      return false;
+    }
+    return false;
   }
 
-  public boolean hasPiece(Location location) {
-    return selectedLocation != null;
+  public boolean hasMenuPiece() {
+    return selectedTeam != null || selectedName != null;
   }
 
-  public void addPiece() {
-//        PieceViewBuilder selectedPiece = pieces.get(selectedLocation.getRow() * col + selectedLocation.getCol());
-//        PieceInterface newPiece = null;
-//        try {
-//            newPiece = PieceBuilder.buildPiece(selectedPiece.getTeam(), selectedPiece.getName(), selectedLocation);
-//        } catch (FileNotFoundException | InvalidPieceConfigException e) {
-//            e.printStackTrace();
-//        }
-//        model.addPiece(newPiece);
+  public void addPiece(Location location) {
+    model.addPiece(selectedTeam, selectedName, location);
+    List<PieceInterface> pieces = new ArrayList<>();
+    for (PlayerInterface player : model.getPlayers()) {
+      pieces.addAll(player.getPieces());
+    }
+    view.updateDisplay(createPieceViewList(pieces));
+  }
+
+  private List<PieceViewBuilder> createPieceViewList(List<PieceInterface> pieces) {
+    List<PieceViewBuilder> pieceViewList = new ArrayList<>();
+    for (PieceInterface piece : pieces) {
+      pieceViewList.add(new PieceViewBuilder(piece));
+    }
+    return pieceViewList;
   }
 
   protected GameState getGameState() {

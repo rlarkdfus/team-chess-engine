@@ -26,6 +26,14 @@ public class PieceView extends ImageView {
         moveTo(location);
     }
 
+    public String getTeam() {
+        return side;
+    }
+
+    public String getName() {
+        return piece;
+    }
+
     public void moveTo(Location location) {
         this.location = location;
         this.setX(location.getCol()*60);
