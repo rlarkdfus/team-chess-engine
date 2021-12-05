@@ -2,11 +2,9 @@ package ooga.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import ooga.Location;
 import ooga.controller.Config.InvalidPieceConfigException;
-import ooga.model.InvalidPieceException;
 
 public interface ControllerInterface {
 
