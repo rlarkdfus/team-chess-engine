@@ -15,7 +15,7 @@ public class GameBoard extends Board {
     private static final int LAST_ROW = ROWS - 1;
     private static final int FIRST_ROW = 0;
     private static final String QUEEN = "Q";
-    private static final String KING = "K";
+    public static final String KING = "K";
     private static final String PAWN = "P";
 
     private EndConditionRunner endCondition;

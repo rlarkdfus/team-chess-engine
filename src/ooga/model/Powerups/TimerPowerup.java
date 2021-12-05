@@ -13,6 +13,6 @@ public class TimerPowerup extends Powerup{
 
     @Override
     void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) {
-        currentPlayer.incrementTime(1000);
+        currentPlayer.incrementTime(60);
     }
 }

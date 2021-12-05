@@ -4,6 +4,7 @@ import ooga.Location;
 import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Config.PieceBuilder;
 import ooga.model.Board;
+import ooga.model.GameBoard;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
@@ -20,7 +21,7 @@ public class PromotePowerup extends Powerup{
 //FIXME: add promotionLogic with piece builder;
     @Override
     void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException {
-        if(pieceInterface.getName().equals("K")){
+        if(pieceInterface.getName().equals(GameBoard.KING)){
             return;
         }
 //        int randomPieceIndex = (int) (Math.random()*availablePieces.length);
