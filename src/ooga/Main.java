@@ -10,8 +10,9 @@ import ooga.controller.LoginController;
 public class Main extends Application {
     @Override
     public void start(Stage stage) {
-        //new LoginController();
-        //new EditorController();
-        new GameController();
+
+        new LoginController();
+//        new EditorController();
+        // new GameController();
     }
 }
