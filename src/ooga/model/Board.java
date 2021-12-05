@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import ooga.model.Moves.MoveUtility;
 import ooga.model.Powerups.PowerupInterface;
-import ooga.model.Powerups.PromotePowerup;
 
 public abstract class Board implements Engine {
 
