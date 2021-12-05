@@ -24,14 +24,12 @@ public class JSONWriter {
    * saveFile() saves a jsonFile to a specified file path. This will allow the user of the
    * application to get a file with the game settings saved to their local computer if they wish
    * to start the game again at a later date.
-   * @param jsonFile JSONFile containing the settings of the game
+   * @param jsonObject JSONObject containing the settings of the game
    * @param filePath The path where the JSON will be saved to
    * @throws IOException If there is an issue with the path to which the file is saved or creating a
    * FileWriter, then this exception will be thrown
    */
-  public void saveFile(File jsonFile, String filePath) throws IOException {
-    JsonParser parser = new JsonParser();
-    JSONObject jsonObject = parser.loadFile(jsonFile);
+  public void saveFile(JSONObject jsonObject, String filePath) throws IOException {
     jsonObject.remove(CSV);
     jsonObject.put(CSV, String.format(CSV_STRING_FORMAT, filePath));
     FileWriter writer = new FileWriter(filePath + JSON_EXTENSION);

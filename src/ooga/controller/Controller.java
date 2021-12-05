@@ -10,6 +10,7 @@ import ooga.Location;
 import ooga.model.Engine;
 import ooga.view.LoginView;
 import ooga.controller.Config.*;
+import org.json.JSONObject;
 
 public abstract class Controller implements ControllerInterface {
 
@@ -98,7 +99,8 @@ public abstract class Controller implements ControllerInterface {
   public void downloadGame(String filePath) {
     try {
       JSONWriter jsonWriter = new JSONWriter();
-      jsonWriter.saveFile(jsonFile, filePath);
+      JSONObject jsonObject = JsonParser.loadFile(jsonFile);
+      jsonWriter.saveFile(jsonObject, filePath);
       locationWriter = new LocationWriter();
       locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
     } catch (IOException ignored) {
