@@ -2,7 +2,6 @@
   "type": "chess",
   "board": "square",
   "boardSize": "8x8",
-  "players": ["w", "b"],
   "time": 10,
   "timeIncrement": 5,
   "rules": "data/chess/rules/default.json",

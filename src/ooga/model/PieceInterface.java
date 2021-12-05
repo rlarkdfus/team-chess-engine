@@ -11,7 +11,6 @@ public interface PieceInterface {
     String getTeam();
 //    List<Location> getMoves(Location location);
 //    void getValue();
-    boolean isLimited();
     int getScore();
     String getName();
     Location getLocation();
@@ -28,7 +27,4 @@ public interface PieceInterface {
     void updateMoves(List<PieceInterface> pieces);
     List<Move> getMoves();
     boolean isSameTeam(PieceInterface piece);
-    boolean canTransform();
-
-    Map<String, Boolean> getAttributes();
 }

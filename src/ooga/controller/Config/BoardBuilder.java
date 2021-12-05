@@ -38,7 +38,7 @@ public class BoardBuilder implements Builder {
   public static final String PIECE_TYPE = "pieceType";
   public static final String POWER_UPS = "powerups";
   public static final String RULES = "rules";
-  public static final String TYPE = "type";
+  public static final String TYPE = "type"; //unused
   public static final String BOARD = "board"; //unused
   public static final String TIME = "time";
   public static final String TIME_INCREMENT = "timeIncrement";
@@ -50,10 +50,7 @@ public class BoardBuilder implements Builder {
 
   public static final ResourceBundle mappings= ResourceBundle.getBundle(PROPERTIES_FILE);
 
-  private String gameType;
-  private String boardShape;
   private List<Integer> boardSize;
-  private List<String> boardColors;
   private int time;
   private int timeIncrement;
   private List<List<String>> csvData;
@@ -201,11 +198,6 @@ public class BoardBuilder implements Builder {
   private void extractJSONObj(JSONObject jsonObject) throws InvalidGameConfigException {
     String errorKey = null;
     try{
-      errorKey = TYPE;
-      gameType = jsonObject.getString(mappings.getString(TYPE));
-
-      errorKey = BOARD;
-      boardShape = jsonObject.getString(mappings.getString(BOARD));
 
       errorKey = TIME;
       time = jsonObject.getInt(mappings.getString(TIME));
@@ -218,10 +210,6 @@ public class BoardBuilder implements Builder {
       for (String dimension : jsonObject.getString(mappings.getString(BOARD_SIZE)).split(X)){
         boardSize.add(parseInt(dimension));
       }
-
-      errorKey = BOARD_COLORS;
-      boardColors = convertJSONArrayOfStrings(
-          jsonObject.getJSONArray(mappings.getString(BOARD_COLORS)));
 
       errorKey = PLAYERS;
       for (String player : convertJSONArrayOfStrings(

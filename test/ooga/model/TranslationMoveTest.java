@@ -53,7 +53,7 @@ public class TranslationMoveTest {
 
     //ally piece in the way and unlimited.
     move = new TranslationMove(0,1,true,false);
-    allpieces.add(new Piece("b","P",new Location(0,2), new ArrayList<>(), new HashMap<>(),1));
+    allpieces.add(new Piece("b","P",new Location(0,2), new ArrayList<>(),1));
     move.updateMoveLocations(p,allpieces);
     endLocation =  move.getEndLocations();
     assertEquals(1, endLocation.size(), "should have 0 end locations because unlimited and ally");
@@ -62,7 +62,7 @@ public class TranslationMoveTest {
     move = new TranslationMove(0,1,true,false);
 
     allpieces.remove(2);
-    allpieces.add(new Piece("w","P",new Location(0,2), new ArrayList<>(), new HashMap<>(),1));
+    allpieces.add(new Piece("w","P",new Location(0,2), new ArrayList<>(),1));
     move.updateMoveLocations(p,allpieces);
     endLocation =  move.getEndLocations();
     assertEquals(2, endLocation.size(), "should have 2 end locations because unlimited and enemy");
@@ -84,8 +84,8 @@ public class TranslationMoveTest {
 
   private void makeAllpieces() {
     allpieces = new ArrayList<>();
-    allpieces.add(new Piece("b","K",new Location(0,7), new ArrayList<>(), new HashMap<>(), 1));
-    allpieces.add(new Piece("w","K",new Location(7,0), new ArrayList<>(), new HashMap<>(), 1));
+    allpieces.add(new Piece("b","K",new Location(0,7), new ArrayList<>(), 1));
+    allpieces.add(new Piece("w","K",new Location(7,0), new ArrayList<>(), 1));
   }
 
 }

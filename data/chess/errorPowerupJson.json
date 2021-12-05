@@ -4,7 +4,7 @@
   "board": "square",
   "boardSize": "8x8",
   "boardColors": ["#f3dab0", "#bb885b"],
-  "players": ["a", "b"],
+  "players": ["w", "b"],
   "time": 10,
   "timeIncrement": 5,
   "powerups": "data/chess/powerups/errorPowerup.json",

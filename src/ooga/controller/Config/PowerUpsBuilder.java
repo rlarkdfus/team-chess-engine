@@ -1,6 +1,7 @@
 package ooga.controller.Config;
 
 import static java.lang.Integer.parseInt;
+import static ooga.controller.Config.BoardBuilder.mappings;
 import static ooga.controller.Config.EndConditionBuilder.convertJSONArrayOfStrings;
 import static ooga.controller.Config.LocationWriter.COMMA;
 import static ooga.model.Moves.MoveUtility.BOARD_MAX;
@@ -77,7 +78,7 @@ public class PowerUpsBuilder {
       int row = parseInt(location[0].strip());
       int col = parseInt(location[1].strip());
       if (outOfBounds(row,col)){
-        throw new InvalidPowerupsConfigException(OUT_OF_BOUNDS_ERROR);
+        throw new InvalidPowerupsConfigException(mappings.getString(OUT_OF_BOUNDS_ERROR));
       }
       locations.add(new Location(row,col));
     }

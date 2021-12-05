@@ -34,7 +34,7 @@ class TimerEndConditionHandlerTest {
     Builder boardBuilder = new BoardBuilder(new File(testFile));
     players = boardBuilder.getInitialPlayers();
     endConRunner = boardBuilder.getEndConditionHandler();
-    board = new Board(players);
+    board = new GameBoard(players);
     board.setEndCondition(endConRunner);
   }
 
