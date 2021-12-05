@@ -11,9 +11,5 @@
       "-2,1,takes,limited"
     ]
   },
-  "attributes":{
-    "limited": true,
-    "canTransform": false
-  },
   "value": 3
 }

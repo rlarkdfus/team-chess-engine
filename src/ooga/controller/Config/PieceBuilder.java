@@ -24,20 +24,17 @@ public class PieceBuilder {
     JSONObject pieceJSON = JsonParser.loadFile(new File(pieceJsonPath));
 
     List<Move> moves;
-    Map<String, Boolean> attributes;
     int value;
     String errorKey = null;
     try {
       errorKey = mappings.getString("moves");
       moves = getMoves(pieceJSON);
-      errorKey = mappings.getString("attributes");
-      attributes = getAttributes(pieceJSON);
       errorKey = mappings.getString("value");
       value = pieceJSON.getInt(mappings.getString("value"));
     } catch (Throwable e) {
       throw new InvalidPieceConfigException(location, pieceJsonPath, errorKey);
     }
-    return new Piece(team, pieceName, location, moves, attributes, value);
+    return new Piece(team, pieceName, location, moves, value);
 
   }
 
@@ -93,19 +90,4 @@ public class PieceBuilder {
 //      throw new Exception();
 //    }
 //  }
-
-  /**
-   * @param pieceJSON - JSON object of the piece
-   * @return a map of all the attributes and their values
-   */
-  private static Map<String, Boolean> getAttributes(JSONObject pieceJSON) {
-    JSONObject attributes = pieceJSON.getJSONObject(mappings.getString("attributes"));
-    Map<String, Boolean> map = new HashMap<>();
-    for (String attribute : attributes.keySet()) {
-      map.put(attribute, attributes.getBoolean(attribute));
-    }
-
-    return map;
-  }
-
 }

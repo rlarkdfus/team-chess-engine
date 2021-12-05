@@ -57,7 +57,6 @@ public class PromoteMove extends Move {
     @Override
     protected boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
         return (piece.getLocation().getRow() == getdRow() || getdRow() == -1) &&
-            (piece.getLocation().getCol() == getdCol() || getdCol() == -1) &&
-            piece.canTransform();
+            (piece.getLocation().getCol() == getdCol() || getdCol() == -1);
     }
 }
