@@ -12,7 +12,7 @@ public class Main extends Application {
     public void start(Stage stage) {
 
         //new LoginController();
-        new EditorController();
-//        new GameController();
+//        new EditorController();
+        new GameController();
     }
 }
