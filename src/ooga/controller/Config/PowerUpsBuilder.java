@@ -3,6 +3,8 @@ package ooga.controller.Config;
 import static java.lang.Integer.parseInt;
 import static ooga.controller.Config.EndConditionBuilder.convertJSONArrayOfStrings;
 import static ooga.controller.Config.LocationWriter.COMMA;
+import static ooga.model.Moves.MoveUtility.BOARD_MAX;
+import static ooga.model.Moves.MoveUtility.BOARD_MIN;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -31,9 +33,10 @@ public class PowerUpsBuilder {
   public static final String OUT_OF_BOUNDS_ERROR = "outOfBoundsError";
 
   /**
-   *
-   * @param powerupsFilepath
-   * @return
+   *This return the List of powerup objects. This will be used by the model to determine when and what
+   *   powerup should be activated.
+   * @param powerupsFilepath - a path to a powerups json file
+   * @return - a list of powerups
    * @throws InvalidPowerupsConfigException
    */
   public static List<PowerupInterface> getPowerups(String powerupsFilepath) throws InvalidPowerupsConfigException {
@@ -46,7 +49,7 @@ public class PowerUpsBuilder {
   }
 
   /**
-   *
+   * iterates through the powerup types and callsl buildPowerup
    */
   private static List<PowerupInterface> buildPowerupsRunner(String powerupsFilepath)
       throws FileNotFoundException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvalidPowerupsConfigException {
@@ -61,6 +64,10 @@ public class PowerUpsBuilder {
     return powerupsList;
   }
 
+  /**
+   * converts the jsonarray of string locations to a list of locations. Also checks that the locations
+   * are inbounds
+   */
   private static List<Location> getPowerupLocations(JSONArray jsonArray)
       throws InvalidPowerupsConfigException {
     List<Location> locations = new ArrayList<>();
@@ -77,13 +84,19 @@ public class PowerUpsBuilder {
     return locations;
   }
 
+  /**
+   * helper method for checking that a location is in side the 8x8 bounds
+   */
   private static boolean outOfBounds(int row, int col) {
-    if (row >= 8 || row < 0 || col >= 8 || col < 0){
+    if (row >= BOARD_MAX || row < BOARD_MIN || col >= BOARD_MAX || col < BOARD_MIN){
       return true;
     }
     return false;
   }
 
+  /**
+   * builds the powerup objects using reflection
+   */
   private static PowerupInterface buildPowerUp(String powerupType, List<Location> powerupLocations)
       throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
     PowerupInterface powerup;

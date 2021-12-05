@@ -13,6 +13,10 @@ public class MoveUtility {
      * @param pieces all pieces
      * @return team in check or not
      */
+    public static final int BOARD_MAX = 8;
+    public static final int BOARD_MIN = 8;
+
+
     public static boolean inCheck(String team, List<PieceInterface> pieces) {
         PieceInterface king = findKing(team, pieces);
         List<PieceInterface> attackingPieces = getAttackingPieces(king.getTeam(), pieces);
@@ -66,7 +70,7 @@ public class MoveUtility {
      * @return whether a row and column are in bounds
      */
     protected static boolean inBounds(int newRow, int newCol) {
-        return (newRow < 8 && newCol < 8 && newRow >= 0 && newCol >= 0); //FIXME: hardcoded row col
+        return (newRow < BOARD_MAX && newCol < BOARD_MAX && newRow >= BOARD_MIN && newCol >= BOARD_MIN);
     }
 
     /**

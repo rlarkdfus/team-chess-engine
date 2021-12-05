@@ -134,6 +134,16 @@ public class BoardBuilder implements Builder {
   }
 
   /**
+   * Overridden interface getter method.
+   * @return a list of powerup Objects which are used by the model to determine when and what powerups
+   * should be activated
+   */
+  @Override
+  public List<PowerupInterface> getPowerupsHandler() {
+    return powerupsList;
+  }
+
+  /**
    * Iterates through the list<list> as given by the csvParser. Create pieces and adds them to the
    * pieceGrid
    */

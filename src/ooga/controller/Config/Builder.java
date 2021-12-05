@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.PlayerInterface;
+import ooga.model.Powerups.PowerupInterface;
 
 /**
  * @Authors Albert
@@ -59,4 +60,10 @@ public interface Builder {
    * */
   EndConditionRunner getEndConditionHandler();
 
+  /**
+   * Getter method that is used in the board constructor to help the board determine when and what
+   * powerups are to be used.
+   * @return a list of powerups objects
+   * */
+  List<PowerupInterface> getPowerupsHandler();
 }
