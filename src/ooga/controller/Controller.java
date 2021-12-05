@@ -8,7 +8,6 @@ import java.util.List;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.model.Engine;
-import ooga.view.LoginView;
 import ooga.controller.Config.*;
 import org.json.JSONObject;
 
@@ -96,9 +95,8 @@ public abstract class Controller implements ControllerInterface {
   @Override
   public void downloadGame(String filePath) {
     try {
-      JSONWriter jsonWriter = new JSONWriter();
       JSONObject jsonObject = JsonParser.loadFile(jsonFile);
-      jsonWriter.saveFile(jsonObject, filePath);
+      JSONWriter.saveFile(jsonObject, filePath);
       locationWriter = new LocationWriter();
       locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
     } catch (IOException ignored) {

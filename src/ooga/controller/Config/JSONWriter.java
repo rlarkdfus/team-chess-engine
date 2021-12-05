@@ -29,7 +29,7 @@ public class JSONWriter {
    * @throws IOException If there is an issue with the path to which the file is saved or creating a
    * FileWriter, then this exception will be thrown
    */
-  public void saveFile(JSONObject jsonObject, String filePath) throws IOException {
+  public static void saveFile(JSONObject jsonObject, String filePath) throws IOException {
     jsonObject.remove(CSV);
     jsonObject.put(CSV, String.format(CSV_STRING_FORMAT, filePath));
     FileWriter writer = new FileWriter(filePath + JSON_EXTENSION);

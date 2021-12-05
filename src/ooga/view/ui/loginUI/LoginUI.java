@@ -82,6 +82,6 @@ public class LoginUI extends GridPane implements UIInterface {
     private void handleRegisterAction() {
         Dialog dlg = viewUtility.makeDialog(List.of(viewUtility.makeLabel("username"), viewUtility.makeLabel("password")),
                 List.of(viewUtility.makeTextField("register_username_field"), viewUtility.makeTextField("register_password_field")));
-        System.out.println(viewUtility.getDialogResults(dlg));
+        loginController.handleSignUp(viewUtility.getDialogResults(dlg).get(0), viewUtility.getDialogResults(dlg).get(1));
     }
 }

@@ -29,9 +29,7 @@ public class EditorController extends Controller {
     @Override
     public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
         List<PieceViewBuilder> pieceViewList = new ArrayList<>();
-        for (PieceInterface piece : model.movePiece(start, end)) {
-            pieceViewList.add(new PieceViewBuilder(piece));
-        }
+        model.movePiece(start, end).forEach(piece -> pieceViewList.add(new PieceViewBuilder(piece)));
         editorView.updateDisplay(pieceViewList);
     }
 
