@@ -6,13 +6,15 @@ import ooga.controller.Config.BoardBuilder;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import ooga.model.Powerups.PowerupInterface;
 
 public class ModelTestHelper {
     public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
 
     public static Engine createBoard() {
         BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
-        return new GameBoard(boardBuilder.getInitialPlayers());
+        List<PowerupInterface> powerups = boardBuilder.getPowerupsHandler();
+        return new GameBoard(boardBuilder.getInitialPlayers(), boardBuilder.getEndConditionHandler(), powerups);
     }
 
     public static List<Location> getPieceLocations(List<PieceInterface> pieces) {

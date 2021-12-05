@@ -25,8 +25,7 @@ public class GameController extends Controller {
     public void start() {
         try {
             //buildGame() is the 3 lines below
-            model = new GameBoard(boardBuilder.getInitialPlayers());
-            model.setEndCondition(boardBuilder.getEndConditionHandler());
+            model = new GameBoard(boardBuilder.getInitialPlayers(), boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler());
             view = new GameView(this);
             view.initializeDisplay(boardBuilder.getInitialPieceViews());
 
