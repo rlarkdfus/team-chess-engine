@@ -87,8 +87,8 @@ public class GameBoard extends Board {
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn) % players.size());
-        return currentPlayer;
+        currentPlayer = players.get((turn+1) % players.size());
+        return players.get((turn) % players.size());
     }
 
 
