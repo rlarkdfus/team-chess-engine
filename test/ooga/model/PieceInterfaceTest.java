@@ -36,11 +36,6 @@ class PieceInterfaceTest {
     }
 
     @Test
-    void isLimited() {
-        Assertions.assertTrue(piece.isLimited());
-    }
-
-    @Test
     void getScore() {
         Assertions.assertEquals(piece.getScore(), 1);
     }
@@ -61,7 +56,7 @@ class PieceInterfaceTest {
 
     private void makeAllpieces() {
         allpieces = new ArrayList<>();
-        allpieces.add(new Piece("b","K",new Location(0,7), new ArrayList<>(), new HashMap<>(), 1));
-        allpieces.add(new Piece("w","K",new Location(7,0), new ArrayList<>(), new HashMap<>(), 1));
+        allpieces.add(new Piece("b","K",new Location(0,7), new ArrayList<>(), 1));
+        allpieces.add(new Piece("w","K",new Location(7,0), new ArrayList<>(), 1));
     }
 }

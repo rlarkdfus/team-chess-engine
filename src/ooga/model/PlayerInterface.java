@@ -17,6 +17,8 @@ public interface PlayerInterface {
 
   void incrementTimeUserInterface();
 
+  void incrementTime(Integer specifiedTime);
+
   List<PieceInterface> getPieces();
 
   void addPiece(PieceInterface piece);
@@ -27,19 +29,9 @@ public interface PlayerInterface {
 
   void tryMove(PieceInterface piece, Location end);
 
-//  PieceInterface getPiece(Location location);
-
-//  List<Location> getLegalMoves(Location location);
-//
-//  void setLegalMoves(PieceInterface piece, List<Location> legalMoves);
-
   void removePiece(PieceInterface piece);
 
     int getScore();
-    PieceInterface createQueen();
-    void addTime(Integer seconds);
 
-  PieceInterface createPiece(String pieceName) throws InvalidPieceException;
 
-  void incrementTime(Integer specifiedTime);
 }

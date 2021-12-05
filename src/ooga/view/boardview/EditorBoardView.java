@@ -1,9 +1,11 @@
 package ooga.view.boardview;
 
 import ooga.Location;
+import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Controller;
 import ooga.controller.Config.PieceViewBuilder;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class EditorBoardView extends BoardView {
@@ -16,7 +18,7 @@ public class EditorBoardView extends BoardView {
     }
 
     @Override
-    protected void clickBoard(Location clickLocation) {
+    protected void clickBoard(Location clickLocation) throws FileNotFoundException, InvalidPieceConfigException {
         Location startLocation = getSelectedLocation();
 
         if (startLocation == null) {

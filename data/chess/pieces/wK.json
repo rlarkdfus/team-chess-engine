@@ -17,9 +17,5 @@
       "0,-2,false,limited"
     ]
   },
-  "attributes": {
-    "limited": true,
-    "canTransform": false
-  },
   "value": 0
 }

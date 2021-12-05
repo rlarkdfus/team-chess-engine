@@ -3,6 +3,8 @@ package ooga.model;
 import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
+import ooga.model.Powerups.PowerupInterface;
+import ooga.model.Powerups.TimerPowerup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,21 +21,19 @@ public class GameBoard extends Board {
     private EndConditionRunner endCondition;
     private int turnCount;
 
-    private List<Location> promotionSquares;
-    private List<Location> timerSquares;
-    private List<Location> skipSquares;
 
-    public GameBoard(List<PlayerInterface> players) {
+
+    public GameBoard(List<PlayerInterface> players, EndConditionRunner endCondition, List<PowerupInterface> powerups) {
         super(players);
-        endCondition = new EndConditionRunner();
+        this.endCondition = endCondition;
+        this.powerupInterfaceList = powerups;
         turnCount = 0;
         for (PieceInterface piece : allPieces) {
             piece.updateMoves(allPieces);
         }
         updateLegalMoves();
-        promotionSquares = new ArrayList<>();
-        timerSquares = new ArrayList<>();
-        skipSquares = new ArrayList<>();
+
+
     }
 
     @Override
@@ -43,17 +43,9 @@ public class GameBoard extends Board {
 
     @Override
     protected void updateGameRules() {
+
         turnCount++;
         toggleTimers();
-    }
-
-    /**
-     * this method sets the end conditions of the board
-     *
-     * @param endCondition
-     */
-    public void setEndCondition(EndConditionRunner endCondition) {
-        this.endCondition = endCondition;
     }
 
     @Override
@@ -95,26 +87,10 @@ public class GameBoard extends Board {
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
+        currentPlayer = players.get((turn+1) % players.size());
         return players.get((turn) % players.size());
     }
 
-//    private void checkTime(PieceInterface pieceInterface, Location end) {
-//        for (Location timerLocation : timerSquares) {
-//            if (end.equals(timerLocation)) {
-//                findPlayerTurn(turnCount).incrementTime(100000);
-//                timerSquares.remove(timerLocation);
-//            }
-//        }
-//    }
-//
-//    private void checkSkip(PieceInterface pieceInterface, Location end) {
-//        for (Location skipLocation : skipSquares) {
-//            if (end.equals(skipLocation)) {
-//                turnCount++;
-//                skipSquares.remove(skipLocation);
-//            }
-//        }
-//    }
 
     @Override
     public GameState checkGameState() {

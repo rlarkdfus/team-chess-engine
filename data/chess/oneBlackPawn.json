@@ -7,6 +7,7 @@
   "rules": "data/chess/rules/oneBlackPawn.json",
   "style": "companion",
   "time": 10,
+  "powerups": "data/chess/powerups/noPowerups.json",
   "timeIncrement": 5,
   "csv": "data/chess/locations/oneBlackPawn.csv"
 }

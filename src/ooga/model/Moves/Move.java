@@ -42,7 +42,7 @@ public abstract class Move {
 
     /**
      * This method updates all the possible move locations of a piece
-     * @param king piece location
+     * @param piece piece location
      * @param pieces all pieces
      */
     public void updateMoveLocations(PieceInterface piece, List<PieceInterface> pieces) {

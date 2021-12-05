@@ -1,12 +1,10 @@
 package ooga.model;
 
-import ooga.Location;
-import ooga.model.EndConditionHandler.EndConditionRunner;
-import ooga.model.Moves.Move;
-import ooga.model.Moves.NoRestrictionMove;
-
 import java.util.ArrayList;
 import java.util.List;
+import ooga.Location;
+import ooga.model.Moves.Move;
+import ooga.model.Moves.NoRestrictionMove;
 
 public class EditorBoard extends Board {
 
@@ -34,10 +32,6 @@ public class EditorBoard extends Board {
     @Override
     public GameState checkGameState() {
         return GameState.RUNNING;
-    }
-
-    @Override
-    public void setEndCondition(EndConditionRunner endCondition) {
     }
 
     @Override

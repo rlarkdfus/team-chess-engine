@@ -7,6 +7,7 @@
   "timeIncrement": 5,
   "rules": "data/chess/rules/default.json",
   "style": "companion",
+  "powerups": "data/chess/powerups/noPowerups.json",
   "boardColors": ["#f3dab0", "#bb885b"],
   "endcon" : "myendcon.json",
   "csv": "data/chess/locations/errorCSV.csv"
