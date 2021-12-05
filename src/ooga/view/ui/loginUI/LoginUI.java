@@ -1,7 +1,7 @@
 package ooga.view.ui.loginUI;
 
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
@@ -9,18 +9,31 @@ import javafx.scene.input.KeyEvent;
 import ooga.controller.LoginController;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
+import java.util.List;
 
 public class LoginUI extends GridPane implements UIInterface {
 
-    LoginController loginController;
-    ViewUtility viewUtility;
-    Label incorrectPassword;
+    private LoginController loginController;
+    private ViewUtility viewUtility;
+    private Label incorrectPassword;
+    private TextField whiteUsernameField;
+    private TextField whitePasswordField;
+    private TextField blackUsernameField;
+    private TextField blackPasswordField;
 
     public LoginUI(LoginController loginController) {
         this.loginController = loginController;
         this.viewUtility = new ViewUtility();
         this.getStyleClass().add("LoginUI");
+        initializeTextFields();
         createUI();
+    }
+
+    private void initializeTextFields() {
+        blackUsernameField = viewUtility.makeTextField("black_username_field",  e -> handleKeyPressed(e));
+        blackPasswordField = viewUtility.makePasswordField("black_password_field", e -> handleKeyPressed(e));
+        whiteUsernameField = viewUtility.makeTextField("white_username_field",  e -> handleKeyPressed(e));
+        whitePasswordField = viewUtility.makePasswordField("white_password_field", e -> handleKeyPressed(e));
     }
 
     @Override
@@ -28,50 +41,20 @@ public class LoginUI extends GridPane implements UIInterface {
         this.add(viewUtility.makeLabel("welcome"), 0, 0, 1, 1);
         this.add(viewUtility.makeLabel("blackTeam"), 0, 1, 1, 1);
         this.add(viewUtility.makeLabel("username"), 0, 2, 1, 1);
-        this.add(viewUtility.makeTextField("black_username_field",  e -> {
-            try {
-                handleKeyPressed(e);
-            } catch (Exception ex) {
-                ex.getMessage();
-            }
-        }), 0, 3, 3, 1);
+        this.add(blackUsernameField, 0, 3, 3, 1);
         this.add(viewUtility.makeLabel("password"), 0, 4, 3, 1);
-        this.add(viewUtility.makePasswordField("black_password_field", e -> {
-            try {
-                handleKeyPressed(e);
-            } catch (Exception ex) {
-                ex.getMessage();
-            }
-        }), 0, 5, 3, 1);
+        this.add(blackPasswordField, 0, 5, 3, 1);
         this.add(viewUtility.makeLabel("whiteTeam"), 0, 6, 1, 1);
         this.add(viewUtility.makeLabel("username"), 0, 7, 1, 1);
-        this.add(viewUtility.makeTextField("white_username_field",  e -> {
-            try {
-                handleKeyPressed(e);
-            } catch (Exception ex) {
-                ex.getMessage();
-            }
-        }), 0, 8, 3, 1);
+        this.add(whiteUsernameField, 0, 8, 3, 1);
         this.add(viewUtility.makeLabel("password"), 0, 9, 1, 1);
-        this.add(viewUtility.makePasswordField("white_password_field", e -> {
-            try {
-                handleKeyPressed(e);
-            } catch (Exception ex) {
-                ex.getMessage();
-            }
-        }), 0, 10, 3, 1);
-        this.add(viewUtility.makeButton("login", e -> {
-            try {
-                handleLoginAction();
-            } catch (Exception ex) {
-                ex.getMessage();
-            }
-        }), 0, 11, 1, 1);
-
-        this.add(viewUtility.makeButton("guest", e -> handleGuestKeyPressed()), 1, 11, 1, 1);
+        this.add(whitePasswordField, 0, 10, 3, 1);
+        this.add(viewUtility.makeButton("login", e -> handleLoginAction()), 0, 11, 1, 1);
+        this.add(viewUtility.makeButton("register", e -> handleRegisterAction()), 1, 11, 1, 1);
+        this.add(viewUtility.makeButton("guest", e -> handleGuestKeyPressed()), 2, 11, 1, 1);
     }
 
-    private void handleKeyPressed(KeyEvent e) throws Exception {
+    private void handleKeyPressed(KeyEvent e) {
         if (this.getChildren().contains(incorrectPassword)) {
             this.getChildren().remove(incorrectPassword);
         }
@@ -85,15 +68,20 @@ public class LoginUI extends GridPane implements UIInterface {
     }
 
     private void handleLoginAction() {
-        String whiteUsername = ((TextField) lookup("#white_username_field")).getText();
-        String whitePassword = ((PasswordField) lookup("#white_password_field")).getText();
-        String blackUsername = ((TextField) lookup("#black_username_field")).getText();
-        String blackPassword = ((PasswordField) lookup("#black_password_field")).getText();
+        String whiteUsername = whiteUsernameField.getText();
+        String whitePassword = whitePasswordField.getText();
+        String blackUsername = blackUsernameField.getText();
+        String blackPassword = blackPasswordField.getText();
         boolean login = loginController.handleLoginAttempt(blackUsername, blackPassword, whiteUsername, whitePassword);
-
         if (!login) {
             incorrectPassword = viewUtility.makeLabel("incorrectPassword");
             this.add(incorrectPassword, 1, 4, 1, 1);
         }
+    }
+
+    private void handleRegisterAction() {
+        Dialog dlg = viewUtility.makeDialog(List.of(viewUtility.makeLabel("username"), viewUtility.makeLabel("password")),
+                List.of(viewUtility.makeTextField("register_username_field"), viewUtility.makeTextField("register_password_field")));
+        System.out.println(viewUtility.getDialogResults(dlg));
     }
 }

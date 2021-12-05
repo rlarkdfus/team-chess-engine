@@ -12,7 +12,6 @@ public class TimeConfigurationUI extends GridPane implements UIInterface {
     private ViewUtility viewUtility;
 
     public TimeConfigurationUI(Controller controller) {
-        System.out.println("making time config ui");
         this.controller = controller;
         viewUtility = new ViewUtility();
         this.getStyleClass().add("SettingsUI");

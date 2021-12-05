@@ -16,6 +16,10 @@ public class EditorController extends Controller {
     private View editorView;
 
     @Override
+    protected void configureInitialGameSettings() {
+    }
+
+    @Override
     protected void start() {
         model = new EditorBoard(boardBuilder.getInitialPlayers());
         editorView = new EditorView(this);
