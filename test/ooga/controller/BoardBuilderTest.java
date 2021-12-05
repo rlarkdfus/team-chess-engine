@@ -163,7 +163,7 @@ class BoardBuilderTest {
         .getDeclaredMethod("getMoves", JSONObject.class);
     getMoves.setAccessible(true);
 
-    actual = (List<Move>) getMoves.invoke(PieceBuilder.class, getPiece());
+    actual = (List<Move>) getMoves.invoke(PieceBuilder.class, getPiece().getJSONObject("moves"));
     List<Class> moveClassTypes = new ArrayList<>();
 
     for (Move m : actual) {
