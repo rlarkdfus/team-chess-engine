@@ -23,9 +23,10 @@ public class GameBoard extends Board {
 
 
 
-    public GameBoard(List<PlayerInterface> players) {
+    public GameBoard(List<PlayerInterface> players, EndConditionRunner endCondition, List<PowerupInterface> powerups) {
         super(players);
-        endCondition = new EndConditionRunner();
+        this.endCondition = endCondition;
+        this.powerupInterfaceList = powerups;
         turnCount = 0;
         for (PieceInterface piece : allPieces) {
             piece.updateMoves(allPieces);
@@ -45,15 +46,6 @@ public class GameBoard extends Board {
 
         turnCount++;
         toggleTimers();
-    }
-
-    /**
-     * this method sets the end conditions of the board
-     *
-     * @param endCondition
-     */
-    public void setEndCondition(EndConditionRunner endCondition) {
-        this.endCondition = endCondition;
     }
 
     @Override

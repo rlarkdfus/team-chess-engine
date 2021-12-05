@@ -8,5 +8,6 @@
   "style": "companion",
   "time": 10,
   "timeIncrement": 5,
+  "powerups": "data/chess/powerups/noPowerups.json",
   "csv": "data/chess/locations/chess.csv"
 }

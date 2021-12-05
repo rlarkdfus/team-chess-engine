@@ -6,6 +6,7 @@
   "timeIncrement": 5,
   "boardColors": ["#f3dab0", "#bb885b"],
   "players": ["w", "b"],
+  "powerups": "data/chess/powerups/noPowerups.json",
   "rules": "data/chess/rules/default.json",
   "style": "companion",
   "csv": "data/chess/locations/chess.csv"

@@ -10,13 +10,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.CsvException;
 import ooga.controller.Config.InvalidEndGameConfigException;
 import ooga.controller.Config.InvalidGameConfigException;
 import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.InvalidPowerupsConfigException;
 import ooga.controller.Config.JsonParser;
 import ooga.controller.Config.PieceBuilder;
 import ooga.controller.Config.PieceViewBuilder;
@@ -33,6 +33,8 @@ import ooga.model.Moves.TakeOnlyMove;
 import ooga.model.Moves.TranslationMove;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
+import ooga.model.Powerups.PowerupInterface;
+import ooga.model.Powerups.TimerPowerup;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +43,6 @@ import org.junit.jupiter.api.Test;
 class BoardBuilderTest {
 
   Builder boardBuilder;
-  PieceBuilder pieceBuilder;
   JsonParser jp;
   String team;
 
@@ -54,7 +55,6 @@ class BoardBuilderTest {
       System.out.println(e.getClass());
     }
 
-//    getPieceBuilder();
     team = "b";
     jp = new JsonParser();
   }
@@ -77,12 +77,17 @@ class BoardBuilderTest {
   }
 
   @Test
-  void testInvalidEndCondition() {
+  void testPowerUps()
+      throws InvalidPowerupsConfigException, FileNotFoundException, InvalidEndGameConfigException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, CsvException {
     //EndGameBuilder Test
-    String testFile = "data/chess/errorInvalidEndConJson.json";
-    assertThrowsExactly(InvalidEndGameConfigException.class, () -> {
-      boardBuilder.build(new File(testFile));
-    });
+    boardBuilder.build(new File("data/chess/testTimerPowerup.json"));
+    List<PowerupInterface> powerups = boardBuilder.getPowerupsHandler();
+    List<Class> powerupTypes = new ArrayList<>();
+    for (PowerupInterface pu : powerups) {
+      powerupTypes.add(pu.getClass());
+    }
+    assertEquals(true, powerupTypes.contains(TimerPowerup.class));
+
   }
 
   @Test
@@ -148,20 +153,6 @@ class BoardBuilderTest {
   }
 
   @Test
-  void testGetAttributes()
-      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, FileNotFoundException {
-    //PieceBuilder Test
-    Method getAttributes = PieceBuilder.class.getDeclaredMethod("getAttributes", JSONObject.class);
-    getAttributes.setAccessible(true);
-    Map<String, Boolean> map = (Map<String, Boolean>) getAttributes.invoke(PieceBuilder.class,
-        getPiece());
-
-    assertEquals(true, map.get("limited"), "limited should be true");
-    assertEquals(true, map.get("canTransform"), "canTransform should be true");
-
-  }
-
-  @Test
   void testGetMoves()
       throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, FileNotFoundException {
     //PieceBuilder Test
@@ -204,6 +195,12 @@ class BoardBuilderTest {
     assertThrowsExactly(PlayerNotFoundException.class, () -> {
       boardBuilder.build(new File("data/chess/errorPlayerJson.json"));
     });
+
+    assertThrowsExactly(InvalidPowerupsConfigException.class, () -> {
+      boardBuilder.build(new File("data/chess/errorPowerupJson.json"));
+    });
+
+
   }
 
   private JSONObject getPiece()
@@ -217,14 +214,4 @@ class BoardBuilderTest {
     String pieceJsonPath = "data/chess/pieces/" + team + pieceType + ".json";
     return jp.loadFile(new File(pieceJsonPath));
   }
-
-//  private void getPieceBuilder() {
-//    try {
-//      Field f = boardBuilder.getClass().getDeclaredField("pieceBuilder");
-//      f.setAccessible(true);
-//      pieceBuilder = (PieceBuilder) f.get(boardBuilder);
-//    } catch (NoSuchFieldException | IllegalAccessException e) {
-//      e.printStackTrace();
-//    }
-//  }
 }
