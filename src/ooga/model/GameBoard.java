@@ -4,19 +4,9 @@ import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
 import ooga.model.Powerups.PowerupInterface;
-import ooga.model.Powerups.TimerPowerup;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameBoard extends Board {
-    private static final int ROWS = 8;
-    private static final int COLS = 8;
-    private static final int LAST_ROW = ROWS - 1;
-    private static final int FIRST_ROW = 0;
-    private static final String QUEEN = "Q";
-    public static final String KING = "K";
-    private static final String PAWN = "P";
 
     private EndConditionRunner endCondition;
     private int turnCount;

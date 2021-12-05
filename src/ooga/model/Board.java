@@ -13,6 +13,12 @@ import ooga.model.Powerups.PowerupInterface;
 
 public abstract class Board implements Engine {
 
+    public static final String QUEEN = "Q";
+    public static final String KING = "K";
+    private static final int FIRST_ROW = 0;
+    private static final int ROWS = 8;
+    private static final int LAST_ROW = ROWS - 1;
+    private static final int COLS = 8;
     protected List<PlayerInterface> players;
     protected List<PieceInterface> allPieces;
     protected List<PowerupInterface> powerupInterfaceList;
