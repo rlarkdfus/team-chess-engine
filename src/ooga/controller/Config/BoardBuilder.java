@@ -13,6 +13,7 @@ import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Piece;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
+import ooga.model.Powerups.PowerupInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -35,6 +36,7 @@ public class BoardBuilder implements Builder {
   public static final String JSON_DELIMITER = "jsonDelimiter";
   public static final String RULE_TYPE = "ruleType";
   public static final String PIECE_TYPE = "pieceType";
+  public static final String POWER_UPS = "powerups";
   public static final String RULES = "rules";
   public static final String TYPE = "type";
   public static final String BOARD = "board"; //unused
@@ -58,6 +60,7 @@ public class BoardBuilder implements Builder {
   private List<PlayerInterface> playerList;
   private List<PieceViewBuilder> pieceList;
   private EndConditionRunner endCondition;
+  private List<PowerupInterface> powerupsList;
 
   /**
    * Constructor for the BoardBuilder Object.
@@ -86,10 +89,11 @@ public class BoardBuilder implements Builder {
    * @throws InvalidPieceConfigException - if any piece configuration jsons are invalid
    * @throws InvalidGameConfigException - if the game json is invalid
    * @throws InvalidEndGameConfigException - if the rule json is invalid
+   * @throws InvalidPowerupsConfigException - if the powerups json is invalid
    */
   @Override
   public void build(File file)
-      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException {
+      throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, InvalidPowerupsConfigException {
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
     JSONObject gameJson = JsonParser.loadFile(file);
@@ -97,6 +101,7 @@ public class BoardBuilder implements Builder {
 
     iterateCSVData();
     endCondition = EndConditionBuilder.getEndConditions(gameJson.getString(RULES),playerList);
+    powerupsList = PowerUpsBuilder.getPowerups(gameJson.getString(POWER_UPS));
   }
 
   /**

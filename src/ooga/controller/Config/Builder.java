@@ -32,9 +32,10 @@ public interface Builder {
    * @throws InvalidPieceConfigException - if any piece configuration jsons are invalid
    * @throws InvalidGameConfigException - if the game json is invalid
    * @throws InvalidEndGameConfigException - if the rule json is invalid
+   * @throws InvalidPowerupsConfigException - if the powerups json is invalid
    */
   void build(File file)
-      throws FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, CsvException;
+      throws FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, CsvException, InvalidPowerupsConfigException;
 
   /**
    * Getter method that is used in view.initializeDisplay() to build pieceView objects that are displayed

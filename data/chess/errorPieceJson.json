@@ -7,6 +7,7 @@
   "players": ["w", "b"],
   "time": 10,
   "timeIncrement": 5,
+  "powerups": "data/chess/powerups/noPowerups.json",
   "rules": "data/chess/rules/default.json",
   "style": "companion"
 }
