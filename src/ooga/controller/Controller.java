@@ -22,10 +22,13 @@ public abstract class Controller implements ControllerInterface {
   private File jsonFile;
 
   public Controller() {
+    configureInitialGameSettings();
     jsonFile = DEFAULT_CHESS_CONFIGURATION;
     boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
     start();
   }
+
+  protected abstract void configureInitialGameSettings();
 
   protected abstract void start();
 
@@ -55,8 +58,6 @@ public abstract class Controller implements ControllerInterface {
   public boolean canMovePiece(Location location) {
     return model.canMovePiece(location);
   }
-
-
 
   /**
    * sets up a new game with the initial configuration file

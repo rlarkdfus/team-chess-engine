@@ -1,7 +1,7 @@
 package ooga.view.ui.loginUI;
 
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
@@ -9,10 +9,7 @@ import javafx.scene.input.KeyEvent;
 import ooga.controller.LoginController;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
-
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 public class LoginUI extends GridPane implements UIInterface {
 
@@ -83,13 +80,8 @@ public class LoginUI extends GridPane implements UIInterface {
     }
 
     private void handleRegisterAction() {
-        Optional<String[]> strArr = viewUtility.makeDialog(List.of(viewUtility.makeLabel("username"), viewUtility.makeLabel("password")), List.of(new TextField(), new TextField())).showAndWait();
-        try {
-            for (String s : strArr.get()) {
-                System.out.println(s);
-            }
-        }
-        catch (NoSuchElementException ignored) {
-        }
+        Dialog dlg = viewUtility.makeDialog(List.of(viewUtility.makeLabel("username"), viewUtility.makeLabel("password")),
+                List.of(viewUtility.makeTextField("register_username_field"), viewUtility.makeTextField("register_password_field")));
+        System.out.println(viewUtility.getDialogResults(dlg));
     }
 }

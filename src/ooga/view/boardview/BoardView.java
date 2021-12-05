@@ -19,6 +19,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     private final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
     private final String DEFAULT_PIECE_STYLE = "companion";
 
+    private String style;
     private List<BoardSquare> background;
     private List<PieceView> pieceList;
     private Location selectedLocation;
@@ -27,6 +28,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     private int col;
 
     public BoardView(List<PieceViewBuilder> pieceViews, int row, int col) {
+        style = DEFAULT_PIECE_STYLE;
         selectedLocation = null;
         pieceList = new ArrayList<>();
         this.row = row;
@@ -53,7 +55,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     public void updateBoardView(List<PieceViewBuilder> pieceViews) {
         clearBoard();
         for (PieceViewBuilder piece : pieceViews) {
-            PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), DEFAULT_PIECE_STYLE, piece.getLocation());
+            PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
             pieceList.add(newPiece);
             this.getChildren().add(newPiece);
         }
@@ -71,6 +73,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
     @Override
     public void changePieceStyle(String style) {
+        this.style = style;
         for (PieceView pieceView : pieceList) {
             if (pieceView != null) {
                 pieceView.changeStyle(style);

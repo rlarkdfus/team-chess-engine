@@ -5,8 +5,8 @@ import ooga.model.PlayerInterface;
 import java.util.List;
 
 public class TimeController {
-    private int initialTime;
-    private int increment;
+    private static int initialTime;
+    private static int increment;
 
     public TimeController(int initialTimeMinutes, int incrementSeconds) {
         setInitialTime(initialTimeMinutes);

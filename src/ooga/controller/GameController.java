@@ -17,9 +17,18 @@ public class GameController extends Controller {
     public static final int DEFAULT_INITIAL_TIME = 5;
     public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
+    private int initialTime;
+    private int increment;
+
     private GameOverScreen gameOverScreen;
     private View view;
     private TimeController timeController;
+
+    @Override
+    protected void configureInitialGameSettings() {
+        initialTime = DEFAULT_INITIAL_TIME;
+        increment = DEFAULT_INITIAL_INCREMENT;
+    }
 
     @Override
     public void start() {
@@ -28,7 +37,8 @@ public class GameController extends Controller {
             model = new GameBoard(boardBuilder.getInitialPlayers(), boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler());
             view = new GameView(this);
             view.initializeDisplay(boardBuilder.getInitialPieceViews());
-            timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+            timeController = new TimeController(initialTime, increment);
+            timeController.configTimers(model.getPlayers());
             startTimersForNewGame();
         } catch (Exception E) {
             E.printStackTrace();
@@ -43,13 +53,13 @@ public class GameController extends Controller {
         }
         view.updateDisplay(pieceViewList);
         GameState gameState = model.checkGameState();
-        if(gameState != GameState.RUNNING) {
+        if (gameState != GameState.RUNNING) {
             gameOverScreen = new GameOverScreen(this, gameState.toString());
         }
     }
 
-
     //TODO: TIMER
+
     /**
      * reset timers for a new game and start the first player's timer
      */
@@ -65,7 +75,8 @@ public class GameController extends Controller {
      */
     @Override
     public void setInitialTime(int minutes) {
-        timeController.setInitialTime(minutes);
+        //timeController.setInitialTime(minutes);
+        initialTime = minutes;
     }
 
     /**
@@ -75,6 +86,7 @@ public class GameController extends Controller {
      */
     @Override
     public void setIncrement(int seconds) {
-        timeController.setIncrement(seconds);
+        //timeController.setIncrement(seconds);
+        increment = seconds;
     }
 }

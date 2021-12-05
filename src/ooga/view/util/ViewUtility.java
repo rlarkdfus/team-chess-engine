@@ -60,6 +60,12 @@ public class ViewUtility {
         return (Button) setID(property, result);
     }
 
+    public TextField makeTextField(String property) {
+        TextField result = new TextField();
+        result.getStyleClass().add("text-field");
+        return (TextField) setID(property, result);
+    }
+
     /**
      * makes a TextField node
      *
@@ -67,10 +73,9 @@ public class ViewUtility {
      * @return the TextField created
      */
     public TextField makeTextField(String property, EventHandler<KeyEvent> response) {
-        TextField result = new TextField();
-        result.getStyleClass().add("text-field");
+        TextField result = makeTextField(property);
         result.setOnKeyPressed(response);
-        return (TextField) setID(property, result);
+        return result;
     }
 
     /**
@@ -247,16 +252,16 @@ public class ViewUtility {
         return grid;
     }
 
-    private String[] getTextFieldStrings(List<TextField> textFields) {
-        String[] strings = new String[textFields.size()];
-        for (int i = 0; i < strings.length; i++) {
-            strings[i] = textFields.get(i).getText();
+    private List<String> getTextFieldStrings(List<TextField> textFields) {
+        List<String> strings = new ArrayList<>();
+        for (TextField textField : textFields) {
+            strings.add(textField.getText());
         }
         return strings;
     }
 
-    public String[] getDialogResults(Dialog dlg) {
-        Optional<String[]> strArr = dlg.showAndWait();
+    public List<String> getDialogResults(Dialog dlg) {
+        Optional<List<String>> strArr = dlg.showAndWait();
         return strArr.get();
     }
 
@@ -266,8 +271,6 @@ public class ViewUtility {
         BooleanBinding isInvalid = Bindings.createBooleanBinding(() -> !acceptableValues.contains(inputField.getText().toLowerCase()), inputField.textProperty());
         okButton.disableProperty().bind(isInvalid);
     }
-
-
 
     /**
      * Displays a TextInputDialog and gets the value inputted by a user
