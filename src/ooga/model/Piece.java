@@ -25,7 +25,6 @@ public class Piece implements PieceInterface {
    * @param name piece name
    * @param location location of piece
    * @param moves list of all moves available to piece
-   * @param attributes attributes map
    * @param score value of a piece
    */
   public Piece(String team, String name, Location location, List<Move> moves, int score) {
