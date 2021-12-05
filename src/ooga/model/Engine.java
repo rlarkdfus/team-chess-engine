@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.util.List;
 import ooga.Location;
 import ooga.controller.Config.InvalidPieceConfigException;
-import ooga.model.EndConditionHandler.EndConditionRunner;
 
 public interface Engine {
     /**
@@ -17,7 +16,7 @@ public interface Engine {
      * @param start is piece initial location
      * @param end is piece new location
      */
-    List<PieceInterface> movePiece(Location start, Location end);
+    List<PieceInterface> movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException;
 
     /**
      * Determine whether the win condition of the game is satisfied, and declare a winner.
@@ -27,8 +26,6 @@ public interface Engine {
     List<Location> getLegalMoves(Location location);
 
     List<PlayerInterface> getPlayers();
-
-    void setEndCondition(EndConditionRunner endCondition);
 
   boolean canMovePiece(Location location);
 }

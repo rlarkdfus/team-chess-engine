@@ -125,46 +125,8 @@ public class Player implements PlayerInterface {
         return score;
     }
 
-    /**
-     * get a queen piece
-     * @return queen
-     */
-    @Override
-    public PieceInterface createQueen() {
-        PieceInterface queen = null;
-        for(PieceInterface pieceInterface: initialPieces){
-            if(pieceInterface.getName().equals("Q")){
-                queen = pieceInterface;
-            }
-        }
-        return queen;
-    }
 
-    /**
-     * create another piece
-     * @param pieceName piece to create
-     * @return new piece
-     * @throws InvalidPieceException if pieceName is invalid
-     */
-    //FIXME:
-    //Needs to be in initial Piece List
-    public PieceInterface createPiece(String pieceName) throws InvalidPieceException {
-        for(PieceInterface pieceInterace: initialPieces){
-            if(pieceInterace.getName().equals(pieceName)){
-                return pieceInterace;
-            }
-        }
-        throw new InvalidPieceException(pieceName);
-    }
 
-    /**
-     * add time to a player
-     * @param seconds amount of time to add
-     */
-    @Override
-    public void addTime(Integer seconds) {
-
-    }
 
     /**
      * returns the player team
