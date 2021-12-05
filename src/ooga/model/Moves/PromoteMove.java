@@ -6,6 +6,7 @@ import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Config.PieceBuilder;
 import ooga.model.PieceInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PromoteMove extends Move {
@@ -46,6 +47,10 @@ public class PromoteMove extends Move {
             e.printStackTrace();
         }
         piece.transform(newPiece);
+
+        for (PieceInterface p : pieces) {
+            p.updateMoves(new ArrayList<>(pieces));
+        }
     }
 
     /**
