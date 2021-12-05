@@ -10,7 +10,7 @@ import ooga.Location;
  */
 public class BoardSquare extends StackPane {
 
-    private static final Color HIGHLIGHT_FILTER_COLOR = Color.web("#b8e1ff");
+    private static final Color LEGAL_MOVES_FILTER_COLOR = Color.web("#b8e1ff");
     private static final Color SELECT_FILTER_COLOR = Color.web("#13315C");
     private static final Color ANNOTATE_FILTER_COLOR = Color.web("EA3546");
     private static final Color CHECK_FILTER_COLOR = Color.RED;
@@ -19,7 +19,7 @@ public class BoardSquare extends StackPane {
 
     private Rectangle square;
     private Rectangle selectFilter;
-    private Rectangle highlightFilter;
+    private Rectangle legalMovesFilter;
     private Rectangle annotateFilter;
     private Rectangle checkFilter;
 
@@ -38,7 +38,7 @@ public class BoardSquare extends StackPane {
         square.setFill(originalColor);
         this.getChildren().add(square);
 
-        highlightFilter = createHighlight(HIGHLIGHT_FILTER_COLOR, DEFAULT_FILTER_OPACITY);
+        legalMovesFilter = createHighlight(LEGAL_MOVES_FILTER_COLOR, DEFAULT_FILTER_OPACITY);
         selectFilter = createHighlight(SELECT_FILTER_COLOR, DEFAULT_FILTER_OPACITY);
         annotateFilter = createHighlight(ANNOTATE_FILTER_COLOR, DEFAULT_FILTER_OPACITY);
         checkFilter = createHighlight(CHECK_FILTER_COLOR, CHECK_FILTER_OPACITY);
@@ -48,7 +48,7 @@ public class BoardSquare extends StackPane {
 
     private void setIDs(Location location) {
         square.setId(String.format("square_location(%d,%d)", location.getRow(), location.getCol()));
-        highlightFilter.setId(String.format("highlight_location(%d,%d)", location.getRow(), location.getCol()));
+        legalMovesFilter.setId(String.format("legal_location(%d,%d)", location.getRow(), location.getCol()));
         selectFilter.setId(String.format("select_location(%d,%d)", location.getRow(), location.getCol()));
         annotateFilter.setId(String.format("annotate_location(%d,%d)", location.getRow(), location.getCol()));
         checkFilter.setId(String.format("check_location(%d,%d)", location.getRow(), location.getCol()));
@@ -76,7 +76,7 @@ public class BoardSquare extends StackPane {
      * Add legal move highlight
      */
     public void highlight() {
-        this.getChildren().add(highlightFilter);
+        this.getChildren().add(legalMovesFilter);
     }
 
     /**

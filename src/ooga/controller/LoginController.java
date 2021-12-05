@@ -14,11 +14,15 @@ public class LoginController {
         loginView.initializeDisplay();
     }
 
-    public boolean handleLoginAttempt(String username1, String password1, String username2, String password2) throws Exception {
-        if (isValidLogin(username1, password1) && isValidLogin(username2, password2)) {
-            new GameController();
-            hideLoginView();
-            return true;
+    public boolean handleLoginAttempt(String username1, String password1, String username2, String password2) {
+        try {
+            if (isValidLogin(username1, password1) && isValidLogin(username2, password2)) {
+                new GameController();
+                hideLoginView();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }
