@@ -99,7 +99,8 @@ public abstract class Controller implements ControllerInterface {
   @Override
   public void movePiece(Location start, Location end) {
     List<PieceViewBuilder> pieceViewList = new ArrayList<>();
-    for (PieceInterface piece : model.movePiece(start, end)) {
+    model.movePiece(start, end);
+    for (PieceInterface piece : model.getPieces()) {
       pieceViewList.add(new PieceViewBuilder(piece));
     }
     view.updateDisplay(pieceViewList);
@@ -136,30 +137,24 @@ public abstract class Controller implements ControllerInterface {
   public abstract void setIncrement(int seconds);
 
   public boolean selectMenuPiece(String team, String name) {
-    if (selectedTeam == null) {
+    boolean selectNewPiece = !hasMenuPiece() || !selectedTeam.equals(team) || !selectedName.equals(name);
+    if (selectNewPiece) {
       selectedTeam = team;
       selectedName = name;
-      return true;
-    }
-    if (selectedTeam.equals(team) && selectedName.equals(name)) {
+    } else {
       selectedTeam = null;
       selectedName = null;
-      return false;
     }
-    return false;
+    return selectNewPiece;
   }
 
   public boolean hasMenuPiece() {
-    return selectedTeam != null || selectedName != null;
+    return selectedTeam != null && selectedName != null;
   }
 
   public void addPiece(Location location) {
     model.addPiece(selectedTeam, selectedName, location);
-    List<PieceInterface> pieces = new ArrayList<>();
-    for (PlayerInterface player : model.getPlayers()) {
-      pieces.addAll(player.getPieces());
-    }
-    view.updateDisplay(createPieceViewList(pieces));
+    view.updateDisplay(createPieceViewList(model.getPieces()));
   }
 
   private List<PieceViewBuilder> createPieceViewList(List<PieceInterface> pieces) {
