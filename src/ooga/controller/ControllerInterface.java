@@ -1,10 +1,8 @@
 package ooga.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 import ooga.Location;
-import ooga.controller.Config.InvalidPieceConfigException;
 
 public interface ControllerInterface {
 
@@ -28,7 +26,7 @@ public interface ControllerInterface {
      * @param start is initial location of moved piece
      * @param end is final location of moved piece
      */
-    void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException;
+    void movePiece(Location start, Location end);
 
   /**
      * Returns true if the piece at the location of user click can be moved

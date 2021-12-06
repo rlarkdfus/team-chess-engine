@@ -9,32 +9,30 @@ import ooga.model.Moves.NoRestrictionMove;
 public class EditorBoard extends Board {
 
 
-    public EditorBoard(List<PlayerInterface> players) {
-        super(players);
+    public EditorBoard(List<PlayerInterface> players, Location bounds) {
+        super(players,bounds);
         for(PlayerInterface player : players) {
             for(PieceInterface piece : player.getPieces()) {
                 player.removePiece(piece);
             }
-            player.getPieces().clear();
-            System.out.println("player pieces: " + player.getPieces().size());
         }
         pieces = new ArrayList<>();
     }
 
     @Override
     protected Move getMove(Location end, PieceInterface piece) {
-        Move move = new NoRestrictionMove(0, 0, false, false);
+        Move move = new NoRestrictionMove(0, 0, false, false, getBounds());
         move.updateMoveLocations(piece, new ArrayList<>());
         return move;
     }
 
     @Override
     public List<Location> getLegalMoves(Location location) {
-        return new NoRestrictionMove(0, 0, false, false).findAllEndLocations(null, null);
+        return new NoRestrictionMove(0, 0, false, false, getBounds()).findAllEndLocations(null, null);
     }
 
     @Override
-    protected void updateGameRules() {
+    protected void updateGameRules(PieceInterface piecee) {
         for(PieceInterface piece : pieces) {
             PieceInterface newPiece = new Piece(piece.getTeam(), piece.getName(), piece.getLocation(), new ArrayList<>(), piece.getScore());
             piece.transform(newPiece);

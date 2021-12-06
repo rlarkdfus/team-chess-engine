@@ -1,4 +1,4 @@
-package ooga.model;
+package ooga.model.EndConditionHandler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,7 +17,11 @@ import ooga.controller.Config.Builder;
 import ooga.controller.Config.InvalidEndGameConfigException;
 import ooga.controller.Config.InvalidGameConfigException;
 import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.model.Board;
 import ooga.model.EndConditionHandler.EndConditionRunner;
+import ooga.model.GameBoard;
+import ooga.model.GameState;
+import ooga.model.PlayerInterface;
 import ooga.model.Powerups.PowerupInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +40,7 @@ class TimerEndConditionHandlerTest {
     players = boardBuilder.getInitialPlayers();
     endConRunner = boardBuilder.getEndConditionHandler();
     List<PowerupInterface> powerups = boardBuilder.getPowerupsHandler();
-    board = new GameBoard(players, endConRunner, powerups);
+    board = new GameBoard(players, endConRunner, powerups, boardBuilder.getBoardSize());
   }
 
   @Test

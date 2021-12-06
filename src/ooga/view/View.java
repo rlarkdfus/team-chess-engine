@@ -52,13 +52,13 @@ public abstract class View implements ViewInterface {
     protected abstract void addUIs(GridPane root);
     
     @Override
-    public void initializeDisplay(List<PieceViewBuilder> pieceViewList) {
+    public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
         createStaticUIs();
-        resetDisplay(pieceViewList);
+        resetDisplay(pieceViewList, bounds);
     }
     
     @Override
-    public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
+    public void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
         createResettableUIs();
         stage.setScene(setupDisplay());
         stage.show();
@@ -77,13 +77,5 @@ public abstract class View implements ViewInterface {
     @Override
     public void changePieceStyle(String style) {
         boardView.changePieceStyle(style);
-    }
-
-    @Override
-    public void showError(String message) {viewUtility.showError(message);}
-
-    @Override
-    public void showCheck(Location location) {
-        boardView.showCheck(location);
     }
 }

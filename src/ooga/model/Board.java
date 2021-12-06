@@ -1,6 +1,7 @@
 package ooga.model;
 
 import ooga.Location;
+import ooga.LogUtils;
 import ooga.Turn;
 import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.Moves.Move;
@@ -15,26 +16,21 @@ public abstract class Board implements Engine {
 
     public static final String QUEEN = "Q";
     public static final String KING = "K";
-    private static final int FIRST_ROW = 0;
-    private static final int ROWS = 8;
-    private static final int LAST_ROW = ROWS - 1;
-    private static final int COLS = 8;
+    private Location bounds;
     protected List<PlayerInterface> players;
     protected List<PieceInterface> pieces;
-    protected final List<PieceInterface> initialPieces;
 
     protected List<PowerupInterface> powerupInterfaceList;
     protected PlayerInterface currentPlayer;
 
 
-    public Board(List<PlayerInterface> players) {
+    public Board(List<PlayerInterface> players, Location bounds) {
+        this.bounds = bounds;
         this.players = players;
         pieces = new ArrayList<>();
         for (PlayerInterface player : players) {
             pieces.addAll(player.getPieces());
         }
-        initialPieces = new ArrayList<>(pieces);
-        System.out.println(initialPieces);
         powerupInterfaceList = new ArrayList<>();
     }
 
@@ -53,38 +49,35 @@ public abstract class Board implements Engine {
      * @param start is piece initial location
      * @param end   is piece new location
      */
-    public List<PieceInterface> movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
+    public void movePiece(Location start, Location end) {
         PieceInterface piece = MoveUtility.pieceAt(start, pieces);
         executeMove(piece, end);
-        updateGameRules();
-        for(PowerupInterface powerupInterface: powerupInterfaceList){
-            powerupInterface.checkPowerUp(piece,end,currentPlayer, pieces);
-        }
+        updateGameRules(piece);
         updateLegalMoves();
-        return pieces;
     }
 
     private void executeMove(PieceInterface piece, Location end) {
         Move move = getMove(end, piece);
         move.executeMove(piece, pieces, end);
-        updatePlayerPieces(piece, move.getTurn());
+        updatePlayerPieces();
     }
 
     protected abstract Move getMove(Location end, PieceInterface piece);
 
-    private void updatePlayerPieces(PieceInterface piece, Turn turn) {
-        for (Location removeLocation : turn.getRemoved()) {
-            for (PlayerInterface player : players) {
-                for (PieceInterface p : player.getPieces()) {
-                    if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
-                        player.removePiece(p);
-                    }
-                }
+    private void updatePlayerPieces() {
+        for (PlayerInterface player : players) {
+            player.clearPieces();
+            for (PieceInterface piece : pieces) {
+                player.addPiece(piece);
             }
         }
     }
 
-    protected abstract void updateGameRules();
+    protected abstract void updateGameRules(PieceInterface piece);
+
+    protected Location getBounds() {
+        return bounds;
+    }
 
     protected void updateLegalMoves() {
         for (PieceInterface piece : pieces) {
@@ -122,11 +115,19 @@ public abstract class Board implements Engine {
         for(PlayerInterface player : players) {
             if(newPiece.getTeam().equals(player.getTeam())) {
                 player.addPiece(newPiece);
+                System.out.println(player.getTeam()+": " + player.getPieces());
                 break;
             }
         }
         executeMove(newPiece, location);
         pieces.add(newPiece);
+        System.out.println("addPiece\n" + this);
+
+    }
+
+    @Override
+    public List<PieceInterface> getPieces() {
+        return new ArrayList<>(pieces);
     }
 
     /**

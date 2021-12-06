@@ -18,7 +18,7 @@ public interface Engine {
    * @param start is piece initial location
    * @param end   is piece new location
    */
-  List<PieceInterface> movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException;
+  void movePiece(Location start, Location end);
 
   /**
    * Determine whether the win condition of the game is satisfied, and declare a winner.
@@ -28,6 +28,8 @@ public interface Engine {
   List<Location> getLegalMoves(Location location);
 
   List<PlayerInterface> getPlayers();
+
+  List<PieceInterface> getPieces();
 
   boolean canMovePiece(Location location);
 

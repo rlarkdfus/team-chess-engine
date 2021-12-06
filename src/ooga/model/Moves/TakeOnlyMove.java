@@ -14,8 +14,8 @@ public class TakeOnlyMove extends TranslationMove {
      * @param take move takes
      * @param limited move is limited
      */
-    public TakeOnlyMove(int dRow, int dCol, boolean take, boolean limited) {
-        super(dRow, dCol, take, limited);
+    public TakeOnlyMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
+        super(dRow, dCol, take, limited,bounds);
     }
 
     /**

@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 public class ViewUtility {
 
     private ResourceBundle myResources = ResourceBundle.getBundle("ooga/view/resources/English");
-    public final String ERROR_ALERT_TITLE = "Error";
+    public static final String ERROR_ALERT_TITLE = "Error";
     public final String SELECT_JSON_FILE = "Select JSON File";
     public final String JSON_FILE_EXTENSION_DESCRIPTION = "JSON Files (*.json)";
     //public final String CSV_FILE_EXTENSION_DESCRIPTION = "CSV (Comma delimited) (*.csv)";
@@ -209,7 +209,7 @@ public class ViewUtility {
      *
      * @param message the error message to show
      */
-    public void showError(String message) {
+    public static void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(ERROR_ALERT_TITLE);
         alert.setContentText(message);

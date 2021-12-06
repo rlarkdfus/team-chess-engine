@@ -9,21 +9,21 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 public abstract class Powerup implements PowerupInterface{
-    protected List<Location> powerupLocations;
-
+    private List<Location> powerupLocations;
+    private Location bounds;
 
     /**
      * Initializes powerup class
      * @param powerupLocations list of locations for powerup squares
+     * @param bounds location object representing the bounds of the board
      */
-    public Powerup(List<Location> powerupLocations) {
+    public Powerup(List<Location> powerupLocations, Location bounds) {
         this.powerupLocations = powerupLocations;
+        this.bounds = bounds;
     }
 
-
-
     @Override
-    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException {
+    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) {
         if(hitPowerup(endLocation)){
             execute(pieceInterface,endLocation, currentPlayer, allPieces);
 //            removeUsedPowerup(endLocation);
@@ -56,10 +56,15 @@ public abstract class Powerup implements PowerupInterface{
      * @param endLocation  end location of the piece being moved
      * @param currentPlayer current player who
      * @param allPieces list of all pieces intialized on the board
-     * @throws FileNotFoundException ? - if the piece's json file is unable to be found
-     * @throws InvalidPieceConfigException ? - if the piece's json file is not valid (ie. missing key)
      */
 
-     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException;
+     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces);
 
+     protected Location getBounds(){
+         return bounds;
+     }
+
+     protected List<Location> getPowerupLocations(){
+        return powerupLocations;
+    }
 }

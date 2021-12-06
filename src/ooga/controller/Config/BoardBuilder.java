@@ -14,11 +14,12 @@ import ooga.model.Piece;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
 import ooga.model.Powerups.PowerupInterface;
+import ooga.view.util.ViewUtility;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * @Authors Albert, Luis
+ * @author Albert, Luis
  * purpose - this class builds objects that will be used by the model to run the game. It builds all
  *  the different pieces, and it builds the endConditions that determine when the game ends.
  * assumptions - we assume that the file is a json and formatted with the proper keys. If any of this
@@ -50,7 +51,7 @@ public class BoardBuilder implements Builder {
 
   public static final ResourceBundle mappings= ResourceBundle.getBundle(PROPERTIES_FILE);
 
-  private List<Integer> boardSize;
+  private Location boardSize;
   private int time;
   private int timeIncrement;
   private List<List<String>> csvData;
@@ -98,7 +99,7 @@ public class BoardBuilder implements Builder {
 
     iterateCSVData();
     endCondition = EndConditionBuilder.getEndConditions(gameJson.getString(RULES),playerList);
-    powerupsList = PowerUpsBuilder.getPowerups(gameJson.getString(POWER_UPS));
+    powerupsList = PowerUpsBuilder.getPowerups(gameJson.getString(POWER_UPS),boardSize);
   }
 
   /**
@@ -109,6 +110,15 @@ public class BoardBuilder implements Builder {
   @Override
   public List<PieceViewBuilder> getInitialPieceViews() {
     return pieceList;
+  }
+
+  /**
+   * Overridden interface getter method.
+   * @return a Location object that represent the bounds of the board
+   */
+  @Override
+  public Location getBoardSize() {
+    return boardSize;
   }
 
   /**
@@ -145,12 +155,12 @@ public class BoardBuilder implements Builder {
    * pieceGrid
    */
   private void iterateCSVData()
-      throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException, CsvException {
-    for (int r = 0; r < boardSize.get(0); r++) {
-      for (int c = 0; c < boardSize.get(1); c++) {
+      throws InvalidPieceConfigException, PlayerNotFoundException, CsvException {
+    for (int r = 0; r < boardSize.getRow(); r++) {
+      for (int c = 0; c < boardSize.getCol(); c++) {
         String[] square = pieceInformation(r, c);
         if (square == null){continue;}
-        Piece piece = buildPiece(square[0], square[1],new Location(r,c));
+        Piece piece = buildPiece(square[0], square[1],new Location(r,c),boardSize);
         pieceList.add(new PieceViewBuilder(piece));
         playerList.get(determinePlayer(r, c, square[0])).addPiece(piece);
       }
@@ -206,10 +216,8 @@ public class BoardBuilder implements Builder {
       timeIncrement = jsonObject.getInt(mappings.getString(TIME_INCREMENT));
 
       errorKey = BOARD_SIZE;
-      boardSize = new ArrayList<>();
-      for (String dimension : jsonObject.getString(mappings.getString(BOARD_SIZE)).split(X)){
-        boardSize.add(parseInt(dimension));
-      }
+      String[] dimension = jsonObject.getString(mappings.getString(BOARD_SIZE)).split(X);
+      boardSize = new Location(parseInt(dimension[0]),parseInt(dimension[1]));
 
       errorKey = PLAYERS;
       for (String player : convertJSONArrayOfStrings(

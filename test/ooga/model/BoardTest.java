@@ -17,33 +17,37 @@ class BoardTest {
   private Engine board;
 
   @BeforeEach
-  void setUp() throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+  void setUp() {
     board = ModelTestHelper.createBoard();
   }
 
   @Test
-  void testRemovingPiece() throws FileNotFoundException, InvalidPieceConfigException {
+  void testRemovingPiece() {
     List<Location[]> moves = List.of(
             new Location[]{new Location(6, 4), new Location(5, 4)},
             new Location[]{new Location(1, 1), new Location(3, 1)},
             new Location[]{new Location(7, 5), new Location(3, 1)}
     );
-    int before = board.movePiece(new Location(7, 6), new Location(5, 5)).size();
-    board.movePiece(new Location(5, 5), new Location(7, 6)).size();
+    board.movePiece(new Location(7, 6), new Location(5, 5));
+    int before = board.getPieces().size();
+    board.movePiece(new Location(5, 5), new Location(7, 6));
     int after = 0;
     for(Location[] move : moves) {
-      after = board.movePiece(move[0], move[1]).size();
+      board.movePiece(move[0], move[1]);
+      after = board.getPieces().size();
     }
     assertEquals(1, before - after);
   }
 
   @Test
-  void testMovesCorrectly() throws FileNotFoundException, InvalidPieceConfigException {
+  void testMovesCorrectly() {
     Location start = new Location(1,0);
     Location end = new Location(2,0);
 
+    board.movePiece(start, end);
+
     List<Location> pieceLocations = new ArrayList<>();
-    for(PieceInterface piece : board.movePiece(start, end)) {
+    for(PieceInterface piece : board.getPieces()) {
       pieceLocations.add(piece.getLocation());
     }
 

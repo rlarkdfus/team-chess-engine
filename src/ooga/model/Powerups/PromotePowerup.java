@@ -10,12 +10,9 @@ import java.util.List;
 
 public class PromotePowerup extends Powerup{
 
-
-    public PromotePowerup(List<Location> powerupLocations) {
-        super(powerupLocations);
+    public PromotePowerup(List<Location> powerupLocations, Location bounds) {
+        super(powerupLocations, bounds);
     }
-
-
 
     /**
      * Promotes the piece at the powerup location to a Queen. Removes the existing piece and adds the new Queen to the player's pieces
@@ -27,13 +24,12 @@ public class PromotePowerup extends Powerup{
      * @throws FileNotFoundException ? - if the piece's json file is unable to be found
      * @throws InvalidPieceConfigException ? - if the piece's json file is not valid (ie. missing key)
      */
-
     @Override
-    void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException {
+    void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) {
         if(pieceInterface.getName().equals(Board.KING)){
             return;
         }
-        PieceInterface additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(), Board.QUEEN,endLocation);
+        PieceInterface additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(), Board.QUEEN,endLocation,getBounds());
 
         currentPlayer.addPiece(additionalPiece);
         allPieces.add(additionalPiece);

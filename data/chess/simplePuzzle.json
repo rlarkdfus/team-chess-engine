@@ -1,12 +1,13 @@
 {
   "type": "chess",
   "board": "square",
-  "boardSize": "2x6",
+  "boardSize": "8x8",
   "time": 10,
   "timeIncrement": 5,
   "boardColors": ["#f3dab0", "#bb885b"],
   "players": ["w", "b"],
-  "rules": "data/chess/rules/default.json",
+  "powerups": "data/chess/powerups/noPowerups.json",
+  "rules": "data/chess/rules/puzzle.json",
   "style": "companion",
-  "csv": "data/chess/locations/defaultEditor.csv"
+  "csv": "data/chess/locations/checkmate.csv"
 }
