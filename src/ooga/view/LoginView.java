@@ -3,7 +3,6 @@ package ooga.view;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import ooga.controller.Controller;
 import ooga.controller.LoginController;
 import ooga.view.ui.loginUI.LoginUI;
 import ooga.view.util.ViewUtility;
