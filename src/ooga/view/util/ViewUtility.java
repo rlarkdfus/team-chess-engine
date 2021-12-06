@@ -41,6 +41,7 @@ public class ViewUtility {
     public Label makeLabel(String property) {
         Label result = new Label();
         result.setText(myResources.getString(property));
+        result.getStyleClass().add("label");
         //result.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         return (Label) setID(property, result);
     }
@@ -121,11 +122,32 @@ public class ViewUtility {
             lang.put(myResources.getString(option), option);
         }
         result.setItems(FXCollections.observableArrayList(lang.keySet().stream().toList()));
-        result.valueProperty()
-                .addListener((o, oldValue, newValue) -> response.accept(lang.get(newValue)));
+        result.valueProperty().addListener((o, oldValue, newValue) -> response.accept(lang.get(newValue)));
         result.getStyleClass().add("combo-box");
-        //result.setValue("test");
         return (ComboBox) setID(property, result);
+    }
+
+    public MenuButton makeMenu(String property, List<String> choices, Consumer<String> response) {
+        MenuButton result = new MenuButton();
+        Map<String, String> lang = new HashMap<>();
+        for (String option : choices) {
+            lang.put(myResources.getString(option), option);
+        }
+        List<MenuItem> options = new ArrayList<>();
+        for(String option : lang.keySet()) {
+            MenuItem menuItem = new MenuItem(option);
+            menuItem.setOnAction(e -> {
+                response.accept(lang.get(option));
+                result.setText(option);
+            });
+            menuItem.getStyleClass().add("menu-item");
+            options.add(menuItem);
+        }
+        result.getStyleClass().add("menu-button");
+//        result.getContextMenu().getStyleClass().add("context-menu");
+        result.getItems().addAll(options);
+        result.setText(myResources.getString(choices.get(0)));
+        return (MenuButton) setID(property, result);
     }
 
     /**

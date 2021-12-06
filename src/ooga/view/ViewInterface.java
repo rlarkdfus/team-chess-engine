@@ -23,4 +23,8 @@ public interface ViewInterface {
     static void showError(String message) {
         ViewUtility.showError(message);
     }
+
+    void changeTheme(String theme);
+
+    void changeLanguage(String language);
 }
