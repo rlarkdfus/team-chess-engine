@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeleportMove extends TranslationMove {
+    private final boolean take;
     /**
      * teleport allows a piece to jump to a specific square directly
      * @param dRow    delta row
@@ -17,6 +18,7 @@ public class TeleportMove extends TranslationMove {
      */
     public TeleportMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
         super(dRow, dCol, take, limited, bounds);
+        this.take = take;
     }
 
     /**
@@ -38,7 +40,7 @@ public class TeleportMove extends TranslationMove {
      */
     @Override
     protected boolean isLegal(PieceInterface piece, Location potentialLocation, List<PieceInterface> pieces) {
-        if(MoveUtility.pieceAt(potentialLocation, pieces) != null) {
+        if(!take && MoveUtility.pieceAt(potentialLocation, pieces) != null) {
             return false;
         }
         return tryMove(piece, new Location(getdRow(), getdCol()), new ArrayList<>(pieces));
