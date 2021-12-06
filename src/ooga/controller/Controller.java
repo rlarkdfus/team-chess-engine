@@ -157,7 +157,7 @@ public abstract class Controller implements ControllerInterface {
       JSONObject jsonObject = JsonParser.loadFile(jsonFile);
       JSONWriter.saveFile(jsonObject, filePath);
       LocationWriter locationWriter = new LocationWriter();
-      locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
+      locationWriter.saveCSV(filePath + ".csv", model.getPieces());
     } catch (IOException ignored) {
     }
   }
