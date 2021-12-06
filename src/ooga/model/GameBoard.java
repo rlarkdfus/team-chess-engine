@@ -35,6 +35,7 @@ public class GameBoard extends Board {
         }
         updateLegalMoves();
         this.currentPlayer = players.get(0);
+
     }
 
     /**
@@ -57,6 +58,7 @@ public class GameBoard extends Board {
         for(PowerupInterface powerupInterface: powerupInterfaceList){
             powerupInterface.checkPowerUp(piece, piece.getLocation(), currentPlayer, pieces);
         }
+        System.out.println(currentPlayer.getTeam() + " " + currentPlayer.getScore());
         turnCount++;
         toggleTimers();
     }

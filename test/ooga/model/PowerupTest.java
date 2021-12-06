@@ -57,9 +57,9 @@ public class PowerupTest {
     @Test
     void testPromotionSquare()
             throws FileNotFoundException, InvalidPieceConfigException {
+        PlayerInterface whitePlayer = board.getPlayers().get(0);
       PieceInterface expectedWhiteQueen =  PieceBuilder.buildPiece("w","Q",new Location(5,0),new Location(8,8));
         board.movePiece(new Location(6,0),new Location(5,0)); //move white pawn
-        System.out.println(promotionLocations);
         Assertions.assertEquals(expectedWhiteQueen.getName(),MoveUtility.pieceAt(powerupTestLocation1,board.pieces).getName());
     }
 
@@ -67,7 +67,7 @@ public class PowerupTest {
     void testTimerSquare()
             throws FileNotFoundException, InvalidPieceConfigException {
         PlayerInterface whitePlayer = board.getPlayers().get(0);
-        //Initialized time is 10:00
+        //Initialized time is 5:00
         whitePlayer.resetTimer();
         System.out.println("Test time"+ whitePlayer.getTimeLeft());
         board.movePiece(new Location(6,0),new Location(5,0)); //move white pawn to timer square 3,1;
