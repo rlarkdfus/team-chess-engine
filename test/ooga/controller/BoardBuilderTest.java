@@ -35,6 +35,8 @@ import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 import ooga.model.Powerups.PowerupInterface;
 import ooga.model.Powerups.TimerPowerup;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,6 +61,18 @@ class BoardBuilderTest {
     jp = new JsonParser();
   }
 
+  @Test
+  void asdf(){
+    Logger logger = LogManager.getLogger(this.getClass());
+
+    logger.debug("Debug log message");
+    logger.info("Info log message");
+    logger.warn("Warn log message");
+    logger.error("Error log message");
+    logger.fatal("Fatal log message");
+    logger.trace("Trace log message");
+
+  }
   @Test
   void testEndCondition() throws NoSuchFieldException, IllegalAccessException {
     //EndGameBuilder Test
