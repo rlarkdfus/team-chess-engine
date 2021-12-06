@@ -40,7 +40,6 @@ public class GameBoardView extends BoardView {
                 showLegalMoves(controller.getLegalMoves(clickLocation));
             } else {
                 unselectPiece();
-
             }
         }
     }

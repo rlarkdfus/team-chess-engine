@@ -26,14 +26,17 @@ public class BoardStyleUI extends GridPane implements UIInterface {
         this.viewController = viewController;
         this.viewUtility = new ViewUtility();
         this.getStyleClass().add("SettingsUI");
+        makeColorPickers();
         createUI();
+    }
+
+    private void makeColorPickers() {
+        colorPicker1 = viewUtility.makeColorPicker("board_color_1", LICHESS_COLOR1, color -> viewController.handleChangeBoardColor(color, colorPicker2.getValue()));
+        colorPicker2 = viewUtility.makeColorPicker("board_color_2", LICHESS_COLOR2, color -> viewController.handleChangeBoardColor(colorPicker1.getValue(), color));
     }
 
     @Override
     public void createUI() {
-        colorPicker1 = viewUtility.makeColorPicker("board_color_1", LICHESS_COLOR1, color -> viewController.handleChangeBoardColor(color, colorPicker2.getValue()));
-        colorPicker2 = viewUtility.makeColorPicker("board_color_2", LICHESS_COLOR2, color -> viewController.handleChangeBoardColor(colorPicker1.getValue(), color));
-
         this.add(viewUtility.makeLabel("board_color"), 0, 0);
         this.add(colorPicker1, 1, 0);
         this.add(colorPicker2, 1, 1);

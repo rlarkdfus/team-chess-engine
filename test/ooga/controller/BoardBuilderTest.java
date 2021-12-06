@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import ooga.LogUtils;
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.CsvException;
@@ -39,7 +40,6 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
 class BoardBuilderTest {
 
   Builder boardBuilder;
@@ -52,7 +52,7 @@ class BoardBuilderTest {
     try {
       boardBuilder = new BoardBuilder(new File(testFile));
     } catch (Exception e) {
-      System.out.println(e.getClass());
+      LogUtils.error(BoardBuilderTest.class,e.getClass());
     }
 
     team = "b";

@@ -14,7 +14,6 @@ import org.junit.jupiter.api.io.TempDir;
 
 class JSONWriterTest {
   private JSONWriter jsonWriter;
-  private JsonParser jsonParser;
   private Path directory;
   private File file;
 
@@ -23,15 +22,14 @@ class JSONWriterTest {
 
   @BeforeEach
   void setUp() {
-    jsonWriter = new JSONWriter();
-    jsonParser = new JsonParser();
     directory = predirectory.resolve("testfile.json");
   }
 
   @Test
   void testSavedFileSavesCorrectly() throws IOException {
-    jsonWriter.saveFile(new File("data/chess/defaultChess.json"), directory.toString());
-    JSONObject jsonObject = jsonParser.loadFile(new File(directory.toString() + ".json"));
+    JSONObject jsonData = JsonParser.loadFile(new File("data/chess/defaultChess.json"));
+    JSONWriter.saveFile(jsonData, directory.toString());
+    JSONObject jsonObject = JsonParser.loadFile(new File(directory.toString() + ".json"));
     String expected = "chess";
     String actual = jsonObject.getString("type");
     assertEquals(expected, actual);

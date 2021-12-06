@@ -137,32 +137,32 @@ public class Player implements PlayerInterface {
         return team;
     }
 
-    /**
-     * perform a piece move to end location
-     * @param piece
-     * @param end
-     */
-    @Override
-    public void movePiece(PieceInterface piece, Location end) {
-
-    }
-
-    /**
-     * test a piece move to end location
-     * @param piece
-     * @param end
-     */
-    @Override
-    public void tryMove(PieceInterface piece, Location end) {
-
-    }
-
-    /**
-     * get score of all pieces
-     */
-    private void calculateScore(){
-        for(PieceInterface piece: remainingPieces.keySet()){
-            score += piece.getScore();
-        }
-    }
+//    /**
+//     * perform a piece move to end location
+//     * @param piece
+//     * @param end
+//     */
+//    @Override
+//    public void movePiece(PieceInterface piece, Location end) {
+//
+//    }
+//
+//    /**
+//     * test a piece move to end location
+//     * @param piece
+//     * @param end
+//     */
+//    @Override
+//    public void tryMove(PieceInterface piece, Location end) {
+//
+//    }
+//
+//    /**
+//     * get score of all pieces
+//     */
+//    private void calculateScore(){
+//        for(PieceInterface piece: remainingPieces.keySet()){
+//            score += piece.getScore();
+//        }
+//    }
 }

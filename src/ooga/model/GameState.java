@@ -10,6 +10,7 @@ public enum GameState {
     WHITE ("w"),
     DRAW ("draw");
 
+    private static final String WHITE_TEAM = "w";
     private final String team;
 
     GameState(String team){
@@ -27,7 +28,7 @@ public enum GameState {
      * @return winning team state
      */
     public GameState getWinner(String team){
-        return team.equals("w") ? WHITE : BLACK;
+        return team.equals(WHITE_TEAM) ? WHITE : BLACK;
     }
 
     /**
@@ -36,6 +37,6 @@ public enum GameState {
      * @return winning team state
      */
     public GameState getLoser(String team) {
-        return team.equals("w") ? BLACK : WHITE;
+        return team.equals(WHITE_TEAM) ? BLACK : WHITE;
     }
 }
