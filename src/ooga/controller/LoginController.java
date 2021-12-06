@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 public class LoginController {
     public static final String USER_PROFILES = "data/chess/profiles/profiles.json";
-    public static final String RESOURCE_BUNDLE_PATH = "ooga/controller/English";
+    public static final String RESOURCE_BUNDLE_PATH = "ooga/controller/resources/English";
     public static final String JSON_WRITER_FILE_PATH = "data/chess/profiles/profiles";
     public static final String USER_PROFILE_ERROR = "userProfileError";
     public static final String USERNAME_ERROR = "usernameError";
