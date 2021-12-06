@@ -14,8 +14,10 @@ public class PieceView extends ImageView {
     private String style;
     private Location location;
 
-    public PieceView(String side, String piece, String style, Location location) {
+    public PieceView(String side, String piece, String style, Location location){
         super(String.format("images/%s/%s%s.png", style, side, piece));
+
+
         System.out.println(String.format("images/%s/%s%s.png", style, side, piece));
         this.side = side;
         this.piece = piece;

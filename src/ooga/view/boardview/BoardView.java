@@ -119,7 +119,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
   }
 
-  private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style) {
+  private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style){
     for (PieceViewBuilder piece : pieceViews) {
       PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
       pieceList.add(newPiece);
