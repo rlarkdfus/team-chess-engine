@@ -1,4 +1,4 @@
-package ooga.model;
+package ooga.model.EndConditionHandler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,9 +15,11 @@ import ooga.controller.Config.Builder;
 import ooga.controller.Config.InvalidEndGameConfigException;
 import ooga.controller.Config.InvalidGameConfigException;
 import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.model.*;
 import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Powerups.PowerupInterface;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +48,7 @@ class EliminationEndConditionHandlerTest {
     board.movePiece(new Location(4,7),new Location(6, 7)); //queen eats
     board.movePiece(new Location(6,7),new Location(6, 6)); //queen eats
     board.movePiece(new Location(6,6),new Location(6, 5)); //queen eats
-    assertEquals(GameState.BLACK, board.checkGameState());
+    Assertions.assertEquals(GameState.BLACK, board.checkGameState());
   }
 
   @Test
