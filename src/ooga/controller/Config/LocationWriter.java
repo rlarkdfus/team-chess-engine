@@ -64,7 +64,7 @@ public class LocationWriter {
   private void setPieces(List<PlayerInterface> players, List<String[]> tempGrid) {
     for(PlayerInterface player: players) {
       List<PieceInterface> pieces = player.getPieces();
-      pieces.stream().forEach(piece -> {
+      pieces.forEach(piece -> {
         Location location = piece.getLocation();
         int col = location.getCol();
         int row = location.getRow();
@@ -74,6 +74,6 @@ public class LocationWriter {
   }
 
   private void listStringArrToListString(List<String[]> tempGrid) {
-    tempGrid.stream().forEach(pieceRow -> csvGrid.add(String.join(COMMA, pieceRow)));
+    tempGrid.forEach(pieceRow -> csvGrid.add(String.join(COMMA, pieceRow)));
   }
 }

@@ -10,10 +10,12 @@ import ooga.model.PlayerInterface;
 
 public class TimerEndCondition implements EndConditionInterface{
 
+  public static final String OUT_OF_TIME = "00:00";
+
   @Override
   public GameState isSatisfied(List<PlayerInterface> players) {
     for (PlayerInterface player : players){
-      if (player.getTimeLeft().getValue().equals("00:00")){
+      if (player.getTimeLeft().getValue().equals(OUT_OF_TIME)){
         return GameState.ENDED.getLoser(player.getTeam());
       }
     }

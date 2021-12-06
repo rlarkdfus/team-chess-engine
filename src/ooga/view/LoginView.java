@@ -19,12 +19,12 @@ public class LoginView {
     public static final int STAGE_WIDTH = 450;
     public static final int STAGE_HEIGHT = 400;
 
-    private LoginController loginçontroller;
+    private LoginController loginController;
     private Stage stage;
     private ViewUtility viewUtility;
 
     public LoginView(LoginController loginController) {
-        this.loginçontroller = loginController;
+        this.loginController = loginController;
         this.stage = new Stage();
         this.stage.setResizable(false);
         this.viewUtility = new ViewUtility();
@@ -32,7 +32,7 @@ public class LoginView {
 
     private Scene setupDisplay() {
         GridPane root = new GridPane();
-        root.add(new LoginUI(loginçontroller), 0, 0);
+        root.add(new LoginUI(loginController), 0, 0);
         Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(DEFAULT_STYLESHEET)).toExternalForm());
         return scene;
