@@ -2,8 +2,10 @@ package ooga.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import ooga.Location;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.InvalidPieceConfigException;
@@ -34,7 +36,6 @@ public class GameController extends Controller {
     private int increment;
 
     private GameOverScreen gameOverScreen;
-    private View view;
     private Map<Enum, JSONObject> players;
     private Map<Enum, String> usernames;
 
@@ -59,6 +60,20 @@ public class GameController extends Controller {
     view.initializeDisplay(pieces);
     return view;
   }
+    public Map<String, Integer> getUsernameAndWins() {
+
+      Map<String, Integer> usernameToWinsMap = new HashMap<>();
+      if (players != null) {
+        Iterator playersIter = players.entrySet().iterator();
+        Iterator usernamesIter = usernames.entrySet().iterator();
+        while (playersIter.hasNext() && usernamesIter.hasNext()) {
+          Entry<Enum, String> usernameEntry = (Entry) usernamesIter.next();
+          Entry<Enum, JSONObject> playersEntry = (Entry) playersIter.next();
+          usernameToWinsMap.put(usernameEntry.getValue(), playersEntry.getValue().getInt("wins"));
+        }
+      }
+      return usernameToWinsMap;
+    }
 
     public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
         super.movePiece(start, end);
@@ -67,6 +82,7 @@ public class GameController extends Controller {
             gameOverScreen = new GameOverScreen(this, gameState.toString());
         }
         incrementPlayerWin(gameState);
+        getUsernameAndWins();
     }
 
     private void incrementPlayerWin(GameState gameState) throws FileNotFoundException {
@@ -124,7 +140,6 @@ public class GameController extends Controller {
      */
     @Override
     public void setIncrement(int seconds) {
-        //timeController.setIncrement(seconds);
         increment = seconds;
     }
 
