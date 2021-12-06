@@ -11,6 +11,9 @@ import java.util.List;
 
 public class BoardStyleUI extends GridPane implements UIInterface {
 
+    private static final List<String> LANGUAGES = List.of("English", "Spanish", "French", "Italian", "German");
+    private static final List<String> THEMES = List.of("light", "dark", "duke");
+
     private final Color LICHESS_COLOR1 = Color.web("#f3dab0");
     private final Color LICHESS_COLOR2 = Color.web("#bb885b");
     private final List<String> PIECE_STYLES = List.of(
@@ -40,7 +43,14 @@ public class BoardStyleUI extends GridPane implements UIInterface {
         this.add(viewUtility.makeLabel("board_color"), 0, 0);
         this.add(colorPicker1, 1, 0);
         this.add(colorPicker2, 1, 1);
-        this.add(viewUtility.makeLabel("piece_style_label"), 0, 3);
-        this.add(viewUtility.makeComboBox("piece_style", PIECE_STYLES, style -> viewController.handleChangePieceStyle(style)), 1, 3);
+        this.add(viewUtility.makeLabel("piece_style_label"), 0, 2);
+        this.add(viewUtility.makeMenu("piece_style", PIECE_STYLES, style -> viewController.handleChangePieceStyle(style)), 1, 2);
+
+
+        this.add(viewUtility.makeLabel("language"), 0, 3);
+        this.add(viewUtility.makeMenu("language_variation", LANGUAGES, e -> viewController.changeLanguage(e)), 1, 3);
+
+        this.add(viewUtility.makeLabel("theme"), 0, 4);
+        this.add(viewUtility.makeMenu("theme_variation", THEMES, e -> viewController.changeTheme(e)), 1, 4);
     }
 }
