@@ -19,12 +19,13 @@ import ooga.model.GameState;
 import ooga.model.PlayerInterface;
 import ooga.view.GameOverScreen;
 import ooga.view.GameView;
-import ooga.view.View;
 import ooga.view.ViewInterface;
 import org.json.JSONObject;
 
 public class GameController extends Controller {
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
+  public static final String WINS = "wins";
+  public static final String JSON_WRITER_FILE_PATH = "data/chess/profiles/profiles";
 
   private TimeController timeController;
     private final File userProfilesFile = new File("data/chess/profiles/profiles.json");
@@ -96,16 +97,16 @@ public class GameController extends Controller {
 
     private void incrementWinAndSaveJSON(GameState gameState, Enum player) {
         JSONObject playerInfo = players.get(player);
-        int wins =  players.get(player).getInt("wins") + 1;
+        int wins =  players.get(player).getInt(WINS) + 1;
         players.remove(wins);
-        playerInfo.put("wins", wins);
+        playerInfo.put(WINS, wins);
         players.remove(player);
         players.put(player, playerInfo);
         JSONObject userProfiles = JsonParser.loadFile(userProfilesFile);
         userProfiles.remove(usernames.get(gameState));
         userProfiles.put(usernames.get(gameState), playerInfo);
         try {
-            JSONWriter.saveFile(userProfiles, "data/chess/profiles/profiles");
+            JSONWriter.saveFile(userProfiles, JSON_WRITER_FILE_PATH);
         } catch (Exception e) {
         }
     }
