@@ -34,8 +34,9 @@ public class GameBoard extends Board implements GameEngine {
             piece.updateMoves(pieces);
         }
         updateLegalMoves();
-        this.currentPlayer = players.get(0);
-
+        if (!players.isEmpty()) {
+            this.currentPlayer = players.get(0);
+        }
     }
 
     /**

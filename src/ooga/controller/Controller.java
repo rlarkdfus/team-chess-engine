@@ -1,29 +1,19 @@
 package ooga.controller;
 
-
 import ooga.Location;
-import ooga.model.*;
 import ooga.view.ViewInterface;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.JSONWriter;
 import ooga.controller.Config.JsonParser;
 import ooga.controller.Config.LocationWriter;
 import ooga.controller.Config.PieceViewBuilder;
-import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Engine;
 import ooga.model.PieceInterface;
-import ooga.view.View;
-import ooga.view.ViewInterface;
-import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
 /**
@@ -121,10 +111,14 @@ public abstract class Controller implements ControllerInterface {
    */
   @Override
   public void uploadConfiguration(File file) {
-    BoardBuilder boardBuilder = new BoardBuilder(file);
-    jsonFile = file;
-    model = initializeModel(boardBuilder);
-    view = initializeView(boardBuilder.getInitialPieceViews(), boardBuilder.getBoardSize());
+    try {
+      BoardBuilder boardBuilder = new BoardBuilder(file);
+      jsonFile = file;
+      model = initializeModel(boardBuilder);
+      view = initializeView(boardBuilder.getInitialPieceViews(), boardBuilder.getBoardSize());
+    } catch (Exception ignored) {
+    }
+
   }
 
   /**
@@ -183,16 +177,11 @@ public abstract class Controller implements ControllerInterface {
    * @param variation the variation of the controller to use
    */
   public void launchController(String variation) {
-    Class<?> clazz = null;
     try {
-      clazz = Class.forName(CONTROLLER_PATH + variation + CONTROLLER_SUFFIX);
-    } catch (ClassNotFoundException e) {
-      ViewUtility.showError("VariationNotFound");
-    }
-    try {
+      Class<?> clazz = Class.forName(CONTROLLER_PATH + variation + CONTROLLER_SUFFIX);
       ControllerInterface controller = (ControllerInterface) clazz.getDeclaredConstructor().newInstance();
-    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-      ViewUtility.showError("VariationConstructorNotFound");
+    }
+    catch (Exception ignored) {
     }
   }
 }
