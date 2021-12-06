@@ -3,6 +3,7 @@ package ooga.view;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.Main;
 import ooga.controller.Config.PieceViewBuilder;
@@ -42,5 +43,17 @@ public class EditorView extends View {
     this.boardView = new EditorBoardView(controller, new ArrayList<>(), Main.DEFAULT_ROW, Main.DEFAULT_COL);
     this.pieceMenu = new PieceMenuView(controller, pieceViewList, bounds.getRow(), bounds.getCol());
     super.resetDisplay(pieceViewList, bounds);
+  }
+
+  @Override
+  public void changePieceStyle(String style) {
+    super.changePieceStyle(style);
+    pieceMenu.changePieceStyle(style);
+  }
+
+  @Override
+  public void changeBoardColor(Color color1, Color color2) {
+    super.changeBoardColor(color1, color2);
+    pieceMenu.changeColors(color1, color2);
   }
 }
