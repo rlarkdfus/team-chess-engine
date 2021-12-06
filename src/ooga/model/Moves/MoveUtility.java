@@ -3,6 +3,7 @@ package ooga.model.Moves;
 import static ooga.controller.Config.PowerUpsBuilder.ZERO_BOUNDS;
 
 import ooga.Location;
+import ooga.model.Board;
 import ooga.model.PieceInterface;
 
 import java.util.ArrayList;
@@ -16,7 +17,6 @@ public class MoveUtility {
      * @return team in check or not
      */
 
-    public static final String KING_NAME = "K";
 
     public static boolean inCheck(String team, List<PieceInterface> pieces) {
         PieceInterface king = findKing(team, pieces);
@@ -26,7 +26,7 @@ public class MoveUtility {
 
     private static PieceInterface findKing(String team, List<PieceInterface> pieces) {
         for(PieceInterface piece : pieces) {
-            if(piece.getTeam().equals(team) && piece.getName().equals(KING_NAME)) {
+            if(piece.getTeam().equals(team) && piece.getName().equals(Board.KING)) {
                 return piece;
             }
         }

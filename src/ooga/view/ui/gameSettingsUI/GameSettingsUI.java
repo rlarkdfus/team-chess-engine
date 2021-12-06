@@ -1,7 +1,7 @@
 package ooga.view.ui.gameSettingsUI;
 
 import javafx.scene.layout.GridPane;
-import ooga.controller.Controller;
+import ooga.controller.GameControllerInterface;
 import ooga.view.ViewController;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
@@ -10,11 +10,11 @@ public class GameSettingsUI extends GridPane implements UIInterface {
     public static final int WHITE_INDEX = 0;
     public static final int BLACK_INDEX = 1;
 
-    Controller controller;
+    GameControllerInterface controller;
     ViewController viewController;
     ViewUtility viewUtility;
 
-    public GameSettingsUI(Controller controller, ViewController viewController) {
+    public GameSettingsUI(GameControllerInterface controller, ViewController viewController) {
         this.controller = controller;
         this.viewController = viewController;
         this.viewUtility = new ViewUtility();

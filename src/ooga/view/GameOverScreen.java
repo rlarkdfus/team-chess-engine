@@ -9,11 +9,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import ooga.LogUtils;
 import ooga.controller.Controller;
 
 public class GameOverScreen {
+
   private final int STAGE_SIZE = 200;
-  private static final String DEFAULT_RESOURCE_PACKAGE = View.class.getPackageName() + ".resources.";
+  private static final String DEFAULT_RESOURCE_PACKAGE =
+      View.class.getPackageName() + ".resources.";
   private static final String STYLE_PACKAGE = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
   private static final String DEFAULT_STYLESHEET = STYLE_PACKAGE + "style.css";
 
@@ -57,7 +60,7 @@ public class GameOverScreen {
     top.setAlignment(Pos.CENTER);
 
     String text = "Winner: " + winner;
-    if (winner == null){
+    if (winner == null) {
       return top;
     }
     Label winnerText = new Label(text);
@@ -68,13 +71,19 @@ public class GameOverScreen {
   }
 
   private Node makeWinnerPicture() {
-    if (winner == null){
-      Label drawLabel = new Label("Draw");
-      drawLabel.setId("DrawText");
-      return drawLabel;
+    try {
+      if (winner == null) {
+        Label drawLabel = new Label("Draw");
+        drawLabel.setId("DrawText");
+        return drawLabel;
+      }
+      String imagePath = String.format("images/%s/%s%s.png", "companion", winner, "K");
+      return new ImageView(imagePath);
+    } catch (Exception e) {
+      LogUtils.error(this, "making winner picture: " + e.toString());
+      throw e;
     }
-    String imagePath = String.format("images/%s/%s%s.png", "companion", winner, "K");
-    return new ImageView(imagePath);
+
   }
 
   private HBox makeButtons() {
@@ -87,7 +96,7 @@ public class GameOverScreen {
     Button quit = new Button("Quit");
     quit.setOnAction(e -> quit());
 
-    buttons.getChildren().addAll(playagain,quit);
+    buttons.getChildren().addAll(playagain, quit);
     return buttons;
   }
 
@@ -96,7 +105,7 @@ public class GameOverScreen {
     stage.close();
   }
 
-  private void quit(){
+  private void quit() {
     controller.quit();
   }
 

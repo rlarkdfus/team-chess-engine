@@ -1,8 +1,7 @@
 package ooga.controller;
 
-import ooga.model.PlayerInterface;
-
 import java.util.List;
+import ooga.model.PlayerInterface;
 
 public class TimeController {
     private static int initialTime;

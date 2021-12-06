@@ -1,6 +1,7 @@
 package ooga.model.Moves;
 
 import ooga.Location;
+import ooga.model.Board;
 import ooga.model.PieceInterface;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class EnPassantMove extends Move {
 //            System.out.println(pawn.toString() + " " + pawn.getLocation() + ", " + otherPawn.toString() + " " + otherPawnLocation);
 //        }
 
-        if (otherPawn == null || !otherPawn.getName().equals("P") || !otherPawn.isFirstMove()){
+        if (otherPawn == null || !otherPawn.getName().equals(Board.PAWN) || !otherPawn.isFirstMove()){
             return false;
         }
         return tryMove(pawn, potentialLocation, new ArrayList<>(pieces));

@@ -7,8 +7,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ooga.Location;
-import ooga.controller.Controller;
 import ooga.controller.Config.PieceViewBuilder;
+import ooga.controller.ControllerInterface;
 import ooga.view.boardview.BoardView;
 import ooga.view.util.ViewUtility;
 
@@ -23,7 +23,7 @@ public abstract class View implements ViewInterface {
     public static final int STAGE_WIDTH = 1000;
     public static final int STAGE_HEIGHT = 700;
 
-    protected Controller controller;
+    protected ControllerInterface controller;
     protected ViewController viewController;
     protected ViewUtility viewUtility;
     private Stage stage;
@@ -32,8 +32,7 @@ public abstract class View implements ViewInterface {
     //TODO: change protected
     protected BoardView boardView;
 
-    public View(Controller controller) {
-        this.controller = controller;
+    public View() {
         this.viewController = new ViewController(this);
         this.viewUtility = new ViewUtility();
         this.stage = new Stage();
