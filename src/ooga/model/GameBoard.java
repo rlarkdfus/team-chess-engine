@@ -11,15 +11,13 @@ public class GameBoard extends Board {
     private EndConditionRunner endCondition;
     private int turnCount;
 
-
-
     public GameBoard(List<PlayerInterface> players, EndConditionRunner endCondition, List<PowerupInterface> powerups) {
         super(players);
         this.endCondition = endCondition;
         this.powerupInterfaceList = powerups;
         turnCount = 0;
-        for (PieceInterface piece : allPieces) {
-            piece.updateMoves(allPieces);
+        for (PieceInterface piece : pieces) {
+            piece.updateMoves(pieces);
         }
         updateLegalMoves();
 
@@ -41,7 +39,7 @@ public class GameBoard extends Board {
     @Override
     public boolean canMovePiece(Location location) {
         String turn = findPlayerTurn(turnCount).getTeam();
-        for (PieceInterface piece : allPieces) {
+        for (PieceInterface piece : pieces) {
             if (piece.getTeam().equals(turn) && piece.getLocation().equals(location)) {
                 return true;
             }
@@ -57,7 +55,7 @@ public class GameBoard extends Board {
      */
     @Override
     public List<Location> getLegalMoves(Location location) {
-        for (PieceInterface piece : allPieces) {
+        for (PieceInterface piece : pieces) {
             if (piece.getLocation().equals(location)) {
                 return piece.getEndLocations();
             }
