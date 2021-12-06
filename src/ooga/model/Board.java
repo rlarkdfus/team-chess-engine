@@ -2,6 +2,7 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
+import ooga.controller.Config.PieceBuilder;
 import ooga.model.Moves.Move;
 import java.util.ArrayList;
 import java.util.List;
