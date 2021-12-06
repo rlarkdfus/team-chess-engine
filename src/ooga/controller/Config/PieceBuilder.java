@@ -68,7 +68,6 @@ public class PieceBuilder {
    */
   private static List<Move> getMoves(JSONObject moveTypes) throws Throwable {
     List<Move> moveList = new ArrayList<>();
-    System.out.println(moveTypes.keySet());
 
     for (String moveType : moveTypes.keySet()) {
       List<Move> newMoves = makeTypeOfMove(moveType, (JSONArray) moveTypes.get(moveType));

@@ -1,6 +1,7 @@
 package ooga.model;
 
 import ooga.Location;
+import ooga.LogUtils;
 import ooga.Turn;
 import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.Moves.Move;
