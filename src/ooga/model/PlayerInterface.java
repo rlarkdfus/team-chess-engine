@@ -70,6 +70,11 @@ public interface PlayerInterface {
   void removePiece(PieceInterface piece);
 
   /**
+   * reset the player's list of pieces
+   */
+  void clearPieces();
+
+  /**
    * get a player's score
    * @return the player's score
    */

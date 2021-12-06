@@ -10,13 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 public class Player implements PlayerInterface {
-    private Map<PieceInterface, List<Location>> remainingPieces;
     //Keep track of all their killed pieces
-    private List<PieceInterface> killedPieces;
     private final String team;
     private int score;
     private TimerInterface moveTimer;
-    private List<PieceInterface> initialPieces;
+    private List<PieceInterface> pieces;
 
     /**
      * creates a player object
@@ -24,11 +22,9 @@ public class Player implements PlayerInterface {
      */
     public Player(String team) {
         this.team = team;
-        remainingPieces = new HashMap<>();
+        pieces = new ArrayList<>();
         score = 0;
-        this.killedPieces = new ArrayList<>();
         this.moveTimer = new MoveTimer();
-        this.initialPieces = new ArrayList<>();
     }
 
     /**
@@ -89,7 +85,7 @@ public class Player implements PlayerInterface {
      * @return list of all pieces held by a player
      */
     public List<PieceInterface> getPieces(){
-        return new ArrayList<>(remainingPieces.keySet());
+        return new ArrayList<>(pieces);
     }
 
     /**
@@ -98,8 +94,7 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void addPiece(PieceInterface piece){
-        remainingPieces.put(piece, new ArrayList<>());
-        initialPieces.add(piece);
+        pieces.add(piece);
         score += piece.getScore();
     }
 
@@ -112,8 +107,13 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void removePiece(PieceInterface piece){
-        remainingPieces.remove(piece);
+        pieces.remove(piece);
         score -= piece.getScore();
+    }
+
+    @Override
+    public void clearPieces(){
+        pieces = new ArrayList<>();
     }
 
     /**
@@ -124,9 +124,6 @@ public class Player implements PlayerInterface {
     public int getScore() {
         return score;
     }
-
-
-
 
     /**
      * returns the player team

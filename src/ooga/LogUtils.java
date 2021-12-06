@@ -12,7 +12,7 @@ public class LogUtils {
 
   public static void info(Object obj, Object toBeLogged) {
     Logger logger = LogManager.getLogger(obj.getClass());
-    logger.info(toBeLogged);
+    logger.info(obj.toString() + toBeLogged);
   }
 
   public static void warn(Object obj, Object toBeLogged) {

@@ -58,18 +58,17 @@ public abstract class Board implements Engine {
      * @param start is piece initial location
      * @param end is piece new location
      */
-    public List<PieceInterface> movePiece(Location start, Location end) {
+    public void movePiece(Location start, Location end) {
         PieceInterface piece = MoveUtility.pieceAt(start, pieces);
         executeMove(piece, end);
         updateGameRules(piece);
         updateLegalMoves();
-        return pieces;
     }
 
     private void executeMove(PieceInterface piece, Location end) {
         Move move = getMove(end, piece);
         move.executeMove(piece, pieces, end);
-        updatePlayerPieces(piece, move.getTurn());
+        updatePlayerPieces();
     }
 
     /**
@@ -80,14 +79,11 @@ public abstract class Board implements Engine {
      */
     protected abstract Move getMove(Location end, PieceInterface piece);
 
-    private void updatePlayerPieces(PieceInterface piece, Turn turn) {
-        for (Location removeLocation : turn.getRemoved()) {
-            for (PlayerInterface player : players) {
-                for (PieceInterface p : player.getPieces()) {
-                    if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
-                        player.removePiece(p);
-                    }
-                }
+    private void updatePlayerPieces() {
+        for (PlayerInterface player : players) {
+            player.clearPieces();
+            for (PieceInterface piece : pieces) {
+                player.addPiece(piece);
             }
         }
     }
@@ -148,6 +144,7 @@ public abstract class Board implements Engine {
         for(PlayerInterface player : players) {
             if(newPiece.getTeam().equals(player.getTeam())) {
                 player.addPiece(newPiece);
+                System.out.println(player.getTeam()+": " + player.getPieces());
                 break;
             }
         }

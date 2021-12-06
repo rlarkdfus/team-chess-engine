@@ -27,8 +27,6 @@ public class EditorBoard extends Board {
             for(PieceInterface piece : player.getPieces()) {
                 player.removePiece(piece);
             }
-            player.getPieces().clear();
-            System.out.println("player pieces: " + player.getPieces().size());
         }
         pieces = new ArrayList<>();
     }
