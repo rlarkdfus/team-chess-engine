@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class PuzzleEndCondition extends CheckmateEndCondition implements EndConditionInterface {
     /**
-     * uses checkmate end condition to count legal moves
+     * extends from checkmate to hold all pieces
      * @param properties none required
      * @param allpieces list of all pieces
      */
@@ -19,9 +19,9 @@ public class PuzzleEndCondition extends CheckmateEndCondition implements EndCond
     }
 
     /**
-     * puzzle requires white to find the move that will checkmate, or lose immediately
+     * puzzle requires white to find the move that will check, or lose immediately
      * @param players all players
-     * @return winner when a checkmate is played
+     * @return winner when a check is played
      */
     @Override
     public GameState isSatisfied(List<PlayerInterface> players) {
