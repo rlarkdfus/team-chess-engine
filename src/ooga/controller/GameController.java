@@ -13,7 +13,6 @@ import ooga.view.GameView;
 import ooga.view.ViewInterface;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class GameController extends Controller {
   }
 
   @Override
-  public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
+  public void movePiece(Location start, Location end) {
     super.movePiece(start, end);
     GameState gameState = getGameState();
     if (gameState != GameState.RUNNING) {

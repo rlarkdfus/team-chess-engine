@@ -15,13 +15,9 @@ public abstract class Board implements Engine {
 
     public static final String QUEEN = "Q";
     public static final String KING = "K";
-    private static final int FIRST_ROW = 0;
-    private static final int ROWS = 8;
-    private static final int LAST_ROW = ROWS - 1;
-    private static final int COLS = 8;
+
     protected List<PlayerInterface> players;
     protected List<PieceInterface> pieces;
-    protected final List<PieceInterface> initialPieces;
 
     protected List<PowerupInterface> powerupInterfaceList;
     protected PlayerInterface currentPlayer;
@@ -33,8 +29,6 @@ public abstract class Board implements Engine {
         for (PlayerInterface player : players) {
             pieces.addAll(player.getPieces());
         }
-        initialPieces = new ArrayList<>(pieces);
-        System.out.println(initialPieces);
         powerupInterfaceList = new ArrayList<>();
     }
 
@@ -53,13 +47,10 @@ public abstract class Board implements Engine {
      * @param start is piece initial location
      * @param end   is piece new location
      */
-    public List<PieceInterface> movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
+    public List<PieceInterface> movePiece(Location start, Location end) {
         PieceInterface piece = MoveUtility.pieceAt(start, pieces);
         executeMove(piece, end);
-        updateGameRules();
-        for(PowerupInterface powerupInterface: powerupInterfaceList){
-            powerupInterface.checkPowerUp(piece,end,currentPlayer, pieces);
-        }
+        updateGameRules(piece);
         updateLegalMoves();
         return pieces;
     }
@@ -84,7 +75,7 @@ public abstract class Board implements Engine {
         }
     }
 
-    protected abstract void updateGameRules();
+    protected abstract void updateGameRules(PieceInterface piece);
 
     protected void updateLegalMoves() {
         for (PieceInterface piece : pieces) {

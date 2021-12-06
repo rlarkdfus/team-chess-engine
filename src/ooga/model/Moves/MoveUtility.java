@@ -15,7 +15,7 @@ public class MoveUtility {
      */
     public static final int BOARD_MAX = 8;
     public static final int BOARD_MIN = 0;
-
+    public static final String KING_NAME = "K";
 
     public static boolean inCheck(String team, List<PieceInterface> pieces) {
         PieceInterface king = findKing(team, pieces);
@@ -25,7 +25,7 @@ public class MoveUtility {
 
     private static PieceInterface findKing(String team, List<PieceInterface> pieces) {
         for(PieceInterface piece : pieces) {
-            if(piece.getTeam().equals(team) && piece.getName().equals("K")) {
+            if(piece.getTeam().equals(team) && piece.getName().equals(KING_NAME)) {
                 return piece;
             }
         }

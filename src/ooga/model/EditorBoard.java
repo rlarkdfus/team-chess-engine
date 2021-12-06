@@ -34,7 +34,7 @@ public class EditorBoard extends Board {
     }
 
     @Override
-    protected void updateGameRules() {
+    protected void updateGameRules(PieceInterface piecee) {
         for(PieceInterface piece : pieces) {
             PieceInterface newPiece = new Piece(piece.getTeam(), piece.getName(), piece.getLocation(), new ArrayList<>(), piece.getScore());
             piece.transform(newPiece);

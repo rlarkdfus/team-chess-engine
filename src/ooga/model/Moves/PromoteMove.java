@@ -40,12 +40,7 @@ public class PromoteMove extends Move {
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         System.out.println("Execute promote move");
-        PieceInterface newPiece = null;
-        try {
-            newPiece = PieceBuilder.buildPiece(piece.getTeam(), "Q",end);
-        } catch (FileNotFoundException | InvalidPieceConfigException e) {
-            e.printStackTrace();
-        }
+        PieceInterface newPiece = PieceBuilder.buildPiece(piece.getTeam(), "Q",end);
         piece.transform(newPiece);
 
         for (PieceInterface p : pieces) {

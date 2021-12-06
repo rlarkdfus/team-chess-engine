@@ -5,10 +5,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
-import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.view.PieceView;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,11 +35,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     renderBackground();
     renderInitialChessPieces(pieceViews, DEFAULT_PIECE_STYLE);
     this.setOnMouseClicked(e -> {
-      try {
-        clickBoard(findClickLocation(e));
-      } catch (FileNotFoundException | InvalidPieceConfigException ex) {
-        ex.printStackTrace();
-      }
+      clickBoard(findClickLocation(e));
       annotate(e);
     });
   }
@@ -82,7 +76,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     }
   }
 
-  protected abstract void clickBoard(Location clickLocation) throws FileNotFoundException, InvalidPieceConfigException;
+  protected abstract void clickBoard(Location clickLocation);
 
   protected void highlightBoardSquare(Location location) {
     findBoardSquare(location).highlight();

@@ -14,18 +14,12 @@ public class LoginController {
     private final ViewUtility viewUtility = new ViewUtility();
 
     private LoginView loginView;
-    private JsonParser jsonParser;
     private JSONObject userProfilesJSON;
 
     public LoginController() {
         loginView = new LoginView(this);
         loginView.initializeDisplay();
-        jsonParser = new JsonParser();
-        try {
-            userProfilesJSON = jsonParser.loadFile(userProfiles);
-        } catch (FileNotFoundException e) {
-            viewUtility.showError("Error finding user profiles. Please play as guest ");
-        }
+        userProfilesJSON = JsonParser.loadFile(userProfiles);
     }
 
     public boolean handleLoginAttempt (String username1, String password1, String username2, String password2) {
@@ -50,7 +44,7 @@ public class LoginController {
         try {
             jsonWriter.saveFile(userProfilesJSON, "data/chess/profiles/profiles.json");
         } catch (IOException e) {
-            viewUtility.showError("Error in accessing user profiles, please play as guest");
+            ViewUtility.showError("Error in accessing user profiles, please play as guest");
         }
     }
 
@@ -65,7 +59,7 @@ public class LoginController {
             return truePassword.equals(password);
         }
         catch (Exception e) {
-            viewUtility.showError("Invalid username. Please login with an existing username or sign in to create an account");
+            ViewUtility.showError("Invalid username. Please login with an existing username or sign in to create an account");
         }
         return false;
     }
