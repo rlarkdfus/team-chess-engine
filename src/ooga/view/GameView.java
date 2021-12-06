@@ -1,16 +1,15 @@
 package ooga.view;
 
+import java.util.List;
 import javafx.scene.layout.GridPane;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
-import ooga.controller.Controller;
+import ooga.controller.GameControllerInterface;
 import ooga.view.boardview.GameBoardView;
 import ooga.view.ui.gameInfoUI.GameInfoUI;
 import ooga.view.ui.gameSettingsUI.GameSettingsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
 import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
-
-import java.util.List;
 
 public class GameView extends View {
 
@@ -18,9 +17,10 @@ public class GameView extends View {
   private GameInfoUI gameInfoUI; // left
   private GameSettingsUI gameSettingsInfoUI; // top
   private TimeConfigurationUI timeConfigurationUI;
+  GameControllerInterface controller;
 
-  public GameView(Controller controller) {
-    super(controller);
+  public GameView(GameControllerInterface controller) {
+    this.controller = controller;
   }
 
   @Override

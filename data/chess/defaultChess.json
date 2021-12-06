@@ -2,7 +2,7 @@
   "type": "chess",
   "board": "square",
   "boardSize": "8x8",
-  "time": 10,
+  "time": 5,
   "timeIncrement": 5,
   "boardColors": ["#f3dab0", "#bb885b"],
   "players": ["w", "b"],

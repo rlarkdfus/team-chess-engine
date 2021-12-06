@@ -1,7 +1,7 @@
 package ooga.view.ui.settingsUI;
 
 import javafx.scene.layout.GridPane;
-import ooga.controller.Controller;
+import ooga.controller.ControllerInterface;
 import ooga.view.ViewController;
 import ooga.view.ui.UIInterface;
 
@@ -10,7 +10,7 @@ public class SettingsUI extends GridPane implements UIInterface {
     private GameConfigurationUI gameConfigurationUI;
     private BoardStyleUI boardStyleUI;
 
-    public SettingsUI(Controller controller, ViewController viewController) {
+    public SettingsUI(ControllerInterface controller, ViewController viewController) {
         gameConfigurationUI = new GameConfigurationUI(controller);
         boardStyleUI = new BoardStyleUI(viewController);
         createUI();
