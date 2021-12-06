@@ -68,11 +68,13 @@ public class GameController extends Controller {
     }
 
     private void incrementPlayerWin(GameState gameState) throws FileNotFoundException {
-        Iterator playersIter = players.keySet().iterator();
-        while(playersIter.hasNext()) {
-            Enum player = (Enum) playersIter.next();
-            if (gameState == player) {
-                incrementWinAndSaveJSON(gameState, player);
+        if(players != null) {
+            Iterator playersIter = players.keySet().iterator();
+            while (playersIter.hasNext()) {
+                Enum player = (Enum) playersIter.next();
+                if (gameState == player) {
+                    incrementWinAndSaveJSON(gameState, player);
+                }
             }
         }
     }
