@@ -25,7 +25,7 @@ public class CheckmateEndCondition implements EndConditionInterface {
     return null;
   }
 
-  private int getTotalLegalMoves(PlayerInterface player) {
+  protected int getTotalLegalMoves(PlayerInterface player) {
     int totalLegalMoves = 0;
     for (PieceInterface piece : player.getPieces()) {
       totalLegalMoves += piece.getEndLocations().size();
@@ -34,7 +34,7 @@ public class CheckmateEndCondition implements EndConditionInterface {
   }
 
 
-  private List<PieceInterface> getAllPieces(List<PlayerInterface> players) {
+  protected List<PieceInterface> getAllPieces(List<PlayerInterface> players) {
     List<PieceInterface> pieces = new ArrayList<>();
     for(PlayerInterface player : players){
       pieces.addAll(player.getPieces());

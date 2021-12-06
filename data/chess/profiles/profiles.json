@@ -1,10 +1,1 @@
-{
-  "Luis": {
-    "password": "password",
-    "wins": 0
-  },
-  "Richard": {
-    "password": "123",
-    "wins": 0
-  }
-}
+{"Gordon":{"wins":3,"password":"password"},"Luis":{"wins":2,"password":"password"},"csv":"data/chess/profiles/profiles.csv","Richard":{"wins":0,"password":"123"},"Albert":{"wins":0,"password":"chess"}}
