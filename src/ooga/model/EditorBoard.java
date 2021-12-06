@@ -8,8 +8,17 @@ import ooga.model.Moves.NoRestrictionMove;
 
 public class EditorBoard extends Board {
 
+
     public EditorBoard(List<PlayerInterface> players) {
         super(players);
+        for(PlayerInterface player : players) {
+            for(PieceInterface piece : player.getPieces()) {
+                player.removePiece(piece);
+            }
+            player.getPieces().clear();
+            System.out.println("player pieces: " + player.getPieces().size());
+        }
+        pieces = new ArrayList<>();
     }
 
     @Override
@@ -26,7 +35,10 @@ public class EditorBoard extends Board {
 
     @Override
     protected void updateGameRules() {
-
+        for(PieceInterface piece : pieces) {
+            PieceInterface newPiece = new Piece(piece.getTeam(), piece.getName(), piece.getLocation(), new ArrayList<>(), piece.getScore());
+            piece.transform(newPiece);
+        }
     }
 
     @Override
@@ -37,7 +49,7 @@ public class EditorBoard extends Board {
     @Override
     public boolean canMovePiece(Location location) {
         List<Location> pieceLocations = new ArrayList<>();
-        for (PieceInterface piece : allPieces) {
+        for (PieceInterface piece : pieces) {
             pieceLocations.add(piece.getLocation());
         }
         return location.inList(pieceLocations);

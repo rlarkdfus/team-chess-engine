@@ -56,7 +56,7 @@ public class PowerupTest {
       PieceInterface expectedWhiteQueen =  PieceBuilder.buildPiece("w","Q",new Location(5,0));
         board.movePiece(new Location(6,0),new Location(5,0)); //move white pawn
         System.out.println(promotionLocations);
-        Assertions.assertEquals(expectedWhiteQueen.getName(),MoveUtility.pieceAt(powerupTestLocation1,board.allPieces).getName());
+        Assertions.assertEquals(expectedWhiteQueen.getName(),MoveUtility.pieceAt(powerupTestLocation1,board.pieces).getName());
     }
 
     @Test

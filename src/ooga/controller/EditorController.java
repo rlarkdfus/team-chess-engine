@@ -1,47 +1,43 @@
 package ooga.controller;
 
 import ooga.Location;
-import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.Builder;
 import ooga.controller.Config.PieceViewBuilder;
-import ooga.model.*;
-import ooga.view.View;
+import ooga.model.EditorBoard;
+import ooga.model.Engine;
 import ooga.view.EditorView;
+import ooga.view.ViewInterface;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.io.File;
 import java.util.List;
 
 public class EditorController extends Controller {
-    
-    private View editorView;
 
-    @Override
-    protected void configureInitialGameSettings() {
-    }
+  public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultEditor.json");
 
-    @Override
-    protected void start() {
-        model = new EditorBoard(boardBuilder.getInitialPlayers());
-        editorView = new EditorView(this);
-        editorView.initializeDisplay(boardBuilder.getInitialPieceViews());
-    }
+  @Override
+  protected File getDefaultConfiguration() {
+    return DEFAULT_CHESS_CONFIGURATION;
+  }
 
-    @Override
-    public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
-        List<PieceViewBuilder> pieceViewList = new ArrayList<>();
-        for (PieceInterface piece : model.movePiece(start, end)) {
-            pieceViewList.add(new PieceViewBuilder(piece));
-        }
-        editorView.updateDisplay(pieceViewList);
-    }
+  @Override
+  protected Engine initializeModel(Builder boardBuilder) {
+    return new EditorBoard(boardBuilder.getInitialPlayers());
+  }
 
-    @Override
-    public void setInitialTime(int minutes) {
+  @Override
+  protected ViewInterface initializeView(List<PieceViewBuilder> pieces) {
+    ViewInterface view = new EditorView(this);
+    view.initializeDisplay(pieces);
+    return view;
+  }
 
-    }
+  @Override
+  public void setInitialTime(int minutes) {
+  }
 
-    @Override
-    public void setIncrement(int seconds) {
+  @Override
+  public void setIncrement(int seconds) {
+  }
 
-    }
 }
