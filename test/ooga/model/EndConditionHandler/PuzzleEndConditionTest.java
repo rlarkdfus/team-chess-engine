@@ -1,21 +1,20 @@
 package ooga.model.EndConditionHandler;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.List;
 import ooga.Location;
-import ooga.controller.Config.*;
-import ooga.model.*;
+import ooga.controller.Config.BoardBuilder;
+import ooga.controller.Config.Builder;
+import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.model.Board;
+import ooga.model.GameBoard;
+import ooga.model.GameState;
+import ooga.model.PlayerInterface;
 import ooga.model.Powerups.PowerupInterface;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class PuzzleEndConditionTest {
     EndConditionRunner endConRunner;
@@ -29,7 +28,7 @@ class PuzzleEndConditionTest {
         players = boardBuilder.getInitialPlayers();
         endConRunner = boardBuilder.getEndConditionHandler();
         List<PowerupInterface> powerups = boardBuilder.getPowerupsHandler();
-        board = new GameBoard(players, endConRunner, powerups);
+        board = new GameBoard(players, endConRunner, powerups, boardBuilder.getBoardSize());
     }
 
     @Test

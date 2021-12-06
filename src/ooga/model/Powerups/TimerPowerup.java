@@ -1,17 +1,14 @@
 package ooga.model.Powerups;
 
+import java.util.List;
 import ooga.Location;
-import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
-import java.io.FileNotFoundException;
-import java.util.List;
-
 public class TimerPowerup extends Powerup{
     private static int MINUTE = 60;
-    public TimerPowerup(List<Location> powerupLocations) {
-        super(powerupLocations);
+    public TimerPowerup(List<Location> powerupLocations, Location bounds) {
+        super(powerupLocations, bounds);
     }
 
     /**

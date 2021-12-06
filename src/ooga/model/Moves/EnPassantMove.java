@@ -13,8 +13,8 @@ public class EnPassantMove extends Move {
      * @param take move takes
      * @param limited move is limited
      */
-    public EnPassantMove(int dRow, int dCol, boolean take, boolean limited) {
-        super(dRow, dCol, take, limited);
+    public EnPassantMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
+        super(dRow, dCol, take, limited, bounds);
     }
 
     /**

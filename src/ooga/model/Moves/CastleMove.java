@@ -1,7 +1,6 @@
 package ooga.model.Moves;
 
 import ooga.Location;
-import ooga.model.Moves.Move;
 import ooga.model.PieceInterface;
 
 import java.util.List;
@@ -14,8 +13,8 @@ public abstract class CastleMove extends Move {
      * @param take whether move can take
      * @param limited whether move is limited
      */
-    public CastleMove(int dRow, int dCol, boolean take, boolean limited) {
-        super(dRow, dCol, take, limited);
+    public CastleMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
+        super(dRow, dCol, take, limited, bounds);
     }
 
     /**

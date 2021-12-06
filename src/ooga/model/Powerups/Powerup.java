@@ -9,15 +9,17 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 public abstract class Powerup implements PowerupInterface{
-
-    protected List<Location> powerupLocations;
+    private List<Location> powerupLocations;
+    private Location bounds;
 
     /**
      * Initializes powerup class
      * @param powerupLocations list of locations for powerup squares
+     * @param bounds location object representing the bounds of the board
      */
-    public Powerup(List<Location> powerupLocations) {
+    public Powerup(List<Location> powerupLocations, Location bounds) {
         this.powerupLocations = powerupLocations;
+        this.bounds = bounds;
     }
 
     @Override
@@ -58,4 +60,11 @@ public abstract class Powerup implements PowerupInterface{
 
      abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces);
 
+     protected Location getBounds(){
+         return bounds;
+     }
+
+     protected List<Location> getPowerupLocations(){
+        return powerupLocations;
+    }
 }

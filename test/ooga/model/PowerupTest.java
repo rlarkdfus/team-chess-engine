@@ -1,7 +1,19 @@
 package ooga.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import ooga.Location;
-import ooga.controller.Config.*;
+import ooga.controller.Config.BoardBuilder;
+import ooga.controller.Config.Builder;
+import ooga.controller.Config.InvalidEndGameConfigException;
+import ooga.controller.Config.InvalidGameConfigException;
+import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.PieceBuilder;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.MoveUtility;
 import ooga.model.Powerups.PowerupInterface;
@@ -10,14 +22,6 @@ import ooga.model.Powerups.TimerPowerup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PowerupTest {
 
@@ -40,20 +44,20 @@ public class PowerupTest {
         promotionLocations.add(powerupTestLocation1);
         promotionLocations.add(powerupTestLocation2);
 
-        PromotePowerup promotePowerup = new PromotePowerup(promotionLocations);
-        TimerPowerup timerPowerup = new TimerPowerup(promotionLocations);
+        PromotePowerup promotePowerup = new PromotePowerup(promotionLocations,new Location(8,8));
+        TimerPowerup timerPowerup = new TimerPowerup(promotionLocations,new Location(8,8));
 
         List<PowerupInterface> powerups = new ArrayList<>();
         powerups.add(promotePowerup);
         powerups.add(timerPowerup);
-        board = new GameBoard(players, endConRunner, powerups);
+        board = new GameBoard(players, endConRunner, powerups, boardBuilder.getBoardSize());
     }
 
 
     @Test
     void testPromotionSquare()
             throws FileNotFoundException, InvalidPieceConfigException {
-      PieceInterface expectedWhiteQueen =  PieceBuilder.buildPiece("w","Q",new Location(5,0));
+      PieceInterface expectedWhiteQueen =  PieceBuilder.buildPiece("w","Q",new Location(5,0),new Location(8,8));
         board.movePiece(new Location(6,0),new Location(5,0)); //move white pawn
         System.out.println(promotionLocations);
         Assertions.assertEquals(expectedWhiteQueen.getName(),MoveUtility.pieceAt(powerupTestLocation1,board.pieces).getName());
