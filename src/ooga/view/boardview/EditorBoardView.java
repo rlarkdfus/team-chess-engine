@@ -20,28 +20,23 @@ public class EditorBoardView extends BoardView {
     @Override
     protected void clickBoard(Location clickLocation) throws FileNotFoundException, InvalidPieceConfigException {
         Location startLocation = getSelectedLocation();
-
-        if (startLocation == null) {
-            if (controller.canMovePiece(clickLocation)) {
-                selectPiece(clickLocation);
-                showLegalMoves(controller.getLegalMoves(clickLocation));
-            } else {
-                unselectPiece();
-            }
+        if (controller.hasMenuPiece()) {
+            controller.addPiece(clickLocation);
         } else {
-            if (isLegalMove(clickLocation, controller.getLegalMoves(clickLocation))) { //user clicks new location
-                controller.movePiece(startLocation, clickLocation);
-                unselectPiece();
+            if (startLocation == null) {
+                if (controller.canMovePiece(clickLocation)) {
+                    selectPiece(clickLocation);
+                    showLegalMoves(controller.getLegalMoves(clickLocation));
+                } else {
+                    unselectPiece();
+                }
+            } else {
+                if (isLegalMove(clickLocation, controller.getLegalMoves(clickLocation))) { //user clicks new location
+                    controller.movePiece(startLocation, clickLocation);
+                    unselectPiece();
+                }
             }
         }
 
-
-//        if (getSelectedLocation() == null) {
-//            selectPiece(clickLocation);
-//        }
-//        else {
-//            controller.movePiece(getSelectedLocation(), clickLocation);
-//            unselectPiece();
-//        }
     }
 }

@@ -27,7 +27,7 @@ public class PowerupTest {
     static Location powerupTestLocation1 = new Location(5,0);
     static Location powerupTestLocation2 = new Location(3,1);
 
-    List<PieceInterface> allpieces;
+    List<Location> promotionLocations;
 
     @BeforeEach
     void setUp()
@@ -36,8 +36,7 @@ public class PowerupTest {
         Builder boardBuilder = new BoardBuilder(new File(testFile));
         players = boardBuilder.getInitialPlayers();
         endConRunner = boardBuilder.getEndConditionHandler();
-
-        List<Location> promotionLocations = new ArrayList<>();
+        promotionLocations = new ArrayList<>();
         promotionLocations.add(powerupTestLocation1);
         promotionLocations.add(powerupTestLocation2);
 
@@ -47,7 +46,6 @@ public class PowerupTest {
         List<PowerupInterface> powerups = new ArrayList<>();
         powerups.add(promotePowerup);
         powerups.add(timerPowerup);
-
         board = new GameBoard(players, endConRunner, powerups);
     }
 
@@ -57,7 +55,8 @@ public class PowerupTest {
             throws FileNotFoundException, InvalidPieceConfigException {
       PieceInterface expectedWhiteQueen =  PieceBuilder.buildPiece("w","Q",new Location(5,0));
         board.movePiece(new Location(6,0),new Location(5,0)); //move white pawn
-        Assertions.assertEquals(expectedWhiteQueen.getName(),MoveUtility.pieceAt(powerupTestLocation1,board.allPieces).getName());
+        System.out.println(promotionLocations);
+        Assertions.assertEquals(expectedWhiteQueen.getName(),MoveUtility.pieceAt(powerupTestLocation1,board.pieces).getName());
     }
 
     @Test
@@ -72,7 +71,6 @@ public class PowerupTest {
         // 64 incremented seconds
         String expectedTime = "11:04";
         assertEquals(expectedTime, whitePlayer.getTimeLeft().getValue());
-
     }
 
 

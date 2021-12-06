@@ -25,13 +25,13 @@ public interface PlayerInterface {
 
   String getTeam();
 
-  void movePiece(PieceInterface piece, Location end);
-
-  void tryMove(PieceInterface piece, Location end);
+//  void movePiece(PieceInterface piece, Location end);
+//
+//  void tryMove(PieceInterface piece, Location end);
 
   void removePiece(PieceInterface piece);
 
-    int getScore();
+  int getScore();
 
 
 }
