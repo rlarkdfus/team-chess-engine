@@ -21,6 +21,20 @@ import ooga.model.PlayerInterface;
 import ooga.view.ViewInterface;
 import org.json.JSONObject;
 
+/**
+ * @Authors albert luis gordon sam tarun richard
+ *
+ * purpose - this class starts the game and connects the board and view, and holds all the game configuration objects.
+ *  This is the parent class of editor and game controllers. The purpose of this class is to communicate
+ *  any information that needs to be send to and from the view and model. It also initiates the game
+ *  by creating view and model objects by reading files and creating objects from them.
+ * assumptions - we assume that the defaultConfiguration file is valid. if this isn't the case, the
+ *  game will crash.
+ * dependencies - this class depends on the our model classes, our view classes, and our boardbuilder classes.
+ * To use - The user create a new controller object and a default view and model will be created. If a file
+ *  is selected, the file is sent to boardbuilder and then new view and model objects are created and
+ *  the game is remade.
+ */
 public abstract class Controller implements ControllerInterface {
 
   //TODO: change protected
@@ -36,6 +50,10 @@ public abstract class Controller implements ControllerInterface {
   public static final int DEFAULT_INITIAL_TIME = 5;
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
+  /**
+   * This constructor creates default model and view objects to that the player can either play the game,
+   * or select a new configuration file and play a new game
+   */
   public Controller() {
     initialTime = DEFAULT_INITIAL_TIME;
     increment = DEFAULT_INITIAL_INCREMENT;
@@ -46,10 +64,29 @@ public abstract class Controller implements ControllerInterface {
     view = initializeView(boardBuilder.getInitialPieceViews(),boardBuilder.getBoardSize());
   }
 
+  /**
+   * this method returns the defaultconfiguration file that is used to initiate the game and
+   * reset the game
+   * @return - a file object of a statically defined default file
+   */
   protected abstract File getDefaultConfiguration();
 
+  /**
+   * this method initializes a model by using the objects made by the boardbuilder.
+   * we assume that the boardbuilder has run .build() with a valid json file.
+   * @param boardBuilder - a boardbuilder object that holds vital objects like the pieces, powerups, and endconditions
+   * @return - a model object that is used to run the game
+   */
   protected abstract Engine initializeModel(Builder boardBuilder);
 
+  /**
+   * this method initializes a view by using the objects made by the boardbuilder.
+   * we assume that the boardbuilder has run .build() with a valid json file and that
+   * the following parameters have been made.
+   * @param pieces -  a list of data objects that are used to produce javafx objects in view
+   * @param bounds -  a location object that is used to define the bounds of the display board
+   * @return - a view object that is used to display the game
+   */
   protected abstract ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds);
 
   /**
@@ -105,10 +142,24 @@ public abstract class Controller implements ControllerInterface {
     view.updateDisplay(pieceViewList);
   }
 
+  /**
+   * this method is called from view when a piece is clicked. When a piece is clicked, it's location
+   * is sent via this method to the model to find all the possible moves it can legally go to based on
+   * the defined rules. The returned list is used to highlight squares that the user can select as a
+   * move
+   * @param location - the location of the piece that is potentially getting moved
+   * @return - a list of locations that the piece can go to
+   */
   public List<Location> getLegalMoves(Location location) {
     return model.getLegalMoves(location);
   }
 
+  /**
+   * this method is called via a button in view. It copies down the current pieces and their locations to
+   * a csv, and copies the current game json. These two files are identically named based on the given
+   * filepath
+   * @param filePath - the filepath of the to-be-saved game data
+   */
   @Override
   public void downloadGame(String filePath) {
     try {
@@ -131,9 +182,20 @@ public abstract class Controller implements ControllerInterface {
     return model.getPlayers().get(side).getTimeLeft();
   }
 
+  /**
+   * this is called by the slider in view that allows the user to change the amount of time per game
+   * upon resetting the game, the new game will its timer start at this time.
+   * @param minutes - the new time per game
+   */
   public abstract void setInitialTime(int minutes);
 
+  /**
+   * this is called by the slider in view that allows the user to change the amount of time gained per
+   * move upon resetting the game, the new game will increment the timer by this amount.
+   * @param seconds - the new time bonus per played move
+   */
   public abstract void setIncrement(int seconds);
+
 
   public boolean selectMenuPiece(String team, String name) {
     if (selectedTeam == null) {
