@@ -14,7 +14,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   private final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
   private final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
-  private final String DEFAULT_PIECE_STYLE = "companion";
+  private String DEFAULT_PIECE_STYLE = "companion";
   private final int SQUARE_WIDTH = 60;
   private final int SQUARE_HEIGHT = 60;
 
@@ -69,6 +69,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
         pieceView.changeStyle(style);
       }
     }
+    DEFAULT_PIECE_STYLE = style;
   }
 
   private void annotate(MouseEvent mouse) {
