@@ -14,7 +14,6 @@ public class TimerPowerup extends Powerup{
         super(powerupLocations);
     }
 
-
     /**
      * Adds 60 seconds of time to the player's timer if they move a piece on a timer powerup square
      * @param pieceInterface piece that is being moved
@@ -22,7 +21,6 @@ public class TimerPowerup extends Powerup{
      * @param currentPlayer current player who
      * @param allPieces list of all pieces intialized on the board
      */
-
     @Override
     void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) {
         currentPlayer.incrementTime(MINUTE);
