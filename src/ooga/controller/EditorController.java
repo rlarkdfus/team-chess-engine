@@ -2,6 +2,7 @@ package ooga.controller;
 
 import java.io.File;
 import java.util.List;
+import ooga.Location;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.EditorBoard;
@@ -24,9 +25,9 @@ public class EditorController extends Controller {
   }
 
   @Override
-  protected ViewInterface initializeView(List<PieceViewBuilder> pieces) {
+  protected ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds) {
     ViewInterface view = new EditorView(this);
-    view.initializeDisplay(pieces);
+    view.initializeDisplay(pieces, bounds);
     return view;
   }
 

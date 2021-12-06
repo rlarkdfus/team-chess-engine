@@ -11,9 +11,9 @@ public interface ViewInterface {
      */
     void updateDisplay(List<PieceViewBuilder> pieceViewList);
 
-    void initializeDisplay(List<PieceViewBuilder> pieceViewList);
+    void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds);
 
-    void resetDisplay(List<PieceViewBuilder> pieceViewList);
+    void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds);
 
     void changeBoardColor(Color color1, Color color2);
 

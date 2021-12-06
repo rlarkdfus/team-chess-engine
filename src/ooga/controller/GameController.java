@@ -52,9 +52,9 @@ public class GameController extends Controller {
   }
 
   @Override
-  protected ViewInterface initializeView(List<PieceViewBuilder> pieces) {
+  protected ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds) {
     ViewInterface view = new GameView(this);
-    view.initializeDisplay(pieces);
+    view.initializeDisplay(pieces, bounds);
     return view;
   }
 
