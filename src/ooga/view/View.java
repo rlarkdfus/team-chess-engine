@@ -55,12 +55,14 @@ public abstract class View implements ViewInterface {
 
     @Override
     public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
+        System.out.println("Initialize display");
         createStaticUIs();
         resetDisplay(pieceViewList, bounds);
     }
 
     @Override
     public void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
+        System.out.println("Reset display");
         createResettableUIs();
         stage.setScene(setupDisplay());
         stage.show();
@@ -82,7 +84,7 @@ public abstract class View implements ViewInterface {
     }
 
     public void changeLanguage(String language) {
-
+        viewUtility.changeLanguage(language);
     }
 
     @Override

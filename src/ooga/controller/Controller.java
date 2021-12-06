@@ -1,10 +1,18 @@
 package ooga.controller;
 
+import javafx.beans.property.StringProperty;
+import ooga.Location;
+import ooga.controller.Config.*;
+import ooga.model.*;
+import ooga.view.ViewInterface;
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.StringProperty;
 import java.util.Map;
 
 import ooga.Location;
@@ -38,7 +46,7 @@ import org.json.JSONObject;
 public abstract class Controller implements ControllerInterface {
 
   //TODO: change protected
-  private Engine model;
+  protected Engine model;
   private ViewInterface view;
   private File jsonFile;
   private static final String CONTROLLER_PATH = Controller.class.getPackageName() + ".";
@@ -109,7 +117,6 @@ public abstract class Controller implements ControllerInterface {
     return model.canMovePiece(location);
   }
 
-
   /**
    * sets up a new game with the initial configuration file
    *
@@ -177,9 +184,13 @@ public abstract class Controller implements ControllerInterface {
   /**
    * method to help get the model object in subclasses
    */
-  protected Engine getModel(){
+  protected Engine getModel() {
     return model;
   }
+  protected GameState getGameState() {
+    return model.checkGameState();
+  }
+
 
   /**
    * launches a new controller from the selected game variation
