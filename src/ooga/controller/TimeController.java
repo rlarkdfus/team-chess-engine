@@ -24,11 +24,11 @@ public class TimeController {
     }
 
     public void setInitialTime(int minutes) {
-        this.initialTime = minutes;
+        initialTime = minutes;
     }
 
     public void setIncrement(int seconds) {
-        this.increment = seconds;
+        increment = seconds;
     }
 
     public void startPlayer1Timer(List<PlayerInterface> players) {
@@ -36,9 +36,6 @@ public class TimeController {
     }
 
     public void resetTimers(List<PlayerInterface> players) {
-        for (PlayerInterface player : players) {
-            player.resetTimer();
-        }
-        players.forEach(player -> player.resetTimer());
+        players.forEach(PlayerInterface::resetTimer);
     }
 }
