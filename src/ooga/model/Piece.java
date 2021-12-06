@@ -2,11 +2,18 @@ package ooga.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import ooga.Location;
 import ooga.model.Moves.Move;
 
+/**
+ * @authors
+ * purpose - the class manages each piece, and keeps track of its attributes as well as the
+ * moves that it has available to it
+ * assumptions - it assumes that the moves are valid
+ * dependencies - it depends on PieceInterface, Location and Move
+ * usage - a piece is created from the parsed json files using the parsed parameters
+ */
 public class Piece implements PieceInterface {
   private String team;
   private String name;
@@ -36,7 +43,6 @@ public class Piece implements PieceInterface {
 
   /**
    * gets white or black team, used for modifying move vector
-   *
    * @return the team name
    */
   @Override
@@ -46,7 +52,6 @@ public class Piece implements PieceInterface {
 
   /**
    * returns the value of a piece
-   *
    * @return the score of a piece
    */
   @Override
@@ -97,7 +102,6 @@ public class Piece implements PieceInterface {
 
   /**
    * override toString to print out piece information
-   *
    * @return string representation of team and piece
    */
   @Override

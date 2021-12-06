@@ -2,10 +2,17 @@ package ooga.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * @authors
+ * purpose - the movetimer manages the time that each player has to make a move
+ * assumptions - it assumes that the time is a maximum of 3599
+ * dependencies - it depends on the TimerInterface, StringProperty, and Timer
+ * usage - a player holds its MoveTimer and calls methods to start/stop, set, increment,
+ * and get the remaining time
+ */
 public class MoveTimer implements TimerInterface {
     // timer parameters
     public static final int DELAY = 1000;
@@ -30,6 +37,8 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * create move timer object to keep track of remaining time for each player
+     * @param initialTimeMinutes initial time minutes
+     * @param initialIncrementSeconds initial time seconds
      */
     public MoveTimer(int initialTimeMinutes, int initialIncrementSeconds) {
         setInitialTime(initialTimeMinutes);
@@ -42,7 +51,7 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * return the time left on a player's timer
-     * @return
+     * @return the time left
      */
     @Override
     public StringProperty getTimeLeft() {
@@ -51,7 +60,7 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * return whether the current timer is out of time
-     * @return
+     * @return whether a timer is out of time
      */
     @Override
     public boolean isOutOfTime() {
@@ -149,8 +158,6 @@ public class MoveTimer implements TimerInterface {
     @Override
     public void incrementTimeUserInterface() {
         incrementTime(increment);
-//        seconds += increment;
-//        timeLeft.setValue(timeToString(seconds));
     }
 
     /**
@@ -167,7 +174,6 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * converts time in seconds to "mm:ss"
-     *
      * @param seconds the time in seconds (maximum of 3599)
      * @return the String representation of the time
      */
@@ -179,7 +185,6 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * Converts time to two digit string
-     *
      * @param time the time as an integer
      * @return the String representation of the time with two digits
      */
