@@ -58,6 +58,7 @@ public class LoginController {
 
     public void handleGuestLogin() {
         new GameController();
+        hideLoginView();
     }
 
     public void handleSignUp(String username, String password) {
