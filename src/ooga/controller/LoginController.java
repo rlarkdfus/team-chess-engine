@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import ooga.controller.Config.JSONWriter;
 import ooga.controller.Config.JsonParser;
 import ooga.model.GameState;
@@ -14,8 +15,18 @@ import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
 public class LoginController {
-    private final File userProfiles = new File("data/chess/profiles/profiles.json");
+    public static final String USER_PROFILES = "data/chess/profiles/profiles.json";
+    public static final String RESOURCE_BUNDLE_PATH = "ooga/controller/English";
+    public static final String JSON_WRITER_FILE_PATH = "data/chess/profiles/profiles";
+    public static final String USER_PROFILE_ERROR = "userProfileError";
+    public static final String USERNAME_ERROR = "usernameError";
+    public static final String PASSWORD = "password";
+    public static final String WINS = "wins";
+    public static final int STARTING_WINS = 0;
+
+    private final File userProfiles = new File(USER_PROFILES);
     private final ViewUtility viewUtility = new ViewUtility();
+    private final ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH);
 
     private LoginView loginView;
     private JsonParser jsonParser;
@@ -28,7 +39,7 @@ public class LoginController {
         try {
             userProfilesJSON = jsonParser.loadFile(userProfiles);
         } catch (FileNotFoundException e) {
-            viewUtility.showError("Error finding user profiles. Please play as guest ");
+            viewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
         }
     }
 
@@ -54,13 +65,13 @@ public class LoginController {
 
     public void handleSignUp(String username, String password) {
         JSONObject newProfile =  new JSONObject();
-        newProfile.put("password", password);
-        newProfile.put("wins", 0);
+        newProfile.put(PASSWORD, password);
+        newProfile.put(WINS, STARTING_WINS);
         userProfilesJSON.put(username, newProfile);
         try {
-            JSONWriter.saveFile(userProfilesJSON, "data/chess/profiles/profiles");
+            JSONWriter.saveFile(userProfilesJSON, JSON_WRITER_FILE_PATH);
         } catch (IOException e) {
-            viewUtility.showError("Error in accessing user profiles, please play as guest");
+            viewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
         }
     }
 
@@ -71,11 +82,11 @@ public class LoginController {
     private boolean isValidLogin(String username, String password) {
         try {
             JSONObject userData = userProfilesJSON.getJSONObject(username);
-            String truePassword = userData.getString("password");
+            String truePassword = userData.getString(PASSWORD);
             return truePassword.equals(password);
         }
         catch (Exception e) {
-            viewUtility.showError("Invalid username. Please login with an existing username or sign in to create an account");
+            viewUtility.showError(resourceBundle.getString(USERNAME_ERROR));
         }
         return false;
     }

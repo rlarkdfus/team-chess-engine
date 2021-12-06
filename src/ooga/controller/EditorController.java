@@ -1,6 +1,5 @@
 package ooga.controller;
 
-import ooga.Location;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.EditorBoard;
