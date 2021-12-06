@@ -1,16 +1,22 @@
 package ooga.model;
 
 import javafx.beans.property.StringProperty;
-import ooga.Location;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * Purpose: Player is an abstraction representing a player playing the game of chess. This is
+ * useful as the player will hold its own pieces and can keep track of the time left in their turn,
+ * as well as their own score.
+ * Assumptions: TimerInterface works as expected and provides an abstraction so that we can keep
+ * track of the time left in the game.
+ * Dependencies: TimerInterface, PieceInterface
+ *
+ * @author Sam Li, Gordon Kim
+ */
 public class Player implements PlayerInterface {
-    //Keep track of all their killed pieces
+
     private final String team;
     private int score;
     private TimerInterface moveTimer;
@@ -134,29 +140,7 @@ public class Player implements PlayerInterface {
         return team;
     }
 
-//    /**
-//     * perform a piece move to end location
-//     * @param piece
-//     * @param end
-//     */
-//    @Override
-//    public void movePiece(PieceInterface piece, Location end) {
-//
-//    }
-//
-//    /**
-//     * test a piece move to end location
-//     * @param piece
-//     * @param end
-//     */
-//    @Override
-//    public void tryMove(PieceInterface piece, Location end) {
-//
-//    }
-//
-//    /**
-//     * get score of all pieces
-//     */
+
 //    private void calculateScore(){
 //        for(PieceInterface piece: remainingPieces.keySet()){
 //            score += piece.getScore();
