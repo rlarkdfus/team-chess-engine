@@ -124,10 +124,14 @@ public abstract class Controller implements ControllerInterface {
    */
   @Override
   public void uploadConfiguration(File file) {
-    BoardBuilder boardBuilder = new BoardBuilder(file);
-    jsonFile = file;
-    model = initializeModel(boardBuilder);
-    view = initializeView(boardBuilder.getInitialPieceViews(), boardBuilder.getBoardSize());
+    try {
+      BoardBuilder boardBuilder = new BoardBuilder(file);
+      jsonFile = file;
+      model = initializeModel(boardBuilder);
+      view = initializeView(boardBuilder.getInitialPieceViews(), boardBuilder.getBoardSize());
+    } catch (Exception ignored) {
+    }
+
   }
 
   /**
@@ -191,14 +195,16 @@ public abstract class Controller implements ControllerInterface {
     return model.checkGameState();
   }
 
-
   /**
    * launches a new controller from the selected game variation
    * @param variation the variation of the controller to use
    */
-  public void launchController(String variation) throws Throwable{
-    Class<?> clazz = Class.forName(CONTROLLER_PATH + variation + CONTROLLER_SUFFIX);
-    ControllerInterface controller = (ControllerInterface) clazz.getDeclaredConstructor().newInstance();
+  public void launchController(String variation) {
+    try {
+      Class<?> clazz = Class.forName(CONTROLLER_PATH + variation + CONTROLLER_SUFFIX);
+      ControllerInterface controller = (ControllerInterface) clazz.getDeclaredConstructor().newInstance();
+    }
+    catch (Exception ignored) {
+    }
   }
-
 }
