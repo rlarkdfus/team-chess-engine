@@ -15,8 +15,9 @@
     -fx-padding: 15px;
 }
 
-. LoginUI {
-    -fx-background-color: tan;
+. login-window {
+    -fx-alignment: center;
+    -fx-background-color: #e1e3f5;
 }
 
 . EndScreenUI {
