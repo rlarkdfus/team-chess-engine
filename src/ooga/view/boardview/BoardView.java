@@ -27,7 +27,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     selectedLocation = null;
     pieceList = new ArrayList<>();
     this.row = row;
-    this.col = col;
+    this.col = row;
     initializeBoardView(pieceViews);
   }
 

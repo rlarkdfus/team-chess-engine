@@ -1,10 +1,7 @@
 package ooga.controller;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
@@ -32,9 +29,10 @@ public class GameController extends Controller implements GameControllerInterfac
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
 
+
   private TimeController timeController;
-  private int initialTime = DEFAULT_INITIAL_TIME;
-  private int increment = DEFAULT_INITIAL_INCREMENT;
+  private int initialTime;
+  private int increment;
 
   private GameOverScreen gameOverScreen;
   private Map<Enum, JSONObject> players;
@@ -61,7 +59,10 @@ public class GameController extends Controller implements GameControllerInterfac
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
     Engine model = new GameBoard(players, boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler(),
             boardBuilder.getBoardSize());
+    configureTimersStartOfApplication();
+    System.out.println("initializing model w/ time settings: " + initialTime + ", " + increment);
     timeController = new TimeController(initialTime, increment);
+    timeController.configTimers(players);
     startTimersForNewGame(players);
     return model;
   }
@@ -155,6 +156,10 @@ public class GameController extends Controller implements GameControllerInterfac
   }
 
   //TODO: TIMER
+  private void configureTimersStartOfApplication() {
+    setInitialTime(DEFAULT_INITIAL_TIME);
+    setIncrement(DEFAULT_INITIAL_INCREMENT);
+  }
 
   /**
    * reset timers for a new game and start the first player's timer
@@ -204,4 +209,12 @@ public class GameController extends Controller implements GameControllerInterfac
     this.players = players;
     this.usernames = usernames;
   }
+
+    public List<Integer> getUpdatedScores() {
+        List<Integer> scores = new ArrayList<>();
+        for (PlayerInterface player : model.getPlayers()) {
+            scores.add(player.getScore());
+        }
+        return scores;
+    }
 }

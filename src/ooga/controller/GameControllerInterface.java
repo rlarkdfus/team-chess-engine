@@ -1,5 +1,6 @@
 package ooga.controller;
 
+import java.util.List;
 import java.util.Map;
 import javafx.beans.property.StringProperty;
 
@@ -41,4 +42,7 @@ public interface GameControllerInterface extends ControllerInterface{
    * @return a StringProperty ("mm:ss") representing the amount of time left
    */
   StringProperty getTimeLeft(int side);
-}
+
+  public List<Integer> getUpdatedScores();
+
+  }

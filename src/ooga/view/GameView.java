@@ -5,8 +5,7 @@ import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.controller.GameControllerInterface;
 import ooga.view.boardview.GameBoardView;
-import ooga.view.ui.gameInfoUI.GameInfoUI;
-import ooga.view.ui.playerStatsUI.playerStatsUI;
+import ooga.view.ui.playerStatsUI.PlayerStatsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
 import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
 
@@ -15,8 +14,7 @@ import java.util.List;
 public class GameView extends View {
 
   private SettingsUI settingsUI; // right
-  private GameInfoUI gameInfoUI; // left
-  private playerStatsUI playerStatsUI; // top
+  private PlayerStatsUI playerStatsUI; // left
   private TimeConfigurationUI timeConfigurationUI;
   GameControllerInterface controller;
 
@@ -26,14 +24,23 @@ public class GameView extends View {
   private final int DEFAULT_INITIAL_WHITE_SCORE = 39;
 
   public GameView(GameControllerInterface controller) {
+    super();
     this.controller = controller;
   }
-//
-//  @Override
-//  public void initializeDisplay(List<PieceViewBuilder> pieceViewList) {
-//    super.initializeDisplay(pieceViewList);
-//    updatePlayerStatsUI(List.of(DEFAULT_INITIAL_WHITE_SCORE, DEFAULT_INITIAL_BLACK_SCORE));
-//  }
+
+  @Override
+  public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
+    super.initializeDisplay(pieceViewList, bounds);
+    updatePlayerStatsUI(List.of(DEFAULT_INITIAL_WHITE_SCORE, DEFAULT_INITIAL_BLACK_SCORE));
+  }
+
+  private void initializePlayerNames(List<String> names) {
+    playerStatsUI.initializePlayerNames(names.get(WHITE_SCORE_INDEX), names.get(BLACK_SCORE_INDEX));
+  }
+
+  private void updatePlayerStatsUI(List<Integer> scores) {
+    playerStatsUI.updateUI(scores.get(WHITE_SCORE_INDEX), scores.get(BLACK_SCORE_INDEX));
+  }
 
   @Override
   protected void createStaticUIs() {
@@ -43,14 +50,12 @@ public class GameView extends View {
   @Override
   protected void createResettableUIs() {
     this.settingsUI = new SettingsUI(controller, viewController);
-    this.playerStatsUI = new playerStatsUI(controller, viewController);
-    this.gameInfoUI = new GameInfoUI();
+    this.playerStatsUI = new PlayerStatsUI(controller, viewController);
   }
 
   @Override
   protected void addUIs(GridPane root) {
     root.add(settingsUI, 2, 1);
-    root.add(gameInfoUI, 0, 0, 3, 1);
     root.add(boardView, 1, 1, 1, 2);
     root.add(playerStatsUI, 0, 1, 1, 2);
     root.add(timeConfigurationUI, 2, 2, 1, 1);
@@ -60,10 +65,6 @@ public class GameView extends View {
   public void updateDisplay(List<PieceViewBuilder> pieceViewList) {
     super.updateDisplay(pieceViewList);
     updatePlayerStatsUI(controller.getUpdatedScores());
-  }
-
-  private void updatePlayerStatsUI(List<Integer> scores) {
-    playerStatsUI.updateUI(scores.get(BLACK_SCORE_INDEX), scores.get(WHITE_SCORE_INDEX));
   }
 
   @Override

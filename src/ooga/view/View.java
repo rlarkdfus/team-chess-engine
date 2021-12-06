@@ -82,7 +82,7 @@ public abstract class View implements ViewInterface {
     }
 
     public void changeLanguage(String language) {
-
+        viewUtility.changeLanguage(language);
     }
 
     @Override

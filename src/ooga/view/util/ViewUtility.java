@@ -23,14 +23,21 @@ import javafx.stage.Stage;
 
 public class ViewUtility {
 
-    private ResourceBundle myResources = ResourceBundle.getBundle("ooga/view/resources/English");
     public static final String ERROR_ALERT_TITLE = "Error";
     public final String SELECT_JSON_FILE = "Select JSON File";
     public final String JSON_FILE_EXTENSION_DESCRIPTION = "JSON Files (*.json)";
-    //public final String CSV_FILE_EXTENSION_DESCRIPTION = "CSV (Comma delimited) (*.csv)";
     public final String JSON_EXTENSION = "*.json";
-    //public final String CSV_EXTENSION = "*.csv";
     public final String EMPTY_FILE_PATH = "";
+    public static final String LANGUAGE_RESOURCE_PATH = "ooga/view/resources/";
+    public static final String DEFAULT_LANGUAGE = "English";
+    private static ResourceBundle languageResource;
+
+    private static List<Labeled> components = new ArrayList<>();
+    private static List<MenuButton> menuButtons = new ArrayList<>();
+
+    public ViewUtility() {
+        languageResource = ResourceBundle.getBundle(LANGUAGE_RESOURCE_PATH + DEFAULT_LANGUAGE);
+    }
 
     /**
      * makes a Label node
@@ -40,9 +47,9 @@ public class ViewUtility {
      */
     public Label makeLabel(String property) {
         Label result = new Label();
-        result.setText(myResources.getString(property));
+        result.setText(languageResource.getString(property));
         result.getStyleClass().add("label");
-        //result.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        components.add(result);
         return (Label) setID(property, result);
     }
 
@@ -55,9 +62,10 @@ public class ViewUtility {
      */
     public Button makeButton(String property, EventHandler<ActionEvent> response) {
         Button result = new Button();
-        result.setText(myResources.getString(property));
+        result.setText(languageResource.getString(property));
         result.setOnAction(response);
         result.getStyleClass().add("button");
+        components.add(result);
         return (Button) setID(property, result);
     }
 
@@ -101,7 +109,7 @@ public class ViewUtility {
      */
     public Text makeText(String property, StringProperty boundValue) {
         Text result = new Text();
-        result.setText(myResources.getString(property));
+        result.setText(languageResource.getString(property));
         result.getStyleClass().add("text");
         result.textProperty().bind(boundValue);
         return (Text) setID(property, result);
@@ -119,7 +127,7 @@ public class ViewUtility {
         ComboBox result = new ComboBox();
         Map<String, String> lang = new HashMap<>();
         for (String option : choices) {
-            lang.put(myResources.getString(option), option);
+            lang.put(languageResource.getString(option), option);
         }
         result.setItems(FXCollections.observableArrayList(lang.keySet().stream().toList()));
         result.valueProperty().addListener((o, oldValue, newValue) -> response.accept(lang.get(newValue)));
@@ -129,24 +137,21 @@ public class ViewUtility {
 
     public MenuButton makeMenu(String property, List<String> choices, Consumer<String> response) {
         MenuButton result = new MenuButton();
-        Map<String, String> lang = new HashMap<>();
-        for (String option : choices) {
-            lang.put(myResources.getString(option), option);
-        }
         List<MenuItem> options = new ArrayList<>();
-        for(String option : lang.keySet()) {
+        for(String option : choices) {
             MenuItem menuItem = new MenuItem(option);
             menuItem.setOnAction(e -> {
-                response.accept(lang.get(option));
-                result.setText(option);
+                response.accept(option);
+                result.setText(languageResource.getString(option));
             });
             menuItem.getStyleClass().add("menu-item");
+            menuItem.setId(option);
             options.add(menuItem);
         }
         result.getStyleClass().add("menu-button");
-//        result.getContextMenu().getStyleClass().add("context-menu");
         result.getItems().addAll(options);
-        result.setText(myResources.getString(choices.get(0)));
+        result.setText(languageResource.getString(choices.get(0)));
+        menuButtons.add(result);
         return (MenuButton) setID(property, result);
     }
 
@@ -234,7 +239,7 @@ public class ViewUtility {
     public static void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(ERROR_ALERT_TITLE);
-        alert.setContentText(message);
+        alert.setContentText(languageResource.getString(message));
         alert.showAndWait();
     }
 
@@ -242,7 +247,7 @@ public class ViewUtility {
      * makes a TextInputDialog without a cancel button
      *
      * @param headerText the header of the TextInputDialog
-     //* @param response the condition for allowing the text input dialog to close
+     *                   //* @param response the condition for allowing the text input dialog to close
      * @return the TextInputDialog created
      */
     public TextInputDialog makeUncancellableTextInputDialog(String headerText) {
@@ -285,6 +290,21 @@ public class ViewUtility {
     public List<String> getDialogResults(Dialog dlg) {
         Optional<List<String>> strArr = dlg.showAndWait();
         return strArr.get();
+    }
+
+    public void changeLanguage(String language) {
+        languageResource = ResourceBundle.getBundle(LANGUAGE_RESOURCE_PATH + language);
+        for (Labeled component : components) {
+            component.setText(languageResource.getString(component.getId()));
+        }
+        for(MenuButton menuButton : menuButtons) {
+            for(MenuItem menuItem : menuButton.getItems()) {
+                if(menuItem.getText().equals(menuButton.getText())) {
+                    menuButton.textProperty().setValue(languageResource.getString(menuItem.getId()));
+                }
+                menuItem.textProperty().setValue(languageResource.getString(menuItem.getId()));
+            }
+        }
     }
 
     public void setTextInputDialogCloseRestrictions(TextInputDialog textInputDialog, Set<String> acceptableValues) {
