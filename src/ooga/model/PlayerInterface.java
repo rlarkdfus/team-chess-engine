@@ -1,9 +1,7 @@
 package ooga.model;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import javafx.beans.property.StringProperty;
-import ooga.Location;
 
 public interface PlayerInterface {
 
