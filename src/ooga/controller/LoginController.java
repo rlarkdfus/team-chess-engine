@@ -3,8 +3,12 @@ package ooga.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import ooga.controller.Config.JSONWriter;
 import ooga.controller.Config.JsonParser;
+import ooga.model.GameState;
 import ooga.view.LoginView;
 import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
@@ -24,7 +28,14 @@ public class LoginController {
 
     public boolean handleLoginAttempt (String username1, String password1, String username2, String password2) {
         if (isValidLogin(username1, password1) && isValidLogin(username2, password2)) {
-            new GameController();
+            Map<Enum, JSONObject> players = new HashMap<>();
+            Map<Enum, String> usernames = new HashMap<>();
+            players.put(GameState.BLACK, userProfilesJSON.getJSONObject(username1));
+            players.put(GameState.WHITE, userProfilesJSON.getJSONObject(username2));
+            usernames.put(GameState.BLACK, username1);
+            usernames.put(GameState.WHITE, username2);
+            new GameController().setPlayers(usernames, players);
+
             hideLoginView();
             return true;
         }
@@ -37,12 +48,11 @@ public class LoginController {
 
     public void handleSignUp(String username, String password) {
         JSONObject newProfile =  new JSONObject();
-        newProfile.append("password", password);
-        newProfile.append("wins", 0);
-        userProfilesJSON.append(username, newProfile);
-        JSONWriter jsonWriter = new JSONWriter();
+        newProfile.put("password", password);
+        newProfile.put("wins", 0);
+        userProfilesJSON.put(username, newProfile);
         try {
-            jsonWriter.saveFile(userProfilesJSON, "data/chess/profiles/profiles.json");
+            JSONWriter.saveFile(userProfilesJSON, "data/chess/profiles/profiles");
         } catch (IOException e) {
             ViewUtility.showError("Error in accessing user profiles, please play as guest");
         }

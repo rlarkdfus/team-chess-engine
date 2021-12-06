@@ -39,5 +39,6 @@ public class TimeController {
         for (PlayerInterface player : players) {
             player.resetTimer();
         }
+        players.forEach(player -> player.resetTimer());
     }
 }
