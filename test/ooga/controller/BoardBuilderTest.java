@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import ooga.Location;
 import ooga.LogUtils;
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
@@ -79,7 +80,7 @@ class BoardBuilderTest {
   @Test
   void testPowerUps()
       throws InvalidPowerupsConfigException, FileNotFoundException, InvalidEndGameConfigException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, CsvException {
-    //EndGameBuilder Test
+    //powerupsBuilder Test
     boardBuilder.build(new File("data/chess/testTimerPowerup.json"));
     List<PowerupInterface> powerups = boardBuilder.getPowerupsHandler();
     List<Class> powerupTypes = new ArrayList<>();
@@ -160,10 +161,10 @@ class BoardBuilderTest {
     List<Move> actual;
 
     Method getMoves = PieceBuilder.class
-        .getDeclaredMethod("getMoves", JSONObject.class);
+        .getDeclaredMethod("getMoves", JSONObject.class, Location.class);
     getMoves.setAccessible(true);
 
-    actual = (List<Move>) getMoves.invoke(PieceBuilder.class, getPiece().getJSONObject("moves"));
+    actual = (List<Move>) getMoves.invoke(PieceBuilder.class, getPiece().getJSONObject("moves"),boardBuilder.getBoardSize());
     List<Class> moveClassTypes = new ArrayList<>();
 
     for (Move m : actual) {

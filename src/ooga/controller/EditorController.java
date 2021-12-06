@@ -1,14 +1,15 @@
 package ooga.controller;
 
+
+import java.io.File;
+import java.util.List;
+import ooga.Location;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.EditorBoard;
 import ooga.model.Engine;
 import ooga.view.EditorView;
 import ooga.view.ViewInterface;
-
-import java.io.File;
-import java.util.List;
 
 public class EditorController extends Controller {
 
@@ -21,13 +22,13 @@ public class EditorController extends Controller {
 
   @Override
   protected Engine initializeModel(Builder boardBuilder) {
-    return new EditorBoard(boardBuilder.getInitialPlayers());
+    return new EditorBoard(boardBuilder.getInitialPlayers(),boardBuilder.getBoardSize());
   }
 
   @Override
-  protected ViewInterface initializeView(List<PieceViewBuilder> pieces) {
+  protected ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds) {
     ViewInterface view = new EditorView(this);
-    view.initializeDisplay(pieces);
+    view.initializeDisplay(pieces, bounds);
     return view;
   }
 

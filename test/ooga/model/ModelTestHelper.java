@@ -14,7 +14,8 @@ public class ModelTestHelper {
     public static Engine createBoard() {
         BoardBuilder boardBuilder = new BoardBuilder(DEFAULT_CHESS_CONFIGURATION);
         List<PowerupInterface> powerups = boardBuilder.getPowerupsHandler();
-        return new GameBoard(boardBuilder.getInitialPlayers(), boardBuilder.getEndConditionHandler(), powerups);
+        return new GameBoard(boardBuilder.getInitialPlayers(), boardBuilder.getEndConditionHandler(), powerups,
+            boardBuilder.getBoardSize());
     }
 
     public static List<Location> getPieceLocations(List<PieceInterface> pieces) {

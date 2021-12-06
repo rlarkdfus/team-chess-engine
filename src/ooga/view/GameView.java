@@ -1,6 +1,7 @@
 package ooga.view;
 
 import javafx.scene.layout.GridPane;
+import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.controller.Controller;
 import ooga.view.boardview.GameBoardView;
@@ -44,9 +45,9 @@ public class GameView extends View {
   }
 
   @Override
-  public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
-    this.boardView = new GameBoardView(controller, pieceViewList, 8, 8);
-    super.resetDisplay(pieceViewList);
+  public void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
+    this.boardView = new GameBoardView(controller, pieceViewList, bounds.getRow(), bounds.getCol());
+    super.resetDisplay(pieceViewList, bounds);
   }
 }
 

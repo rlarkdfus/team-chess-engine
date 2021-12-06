@@ -1,7 +1,7 @@
 {
   "type": "chess",
   "board": "square",
-  "boardSize": "8x8",
+  "boardSize": "2x6",
   "time": 10,
   "timeIncrement": 5,
   "boardColors": ["#f3dab0", "#bb885b"],

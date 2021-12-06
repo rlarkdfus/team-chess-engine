@@ -2,17 +2,22 @@ package ooga.controller;
 
 import javafx.beans.property.StringProperty;
 import ooga.Location;
-import ooga.controller.Config.*;
 import ooga.model.Engine;
 import ooga.model.GameState;
 import ooga.model.PieceInterface;
 import ooga.view.ViewInterface;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import ooga.controller.Config.BoardBuilder;
+import ooga.controller.Config.Builder;
+import ooga.controller.Config.JSONWriter;
+import ooga.controller.Config.JsonParser;
+import ooga.controller.Config.LocationWriter;
+import ooga.controller.Config.PieceViewBuilder;
 import org.json.JSONObject;
 
 public abstract class Controller implements ControllerInterface {
@@ -37,14 +42,14 @@ public abstract class Controller implements ControllerInterface {
     jsonFile = getDefaultConfiguration();
     BoardBuilder boardBuilder = new BoardBuilder(jsonFile);
     model = initializeModel(boardBuilder);
-    view = initializeView(boardBuilder.getInitialPieceViews());
+    view = initializeView(boardBuilder.getInitialPieceViews(),boardBuilder.getBoardSize());
   }
 
   protected abstract File getDefaultConfiguration();
 
   protected abstract Engine initializeModel(Builder boardBuilder);
 
-  protected abstract ViewInterface initializeView(List<PieceViewBuilder> pieces);
+  protected abstract ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds);
 
   /**
    * Reset the game with the default board configuration
@@ -81,7 +86,7 @@ public abstract class Controller implements ControllerInterface {
     BoardBuilder boardBuilder = new BoardBuilder(file);
     jsonFile = file;
     model = initializeModel(boardBuilder);
-    view = initializeView(boardBuilder.getInitialPieceViews());
+    view = initializeView(boardBuilder.getInitialPieceViews(), boardBuilder.getBoardSize());
   }
 
   /**
