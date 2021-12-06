@@ -1,12 +1,5 @@
 package ooga.controller;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import ooga.Location;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.JSONWriter;
@@ -19,11 +12,19 @@ import ooga.model.PlayerInterface;
 import ooga.view.GameOverScreen;
 import ooga.view.GameView;
 import ooga.view.ViewInterface;
+import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class GameController extends Controller {
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
+  public static final String WINS = "wins";
+  public static final String JSON_WRITER_FILE_PATH = "data/chess/profiles/profiles";
   private final File userProfilesFile = new File("data/chess/profiles/profiles.json");
+
   private TimeController timeController;
   private int initialTime;
   private int increment;
@@ -41,7 +42,7 @@ public class GameController extends Controller {
   protected Engine initializeModel(Builder boardBuilder) {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
     Engine model = new GameBoard(players, boardBuilder.getEndConditionHandler(), new ArrayList<>(),
-        boardBuilder.getBoardSize());
+            boardBuilder.getBoardSize());
     timeController = new TimeController(initialTime, increment);
     timeController.configTimers(players);
     startTimersForNewGame(players);
@@ -94,17 +95,18 @@ public class GameController extends Controller {
 
   private void incrementWinAndSaveJSON(GameState gameState, Enum player) {
     JSONObject playerInfo = players.get(player);
-    int wins = players.get(player).getInt("wins") + 1;
+    int wins = players.get(player).getInt(WINS) + 1;
     players.remove(wins);
-    playerInfo.put("wins", wins);
+    playerInfo.put(WINS, wins);
     players.remove(player);
     players.put(player, playerInfo);
     JSONObject userProfiles = JsonParser.loadFile(userProfilesFile);
     userProfiles.remove(usernames.get(gameState));
     userProfiles.put(usernames.get(gameState), playerInfo);
     try {
-      JSONWriter.saveFile(userProfiles, "data/chess/profiles/profiles");
+      JSONWriter.saveFile(userProfiles, JSON_WRITER_FILE_PATH);
     } catch (Exception e) {
+      ViewUtility.showError("File not found");
     }
   }
 
