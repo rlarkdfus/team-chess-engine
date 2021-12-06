@@ -8,11 +8,9 @@ import ooga.Location;
 import ooga.model.Moves.Move;
 
 public class Piece implements PieceInterface {
-
   private String team;
   private String name;
   private int score;
-
   private Location location;
   private boolean moved;
   private boolean firstMove = false;
@@ -25,7 +23,6 @@ public class Piece implements PieceInterface {
    * @param name piece name
    * @param location location of piece
    * @param moves list of all moves available to piece
-   * @param attributes attributes map
    * @param score value of a piece
    */
   public Piece(String team, String name, Location location, List<Move> moves, int score) {

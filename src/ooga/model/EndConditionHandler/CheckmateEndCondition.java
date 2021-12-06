@@ -40,7 +40,7 @@ public class CheckmateEndCondition implements EndConditionInterface {
    * @param player the player in check
    * @return number of legal moves
    */
-  protected int getTotalLegalMoves(PlayerInterface player) {
+  private int getTotalLegalMoves(PlayerInterface player) {
     int totalLegalMoves = 0;
     for (PieceInterface piece : player.getPieces()) {
       totalLegalMoves += piece.getEndLocations().size();
