@@ -73,7 +73,7 @@ public class PowerupTest {
         board.movePiece(new Location(6,0),new Location(5,0)); //move white pawn to timer square 3,1;
         //Each move adds 5 seconds, 1 second is removed because of the time taken for the move, 60 second is added by powerup, for a total of 5-1+60,
         // 64 incremented seconds
-        String expectedTime = "11:04";
+        String expectedTime = "06:04";
         assertEquals(expectedTime, whitePlayer.getTimeLeft().getValue());
     }
 

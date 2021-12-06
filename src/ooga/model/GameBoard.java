@@ -34,6 +34,7 @@ public class GameBoard extends Board {
             piece.updateMoves(pieces);
         }
         updateLegalMoves();
+        this.currentPlayer = players.get(0);
     }
 
     /**
@@ -103,7 +104,7 @@ public class GameBoard extends Board {
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn+1) % players.size());
+        currentPlayer = players.get((turn) % players.size());
         return players.get((turn) % players.size());
     }
 
