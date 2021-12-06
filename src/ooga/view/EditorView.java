@@ -31,7 +31,7 @@ public class EditorView extends View {
 
   @Override
   protected void addUIs(GridPane root) {
-//        root.add(settingsUI, 2, 1);
+    root.add(settingsUI, 2, 1);
     root.add(boardView, 0, 1, 1, 2);
     root.setVgap(10);
     root.add(pieceMenu, 0, 3);

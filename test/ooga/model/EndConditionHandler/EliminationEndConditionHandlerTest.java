@@ -27,7 +27,7 @@ class EliminationEndConditionHandlerTest {
 
   EndConditionRunner endConRunner;
   List<PlayerInterface> players;
-  Board board;
+  GameEngine board;
 
   @BeforeEach
   void setUp()
