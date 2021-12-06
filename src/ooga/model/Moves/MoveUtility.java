@@ -26,7 +26,7 @@ public class MoveUtility {
 
     private static PieceInterface findKing(String team, List<PieceInterface> pieces) {
         for(PieceInterface piece : pieces) {
-            if(piece.getTeam().equals(team) && piece.getName().equals(Board.KING)) {
+            if(piece.getTeam().equals(team) && piece.getName().equals(Board.PIECES.getString("KING"))) {
                 return piece;
             }
         }
