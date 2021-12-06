@@ -25,6 +25,6 @@ public class PuzzleEndCondition extends CheckmateEndCondition implements EndCond
      */
     @Override
     public GameState isSatisfied(List<PlayerInterface> players) {
-        return MoveUtility.inCheck("b", pieces) && getTotalLegalMoves(players.get(1)) == 0 ? GameState.WHITE : GameState.BLACK;
+        return MoveUtility.inCheck("b", pieces) ? GameState.WHITE : GameState.BLACK;
     }
 }
