@@ -116,6 +116,21 @@ public class ViewUtility {
     }
 
     /**
+     * makes a Text node whose text changes often
+     *
+     * @param property   the property for the Text node
+     * @param boundValue the StringProperty that the text will display
+     * @return the Text created
+     */
+    public Label makeLabel(String property, StringProperty boundValue) {
+        Label result = new Label();
+        result.setText(languageResource.getString(property));
+        result.getStyleClass().add("text");
+        result.textProperty().bind(boundValue);
+        return (Label) setID(property, result);
+    }
+
+    /**
      * makes a ComboBox node
      *
      * @param property the property for the ComboBox

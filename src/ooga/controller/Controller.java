@@ -109,8 +109,7 @@ public abstract class Controller implements ControllerInterface {
   public boolean canMovePiece(Location location) {
     return model.canMovePiece(location);
   }
-
-
+  
   /**
    * sets up a new game with the initial configuration file
    *

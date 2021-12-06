@@ -3,7 +3,6 @@ package ooga.view.ui.playerStatsUI;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import ooga.controller.GameControllerInterface;
-import ooga.view.ViewController;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
 
@@ -13,7 +12,6 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
 
     private ViewUtility viewUtility;
     private GameControllerInterface controller;
-    private ViewController viewController;
 
     private Label whiteNameScoreLabel;
     private Label blackNameScoreLabel;
@@ -21,9 +19,8 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
     private Label whiteScoreDisplay;
     private Label blackScoreDisplay;
 
-    public PlayerStatsUI(GameControllerInterface controller, ViewController viewController) {
+    public PlayerStatsUI(GameControllerInterface controller) {
         this.controller = controller;
-        this.viewController = viewController;
         this.viewUtility = new ViewUtility();
         this.getStyleClass().add("GameSettingsUI");
         makeScoreDisplayLabels();

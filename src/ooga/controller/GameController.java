@@ -28,8 +28,6 @@ public class GameController extends Controller implements GameControllerInterfac
   public static final int DEFAULT_INITIAL_TIME = 5;
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
-
-
   private TimeController timeController;
   private int initialTime;
   private int increment;
@@ -77,6 +75,7 @@ public class GameController extends Controller implements GameControllerInterfac
   @Override
   protected ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds) {
     ViewInterface view = new GameView(this);
+    //view.resetDisplay(pieces, bounds);
     view.initializeDisplay(pieces, bounds);
     return view;
   }

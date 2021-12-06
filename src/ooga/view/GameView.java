@@ -18,8 +18,8 @@ public class GameView extends View {
   private TimeConfigurationUI timeConfigurationUI;
   GameControllerInterface controller;
 
-  private final int BLACK_SCORE_INDEX = 0;
-  private final int WHITE_SCORE_INDEX = 1;
+  private final int WHITE_SCORE_INDEX = 0;
+  private final int BLACK_SCORE_INDEX = 1;
   private final int DEFAULT_INITIAL_BLACK_SCORE = 39;
   private final int DEFAULT_INITIAL_WHITE_SCORE = 39;
 
@@ -50,7 +50,7 @@ public class GameView extends View {
   @Override
   protected void createResettableUIs() {
     this.settingsUI = new SettingsUI(controller, viewController);
-    this.playerStatsUI = new PlayerStatsUI(controller, viewController);
+    this.playerStatsUI = new PlayerStatsUI(controller);
   }
 
   @Override

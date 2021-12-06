@@ -24,17 +24,21 @@ public class BoardSquare extends StackPane {
     private Rectangle checkFilter;
 
     private Color originalColor;
+    private final int width;
+    private final int height;
 
-    public BoardSquare(Location location, Color color) {
+    public BoardSquare(int width, int height, Location location, Color color) {
         this.originalColor = color;
+        this.width = width;
+        this.height = height;
         initializeSquare(location);
     }
 
     private void initializeSquare(Location location) {
-        this.setLayoutX(location.getCol()*60);
-        this.setLayoutY(location.getRow()*60);
+        this.setLayoutX(location.getCol()*width);
+        this.setLayoutY(location.getRow()*height);
 
-        square = new Rectangle(60, 60);
+        square = new Rectangle(width, height);
         square.setFill(originalColor);
         this.getChildren().add(square);
 
@@ -106,7 +110,7 @@ public class BoardSquare extends StackPane {
     }
 
     private Rectangle createHighlight(Color color, double opacity) {
-        Rectangle highlight = new Rectangle(60, 60);
+        Rectangle highlight = new Rectangle(width, height);
         highlight.setFill(color);
         highlight.setOpacity(opacity);
         return highlight;
