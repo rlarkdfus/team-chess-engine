@@ -29,13 +29,10 @@ public class PromotePowerup extends Powerup{
         if(pieceInterface.getName().equals(Board.KING)){
             return;
         }
-        PieceInterface additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(), Board.QUEEN,endLocation,getBounds());
+        PieceInterface additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.QUEEN,endLocation,getBounds());
+        pieceInterface.transform(additionalPiece);
 
-        currentPlayer.addPiece(additionalPiece);
-        allPieces.add(additionalPiece);
 
-        currentPlayer.removePiece(pieceInterface);
-        allPieces.remove(pieceInterface);
 
     }
 

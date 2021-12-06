@@ -18,7 +18,6 @@ import java.util.List;
 public class Player implements PlayerInterface {
 
     private final String team;
-    private int score;
     private TimerInterface moveTimer;
     private List<PieceInterface> pieces;
 
@@ -29,7 +28,6 @@ public class Player implements PlayerInterface {
     public Player(String team) {
         this.team = team;
         pieces = new ArrayList<>();
-        score = 0;
         this.moveTimer = new MoveTimer();
     }
 
@@ -101,7 +99,6 @@ public class Player implements PlayerInterface {
     @Override
     public void addPiece(PieceInterface piece){
         pieces.add(piece);
-        score += piece.getScore();
     }
 
     //FIXME: add to interface
@@ -114,7 +111,6 @@ public class Player implements PlayerInterface {
     @Override
     public void removePiece(PieceInterface piece){
         pieces.remove(piece);
-        score -= piece.getScore();
     }
 
     @Override
@@ -128,6 +124,10 @@ public class Player implements PlayerInterface {
      */
     @Override
     public int getScore() {
+        int score = 0;
+        for(PieceInterface pieceInterface:pieces){
+            score+=pieceInterface.getScore();
+        }
         return score;
     }
 

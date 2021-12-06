@@ -2,6 +2,7 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
+import ooga.controller.Config.PieceBuilder;
 import ooga.model.Moves.Move;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public abstract class Board implements Engine {
 
     public static final String QUEEN = "Q";
     public static final String KING = "K";
+    public static final String PAWN = "P";
     private Location bounds;
     protected List<PlayerInterface> players;
     protected List<PieceInterface> pieces;
@@ -43,6 +45,7 @@ public abstract class Board implements Engine {
             pieces.addAll(player.getPieces());
         }
         powerupInterfaceList = new ArrayList<>();
+
     }
 
     /**
@@ -83,7 +86,9 @@ public abstract class Board implements Engine {
         for (PlayerInterface player : players) {
             player.clearPieces();
             for (PieceInterface piece : pieces) {
-                player.addPiece(piece);
+                if(piece.getTeam().equals(player.getTeam())) {
+                    player.addPiece(piece);
+                }
             }
         }
     }
