@@ -9,13 +9,15 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import ooga.Location;
+import ooga.LogUtils;
 import ooga.model.Moves.Move;
 import ooga.model.Piece;
+import ooga.view.ViewInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * @Authors Albert
+ * @author Albert
  * purpose - this class builds piece objects that will be used by the model play the game. This
  *  class takes in a team, pieceType, and location to build the piece. With these 3 bits of information,
  *  we can put the piece in the correct location on the board, and build the piece by reference the
@@ -42,27 +44,24 @@ public class PieceBuilder {
    * @param team - string of the team (ie. "w" for white)
    * @param pieceName - string of the piece type (ie. "P" for pawn)
    * @param location - location of where the piece is on the board
+   * @param bounds - object that represents the max row and cols of the board
    * @return - Piece object with all of it's moves, score value, and location
    * @throws FileNotFoundException - if the piece's json file is unable to be found
    * @throws InvalidPieceConfigException - if the piece's json file is not valid (ie. missing key)
    */
-  public static Piece buildPiece(String team, String pieceName, Location location)
-      throws FileNotFoundException, InvalidPieceConfigException {
-
+  public static Piece buildPiece(String team, String pieceName, Location location, Location bounds){
     String pieceJsonPath = PIECE_JSON_PREFIX + team + pieceName + PIECE_JSON_SUFFIX;
     JSONObject pieceJSON = JsonParser.loadFile(new File(pieceJsonPath));
 
-    List<Move> moves;
+    List<Move> moves = new ArrayList<>();
     int value;
-    String errorKey = null;
     try {
-      errorKey = mappings.getString(MOVES);
-      moves = getMoves(pieceJSON.getJSONObject(mappings.getString(MOVES)));
-      errorKey = mappings.getString(VALUE);
-      value = pieceJSON.getInt(mappings.getString(VALUE));
+      moves = getMoves(pieceJSON.getJSONObject(mappings.getString(MOVES)),bounds);
     } catch (Throwable e) {
-      throw new InvalidPieceConfigException(location, pieceJsonPath, errorKey);
+      LogUtils.error("piecebuilder",e);
+      ViewInterface.showError("invalid piece configuration");
     }
+    value = pieceJSON.getInt(mappings.getString(VALUE));
     return new Piece(team, pieceName, location, moves, value);
 
   }
@@ -70,11 +69,11 @@ public class PieceBuilder {
   /**
    * makes the move Objects that are used by the piece to determine legal moves
    */
-  private static List<Move> getMoves(JSONObject moveTypes) throws Throwable {
+  private static List<Move> getMoves(JSONObject moveTypes, Location bounds) throws Throwable {
     List<Move> moveList = new ArrayList<>();
 
     for (String moveType : moveTypes.keySet()) {
-      List<Move> newMoves = makeTypeOfMove(moveType, (JSONArray) moveTypes.get(moveType));
+      List<Move> newMoves = makeTypeOfMove(moveType, (JSONArray) moveTypes.get(moveType),bounds);
       moveList.addAll(newMoves);
     }
     return moveList;
@@ -83,11 +82,11 @@ public class PieceBuilder {
   /**
    * makes multiple of the same type of move with different directions and arguments
    */
-  private static List<Move> makeTypeOfMove(String moveType, JSONArray arguments)
+  private static List<Move> makeTypeOfMove(String moveType, JSONArray arguments, Location bounds)
       throws Throwable {
     List<Move> moves = new ArrayList<>();
     for (int i = 0; i < arguments.length(); i++) {
-      Move newMove = makeMove(moveType,arguments.getString(i));
+      Move newMove = makeMove(moveType,arguments.getString(i),bounds);
       moves.add(newMove);
     }
     return moves;
@@ -96,7 +95,7 @@ public class PieceBuilder {
   /**
    * uses reflection to actually create the move object
    */
-  private static Move makeMove(String moveType, String arg) throws Throwable {
+  private static Move makeMove(String moveType, String arg, Location bounds) throws Throwable {
     String[] args = arg.split(mappings.getString(JSON_DELIMITER));
     if (args.length == BoardBuilder.ARG_LENGTH) {
       int dRow = parseInt(args[0].strip());
@@ -105,8 +104,8 @@ public class PieceBuilder {
       boolean limited = args[3].strip().equals(mappings.getString(LIMITED));
       Class<?> clazz = Class.forName(MOVE_PREFIX + moveType);
       return (Move) clazz.getDeclaredConstructor(int.class, int.class, boolean.class,
-              boolean.class)
-          .newInstance(dRow, dCol, takes, limited);
+              boolean.class, Location.class)
+          .newInstance(dRow, dCol, takes, limited, bounds);
     } else {
       throw new Exception();
     }

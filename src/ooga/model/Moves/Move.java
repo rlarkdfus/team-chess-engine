@@ -13,6 +13,7 @@ public abstract class Move {
     private final int dCol;
     private final boolean take;
     private final boolean limited;
+    private final Location bounds;
 
     private Turn turn;
     private List<Location> endLocations;
@@ -23,13 +24,15 @@ public abstract class Move {
      * @param dCol delta col
      * @param take whether a move takes
      * @param limited whether a move is limited
+     * @param bounds
      */
-    public Move(int dRow, int dCol, boolean take, boolean limited) {
+    public Move(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
         resetMove();
         this.dRow = dRow;
         this.dCol = dCol;
         this.take = take;
         this.limited = limited;
+        this.bounds = bounds;
     }
 
     /**
@@ -75,7 +78,7 @@ public abstract class Move {
 
         Location potentialLocation = new Location(row, col);
 
-        while(MoveUtility.inBounds(row, col)){
+        while(MoveUtility.inBounds(row, col,bounds)){
             PieceInterface targetPiece = MoveUtility.pieceAt(potentialLocation, pieces);
             if(targetPiece != null) {
                 if(!targetPiece.isSameTeam(piece) && take) {
@@ -188,6 +191,13 @@ public abstract class Move {
         return dCol;
     }
 
+    /**
+     * get the bounds of the board
+     * @return a location object with the row and col bounds
+     */
+    protected Location getBounds() {
+        return bounds;
+    }
     /**
      * return the turn of a move
      * @return turn

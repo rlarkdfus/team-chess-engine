@@ -21,9 +21,12 @@ public class EliminationEndCondition implements EndConditionInterface {
   private List<PieceInterface> previousTurnPieces;
   private Map<String, Integer> piecesToEliminate;
 
-
+  /**
+   * this builds the map of the pieces that needs to be eliminated
+   * @param propertiesMap the pieces that need to be eliminated
+   * @param allpieces all pieces, used to determine pieces eliminated
+   */
   public EliminationEndCondition(Map<String, List<String>> propertiesMap, List<PieceInterface> allpieces) {
-
     Set<String> teams = new HashSet<>();
     previousTurnPieces = new ArrayList<>();
     for(PieceInterface piece : allpieces) {
@@ -42,6 +45,11 @@ public class EliminationEndCondition implements EndConditionInterface {
     }
   }
 
+  /**
+   * elimination requires a certain number of pieces to be eliminated
+   * @param players all players
+   * @return the winner if conditions are met
+   */
   @Override
   public GameState isSatisfied(List<PlayerInterface> players) {
     List<PieceInterface> alivePieces = new ArrayList<>();
@@ -96,7 +104,6 @@ public class EliminationEndCondition implements EndConditionInterface {
       targetPiecesRemaining.putIfAbsent(team, 0);
       targetPiecesRemaining.put(team, targetPiecesRemaining.get(team) + piecesLeft);
     }
-//    System.out.println(targetPiecesRemaining);
     return targetPiecesRemaining;
   }
 

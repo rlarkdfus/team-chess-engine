@@ -2,46 +2,55 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.Turn;
-import ooga.controller.Config.InvalidPieceConfigException;
+import ooga.controller.Config.PieceBuilder;
 import ooga.model.Moves.Move;
-
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import ooga.model.Moves.MoveUtility;
 import ooga.model.Powerups.PowerupInterface;
 
+/**
+ * @authors
+ * purpose - the purpose of this class is to manage the board that the controller interacts with.
+ * it provides methods for moving pieces and keeping track of game state
+ * assumptions - this class assumes that all the pieces are valid, and that the game states are valid.
+ * it requires a king for each player.
+ * dependencies - this class depends on the PlayerInterface, PieceInterface, Location, and PowerupInterface
+ * usage - a board is constructed with a list of players and bounds, and its methods are called
+ * such as movePiece and executeMove to update the board's pieces.
+ */
 public abstract class Board implements Engine {
 
     public static final String QUEEN = "Q";
     public static final String KING = "K";
-    private static final int FIRST_ROW = 0;
-    private static final int ROWS = 8;
-    private static final int LAST_ROW = ROWS - 1;
-    private static final int COLS = 8;
+    public static final String PAWN = "P";
+    private Location bounds;
     protected List<PlayerInterface> players;
     protected List<PieceInterface> pieces;
-    protected final List<PieceInterface> initialPieces;
 
     protected List<PowerupInterface> powerupInterfaceList;
     protected PlayerInterface currentPlayer;
 
-
-    public Board(List<PlayerInterface> players) {
+    /**
+     * the board is constructed by passing in a list of players and bounds. the players each hold
+     * their pieces, and bounds are used to validate locations
+     * @param players list of players
+     * @param bounds boundaries of the board
+     */
+    public Board(List<PlayerInterface> players, Location bounds) {
+        this.bounds = bounds;
         this.players = players;
         pieces = new ArrayList<>();
         for (PlayerInterface player : players) {
             pieces.addAll(player.getPieces());
         }
-        initialPieces = new ArrayList<>(pieces);
-        System.out.println(initialPieces);
         powerupInterfaceList = new ArrayList<>();
+
     }
 
     /**
      * this method returns the list of all players
-     *
-     * @return
+     * @return list of all players
      */
     public List<PlayerInterface> getPlayers() {
         return players;
@@ -49,44 +58,59 @@ public abstract class Board implements Engine {
 
     /**
      * Moves piece from start to end and updates the board
-     *
      * @param start is piece initial location
-     * @param end   is piece new location
+     * @param end is piece new location
      */
-    public List<PieceInterface> movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
+    public void movePiece(Location start, Location end) {
         PieceInterface piece = MoveUtility.pieceAt(start, pieces);
         executeMove(piece, end);
-        updateGameRules();
-        for(PowerupInterface powerupInterface: powerupInterfaceList){
-            powerupInterface.checkPowerUp(piece,end,currentPlayer, pieces);
-        }
+        updateGameRules(piece);
         updateLegalMoves();
-        return pieces;
     }
 
     private void executeMove(PieceInterface piece, Location end) {
         Move move = getMove(end, piece);
         move.executeMove(piece, pieces, end);
-        updatePlayerPieces(piece, move.getTurn());
+        updatePlayerPieces();
     }
 
+    /**
+     * This class gets the move that results in a piece moving to the specified end location
+     * @param end end location for a move
+     * @param piece the piece that is being moved
+     * @return the move that moves a piece to the end location
+     */
     protected abstract Move getMove(Location end, PieceInterface piece);
 
-    private void updatePlayerPieces(PieceInterface piece, Turn turn) {
-        for (Location removeLocation : turn.getRemoved()) {
-            for (PlayerInterface player : players) {
-                for (PieceInterface p : player.getPieces()) {
-                    if (p.getLocation().equals(removeLocation) && !p.equals(piece)) {
-                        player.removePiece(p);
-                    }
+    private void updatePlayerPieces() {
+        for (PlayerInterface player : players) {
+            player.clearPieces();
+            for (PieceInterface piece : pieces) {
+                if(piece.getTeam().equals(player.getTeam())) {
+                    player.addPiece(piece);
                 }
             }
         }
 
     }
 
-    protected abstract void updateGameRules();
+    /**
+     * this method updates the game rules for a piece
+     * @param piece piece to update rules
+     */
+    protected abstract void updateGameRules(PieceInterface piece);
 
+    /**
+     * this method returns the bounds of the board
+     * @return the bounds of the board
+     */
+    protected Location getBounds() {
+        return bounds;
+    }
+
+    /**
+     * this method updates the legal moves of each piece on the board
+     */
     protected void updateLegalMoves() {
         for (PieceInterface piece : pieces) {
             piece.updateMoves(new ArrayList<>(pieces));
@@ -95,46 +119,59 @@ public abstract class Board implements Engine {
 
     /**
      * see if the game is still running or if its over
-     *
-     * @return
+     * @return the current game state
      */
     @Override
     public abstract GameState checkGameState();
 
     /**
      * determine whether player selects their own piece on their turn
-     *
-     * @param location
-     * @return
+     * @param location location that a player selects
+     * @return whether that location has a piece that the player can move
      */
     public abstract boolean canMovePiece(Location location);
 
     /**
      * return a list of all legal moves for a piece at a location
-     *
-     * @param location
-     * @return
+     * @param location that a player selects
+     * @return the list of legal end locations of a piece at that location making a move
      */
     public abstract List<Location> getLegalMoves(Location location);
 
+    /**
+     * this method adds a piece to the board
+     * @param team the piece's team
+     * @param name the piece's name
+     * @param location the location of the piece
+     */
     @Override
     public void addPiece(String team, String name, Location location) {
         PieceInterface newPiece = new Piece(team, name, null, null, 0);
         for(PlayerInterface player : players) {
             if(newPiece.getTeam().equals(player.getTeam())) {
                 player.addPiece(newPiece);
+                System.out.println(player.getTeam()+": " + player.getPieces());
                 break;
             }
         }
         executeMove(newPiece, location);
         pieces.add(newPiece);
+        System.out.println("addPiece\n" + this);
+    }
+
+    /**
+     * this method returns a list of all the pieces
+     * @return list of all pieces
+     */
+    @Override
+    public List<PieceInterface> getPieces() {
+        return new ArrayList<>(pieces);
     }
 
     /**
      * this method overrides toString and prints out the current board state in an easily digestable
      * format
-     *
-     * @return
+     * @return string representation of the board
      */
     @Override
     public String toString() {

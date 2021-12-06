@@ -7,8 +7,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ooga.Location;
-import ooga.controller.Controller;
 import ooga.controller.Config.PieceViewBuilder;
+import ooga.controller.ControllerInterface;
 import ooga.view.boardview.BoardView;
 import ooga.view.util.ViewUtility;
 
@@ -16,54 +16,56 @@ public abstract class View implements ViewInterface {
 
     public static final String DEFAULT_RESOURCE_PACKAGE = View.class.getPackageName() + ".resources.";
     public static final String STYLE_PACKAGE = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-    public static final String DEFAULT_STYLESHEET = STYLE_PACKAGE + "style.css";
+    public static final String STYLE_EXTENSION = ".css";
+    public static final String DEFAULT_STYLESHEET = "style";
+    public static final String DEFAULT_THEME = "light";
 
     public static final int STAGE_WIDTH = 1000;
     public static final int STAGE_HEIGHT = 700;
 
-    protected Controller controller;
+    protected ControllerInterface controller;
     protected ViewController viewController;
     protected ViewUtility viewUtility;
     private Stage stage;
+    private Scene scene;
 
     //TODO: change protected
     protected BoardView boardView;
-    
-    public View(Controller controller) {
-        this.controller = controller;
-        this.viewController = new ViewController();
+
+    public View() {
+        this.viewController = new ViewController(this);
         this.viewUtility = new ViewUtility();
         this.stage = new Stage();
-        viewController.setView(this);
     }
-    
+
     protected Scene setupDisplay() {
         GridPane root = new GridPane();
         addUIs(root);
-        Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
-        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(DEFAULT_STYLESHEET)).toExternalForm());
+        scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
+        applyStyleSheet(DEFAULT_STYLESHEET);
+        applyStyleSheet(DEFAULT_THEME);
         return scene;
     }
-    
+
     protected abstract void createResettableUIs();
 
     protected abstract void createStaticUIs();
-    
+
     protected abstract void addUIs(GridPane root);
-    
+
     @Override
-    public void initializeDisplay(List<PieceViewBuilder> pieceViewList) {
+    public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
         createStaticUIs();
-        resetDisplay(pieceViewList);
+        resetDisplay(pieceViewList, bounds);
     }
-    
+
     @Override
-    public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
+    public void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
         createResettableUIs();
         stage.setScene(setupDisplay());
         stage.show();
     }
-    
+
     @Override
     public void updateDisplay(List<PieceViewBuilder> pieceViewList) {
         boardView.updateBoardView(pieceViewList);
@@ -79,11 +81,17 @@ public abstract class View implements ViewInterface {
         boardView.changePieceStyle(style);
     }
 
-    @Override
-    public void showError(String message) {viewUtility.showError(message);}
+    public void changeLanguage(String language) {
+
+    }
 
     @Override
-    public void showCheck(Location location) {
-        boardView.showCheck(location);
+    public void changeTheme(String theme) {
+        scene.getStylesheets().remove(1);
+        applyStyleSheet(theme);
+    }
+
+    private void applyStyleSheet(String name) {
+        scene.getStylesheets().add(getClass().getResource(STYLE_PACKAGE + name + STYLE_EXTENSION).toExternalForm());
     }
 }

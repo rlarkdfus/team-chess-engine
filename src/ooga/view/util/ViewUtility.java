@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 public class ViewUtility {
 
     private ResourceBundle myResources = ResourceBundle.getBundle("ooga/view/resources/English");
-    public final String ERROR_ALERT_TITLE = "Error";
+    public static final String ERROR_ALERT_TITLE = "Error";
     public final String SELECT_JSON_FILE = "Select JSON File";
     public final String JSON_FILE_EXTENSION_DESCRIPTION = "JSON Files (*.json)";
     //public final String CSV_FILE_EXTENSION_DESCRIPTION = "CSV (Comma delimited) (*.csv)";
@@ -41,6 +41,7 @@ public class ViewUtility {
     public Label makeLabel(String property) {
         Label result = new Label();
         result.setText(myResources.getString(property));
+        result.getStyleClass().add("label");
         //result.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         return (Label) setID(property, result);
     }
@@ -121,11 +122,32 @@ public class ViewUtility {
             lang.put(myResources.getString(option), option);
         }
         result.setItems(FXCollections.observableArrayList(lang.keySet().stream().toList()));
-        result.valueProperty()
-                .addListener((o, oldValue, newValue) -> response.accept(lang.get(newValue)));
+        result.valueProperty().addListener((o, oldValue, newValue) -> response.accept(lang.get(newValue)));
         result.getStyleClass().add("combo-box");
-        //result.setValue("test");
         return (ComboBox) setID(property, result);
+    }
+
+    public MenuButton makeMenu(String property, List<String> choices, Consumer<String> response) {
+        MenuButton result = new MenuButton();
+        Map<String, String> lang = new HashMap<>();
+        for (String option : choices) {
+            lang.put(myResources.getString(option), option);
+        }
+        List<MenuItem> options = new ArrayList<>();
+        for(String option : lang.keySet()) {
+            MenuItem menuItem = new MenuItem(option);
+            menuItem.setOnAction(e -> {
+                response.accept(lang.get(option));
+                result.setText(option);
+            });
+            menuItem.getStyleClass().add("menu-item");
+            options.add(menuItem);
+        }
+        result.getStyleClass().add("menu-button");
+//        result.getContextMenu().getStyleClass().add("context-menu");
+        result.getItems().addAll(options);
+        result.setText(myResources.getString(choices.get(0)));
+        return (MenuButton) setID(property, result);
     }
 
     /**
@@ -209,7 +231,7 @@ public class ViewUtility {
      *
      * @param message the error message to show
      */
-    public void showError(String message) {
+    public static void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(ERROR_ALERT_TITLE);
         alert.setContentText(message);

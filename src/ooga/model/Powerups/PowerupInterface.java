@@ -10,8 +10,6 @@ import java.util.List;
 
 public interface PowerupInterface {
 
-
-
      /**
       * Checks if a powerup is hit and executes the powerup ability if a piece lands on one of the powerup locations
       * @param pieceInterface piece that is being moved
@@ -21,6 +19,5 @@ public interface PowerupInterface {
       * @exception FileNotFoundException if file for transformed piece does not exist
       * @exception InvalidPieceConfigException if transformed piece does not exist
       */
-
-     void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException;
+     void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces);
 }

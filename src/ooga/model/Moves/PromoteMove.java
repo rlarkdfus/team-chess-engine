@@ -2,8 +2,10 @@ package ooga.model.Moves;
 
 import java.io.FileNotFoundException;
 import ooga.Location;
+import ooga.LogUtils;
 import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Config.PieceBuilder;
+import ooga.model.Board;
 import ooga.model.PieceInterface;
 
 import java.util.ArrayList;
@@ -17,8 +19,8 @@ public class PromoteMove extends Move {
      * @param take move takes
      * @param limited move is limited
      */
-    public PromoteMove(int dRow, int dCol, boolean take, boolean limited) {
-        super(dRow, dCol, take, limited);
+    public PromoteMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
+        super(dRow, dCol, take, limited, bounds);
     }
 
     /**
@@ -39,15 +41,11 @@ public class PromoteMove extends Move {
      */
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
-        System.out.println("Execute promote move");
-        PieceInterface newPiece = null;
-        try {
-            newPiece = PieceBuilder.buildPiece(piece.getTeam(), "Q",end);
-        } catch (FileNotFoundException | InvalidPieceConfigException e) {
-            e.printStackTrace();
-        }
+        LogUtils.info(this,"Execute promote move");
+        PieceInterface newPiece = PieceBuilder.buildPiece(piece.getTeam(), Board.QUEEN,end,getBounds());
+        System.out.println(piece.getScore());
         piece.transform(newPiece);
-
+        System.out.println(piece.getScore());
         for (PieceInterface p : pieces) {
             p.updateMoves(new ArrayList<>(pieces));
         }

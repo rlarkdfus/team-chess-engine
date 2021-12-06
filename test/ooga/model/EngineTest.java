@@ -22,8 +22,8 @@ class EngineTest {
     void movePiece() throws FileNotFoundException, InvalidPieceConfigException {
         Location start = new Location(6, 0);
         Location end = new Location(5, 0);
-        List<PieceInterface> pieces = board.movePiece(start, end);
-        List<Location> pieceLocations = ModelTestHelper.getPieceLocations(pieces);
+        board.movePiece(start, end);
+        List<Location> pieceLocations = ModelTestHelper.getPieceLocations(board.getPieces());
         Assertions.assertNotNull(end.inList(pieceLocations));
     }
 

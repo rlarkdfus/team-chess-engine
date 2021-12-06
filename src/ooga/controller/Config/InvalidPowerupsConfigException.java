@@ -1,10 +1,11 @@
 package ooga.controller.Config;
 
-public class InvalidPowerupsConfigException extends Exception {
+import ooga.view.util.ViewUtility;
 
-  public InvalidPowerupsConfigException() {}
+public class InvalidPowerupsConfigException extends Exception {
 
   public InvalidPowerupsConfigException(String outOfBoundsError) {
     super(outOfBoundsError);
+    ViewUtility.showError(this.getClass().getSimpleName());
   }
 }

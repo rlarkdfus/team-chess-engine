@@ -1,22 +1,22 @@
 package ooga.view;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.layout.GridPane;
+import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
-import ooga.controller.Controller;
+import ooga.controller.EditorControllerInterface;
 import ooga.view.boardview.EditorBoardView;
 import ooga.view.boardview.PieceMenuView;
 import ooga.view.ui.settingsUI.SettingsUI;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class EditorView extends View {
 
   private SettingsUI settingsUI; // right
   private PieceMenuView pieceMenu;
-
-  public EditorView(Controller controller) {
-    super(controller);
+  private EditorControllerInterface controller;
+  public EditorView(EditorControllerInterface controller) {
+    this.controller = controller;
   }
 
   @Override
@@ -37,9 +37,10 @@ public class EditorView extends View {
   }
 
   @Override
-  public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
-    this.boardView = new EditorBoardView(controller, new ArrayList<>(), 8, 8);
+  public void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
+    this.boardView = new EditorBoardView(controller, new ArrayList<>(), bounds.getRow(),
+        bounds.getCol());
     this.pieceMenu = new PieceMenuView(controller, pieceViewList, 2, 6);
-    super.resetDisplay(pieceViewList);
+    super.resetDisplay(pieceViewList, bounds);
   }
 }

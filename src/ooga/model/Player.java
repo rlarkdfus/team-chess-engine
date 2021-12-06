@@ -1,22 +1,25 @@
 package ooga.model;
 
 import javafx.beans.property.StringProperty;
-import ooga.Location;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * Purpose: Player is an abstraction representing a player playing the game of chess. This is
+ * useful as the player will hold its own pieces and can keep track of the time left in their turn,
+ * as well as their own score.
+ * Assumptions: TimerInterface works as expected and provides an abstraction so that we can keep
+ * track of the time left in the game.
+ * Dependencies: TimerInterface, PieceInterface
+ *
+ * @author Sam Li, Gordon Kim
+ */
 public class Player implements PlayerInterface {
-    private Map<PieceInterface, List<Location>> remainingPieces;
-    //Keep track of all their killed pieces
-    private List<PieceInterface> killedPieces;
+
     private final String team;
-    private int score;
     private TimerInterface moveTimer;
-    private List<PieceInterface> initialPieces;
+    private List<PieceInterface> pieces;
 
     /**
      * creates a player object
@@ -24,11 +27,8 @@ public class Player implements PlayerInterface {
      */
     public Player(String team) {
         this.team = team;
-        remainingPieces = new HashMap<>();
-        score = 0;
-        this.killedPieces = new ArrayList<>();
+        pieces = new ArrayList<>();
         this.moveTimer = new MoveTimer();
-        this.initialPieces = new ArrayList<>();
     }
 
     /**
@@ -89,7 +89,7 @@ public class Player implements PlayerInterface {
      * @return list of all pieces held by a player
      */
     public List<PieceInterface> getPieces(){
-        return new ArrayList<>(remainingPieces.keySet());
+        return new ArrayList<>(pieces);
     }
 
     /**
@@ -98,9 +98,7 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void addPiece(PieceInterface piece){
-        remainingPieces.put(piece, new ArrayList<>());
-        initialPieces.add(piece);
-        score += piece.getScore();
+        pieces.add(piece);
     }
 
     //FIXME: add to interface
@@ -112,8 +110,12 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void removePiece(PieceInterface piece){
-        remainingPieces.remove(piece);
-        score -= piece.getScore();
+        pieces.remove(piece);
+    }
+
+    @Override
+    public void clearPieces(){
+        pieces = new ArrayList<>();
     }
 
     /**
@@ -122,9 +124,12 @@ public class Player implements PlayerInterface {
      */
     @Override
     public int getScore() {
+        int score = 0;
+        for(PieceInterface pieceInterface:pieces){
+            score+=pieceInterface.getScore();
+        }
         return score;
     }
-
 
     /**
      * returns the player team
@@ -135,29 +140,7 @@ public class Player implements PlayerInterface {
         return team;
     }
 
-//    /**
-//     * perform a piece move to end location
-//     * @param piece
-//     * @param end
-//     */
-//    @Override
-//    public void movePiece(PieceInterface piece, Location end) {
-//
-//    }
-//
-//    /**
-//     * test a piece move to end location
-//     * @param piece
-//     * @param end
-//     */
-//    @Override
-//    public void tryMove(PieceInterface piece, Location end) {
-//
-//    }
-//
-//    /**
-//     * get score of all pieces
-//     */
+
 //    private void calculateScore(){
 //        for(PieceInterface piece: remainingPieces.keySet()){
 //            score += piece.getScore();

@@ -1,0 +1,52 @@
+.root {
+    -fx-background-color:  #f2f4f6;
+    -fx-text-fill: #020406;
+}
+
+. SettingsUI,
+. BoardStyleUI,
+. GameInfoUI,
+. GameSettingsUI,
+. LoginUI {
+    /*-fx-text-fill: blue;*/
+}
+
+. LoginUI {
+    -fx-background-color: tan;
+}
+
+/*. EndScreenUI {*/
+/*    !*-fx-background-color: background_color;*!*/
+/*}*/
+
+.label,
+.text {
+    -fx-text-fill: #020406;
+}
+
+.button,
+.color-picker,
+.menu-button,
+.context-menu {
+    -fx-text-fill: #020406;
+    -fx-background-color: #DBE0E6;
+}
+
+.button:hover,
+.color-picker:hover,
+.menu-button:hover,
+menu-item:hover {
+    -fx-background-color: #CFD5DE;
+}
+
+.button:armed,
+.color-picker:armed,
+.menu-button:armed,
+.context-menu:armed,
+.menu-item:armed {
+    -fx-background-color: #B6BFCE;
+}
+
+.menu-item:focused {
+    -fx-background-color: #C2CAD6;
+}

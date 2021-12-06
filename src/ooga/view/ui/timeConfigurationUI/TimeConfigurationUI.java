@@ -2,16 +2,16 @@ package ooga.view.ui.timeConfigurationUI;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import ooga.controller.Controller;
+import ooga.controller.GameControllerInterface;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
 
 public class TimeConfigurationUI extends GridPane implements UIInterface {
 
-    private Controller controller;
+    private GameControllerInterface controller;
     private ViewUtility viewUtility;
 
-    public TimeConfigurationUI(Controller controller) {
+    public TimeConfigurationUI(GameControllerInterface controller) {
         this.controller = controller;
         viewUtility = new ViewUtility();
         this.getStyleClass().add("SettingsUI");
