@@ -20,8 +20,13 @@ public class LocationEndCondition implements EndConditionInterface{
   private Map<String, Integer> currTeamLocations;
   private Set<String> teams;
   private ResourceBundle resourceBundle;
-  private String winner;
 
+  /**
+   * this builds the map of piece locations
+   * @param properties map of locations of pieces that need to be in place to win
+   * @param allpieces all pieces
+   * @throws InvalidEndGameConfigException if a win condition is not possible
+   */
   public LocationEndCondition(Map<String, List<String>> properties, List<PieceInterface> allpieces)
       throws InvalidEndGameConfigException {
     targetLocations = new HashMap<>();
@@ -38,6 +43,11 @@ public class LocationEndCondition implements EndConditionInterface{
     buildTeams(allpieces);
   }
 
+  /**
+   * location end condition is met if a player has enough pieces in the specified locations
+   * @param players all players
+   * @return whether any winner has all their pieces in the right location
+   */
   @Override
   public GameState isSatisfied(List<PlayerInterface> players) {
     currTeamLocations = new HashMap();
@@ -45,7 +55,6 @@ public class LocationEndCondition implements EndConditionInterface{
 
     if (notEnoughPieces(alivePieces) != GameState.RUNNING){
       return notEnoughPieces(alivePieces);
-//      return null; //FIXME
     }
     boolean foundLocation;
     for (ooga.Location l : targetLocations.keySet()){
@@ -65,15 +74,12 @@ public class LocationEndCondition implements EndConditionInterface{
     for (String team : currTeamLocations.keySet()){
       if (currTeamLocations.get(team).equals(targetLocations.size())){
         return GameState.ENDED.getWinner(team);
-//        winner = team;
-//        return null; //FIXME
       }
     }
     return null;
   }
 
   private GameState notEnoughPieces(List<PieceInterface> alivePieces) {
-//    String loser = null;
     Map<String, Integer> currentAmounts = new HashMap<>();
     for (PieceInterface alive : alivePieces){
       String team = alive.getTeam();
@@ -95,15 +101,6 @@ public class LocationEndCondition implements EndConditionInterface{
       }
     }
     return loser;
-//    if (loser != null){
-//      for (String team : teams){
-//        if (!team.equals(loser)){
-//          winner = team;
-//          return true;
-//        }
-//      }
-//    }
-//    return false;
   }
 
   private List<PieceInterface> getAlivePieces(List<PlayerInterface> players) {
