@@ -1,10 +1,15 @@
 package ooga.controller;
 
+
+import ooga.Location;
+import ooga.model.*;
+import ooga.view.ViewInterface;
+
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import ooga.Location;
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.JSONWriter;
@@ -14,6 +19,7 @@ import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.Engine;
 import ooga.model.PieceInterface;
 import ooga.view.ViewInterface;
+import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
 /**
@@ -32,7 +38,9 @@ import org.json.JSONObject;
  */
 public abstract class Controller implements ControllerInterface {
 
-  //TODO: change protected
+  private static final String CONTROLLER_PATH = Controller.class.getPackageName() + ".";
+  private static final String CONTROLLER_SUFFIX = "Controller";
+
   private Engine model;
   private ViewInterface view;
   private File jsonFile;
@@ -168,10 +176,21 @@ public abstract class Controller implements ControllerInterface {
   }
 
   /**
-   * method to help get the model object in subclasses
+   * launches a new controller from the selected game variation
+   * @param variation the variation of the controller to use
    */
-  protected Engine getModel(){
-    return model;
+  public void launchController(String variation) {
+    Class<?> clazz = null;
+    try {
+      clazz = Class.forName(CONTROLLER_PATH + variation + CONTROLLER_SUFFIX);
+    } catch (ClassNotFoundException e) {
+      ViewUtility.showError("VariationNotFound");
+    }
+    try {
+      ControllerInterface controller = (ControllerInterface) clazz.getDeclaredConstructor().newInstance();
+    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+      ViewUtility.showError("VariationConstructorNotFound");
+    }
   }
 
 }

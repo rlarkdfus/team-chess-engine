@@ -15,7 +15,7 @@ import ooga.model.Moves.NoRestrictionMove;
  * usage - the usage is similar to board, and several methods are overridden from board in
  * order to implement moves with no restrictions which allow a user to drag a piece anywhere.
  */
-public class EditorBoard extends Board {
+public class EditorBoard extends Board implements EditorEngine {
     /**
      * a board requires a list of players and the bounds to be input, and builds a list of pieces
      * @param players all players on the board
@@ -67,12 +67,22 @@ public class EditorBoard extends Board {
     }
 
     /**
-     * returns the running game state
-     * @return running game state
+     * this method adds a piece to the board
+     * @param team the piece's team
+     * @param name the piece's name
+     * @param location the location of the piece
      */
     @Override
-    public GameState checkGameState() {
-        return GameState.RUNNING;
+    public void addPiece(String team, String name, Location location) {
+        PieceInterface newPiece = new Piece(team, name, null, null, 0);
+        for(PlayerInterface player : players) {
+            if(newPiece.getTeam().equals(player.getTeam())) {
+                player.addPiece(newPiece);
+                break;
+            }
+        }
+        executeMove(newPiece, location);
+        pieces.add(newPiece);
     }
 
     /**

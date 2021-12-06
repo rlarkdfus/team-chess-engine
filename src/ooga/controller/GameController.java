@@ -13,10 +13,7 @@ import ooga.controller.Config.Builder;
 import ooga.controller.Config.JSONWriter;
 import ooga.controller.Config.JsonParser;
 import ooga.controller.Config.PieceViewBuilder;
-import ooga.model.Engine;
-import ooga.model.GameBoard;
-import ooga.model.GameState;
-import ooga.model.PlayerInterface;
+import ooga.model.*;
 import ooga.view.GameOverScreen;
 import ooga.view.GameView;
 import ooga.view.ViewInterface;
@@ -33,8 +30,10 @@ public class GameController extends Controller implements GameControllerInterfac
 
 
   private TimeController timeController;
+
   private int initialTime = DEFAULT_INITIAL_TIME;
   private int increment = DEFAULT_INITIAL_INCREMENT;
+  private GameEngine model;
 
   private GameOverScreen gameOverScreen;
   private Map<Enum, JSONObject> players;
@@ -59,7 +58,7 @@ public class GameController extends Controller implements GameControllerInterfac
   @Override
   protected Engine initializeModel(Builder boardBuilder) {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
-    Engine model = new GameBoard(players, boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler(),
+    model = new GameBoard(players, boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler(),
             boardBuilder.getBoardSize());
     timeController = new TimeController(initialTime, increment);
     startTimersForNewGame(players);
@@ -110,7 +109,7 @@ public class GameController extends Controller implements GameControllerInterfac
   @Override
   public void movePiece(Location start, Location end) {
     super.movePiece(start, end);
-    GameState gameState = getModel().checkGameState();
+    GameState gameState = model.checkGameState();
     if (gameState != GameState.RUNNING) {
       LogUtils.info(this,"winner: "+gameState);
       gameOverScreen = new GameOverScreen(this, gameState.toString());
@@ -171,7 +170,7 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   @Override
   public StringProperty getTimeLeft(int side) {
-    return getModel().getPlayers().get(side).getTimeLeft();
+    return model.getPlayers().get(side).getTimeLeft();
   }
 
   /**
