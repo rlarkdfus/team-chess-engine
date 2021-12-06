@@ -9,13 +9,15 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import ooga.Location;
+import ooga.LogUtils;
 import ooga.model.Moves.Move;
 import ooga.model.Piece;
+import ooga.view.ViewInterface;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * @Authors Albert
+ * @author Albert
  * purpose - this class builds piece objects that will be used by the model play the game. This
  *  class takes in a team, pieceType, and location to build the piece. With these 3 bits of information,
  *  we can put the piece in the correct location on the board, and build the piece by reference the
@@ -47,23 +49,19 @@ public class PieceBuilder {
    * @throws FileNotFoundException - if the piece's json file is unable to be found
    * @throws InvalidPieceConfigException - if the piece's json file is not valid (ie. missing key)
    */
-  public static Piece buildPiece(String team, String pieceName, Location location, Location bounds)
-      throws FileNotFoundException, InvalidPieceConfigException {
-
+  public static Piece buildPiece(String team, String pieceName, Location location, Location bounds){
     String pieceJsonPath = PIECE_JSON_PREFIX + team + pieceName + PIECE_JSON_SUFFIX;
     JSONObject pieceJSON = JsonParser.loadFile(new File(pieceJsonPath));
 
-    List<Move> moves;
+    List<Move> moves = new ArrayList<>();
     int value;
-    String errorKey = null;
     try {
-      errorKey = mappings.getString(MOVES);
       moves = getMoves(pieceJSON.getJSONObject(mappings.getString(MOVES)),bounds);
-      errorKey = mappings.getString(VALUE);
-      value = pieceJSON.getInt(mappings.getString(VALUE));
     } catch (Throwable e) {
-      throw new InvalidPieceConfigException(location, pieceJsonPath, errorKey);
+      LogUtils.error("piecebuilder",e);
+      ViewInterface.showError("invalid piece configuration");
     }
+    value = pieceJSON.getInt(mappings.getString(VALUE));
     return new Piece(team, pieceName, location, moves, value);
 
   }

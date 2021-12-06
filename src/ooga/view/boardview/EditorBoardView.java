@@ -18,7 +18,7 @@ public class EditorBoardView extends BoardView {
     }
 
     @Override
-    protected void clickBoard(Location clickLocation) throws FileNotFoundException, InvalidPieceConfigException {
+    protected void clickBoard(Location clickLocation) {
         Location startLocation = getSelectedLocation();
         if (controller.hasMenuPiece()) {
             controller.addPiece(clickLocation);

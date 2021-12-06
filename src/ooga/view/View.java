@@ -78,12 +78,4 @@ public abstract class View implements ViewInterface {
     public void changePieceStyle(String style) {
         boardView.changePieceStyle(style);
     }
-
-    @Override
-    public void showError(String message) {viewUtility.showError(message);}
-
-    @Override
-    public void showCheck(Location location) {
-        boardView.showCheck(location);
-    }
 }

@@ -1,9 +1,12 @@
 package ooga.model;
 
 import ooga.Location;
+import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
 import ooga.model.Powerups.PowerupInterface;
+
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class GameBoard extends Board {
@@ -30,8 +33,10 @@ public class GameBoard extends Board {
     }
 
     @Override
-    protected void updateGameRules() {
-
+    protected void updateGameRules(PieceInterface piece) {
+        for(PowerupInterface powerupInterface: powerupInterfaceList){
+            powerupInterface.checkPowerUp(piece, piece.getLocation(), currentPlayer, pieces);
+        }
         turnCount++;
         toggleTimers();
     }

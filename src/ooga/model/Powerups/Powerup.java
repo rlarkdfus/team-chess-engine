@@ -23,7 +23,7 @@ public abstract class Powerup implements PowerupInterface{
     }
 
     @Override
-    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException {
+    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) {
         if(hitPowerup(endLocation)){
             execute(pieceInterface,endLocation, currentPlayer, allPieces);
 //            removeUsedPowerup(endLocation);
@@ -56,17 +56,15 @@ public abstract class Powerup implements PowerupInterface{
      * @param endLocation  end location of the piece being moved
      * @param currentPlayer current player who
      * @param allPieces list of all pieces intialized on the board
-     * @throws FileNotFoundException ? - if the piece's json file is unable to be found
-     * @throws InvalidPieceConfigException ? - if the piece's json file is not valid (ie. missing key)
      */
 
-     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException;
+     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces);
 
      protected Location getBounds(){
          return bounds;
      }
 
-    protected List<Location> getPowerupLocations(){
+     protected List<Location> getPowerupLocations(){
         return powerupLocations;
     }
 }

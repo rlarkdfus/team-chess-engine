@@ -25,8 +25,6 @@ public class NoRestrictionMove extends TranslationMove {
             col = 0;
             row++;
         }
-        System.out.println("move size: " + locations.size());
-
         return locations;
     }
 

@@ -15,8 +15,6 @@ public class EditorBoard extends Board {
             for(PieceInterface piece : player.getPieces()) {
                 player.removePiece(piece);
             }
-            player.getPieces().clear();
-            System.out.println("player pieces: " + player.getPieces().size());
         }
         pieces = new ArrayList<>();
     }
@@ -34,7 +32,7 @@ public class EditorBoard extends Board {
     }
 
     @Override
-    protected void updateGameRules() {
+    protected void updateGameRules(PieceInterface piecee) {
         for(PieceInterface piece : pieces) {
             PieceInterface newPiece = new Piece(piece.getTeam(), piece.getName(), piece.getLocation(), new ArrayList<>(), piece.getScore());
             piece.transform(newPiece);

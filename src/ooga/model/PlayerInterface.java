@@ -31,6 +31,8 @@ public interface PlayerInterface {
 
   void removePiece(PieceInterface piece);
 
+  void clearPieces();
+
   int getScore();
 
 

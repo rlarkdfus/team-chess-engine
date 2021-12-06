@@ -1,24 +1,23 @@
 package ooga.controller;
 
+import javafx.beans.property.StringProperty;
+import ooga.Location;
+import ooga.model.Engine;
+import ooga.model.GameState;
+import ooga.model.PieceInterface;
+import ooga.view.ViewInterface;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.beans.property.StringProperty;
-import ooga.Location;
+
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
-import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Config.JSONWriter;
 import ooga.controller.Config.JsonParser;
 import ooga.controller.Config.LocationWriter;
 import ooga.controller.Config.PieceViewBuilder;
-import ooga.model.Engine;
-import ooga.model.GameState;
-import ooga.model.PieceInterface;
-import ooga.model.PlayerInterface;
-import ooga.view.ViewInterface;
 import org.json.JSONObject;
 
 /**
@@ -89,6 +88,10 @@ public abstract class Controller implements ControllerInterface {
    */
   protected abstract ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds);
 
+  private void updateView() {
+    List<PieceViewBuilder> pieces = createPieceViewList(model.getPieces());
+    view.updateDisplay(pieces);
+  }
   /**
    * Reset the game with the default board configuration
    */
@@ -134,12 +137,9 @@ public abstract class Controller implements ControllerInterface {
    * @param end   is final location of moved piece
    */
   @Override
-  public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
-    List<PieceViewBuilder> pieceViewList = new ArrayList<>();
-    for (PieceInterface piece : model.movePiece(start, end)) {
-      pieceViewList.add(new PieceViewBuilder(piece));
-    }
-    view.updateDisplay(pieceViewList);
+  public void movePiece(Location start, Location end) {
+    model.movePiece(start, end);
+    updateView();
   }
 
   /**
@@ -163,9 +163,8 @@ public abstract class Controller implements ControllerInterface {
   @Override
   public void downloadGame(String filePath) {
     try {
-      JSONWriter jsonWriter = new JSONWriter();
       JSONObject jsonObject = JsonParser.loadFile(jsonFile);
-      jsonWriter.saveFile(jsonObject, filePath);
+      JSONWriter.saveFile(jsonObject, filePath);
       LocationWriter locationWriter = new LocationWriter();
       locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
     } catch (IOException ignored) {
@@ -198,37 +197,29 @@ public abstract class Controller implements ControllerInterface {
 
 
   public boolean selectMenuPiece(String team, String name) {
-    if (selectedTeam == null) {
+    boolean selectNewPiece = !hasMenuPiece() || !selectedTeam.equals(team) || !selectedName.equals(name);
+    if (selectNewPiece) {
       selectedTeam = team;
       selectedName = name;
-      return true;
-    }
-    if (selectedTeam.equals(team) && selectedName.equals(name)) {
+    } else {
       selectedTeam = null;
       selectedName = null;
-      return false;
     }
-    return false;
+    return selectNewPiece;
   }
 
   public boolean hasMenuPiece() {
-    return selectedTeam != null || selectedName != null;
+    return selectedTeam != null && selectedName != null;
   }
 
   public void addPiece(Location location) {
     model.addPiece(selectedTeam, selectedName, location);
-    List<PieceInterface> pieces = new ArrayList<>();
-    for (PlayerInterface player : model.getPlayers()) {
-      pieces.addAll(player.getPieces());
-    }
-    view.updateDisplay(createPieceViewList(pieces));
+    updateView();
   }
 
   private List<PieceViewBuilder> createPieceViewList(List<PieceInterface> pieces) {
     List<PieceViewBuilder> pieceViewList = new ArrayList<>();
-    for (PieceInterface piece : pieces) {
-      pieceViewList.add(new PieceViewBuilder(piece));
-    }
+    pieces.forEach(piece -> pieceViewList.add(new PieceViewBuilder(piece)));
     return pieceViewList;
   }
 

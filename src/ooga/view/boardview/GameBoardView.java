@@ -19,7 +19,7 @@ public class GameBoardView extends BoardView {
     }
 
     @Override
-    protected void clickBoard(Location clickLocation) throws FileNotFoundException, InvalidPieceConfigException {
+    protected void clickBoard(Location clickLocation) {
         Location startLocation = getSelectedLocation();
         //user doesn't have piece selected and clicks on new piece
         //And add logic and is the same team

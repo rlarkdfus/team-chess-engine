@@ -1,4 +1,4 @@
-package ooga.model;
+package ooga.model.Moves;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,6 +10,8 @@ import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
 import ooga.model.Moves.Move;
 import ooga.model.Moves.TranslationMove;
+import ooga.model.Piece;
+import ooga.model.PieceInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

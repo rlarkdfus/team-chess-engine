@@ -3,10 +3,12 @@ package ooga.controller.Config;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+
+import ooga.view.ViewInterface;
 import org.json.JSONObject;
 
 /**
- * @Authors Albert
+ * @author Albert
  * purpose - this class builds JSONObjects from a given file object. A JSONObject works similar to a map
  *  where in order to access certain fields, the user calls jsonobject.get()
  * assumptions - we assume that the file is a json file. If this isn't the case, then we throw FileNotFoundException
@@ -19,10 +21,14 @@ public class JsonParser {
    * takes in a json file and then out puts a jsonobject object.
    * @param file - file object of a json file
    * @return a jsonobject object
-   * @throws FileNotFoundException - if the input file isn't a valid json file, this exception is thrown
    */
-  public static JSONObject loadFile(File file) throws FileNotFoundException {
-    String currFileString = readFile(file);
+  public static JSONObject loadFile(File file) {
+    String currFileString = null;
+    try {
+      currFileString = readFile(file);
+    } catch (FileNotFoundException e) {
+      ViewInterface.showError(e.getMessage());
+    }
     return buildJSON(currFileString);
   }
 

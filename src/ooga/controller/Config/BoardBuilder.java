@@ -14,11 +14,12 @@ import ooga.model.Piece;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
 import ooga.model.Powerups.PowerupInterface;
+import ooga.view.util.ViewUtility;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * @Authors Albert, Luis
+ * @author Albert, Luis
  * purpose - this class builds objects that will be used by the model to run the game. It builds all
  *  the different pieces, and it builds the endConditions that determine when the game ends.
  * assumptions - we assume that the file is a json and formatted with the proper keys. If any of this
@@ -154,7 +155,7 @@ public class BoardBuilder implements Builder {
    * pieceGrid
    */
   private void iterateCSVData()
-      throws InvalidPieceConfigException, PlayerNotFoundException, FileNotFoundException, CsvException {
+      throws InvalidPieceConfigException, PlayerNotFoundException, CsvException {
     for (int r = 0; r < boardSize.getRow(); r++) {
       for (int c = 0; c < boardSize.getCol(); c++) {
         String[] square = pieceInformation(r, c);

@@ -4,6 +4,7 @@ import java.util.List;
 import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
+import ooga.view.util.ViewUtility;
 
 public interface ViewInterface {
     /**
@@ -19,7 +20,7 @@ public interface ViewInterface {
 
     void changePieceStyle(String style);
 
-    void showError(String message);
-
-    void showCheck(Location location);
+    static void showError(String message) {
+        ViewUtility.showError(message);
+    }
 }
