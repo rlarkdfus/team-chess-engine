@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import ooga.Location;
+import ooga.LogUtils;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Piece;
 import ooga.model.Player;
 import ooga.model.PlayerInterface;
 import ooga.model.Powerups.PowerupInterface;
-import ooga.view.util.ViewUtility;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -155,7 +155,7 @@ public class BoardBuilder implements Builder {
    * pieceGrid
    */
   private void iterateCSVData()
-      throws InvalidPieceConfigException, PlayerNotFoundException, CsvException {
+      throws PlayerNotFoundException, CsvException {
     for (int r = 0; r < boardSize.getRow(); r++) {
       for (int c = 0; c < boardSize.getCol(); c++) {
         String[] square = pieceInformation(r, c);
@@ -223,6 +223,7 @@ public class BoardBuilder implements Builder {
       for (String player : convertJSONArrayOfStrings(
           jsonObject.getJSONArray(mappings.getString(PLAYERS)))) {
         PlayerInterface newPlayer = new Player(player);
+        LogUtils.info(this,"time: "+time +" timeincrement: " +timeIncrement);
         newPlayer.configTimer(time,timeIncrement);
         playerList.add(newPlayer);
       }

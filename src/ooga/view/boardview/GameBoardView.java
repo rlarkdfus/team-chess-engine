@@ -1,19 +1,15 @@
 package ooga.view.boardview;
 
-import ooga.Location;
-import ooga.controller.Config.InvalidPieceConfigException;
-import ooga.controller.Config.PieceViewBuilder;
-import ooga.controller.Controller;
-
-
-import java.io.FileNotFoundException;
 import java.util.List;
+import ooga.Location;
+import ooga.controller.Config.PieceViewBuilder;
+import ooga.controller.GameControllerInterface;
 
 public class GameBoardView extends BoardView {
 
-    private Controller controller;
+    private GameControllerInterface controller;
 
-    public GameBoardView(Controller controller, List<PieceViewBuilder> pieceViews, int row, int col) {
+    public GameBoardView(GameControllerInterface controller, List<PieceViewBuilder> pieceViews, int row, int col) {
         super(pieceViews, row, col);
         this.controller = controller;
     }
