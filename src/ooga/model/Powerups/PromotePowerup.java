@@ -10,9 +10,8 @@ import java.util.List;
 
 public class PromotePowerup extends Powerup{
 
-
-    public PromotePowerup(List<Location> powerupLocations) {
-        super(powerupLocations);
+    public PromotePowerup(List<Location> powerupLocations, Location bounds) {
+        super(powerupLocations, bounds);
     }
 
 
@@ -33,7 +32,7 @@ public class PromotePowerup extends Powerup{
         if(pieceInterface.getName().equals(Board.KING)){
             return;
         }
-        PieceInterface additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(), Board.QUEEN,endLocation);
+        PieceInterface additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(), Board.QUEEN,endLocation,getBounds());
 
         currentPlayer.addPiece(additionalPiece);
         allPieces.add(additionalPiece);

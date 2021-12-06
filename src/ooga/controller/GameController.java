@@ -1,8 +1,10 @@
 package ooga.controller;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import ooga.Location;
 import ooga.controller.Config.Builder;
@@ -18,11 +20,6 @@ import ooga.view.GameOverScreen;
 import ooga.view.GameView;
 import ooga.view.View;
 import ooga.view.ViewInterface;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.JSONObject;
 
 public class GameController extends Controller {
@@ -46,7 +43,8 @@ public class GameController extends Controller {
   @Override
   protected Engine initializeModel(Builder boardBuilder) {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
-    Engine model = new GameBoard(players, boardBuilder.getEndConditionHandler(), new ArrayList<>());
+    Engine model = new GameBoard(players, boardBuilder.getEndConditionHandler(), new ArrayList<>(),
+        boardBuilder.getBoardSize());
     timeController = new TimeController(initialTime, increment);
     timeController.configTimers(players);
     startTimersForNewGame(players);

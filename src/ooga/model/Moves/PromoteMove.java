@@ -17,8 +17,8 @@ public class PromoteMove extends Move {
      * @param take move takes
      * @param limited move is limited
      */
-    public PromoteMove(int dRow, int dCol, boolean take, boolean limited) {
-        super(dRow, dCol, take, limited);
+    public PromoteMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
+        super(dRow, dCol, take, limited, bounds);
     }
 
     /**
@@ -42,7 +42,7 @@ public class PromoteMove extends Move {
         System.out.println("Execute promote move");
         PieceInterface newPiece = null;
         try {
-            newPiece = PieceBuilder.buildPiece(piece.getTeam(), "Q",end);
+            newPiece = PieceBuilder.buildPiece(piece.getTeam(), "Q",end,getBounds());
         } catch (FileNotFoundException | InvalidPieceConfigException e) {
             e.printStackTrace();
         }

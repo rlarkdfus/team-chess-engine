@@ -15,10 +15,7 @@ public abstract class Board implements Engine {
 
     public static final String QUEEN = "Q";
     public static final String KING = "K";
-    private static final int FIRST_ROW = 0;
-    private static final int ROWS = 8;
-    private static final int LAST_ROW = ROWS - 1;
-    private static final int COLS = 8;
+    private Location bounds;
     protected List<PlayerInterface> players;
     protected List<PieceInterface> pieces;
     protected final List<PieceInterface> initialPieces;
@@ -27,7 +24,8 @@ public abstract class Board implements Engine {
     protected PlayerInterface currentPlayer;
 
 
-    public Board(List<PlayerInterface> players) {
+    public Board(List<PlayerInterface> players, Location bounds) {
+        this.bounds = bounds;
         this.players = players;
         pieces = new ArrayList<>();
         for (PlayerInterface player : players) {
@@ -85,6 +83,10 @@ public abstract class Board implements Engine {
     }
 
     protected abstract void updateGameRules();
+
+    protected Location getBounds() {
+        return bounds;
+    }
 
     protected void updateLegalMoves() {
         for (PieceInterface piece : pieces) {

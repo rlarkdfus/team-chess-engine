@@ -35,7 +35,7 @@ class EliminationEndConditionHandlerTest {
     players = boardBuilder.getInitialPlayers();
     endConRunner = boardBuilder.getEndConditionHandler();
     List<PowerupInterface> powerups = boardBuilder.getPowerupsHandler();
-    board = new GameBoard(players, endConRunner, powerups);
+    board = new GameBoard(players, endConRunner, powerups, boardBuilder.getBoardSize());
   }
 
   @Test

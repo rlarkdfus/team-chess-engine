@@ -1,5 +1,7 @@
 package ooga.model.Moves;
 
+import static ooga.controller.Config.PowerUpsBuilder.ZERO_BOUNDS;
+
 import ooga.Location;
 import ooga.model.PieceInterface;
 
@@ -13,9 +15,6 @@ public class MoveUtility {
      * @param pieces all pieces
      * @return team in check or not
      */
-    public static final int BOARD_MAX = 8;
-    public static final int BOARD_MIN = 0;
-
 
     public static boolean inCheck(String team, List<PieceInterface> pieces) {
         PieceInterface king = findKing(team, pieces);
@@ -69,8 +68,8 @@ public class MoveUtility {
      * @param newCol new col position
      * @return whether a row and column are in bounds
      */
-    protected static boolean inBounds(int newRow, int newCol) {
-        return (newRow < BOARD_MAX && newCol < BOARD_MAX && newRow >= BOARD_MIN && newCol >= BOARD_MIN);
+    protected static boolean inBounds(int newRow, int newCol, Location bounds) {
+        return (newRow < bounds.getRow() && newCol < bounds.getCol() && newRow >= ZERO_BOUNDS && newCol >= ZERO_BOUNDS);
     }
 
     /**

@@ -13,8 +13,8 @@ public class PawnMove extends Move { //TODO: pawn move takes in +-2 depending on
      * @param take move can take
      * @param limited move is limited
      */
-    public PawnMove(int dRow, int dCol, boolean take, boolean limited) {
-        super(dRow, dCol, take, limited);
+    public PawnMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
+        super(dRow, dCol, take, limited, bounds);
     }
 
     /**

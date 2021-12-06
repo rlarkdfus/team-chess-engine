@@ -8,8 +8,8 @@ import java.util.List;
 
 public class NoRestrictionMove extends TranslationMove {
 
-    public NoRestrictionMove(int dRow, int dCol, boolean take, boolean limited) {
-        super(dRow, dCol, take, limited);
+    public NoRestrictionMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
+        super(dRow, dCol, take, limited, bounds);
     }
 
     @Override
@@ -17,8 +17,8 @@ public class NoRestrictionMove extends TranslationMove {
         List<Location> locations = new ArrayList<>();
         int row = 0;
         int col = 0;
-        while (MoveUtility.inBounds(row, col)) {
-            while (MoveUtility.inBounds(row, col)) {
+        while (MoveUtility.inBounds(row, col,getBounds())) {
+            while (MoveUtility.inBounds(row, col,getBounds())) {
                 locations.add(new Location(row, col));
                 col++;
             }
