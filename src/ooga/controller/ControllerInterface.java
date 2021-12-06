@@ -69,4 +69,11 @@ public interface ControllerInterface {
    * @return - a list of locations that the piece can go to
    */
   List<Location> getLegalMoves(Location location);
+
+  /**
+   * launches a new controller from the selected game variation
+   * @param controllerVariation the variation to launch a new controller for
+   * @throws Throwable if class not found or no such method
+   */
+  void launchController(String controllerVariation) throws Throwable;
 }

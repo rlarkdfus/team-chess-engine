@@ -9,9 +9,12 @@ import ooga.view.ViewInterface;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.StringProperty;
+import java.util.Map;
+
 import ooga.Location;
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
@@ -19,8 +22,10 @@ import ooga.controller.Config.JSONWriter;
 import ooga.controller.Config.JsonParser;
 import ooga.controller.Config.LocationWriter;
 import ooga.controller.Config.PieceViewBuilder;
+import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Engine;
 import ooga.model.PieceInterface;
+import ooga.view.View;
 import ooga.view.ViewInterface;
 import org.json.JSONObject;
 
@@ -44,6 +49,8 @@ public abstract class Controller implements ControllerInterface {
   protected Engine model;
   private ViewInterface view;
   private File jsonFile;
+  private static final String CONTROLLER_PATH = Controller.class.getPackageName() + ".";
+  private static final String CONTROLLER_SUFFIX = "Controller";
 
   /**
    * This constructor creates default model and view objects to that the player can either play the game,
@@ -109,7 +116,7 @@ public abstract class Controller implements ControllerInterface {
   public boolean canMovePiece(Location location) {
     return model.canMovePiece(location);
   }
-  
+
   /**
    * sets up a new game with the initial configuration file
    *
@@ -184,5 +191,14 @@ public abstract class Controller implements ControllerInterface {
     return model.checkGameState();
   }
 
+
+  /**
+   * launches a new controller from the selected game variation
+   * @param variation the variation of the controller to use
+   */
+  public void launchController(String variation) throws Throwable{
+    Class<?> clazz = Class.forName(CONTROLLER_PATH + variation + CONTROLLER_SUFFIX);
+    ControllerInterface controller = (ControllerInterface) clazz.getDeclaredConstructor().newInstance();
+  }
 
 }

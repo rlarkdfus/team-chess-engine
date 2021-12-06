@@ -169,7 +169,10 @@ public class BoardBuilder implements Builder {
 
   /**
    * takes the given row and column indices and returns the square at that location.
-   * throws a csv exception if the square doesn't exist (because there isn't a 8x8 array of pieces)
+   * @param  r row
+   * @param c column
+   * @throws CsvException if the square doesn't exist (because there isn't a 8x8 array of pieces)
+   * @return String[] of square location
    */
   private String[] pieceInformation(int r, int c) throws CsvException {
     String[] square;
@@ -239,6 +242,8 @@ public class BoardBuilder implements Builder {
 
   /**
    * converts a jsonarray object to a list object
+   * @param jsonArray inputted jsonArray
+   * @return List of strings
    */
   private List<String> convertJSONArrayOfStrings(JSONArray jsonArray) {
     List<String> ret = new ArrayList<>();

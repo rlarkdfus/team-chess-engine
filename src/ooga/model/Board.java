@@ -6,6 +6,7 @@ import ooga.controller.Config.PieceBuilder;
 import ooga.model.Moves.Move;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import ooga.model.Moves.MoveUtility;
 import ooga.model.Powerups.PowerupInterface;
 
@@ -20,10 +21,7 @@ import ooga.model.Powerups.PowerupInterface;
  * such as movePiece and executeMove to update the board's pieces.
  */
 public abstract class Board implements Engine {
-
-    public static final String QUEEN = "Q";
-    public static final String KING = "K";
-    public static final String PAWN = "P";
+    public static ResourceBundle PIECES = ResourceBundle.getBundle("ooga/model/StandardBoard");
     private Location bounds;
     protected List<PlayerInterface> players;
     protected List<PieceInterface> pieces;
@@ -150,13 +148,11 @@ public abstract class Board implements Engine {
         for(PlayerInterface player : players) {
             if(newPiece.getTeam().equals(player.getTeam())) {
                 player.addPiece(newPiece);
-                System.out.println(player.getTeam()+": " + player.getPieces());
                 break;
             }
         }
         executeMove(newPiece, location);
         pieces.add(newPiece);
-        System.out.println("addPiece\n" + this);
     }
 
     /**

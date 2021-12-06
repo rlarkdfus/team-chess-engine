@@ -62,6 +62,8 @@ public class EndConditionBuilder {
 
   /**
    * parses rule json file, builds the endcondition objects, and adds them to the runner
+   * @param ruleJsonFilepath the file path to the rule json file
+   * @param playerList list of players
    */
   private static EndConditionRunner buildEndConditionHandler(String ruleJsonFilepath,
       List<PlayerInterface> playerList)
@@ -80,6 +82,7 @@ public class EndConditionBuilder {
 
   /**
    * builds the endcondition object using reflection
+   * @param playerList list of players
    */
   private static EndConditionInterface buildEndCondition(List<PlayerInterface> playerList,
       JSONObject endConditionsJSONObject)
@@ -105,6 +108,7 @@ public class EndConditionBuilder {
 
   /**
    * creates a list of all pieces from the given players
+   * @param playerList list of players
    */
   private static List<PieceInterface> makeInitialPieces(List<PlayerInterface> playerList) {
     List<PieceInterface> initialPieces = new ArrayList<>();
@@ -143,7 +147,7 @@ public class EndConditionBuilder {
 
   /**
    * checks that the number of player pieces is greater or equal to the number of target pieces.
-   * throws an exception if this is not the case
+   * @throws InvalidEndGameConfigException if this is not the case
    */
   private static void testNotEnoughPlayerPieces(HashMap<String, Integer> playerPieces)
       throws InvalidEndGameConfigException {
