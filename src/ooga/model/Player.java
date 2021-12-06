@@ -126,8 +126,6 @@ public class Player implements PlayerInterface {
     }
 
 
-
-
     /**
      * returns the player team
      * @return player's team

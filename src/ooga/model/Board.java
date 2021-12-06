@@ -82,6 +82,7 @@ public abstract class Board implements Engine {
                 }
             }
         }
+
     }
 
     protected abstract void updateGameRules();

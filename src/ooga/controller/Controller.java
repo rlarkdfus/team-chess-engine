@@ -3,10 +3,7 @@ package ooga.controller;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.controller.Config.*;
-import ooga.model.Engine;
-import ooga.model.GameState;
-import ooga.model.PieceInterface;
-import ooga.model.PlayerInterface;
+import ooga.model.*;
 import ooga.view.ViewInterface;
 
 import java.io.File;
@@ -172,6 +169,15 @@ public abstract class Controller implements ControllerInterface {
 
   protected GameState getGameState() {
     return model.checkGameState();
+  }
+
+  public List<Integer> getUpdatedScores() {
+    List<Integer> scores = new ArrayList<>();
+    for (PlayerInterface player : model.getPlayers()) {
+      scores.add(player.getScore());
+    }
+    System.out.println(scores);
+    return scores;
   }
 
 }
