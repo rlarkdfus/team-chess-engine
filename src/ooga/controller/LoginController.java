@@ -20,6 +20,7 @@ public class LoginController {
     public static final String JSON_WRITER_FILE_PATH = "data/chess/profiles/profiles";
     public static final String USER_PROFILE_ERROR = "userProfileError";
     public static final String USERNAME_ERROR = "usernameError";
+    public static final String ACCOUNT_EXISTS_ERROR = "accountExistsError";
     public static final String PASSWORD = "password";
     public static final String WINS = "wins";
     public static final int STARTING_WINS = 0;
@@ -57,14 +58,18 @@ public class LoginController {
     }
 
     public void handleSignUp(String username, String password) {
-        JSONObject newProfile =  new JSONObject();
-        newProfile.put(PASSWORD, password);
-        newProfile.put(WINS, STARTING_WINS);
-        userProfilesJSON.put(username, newProfile);
-        try {
-            JSONWriter.saveFile(userProfilesJSON, JSON_WRITER_FILE_PATH);
-        } catch (IOException e) {
-            ViewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
+        if (checkUsername(username) != null) {
+            ViewUtility.showError(resourceBundle.getString(ACCOUNT_EXISTS_ERROR));
+        } else {
+            JSONObject newProfile = new JSONObject();
+            newProfile.put(PASSWORD, password);
+            newProfile.put(WINS, STARTING_WINS);
+            userProfilesJSON.put(username, newProfile);
+            try {
+                JSONWriter.saveFile(userProfilesJSON, JSON_WRITER_FILE_PATH);
+            } catch (IOException e) {
+                ViewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
+            }
         }
     }
 
@@ -74,7 +79,7 @@ public class LoginController {
 
     private boolean isValidLogin(String username, String password) {
         try {
-            JSONObject userData = userProfilesJSON.getJSONObject(username);
+            JSONObject userData = checkUsername(username);
             String truePassword = userData.getString(PASSWORD);
             return truePassword.equals(password);
         }
@@ -82,5 +87,10 @@ public class LoginController {
             ViewUtility.showError(resourceBundle.getString(USERNAME_ERROR));
         }
         return false;
+    }
+
+    private JSONObject checkUsername(String username) {
+        JSONObject userData = userProfilesJSON.getJSONObject(username);
+        return userData;
     }
 }
