@@ -1,10 +1,8 @@
 package ooga.controller;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 import ooga.controller.Config.JSONWriter;
@@ -20,6 +18,8 @@ public class LoginController {
     public static final String JSON_WRITER_FILE_PATH = "data/chess/profiles/profiles";
     public static final String USER_PROFILE_ERROR = "userProfileError";
     public static final String USERNAME_ERROR = "usernameError";
+    public static final String ACCOUNT_EXISTS_ERROR = "accountExistsError";
+    public static final String SAME_PROFILE_ERROR = "sameProfileError";
     public static final String PASSWORD = "password";
     public static final String WINS = "wins";
     public static final int STARTING_WINS = 0;
@@ -37,6 +37,9 @@ public class LoginController {
     }
 
     public boolean handleLoginAttempt (String username1, String password1, String username2, String password2) {
+        if (username1.equals(username2)) {
+            ViewUtility.showError(resourceBundle.getString(SAME_PROFILE_ERROR));
+        }
         if (isValidLogin(username1, password1) && isValidLogin(username2, password2)) {
             Map<Enum, JSONObject> players = new HashMap<>();
             Map<Enum, String> usernames = new HashMap<>();
@@ -57,14 +60,18 @@ public class LoginController {
     }
 
     public void handleSignUp(String username, String password) {
-        JSONObject newProfile =  new JSONObject();
-        newProfile.put(PASSWORD, password);
-        newProfile.put(WINS, STARTING_WINS);
-        userProfilesJSON.put(username, newProfile);
-        try {
-            JSONWriter.saveFile(userProfilesJSON, JSON_WRITER_FILE_PATH);
-        } catch (IOException e) {
-            ViewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
+        if (checkUsername(username) != null) {
+            ViewUtility.showError(resourceBundle.getString(ACCOUNT_EXISTS_ERROR));
+        } else {
+            JSONObject newProfile = new JSONObject();
+            newProfile.put(PASSWORD, password);
+            newProfile.put(WINS, STARTING_WINS);
+            userProfilesJSON.put(username, newProfile);
+            try {
+                JSONWriter.saveFile(userProfilesJSON, JSON_WRITER_FILE_PATH);
+            } catch (IOException e) {
+                ViewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
+            }
         }
     }
 
@@ -74,7 +81,7 @@ public class LoginController {
 
     private boolean isValidLogin(String username, String password) {
         try {
-            JSONObject userData = userProfilesJSON.getJSONObject(username);
+            JSONObject userData = checkUsername(username);
             String truePassword = userData.getString(PASSWORD);
             return truePassword.equals(password);
         }
@@ -82,5 +89,10 @@ public class LoginController {
             ViewUtility.showError(resourceBundle.getString(USERNAME_ERROR));
         }
         return false;
+    }
+
+    private JSONObject checkUsername(String username) {
+        JSONObject userData = userProfilesJSON.getJSONObject(username);
+        return userData;
     }
 }

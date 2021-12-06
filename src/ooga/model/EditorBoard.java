@@ -3,6 +3,7 @@ package ooga.model;
 import java.util.ArrayList;
 import java.util.List;
 import ooga.Location;
+import ooga.Main;
 import ooga.model.Moves.Move;
 import ooga.model.Moves.NoRestrictionMove;
 
@@ -22,7 +23,7 @@ public class EditorBoard extends Board {
      * @param bounds the bounds of the board
      */
     public EditorBoard(List<PlayerInterface> players, Location bounds) {
-        super(players,bounds);
+        super(players, new Location(Main.DEFAULT_ROW, Main.DEFAULT_COL));
         for(PlayerInterface player : players) {
             for(PieceInterface piece : player.getPieces()) {
                 player.removePiece(piece);
