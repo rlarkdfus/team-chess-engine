@@ -52,7 +52,7 @@ public class EnPassantMove extends Move {
 //            System.out.println(pawn.toString() + " " + pawn.getLocation() + ", " + otherPawn.toString() + " " + otherPawnLocation);
 //        }
 
-        if (otherPawn == null || !otherPawn.getName().equals(Board.PAWN) || !otherPawn.isFirstMove()){
+        if (otherPawn == null || !otherPawn.getName().equals(Board.PIECES.getString("PAWN")) || !otherPawn.isFirstMove()){
             return false;
         }
         return tryMove(pawn, potentialLocation, new ArrayList<>(pieces));

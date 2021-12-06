@@ -18,6 +18,7 @@ public class TimeConfigurationUI extends GridPane implements UIInterface {
         createUI();
     }
 
+    @Override
     public void createUI() {
         this.add(viewUtility.makeLabel("time_control"), 0, 1);
         this.add(viewUtility.makeLabel("minutes_label"), 0, 2);

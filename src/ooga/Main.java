@@ -6,10 +6,13 @@ import ooga.controller.GameController;
 import ooga.controller.LoginController;
 
 public class Main extends Application {
+    public static final int DEFAULT_ROW = 8;
+    public static final int DEFAULT_COL = 8;
+
     @Override
     public void start(Stage stage) {
-//       new LoginController();
+       new LoginController();
 //        new EditorController();
-        new GameController();
+//        new GameController();
     }
 }
