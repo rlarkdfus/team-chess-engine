@@ -1,0 +1,26 @@
+{
+  "moves": {
+    "TranslationMove": [
+      "1, -1,takes,unlimited",
+      "1, 1,takes,unlimited",
+      "-1, -1,takes,unlimited",
+      "-1, 1,takes,unlimited",
+      "1,0,takes,unlimited",
+      "0,1,takes,unlimited",
+      "-1,0,takes,unlimited",
+      "0,-1,takes,unlimited"
+    ],
+
+    "JumpMove": [
+      "1, -2,takes,limited",
+      "1, 2,takes,limited",
+      "2, -1,takes,limited",
+      "2, 1,takes,limited",
+      "-1,-2,takes,limited",
+      "-1,2,takes,limited",
+      "-2,-1,takes,limited",
+      "-2,1,takes,limited"
+    ]
+  },
+  "value": 50
+}
