@@ -1,6 +1,7 @@
 package ooga.model;
 
 import ooga.Location;
+import ooga.LogUtils;
 import ooga.Turn;
 import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.Moves.Move;
@@ -34,7 +35,7 @@ public abstract class Board implements Engine {
             pieces.addAll(player.getPieces());
         }
         initialPieces = new ArrayList<>(pieces);
-        System.out.println(initialPieces);
+        LogUtils.debug(this,initialPieces);
         powerupInterfaceList = new ArrayList<>();
     }
 
