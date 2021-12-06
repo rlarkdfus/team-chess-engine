@@ -14,6 +14,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.StringProperty;
+import ooga.Location;
+import ooga.model.Engine;
+import ooga.view.LoginView;
+import ooga.controller.Config.*;
+import org.json.JSONObject;
 
 public abstract class Controller implements ControllerInterface {
 
@@ -24,7 +30,16 @@ public abstract class Controller implements ControllerInterface {
   private String selectedTeam;
   private String selectedName;
 
+  protected int initialTime;
+  protected int increment;
+
+  public static final int DEFAULT_INITIAL_TIME = 5;
+  public static final int DEFAULT_INITIAL_INCREMENT = 5;
+
   public Controller() {
+    initialTime = DEFAULT_INITIAL_TIME;
+    increment = DEFAULT_INITIAL_INCREMENT;
+
     jsonFile = getDefaultConfiguration();
     BoardBuilder boardBuilder = new BoardBuilder(jsonFile);
     model = initializeModel(boardBuilder);
@@ -98,8 +113,8 @@ public abstract class Controller implements ControllerInterface {
   public void downloadGame(String filePath) {
     try {
       JSONWriter jsonWriter = new JSONWriter();
-      jsonWriter.saveFile(jsonFile, filePath);
-      //  private ViewInterface view;
+      JSONObject jsonObject = JsonParser.loadFile(jsonFile);
+      jsonWriter.saveFile(jsonObject, filePath);
       LocationWriter locationWriter = new LocationWriter();
       locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
     } catch (IOException ignored) {
@@ -158,4 +173,5 @@ public abstract class Controller implements ControllerInterface {
   protected GameState getGameState() {
     return model.checkGameState();
   }
+
 }

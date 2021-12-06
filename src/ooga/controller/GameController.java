@@ -14,13 +14,11 @@ import ooga.view.ViewInterface;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameController extends Controller {
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
-
-  public static final int DEFAULT_INITIAL_TIME = 5;
-  public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
   private TimeController timeController;
 
@@ -32,10 +30,9 @@ public class GameController extends Controller {
   @Override
   protected Engine initializeModel(Builder boardBuilder) {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
-    Engine model = new GameBoard(players);
-    model.setEndCondition(boardBuilder.getEndConditionHandler());
-
-    timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
+    Engine model = new GameBoard(players, boardBuilder.getEndConditionHandler(), new ArrayList<>());
+    timeController = new TimeController(initialTime, increment);
+    timeController.configTimers(players);
     startTimersForNewGame(players);
     return model;
   }
@@ -71,7 +68,7 @@ public class GameController extends Controller {
    */
   @Override
   public void setInitialTime(int minutes) {
-    timeController.setInitialTime(minutes);
+    initialTime = minutes;
   }
 
   /**
@@ -81,6 +78,6 @@ public class GameController extends Controller {
    */
   @Override
   public void setIncrement(int seconds) {
-    timeController.setIncrement(seconds);
+    increment = seconds;
   }
 }

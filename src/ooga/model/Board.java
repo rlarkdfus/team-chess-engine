@@ -10,10 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 import ooga.model.Moves.MoveUtility;
 import ooga.model.Powerups.PowerupInterface;
-import ooga.model.Powerups.PromotePowerup;
 
 public abstract class Board implements Engine {
 
+    public static final String QUEEN = "Q";
+    public static final String KING = "K";
+    private static final int FIRST_ROW = 0;
+    private static final int ROWS = 8;
+    private static final int LAST_ROW = ROWS - 1;
+    private static final int COLS = 8;
     protected List<PlayerInterface> players;
     protected List<PieceInterface> pieces;
     protected final List<PieceInterface> initialPieces;
@@ -31,10 +36,6 @@ public abstract class Board implements Engine {
         initialPieces = new ArrayList<>(pieces);
         System.out.println(initialPieces);
         powerupInterfaceList = new ArrayList<>();
-        List<Location> powerupLocations = new ArrayList<>();
-        powerupLocations.add(new Location(4,0));
-        PromotePowerup test = new PromotePowerup(powerupLocations);
-        powerupInterfaceList.add(test);
     }
 
     /**

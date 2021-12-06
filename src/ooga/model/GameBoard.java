@@ -3,26 +3,18 @@ package ooga.model;
 import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
-
+import ooga.model.Powerups.PowerupInterface;
 import java.util.List;
 
 public class GameBoard extends Board {
-    private static final int ROWS = 8;
-    private static final int COLS = 8;
-    private static final int LAST_ROW = ROWS - 1;
-    private static final int FIRST_ROW = 0;
-    private static final String QUEEN = "Q";
-    private static final String KING = "K";
-    private static final String PAWN = "P";
 
     private EndConditionRunner endCondition;
     private int turnCount;
 
-
-
-    public GameBoard(List<PlayerInterface> players) {
+    public GameBoard(List<PlayerInterface> players, EndConditionRunner endCondition, List<PowerupInterface> powerups) {
         super(players);
-        endCondition = new EndConditionRunner();
+        this.endCondition = endCondition;
+        this.powerupInterfaceList = powerups;
         turnCount = 0;
         for (PieceInterface piece : pieces) {
             piece.updateMoves(pieces);
@@ -42,15 +34,6 @@ public class GameBoard extends Board {
 
         turnCount++;
         toggleTimers();
-    }
-
-    /**
-     * this method sets the end conditions of the board
-     *
-     * @param endCondition
-     */
-    public void setEndCondition(EndConditionRunner endCondition) {
-        this.endCondition = endCondition;
     }
 
     @Override
@@ -92,8 +75,8 @@ public class GameBoard extends Board {
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn) % players.size());
-        return currentPlayer;
+        currentPlayer = players.get((turn+1) % players.size());
+        return players.get((turn) % players.size());
     }
 
 

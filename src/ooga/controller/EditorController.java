@@ -15,8 +15,6 @@ public class EditorController extends Controller {
 
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultEditor.json");
 
-  private List<PieceViewBuilder> pieces;
-
   @Override
   protected File getDefaultConfiguration() {
     return DEFAULT_CHESS_CONFIGURATION;
@@ -29,7 +27,6 @@ public class EditorController extends Controller {
 
   @Override
   protected ViewInterface initializeView(List<PieceViewBuilder> pieces) {
-    this.pieces = pieces;
     ViewInterface view = new EditorView(this);
     view.initializeDisplay(pieces);
     return view;
@@ -42,4 +39,5 @@ public class EditorController extends Controller {
   @Override
   public void setIncrement(int seconds) {
   }
+
 }

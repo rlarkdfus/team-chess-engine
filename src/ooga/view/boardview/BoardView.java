@@ -8,7 +8,6 @@ import ooga.Location;
 import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.view.PieceView;
-
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
