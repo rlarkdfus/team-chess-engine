@@ -9,8 +9,8 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 public abstract class Powerup implements PowerupInterface{
-    protected List<Location> powerupLocations;
 
+    protected List<Location> powerupLocations;
 
     /**
      * Initializes powerup class
@@ -20,10 +20,8 @@ public abstract class Powerup implements PowerupInterface{
         this.powerupLocations = powerupLocations;
     }
 
-
-
     @Override
-    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException {
+    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) {
         if(hitPowerup(endLocation)){
             execute(pieceInterface,endLocation, currentPlayer, allPieces);
 //            removeUsedPowerup(endLocation);
@@ -56,10 +54,8 @@ public abstract class Powerup implements PowerupInterface{
      * @param endLocation  end location of the piece being moved
      * @param currentPlayer current player who
      * @param allPieces list of all pieces intialized on the board
-     * @throws FileNotFoundException ? - if the piece's json file is unable to be found
-     * @throws InvalidPieceConfigException ? - if the piece's json file is not valid (ie. missing key)
      */
 
-     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) throws FileNotFoundException, InvalidPieceConfigException;
+     abstract void execute(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces);
 
 }

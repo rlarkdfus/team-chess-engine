@@ -20,7 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
- * @Authors Albert
+ * @author Albert
  * purpose - this class builds EndCondition objects that will be used by the model to determine when
  *  the game ends. We also check that the EndCondition is possible to be fulfilled (ie there are at
  *  least 2 pieces on either team if the goal is to eliminate 2 pieces). All of these endconditions

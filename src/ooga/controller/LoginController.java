@@ -25,22 +25,15 @@ public class LoginController {
     public static final int STARTING_WINS = 0;
 
     private final File userProfiles = new File(USER_PROFILES);
-    private final ViewUtility viewUtility = new ViewUtility();
     private final ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH);
 
     private LoginView loginView;
-    private JsonParser jsonParser;
     private JSONObject userProfilesJSON;
 
     public LoginController() {
         loginView = new LoginView(this);
         loginView.initializeDisplay();
-        jsonParser = new JsonParser();
-        try {
-            userProfilesJSON = jsonParser.loadFile(userProfiles);
-        } catch (FileNotFoundException e) {
-            viewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
-        }
+        userProfilesJSON = JsonParser.loadFile(userProfiles);
     }
 
     public boolean handleLoginAttempt (String username1, String password1, String username2, String password2) {
@@ -71,7 +64,7 @@ public class LoginController {
         try {
             JSONWriter.saveFile(userProfilesJSON, JSON_WRITER_FILE_PATH);
         } catch (IOException e) {
-            viewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
+            ViewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
         }
     }
 
@@ -86,7 +79,7 @@ public class LoginController {
             return truePassword.equals(password);
         }
         catch (Exception e) {
-            viewUtility.showError(resourceBundle.getString(USERNAME_ERROR));
+            ViewUtility.showError(resourceBundle.getString(USERNAME_ERROR));
         }
         return false;
     }

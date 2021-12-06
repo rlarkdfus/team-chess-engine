@@ -1,7 +1,7 @@
 package ooga.controller;
 
 import java.io.File;
-
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -75,7 +75,7 @@ public class GameController extends Controller {
       return usernameToWinsMap;
     }
 
-    public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
+    public void movePiece(Location start, Location end) {
         super.movePiece(start, end);
         GameState gameState = getGameState();
         if (gameState != GameState.RUNNING) {
@@ -85,7 +85,7 @@ public class GameController extends Controller {
         getUsernameAndWins();
     }
 
-    private void incrementPlayerWin(GameState gameState) throws FileNotFoundException {
+    private void incrementPlayerWin(GameState gameState) {
         if(players != null) {
             Iterator playersIter = players.keySet().iterator();
             while (playersIter.hasNext()) {
@@ -97,7 +97,7 @@ public class GameController extends Controller {
         }
     }
 
-    private void incrementWinAndSaveJSON(GameState gameState, Enum player) throws FileNotFoundException {
+    private void incrementWinAndSaveJSON(GameState gameState, Enum player) {
         JSONObject playerInfo = players.get(player);
         int wins =  players.get(player).getInt(WINS) + 1;
         players.remove(wins);

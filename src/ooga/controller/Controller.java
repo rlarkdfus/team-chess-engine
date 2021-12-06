@@ -91,7 +91,7 @@ public abstract class Controller implements ControllerInterface {
    * @param end   is final location of moved piece
    */
   @Override
-  public void movePiece(Location start, Location end) throws FileNotFoundException, InvalidPieceConfigException {
+  public void movePiece(Location start, Location end) {
     List<PieceViewBuilder> pieceViewList = new ArrayList<>();
     model.movePiece(start, end).forEach(piece -> pieceViewList.add(new PieceViewBuilder(piece)));
     view.updateDisplay(pieceViewList);
