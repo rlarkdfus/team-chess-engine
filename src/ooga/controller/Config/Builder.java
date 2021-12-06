@@ -3,6 +3,7 @@ package ooga.controller.Config;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
+import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.PlayerInterface;
 import ooga.model.Powerups.PowerupInterface;
@@ -44,6 +45,14 @@ public interface Builder {
    * @return a list of pieceViewBuilder which is a data class that is used to build PieceView objects in the view
    */
   List<PieceViewBuilder> getInitialPieceViews();
+
+  /**
+   * Getter method that is used to send the board dimensions to the board. This is used when pieces
+   * are built so when promotion happens, this is a necessary piece of information for keeping piece
+   * movements inbounds
+   * @return a Location object where getRows() returns the row limit, and getCol() returns the col limit
+   */
+  Location getBoardSize();
 
   /**
    * Getter method that is used to construct the Board. This gives the board all the pieces that are in the

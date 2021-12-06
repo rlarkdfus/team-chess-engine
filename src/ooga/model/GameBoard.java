@@ -14,8 +14,8 @@ public class GameBoard extends Board {
     private EndConditionRunner endCondition;
     private int turnCount;
 
-    public GameBoard(List<PlayerInterface> players, EndConditionRunner endCondition, List<PowerupInterface> powerups) {
-        super(players);
+    public GameBoard(List<PlayerInterface> players, EndConditionRunner endCondition, List<PowerupInterface> powerups, Location bounds) {
+        super(players,bounds);
         this.endCondition = endCondition;
         this.powerupInterfaceList = powerups;
         turnCount = 0;

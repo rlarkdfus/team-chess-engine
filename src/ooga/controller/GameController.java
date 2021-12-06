@@ -1,5 +1,12 @@
 package ooga.controller;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import ooga.Location;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.JSONWriter;
@@ -13,10 +20,6 @@ import ooga.view.GameOverScreen;
 import ooga.view.GameView;
 import ooga.view.ViewInterface;
 import org.json.JSONObject;
-
-import java.io.File;
-import java.util.*;
-import java.util.Map.Entry;
 
 public class GameController extends Controller {
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
@@ -37,7 +40,8 @@ public class GameController extends Controller {
   @Override
   protected Engine initializeModel(Builder boardBuilder) {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
-    Engine model = new GameBoard(players, boardBuilder.getEndConditionHandler(), new ArrayList<>());
+    Engine model = new GameBoard(players, boardBuilder.getEndConditionHandler(), new ArrayList<>(),
+        boardBuilder.getBoardSize());
     timeController = new TimeController(initialTime, increment);
     timeController.configTimers(players);
     startTimersForNewGame(players);
@@ -45,9 +49,9 @@ public class GameController extends Controller {
   }
 
   @Override
-  protected ViewInterface initializeView(List<PieceViewBuilder> pieces) {
+  protected ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds) {
     ViewInterface view = new GameView(this);
-    view.initializeDisplay(pieces);
+    view.initializeDisplay(pieces, bounds);
     return view;
   }
 

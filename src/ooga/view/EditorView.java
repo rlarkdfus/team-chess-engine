@@ -1,6 +1,7 @@
 package ooga.view;
 
 import javafx.scene.layout.GridPane;
+import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.controller.Controller;
 import ooga.view.boardview.EditorBoardView;
@@ -37,9 +38,10 @@ public class EditorView extends View {
   }
 
   @Override
-  public void resetDisplay(List<PieceViewBuilder> pieceViewList) {
-    this.boardView = new EditorBoardView(controller, new ArrayList<>(), 8, 8);
+  public void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
+    this.boardView = new EditorBoardView(controller, new ArrayList<>(), bounds.getRow(),
+        bounds.getCol());
     this.pieceMenu = new PieceMenuView(controller, pieceViewList, 2, 6);
-    super.resetDisplay(pieceViewList);
+    super.resetDisplay(pieceViewList, bounds);
   }
 }

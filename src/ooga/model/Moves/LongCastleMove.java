@@ -1,7 +1,6 @@
 package ooga.model.Moves;
 
 import ooga.Location;
-import ooga.model.Moves.CastleMove;
 import ooga.model.PieceInterface;
 
 public class LongCastleMove extends CastleMove {
@@ -12,8 +11,8 @@ public class LongCastleMove extends CastleMove {
      * @param take move takes
      * @param limited move is limited
      */
-    public LongCastleMove(int dRow, int dCol, boolean take, boolean limited) {
-        super(dRow, dCol, take, limited);
+    public LongCastleMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
+        super(dRow, dCol, take, limited,bounds);
     }
 
     /**
