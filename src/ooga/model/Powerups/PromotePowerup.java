@@ -29,7 +29,7 @@ public class PromotePowerup extends Powerup{
         if(pieceInterface.getName().equals(Board.PIECES.getString("KING"))){
             return;
         }
-        PieceInterface additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("DEFAULT_PROMOTION"),endLocation,getBounds());
+        PieceInterface additionalPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("DefaultPromotionPiece"),endLocation,getBounds());
         pieceInterface.transform(additionalPiece);
 
 

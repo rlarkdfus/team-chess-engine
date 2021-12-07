@@ -1,10 +1,6 @@
 package ooga.controller;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.Map.Entry;
 import javafx.beans.property.StringProperty;
@@ -37,9 +33,6 @@ public class GameController extends Controller implements GameControllerInterfac
   private final File userProfilesFile = new File("data/chess/profiles/profiles.json");
   public static final int DEFAULT_INITIAL_TIME = 5;
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
-  public static final String CHEAT_FILE_PATH = "ooga/controller/resources/Cheat.properties";
-
-  public static ResourceBundle CHEAT_NAMES = ResourceBundle.getBundle("ooga/controller/resources/Cheat");
 
   private TimeController timeController;
 
@@ -223,34 +216,11 @@ public class GameController extends Controller implements GameControllerInterfac
     this.usernames = usernames;
   }
 
-  public List<Integer> getUpdatedScores() {
-      List<Integer> scores = new ArrayList<>();
-      for (PlayerInterface player : model.getPlayers()) {
-          scores.add(player.getScore());
-      }
-      return scores;
-  }
-
-  /**
-   * This calls methods in the gameboard to perform cheats.
-   * @param cheat the name of the cheat defined in Cheat.properties
-   */
-  public void handleCheat(String cheat){
-    String methodName = CHEAT_NAMES.getString(cheat);
-    try {
-      Method method = GameBoard.class.getDeclaredMethod(methodName);
-      method.invoke(model);
-    } catch (NoSuchMethodException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
+    public List<Integer> getUpdatedScores() {
+        List<Integer> scores = new ArrayList<>();
+        for (PlayerInterface player : model.getPlayers()) {
+            scores.add(player.getScore());
+        }
+        return scores;
     }
-
-    // happens every time
-    ((GameBoard)model).updateLegalMoves();
-    super.updateView();
-    System.out.println(model);
-  }
 }
