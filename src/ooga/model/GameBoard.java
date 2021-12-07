@@ -5,10 +5,8 @@ import ooga.controller.Config.PieceBuilder;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
 import ooga.model.Powerups.PowerupInterface;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @authors
@@ -21,6 +19,7 @@ import java.util.Set;
 public class GameBoard extends Board implements GameEngine, CheatInterface{
     private EndConditionRunner endCondition;
     private int turnCount;
+    private PlayerInterface currentPlayer;
 
     /**
      * the gameboard initializes the turns and the legal moves of each piece
@@ -60,18 +59,11 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
      */
     @Override
     protected void updateGameRules(PieceInterface piece) {
+        PlayerInterface currentPlayer = findPlayerTurn(turnCount);
         for(PowerupInterface powerupInterface: powerupInterfaceList){
             powerupInterface.checkPowerUp(piece, piece.getLocation(), currentPlayer, pieces);
         }
         System.out.println(currentPlayer.getTeam() + " " + currentPlayer.getScore());
-
-        //Tried the cheats
-//        incrementTurnCheat();
-////        addRandomPiece();
-////        moveKingRandom();
-//        addTimeCheat();
-//        queenToPawncheat();
-
         incrementTurn();
         toggleTimers();
     }
@@ -119,8 +111,7 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn) % players.size());
-        return currentPlayer;
+        return players.get((turn) % players.size());
     }
 
     /**

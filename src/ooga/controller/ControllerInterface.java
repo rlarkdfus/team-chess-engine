@@ -76,5 +76,5 @@ public interface ControllerInterface {
    * @param controllerVariation the variation to launch a new controller for
    * @throws Throwable if class not found or no such method
    */
-  void launchController(String controllerVariation) throws Throwable;
+  void launchController(String controllerVariation);
 }

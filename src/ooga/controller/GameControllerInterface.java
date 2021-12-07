@@ -9,8 +9,8 @@ import javafx.beans.property.StringProperty;
  *
  * purpose - this class defines the methods that are specific to the GameController object.
  * assumptions - that all the methods below are defined
- * dependencies - this class depends on the model classes, the view classes, and the boardbuilder classes.
- * To use - The user create a new controller object and a default view and model will be created. If a file
+ * dependencies - this class depends on the game model and view classes, and the boardbuilder classes.
+ * To use - The user create a new game controller object and a default view and model will be created. If a file
  *  is selected, the file is sent to boardbuilder and then new view and model objects are created and
  *  the game is remade.
  */
@@ -30,11 +30,18 @@ public interface GameControllerInterface extends ControllerInterface{
    */
   void setIncrement(int seconds);
 
+
   /**
-   * this method finds all the players' usernames and the amount of times they've one a game
-   * @return - a map of player names to their win count
+   * this method finds all the players' usernames mapped to their respective team
+   * @return - a map of team to player username
    */
-  Map<String, Integer> getUsernameAndWins();
+  Map<Enum, String> getUsernames();
+
+  /**
+   * this method finds the amount of times the players have won a game
+   * @return - a map of team to number of wins
+   */
+  Map<Enum, Integer> getWins();
 
   /**
    * gets the amount of time left on a player's timer

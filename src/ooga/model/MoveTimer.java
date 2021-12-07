@@ -2,12 +2,12 @@ package ooga.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * @authors
- * purpose - the movetimer manages the time that each player has to make a move
+ * @authors purpose - the movetimer manages the time that each player has to make a move
  * assumptions - it assumes that the time is a maximum of 3599
  * dependencies - it depends on the TimerInterface, StringProperty, and Timer
  * usage - a player holds its MoveTimer and calls methods to start/stop, set, increment,
@@ -37,7 +37,8 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * create move timer object to keep track of remaining time for each player
-     * @param initialTimeMinutes initial time minutes
+     *
+     * @param initialTimeMinutes      initial time minutes
      * @param initialIncrementSeconds initial time seconds
      */
     public MoveTimer(int initialTimeMinutes, int initialIncrementSeconds) {
@@ -49,8 +50,14 @@ public class MoveTimer implements TimerInterface {
         timer = new Timer();
     }
 
+    public void setToInitialTime() {
+        this.seconds = initialTime;
+        timeLeft.setValue(timeToString(seconds));
+    }
+
     /**
      * return the time left on a player's timer
+     *
      * @return the time left
      */
     @Override
@@ -60,6 +67,7 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * return whether the current timer is out of time
+     *
      * @return whether a timer is out of time
      */
     @Override
@@ -69,6 +77,7 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * set the initial time of the timer in minutes
+     *
      * @param minutes time to set
      */
     @Override
@@ -78,6 +87,7 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * set the amount of time to be added after a move is made
+     *
      * @param seconds time to be added
      */
     @Override
@@ -162,18 +172,20 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * add time to the timer
+     *
      * @param specifiedTime time to add
      */
-    public void incrementTime(int specifiedTime){
-        if (seconds == 0){
+    public void incrementTime(int specifiedTime) {
+        if (seconds == 0) {
             return;
         }
-        seconds+=specifiedTime;
+        seconds += specifiedTime;
         timeLeft.setValue(timeToString(seconds));
     }
 
     /**
      * converts time in seconds to "mm:ss"
+     *
      * @param seconds the time in seconds (maximum of 3599)
      * @return the String representation of the time
      */
@@ -185,6 +197,7 @@ public class MoveTimer implements TimerInterface {
 
     /**
      * Converts time to two digit string
+     *
      * @param time the time as an integer
      * @return the String representation of the time with two digits
      */

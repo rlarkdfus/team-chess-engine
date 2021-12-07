@@ -10,10 +10,7 @@ import java.util.Map.Entry;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.LogUtils;
-import ooga.controller.Config.Builder;
-import ooga.controller.Config.JSONWriter;
-import ooga.controller.Config.JsonParser;
-import ooga.controller.Config.PieceViewBuilder;
+import ooga.controller.Config.*;
 import ooga.model.*;
 import ooga.view.GameOverScreen;
 import ooga.view.GameView;
@@ -21,6 +18,18 @@ import ooga.view.ViewInterface;
 import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
+/**
+ * @Authors albert luis gordon sam richard
+ *
+ * purpose - this class is a controller type object so it connects the model and view. This specific
+ *  subclass is used for when we are in game mode, which allows for users to play a turn, toggle the timer,
+ *  and log their wins.
+ * assumptions - we assume that the defaultConfiguration file is valid. if this isn't the case, the
+ *  game will crash.
+ * dependencies - this class depends on the game model classes, the game view classes, and the
+ *  boardbuilder classes.
+ * To use - The user must only create a new GameController object in main.
+ */
 public class GameController extends Controller implements GameControllerInterface{
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
   public static final String WINS = "wins";
@@ -34,12 +43,12 @@ public class GameController extends Controller implements GameControllerInterfac
 
   private TimeController timeController;
 
+  private Map<Enum, JSONObject> playersAttributes;
+
   private int initialTime = DEFAULT_INITIAL_TIME;
   private int increment = DEFAULT_INITIAL_INCREMENT;
   private GameEngine model;
 
-  private GameOverScreen gameOverScreen;
-  private Map<Enum, JSONObject> players;
   private Map<Enum, String> usernames;
 
   public GameController(){
@@ -61,11 +70,9 @@ public class GameController extends Controller implements GameControllerInterfac
   @Override
   protected Engine initializeModel(Builder boardBuilder) {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
-    model = new GameBoard(players, boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler(),
-            boardBuilder.getBoardSize());
+    model = new GameBoard(players, boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler(), boardBuilder.getBoardSize());
+    timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
     configureTimersStartOfApplication();
-    System.out.println("initializing model w/ time settings: " + initialTime + ", " + increment);
-    timeController = new TimeController(initialTime, increment);
     timeController.configTimers(players);
     startTimersForNewGame(players);
     return model;
@@ -74,36 +81,45 @@ public class GameController extends Controller implements GameControllerInterfac
   /**
    * This method overrides an abstract superclass method. Here the view is created and initialized
    * with the pieces and bounds built by the boardbuilder.
-   * @param pieces -  a list of data objects that are used to produce javafx objects in view
-   * @param bounds -  a location object that is used to define the bounds of the display board
+   * @param boardBuilder - a boardbuilder object that holds vital objects like the pieces, powerups, and endconditions
    * @return - a view object that's been initialized.
    */
   @Override
-  protected ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds) {
+  protected ViewInterface initializeView(Builder boardBuilder) {
     ViewInterface view = new GameView(this);
-    //view.resetDisplay(pieces, bounds);
-    view.initializeDisplay(pieces, bounds);
+    view.initializeDisplay(boardBuilder.getInitialPieceViews(), boardBuilder.getPowerupLocations(), boardBuilder.getBoardSize());
     return view;
   }
 
   /**
-   * this method finds all the players' usernames and the amount of times they've one a game
+   * this method finds all the players' usernames mapped to their respective team
+   * @return - a map of team to player username
+   */
+  @Override
+  public Map<Enum, String> getUsernames() {
+    if(usernames == null) {
+      usernames = new HashMap<>();
+      usernames.put(GameState.BLACK, "Guest 2");
+      usernames.put(GameState.WHITE, "Guest 1");
+    }
+    return usernames;
+  }
+
+  /**
+   * this method finds the amount of times the players have won a game
    * @return - a map of player names to their win count
    */
   @Override
-  public Map<String, Integer> getUsernameAndWins() {
-
-    Map<String, Integer> usernameToWinsMap = new HashMap<>();
-    if (players != null) {
-      Iterator playersIter = players.entrySet().iterator();
-      Iterator usernamesIter = usernames.entrySet().iterator();
-      while (playersIter.hasNext() && usernamesIter.hasNext()) {
-        Entry<Enum, String> usernameEntry = (Entry) usernamesIter.next();
-        Entry<Enum, JSONObject> playersEntry = (Entry) playersIter.next();
-        usernameToWinsMap.put(usernameEntry.getValue(), playersEntry.getValue().getInt("wins"));
-      }
+  public Map<Enum, Integer> getWins() {
+    Map<Enum, Integer> winMap = new HashMap<>();
+    if(playersAttributes == null) {
+      winMap.put(GameState.WHITE, 0);
+      winMap.put(GameState.BLACK, 0);
     }
-    return usernameToWinsMap;
+    else {
+      usernames.keySet().forEach(team -> winMap.put(team, playersAttributes.get(team).getInt(WINS)));
+    }
+    return winMap;
   }
 
   /**
@@ -118,10 +134,9 @@ public class GameController extends Controller implements GameControllerInterfac
     super.movePiece(start, end);
     GameState gameState = model.checkGameState();
     if (gameState != GameState.RUNNING) {
-      LogUtils.info(this,"winner: "+gameState);
-      gameOverScreen = new GameOverScreen(this, gameState.toString());
+      LogUtils.info(this,"winner: " + gameState);
       incrementPlayerWin(gameState);
-      getUsernameAndWins();
+      new GameOverScreen(this, gameState.toString());
     }
   }
 
@@ -129,30 +144,24 @@ public class GameController extends Controller implements GameControllerInterfac
    * this method finds the player who won
    */
   private void incrementPlayerWin(GameState gameState) {
-    if (players != null) {
-      Iterator playersIter = players.keySet().iterator();
-      while (playersIter.hasNext()) {
-        Enum player = (Enum) playersIter.next();
-        if (gameState == player) {
-          incrementWinAndSaveJSON(gameState, player);
+      if (playersAttributes != null) {
+        for (Enum player : playersAttributes.keySet()) {
+          System.out.println("Size %d" + playersAttributes.size());
+          if (player == gameState) {
+            incrementWinAndSaveJSON(gameState, player);
+          }
         }
       }
     }
-  }
 
   /**
    * this method adds a win to the player's json file
    */
   private void incrementWinAndSaveJSON(GameState gameState, Enum player) {
-    JSONObject playerInfo = players.get(player);
-    int wins = players.get(player).getInt(WINS) + 1;
-    players.remove(wins);
-    playerInfo.put(WINS, wins);
-    players.remove(player);
-    players.put(player, playerInfo);
+    JSONObject playerInfo = playersAttributes.get(player);
+    playerInfo.put(WINS, (int) playerInfo.get(WINS) + 1);
     JSONObject userProfiles = JsonParser.loadFile(userProfilesFile);
-    userProfiles.remove(usernames.get(gameState));
-    userProfiles.put(usernames.get(gameState), playerInfo);
+    userProfiles.put(String.valueOf(usernames.get(gameState)), playerInfo);
     try {
       JSONWriter.saveFile(userProfiles, JSON_WRITER_FILE_PATH);
     } catch (Exception e) {
@@ -160,7 +169,6 @@ public class GameController extends Controller implements GameControllerInterfac
     }
   }
 
-  //TODO: TIMER
   private void configureTimersStartOfApplication() {
     setInitialTime(DEFAULT_INITIAL_TIME);
     setIncrement(DEFAULT_INITIAL_INCREMENT);
@@ -191,7 +199,7 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   @Override
   public void setInitialTime(int minutes) {
-    initialTime = minutes;
+    timeController.setInitialTime(model.getPlayers(), minutes);
   }
 
   /**
@@ -201,17 +209,17 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   @Override
   public void setIncrement(int seconds) {
-    increment = seconds;
+    timeController.setIncrement(model.getPlayers(), seconds);
   }
 
   /**
    * This methods uses the input maps to find the player json file and the player name from the Piece Color
    * that they played as (this is the enum).
    * @param usernames - a map from the piece color to the player's username
-   * @param players - a map from the piece color to the player's json file
+   * @param playersAttributes - a map from the piece color to the player's json file
    */
-  public void setPlayers(Map<Enum, String> usernames, Map<Enum, JSONObject> players) {
-    this.players = players;
+  public void setPlayers(Map<Enum, String> usernames, Map<Enum, JSONObject> playersAttributes) {
+    this.playersAttributes = playersAttributes;
     this.usernames = usernames;
   }
 

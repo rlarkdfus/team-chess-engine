@@ -26,6 +26,7 @@ public class CheatUI extends GridPane implements UIInterface {
 
         TreeSet<String> orderedCheats = new TreeSet<>(GameController.CHEAT_NAMES.keySet());
         cheats.addAll(orderedCheats);
+        System.out.println(cheats);
 
         this.getStyleClass().add("SettingsUI");
         createUI();

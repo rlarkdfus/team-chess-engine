@@ -308,7 +308,7 @@ public class ViewUtility {
         return strArr.get();
     }
 
-    public void changeLanguage(String language) {
+    public static void changeLanguage(String language) {
         languageResource = ResourceBundle.getBundle(LANGUAGE_RESOURCE_PATH + language);
         for (Labeled component : components) {
             component.setText(languageResource.getString(component.getId()));

@@ -17,6 +17,11 @@ public interface PlayerInterface {
   void toggleTimer();
 
   /**
+   * sets the player's time to the value of its timer's initial minutes but does not change its on/off state
+   */
+  void setToInitialTime();
+
+  /**
    * gets the remaining time a player has
    * @return the remaining time
    */

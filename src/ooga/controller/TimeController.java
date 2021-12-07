@@ -8,8 +8,8 @@ public class TimeController {
     private static int increment;
 
     public TimeController(int initialTimeMinutes, int incrementSeconds) {
-        setInitialTime(initialTimeMinutes);
-        setIncrement(incrementSeconds);
+        initialTime = initialTimeMinutes;
+        increment = incrementSeconds;
     }
 
     /**
@@ -22,20 +22,37 @@ public class TimeController {
         }
     }
 
-    public void setInitialTime(int minutes) {
+    public void setInitialTime(List<PlayerInterface> players, int minutes) {
         initialTime = minutes;
+        configTimers(players);
+        setToInitialTime(players);
     }
 
-    public void setIncrement(int seconds) {
+    public void setToInitialTime(List<PlayerInterface> players) {
+        for (PlayerInterface player : players) {
+            player.setToInitialTime();
+        }
+    }
+
+    public void setIncrement(List<PlayerInterface> players, int seconds) {
         increment = seconds;
+        configTimers(players);
     }
 
+    /**
+     * starts the timer of the first player
+     * @param players
+     */
     public void startPlayer1Timer(List<PlayerInterface> players) {
         if (!players.isEmpty()) {
             players.get(0).toggleTimer();
         }
     }
 
+    /**
+     * resets all players' timers
+     * @param players
+     */
     public void resetTimers(List<PlayerInterface> players) {
         players.forEach(PlayerInterface::resetTimer);
     }
