@@ -1,14 +1,15 @@
 package ooga.view.boardview;
 
-import java.util.List;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.controller.EditorControllerInterface;
 import ooga.view.PieceView;
 
+import java.util.List;
+
 public class PieceMenuView extends BoardView {
 
-  private EditorControllerInterface controller;
+  private final EditorControllerInterface controller;
 
   public PieceMenuView(EditorControllerInterface controller, List<PieceViewBuilder> pieceViews, int row, int col) {
     super(pieceViews, row, col);

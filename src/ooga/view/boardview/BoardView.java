@@ -41,9 +41,10 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   /**
    * Create a new BoardView object
+   *
    * @param pieceViews List of view representations of the pieces
-   * @param row Row number
-   * @param col Column number
+   * @param row        Row number
+   * @param col        Column number
    */
   public BoardView(List<PieceViewBuilder> pieceViews, int row, int col) {
     selectedLocation = null;
@@ -64,6 +65,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   /**
    * Update the board view so that it reflects the state of the program in the model.
+   *
    * @param pieceViews List of view representations of the pieces.
    */
   @Override
@@ -78,6 +80,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   /**
    * Change the colors of the squares on the board.
+   *
    * @param color1 Color of first type of squares
    * @param color2 Color of second type of squares
    */
@@ -93,6 +96,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   /**
    * Change the style of the piece icon styles
+   *
    * @param style Icon style
    */
   @Override
@@ -116,12 +120,14 @@ public abstract class BoardView extends Group implements BoardViewInterface {
    * Handles the work of what a click on the board should do. Method is abstract as each class
    * extending this one should have its own implementation so that a click performs the correct
    * action.
+   *
    * @param clickLocation Location
    */
   protected abstract void clickBoard(Location clickLocation);
 
   /**
    * Highlights squares on the board
+   *
    * @param location
    */
   protected void highlightBoardSquare(Location location) {
@@ -130,6 +136,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   /**
    * Selects a piece on the board
+   *
    * @param location
    */
   protected void selectPiece(Location location) {
@@ -139,6 +146,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   /**
    * Returns true if legal move
+   *
    * @param clickLocation
    * @param legalMoves
    * @return
@@ -149,6 +157,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   /**
    * List containing locations of legal moves
+   *
    * @param legalMoves
    */
   protected void showLegalMoves(List<Location> legalMoves) {
@@ -180,7 +189,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
   }
 
-  private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style){
+  private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style) {
     for (PieceViewBuilder piece : pieceViews) {
       PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
       pieceList.add(newPiece);
@@ -203,6 +212,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   /**
    * Returns desired selected location
+   *
    * @return
    */
   protected Location getSelectedLocation() {
@@ -211,6 +221,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   /**
    * Marks locations
+   *
    * @param specialLocations
    */
   public void markInitialSpecialLocation(List<Location> specialLocations) {

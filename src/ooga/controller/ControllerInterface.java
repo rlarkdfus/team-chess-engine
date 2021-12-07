@@ -1,9 +1,9 @@
 package ooga.controller;
 
+import ooga.Location;
+
 import java.io.File;
 import java.util.List;
-
-import ooga.Location;
 
 /**
  * @author gordon albert luis richard tarun sam
@@ -73,6 +73,7 @@ public interface ControllerInterface {
 
   /**
    * launches a new controller from the selected game variation
+   *
    * @param controllerVariation the variation to launch a new controller for
    * @throws Throwable if class not found or no such method
    */

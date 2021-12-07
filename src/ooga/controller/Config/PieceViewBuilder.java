@@ -11,13 +11,14 @@ import ooga.model.PieceInterface;
  */
 public class PieceViewBuilder {
 
-  private String team;
-  private String name;
-  private Location location;
+  private final String team;
+  private final String name;
+  private final Location location;
 
   /**
    * This is the constructor. It takes in the piece that it's representing and copies the 3 fields, which
    * are necessary to build the corresponding pieceview object
+   *
    * @param piece - the piece that is being referenced by the to-be-made pieceview object
    */
   public PieceViewBuilder(PieceInterface piece) {
@@ -28,6 +29,7 @@ public class PieceViewBuilder {
 
   /**
    * getter method for finding the team
+   *
    * @return a string of the team (ie "w" for white)
    */
   public String getTeam() {
@@ -36,6 +38,7 @@ public class PieceViewBuilder {
 
   /**
    * getter method for finding the piece type
+   *
    * @return a string of the piece type (ie "K" for king)
    */
   public String getName() {
@@ -44,6 +47,7 @@ public class PieceViewBuilder {
 
   /**
    * getter method for finding the location of the object
+   *
    * @return a Location object
    */
   public Location getLocation() {
