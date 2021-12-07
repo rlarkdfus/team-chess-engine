@@ -45,5 +45,6 @@ public interface Engine {
    */
   boolean canMovePiece(Location location);
 
-  List<Location>  getEmptyLocations();
+
+  Location randomEmptyLocation();
 }

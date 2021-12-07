@@ -9,6 +9,6 @@ public interface CheatInterface {
     void addTimeCheat();
     void removeRandomPieceCheat();
     void decrementTimeCheat();
-    void addRandomPiece();
+    void addRandomPieceCheat();
 
 }

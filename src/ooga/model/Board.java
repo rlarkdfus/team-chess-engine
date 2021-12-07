@@ -178,8 +178,8 @@ public abstract class Board implements Engine {
      * get a list of all the empty squares on the board
      * @return list of all empty locations
      */
-    @Override
-    public List<Location>  getEmptyLocations(){
+
+    private List<Location>  getEmptyLocations(){
         List<Location> emptyLocations = new ArrayList<>();
         for(int rows = 0; rows< bounds.getRow();rows++){
             for(int cols = 0; cols<bounds.getCol(); cols++){
@@ -191,4 +191,17 @@ public abstract class Board implements Engine {
         }
         return emptyLocations;
     }
+
+
+    /**
+     * get an empty locaiton by  finding empty locations and getting a random one
+     * @return an empty location
+     */
+
+    @Override
+    public Location randomEmptyLocation(){
+        List<Location> emptyLocations = this.getEmptyLocations();
+        int randomEmptyIndex  =  (int)(Math.random() * emptyLocations.size());
+        return emptyLocations.get(randomEmptyIndex);
+    };
 }

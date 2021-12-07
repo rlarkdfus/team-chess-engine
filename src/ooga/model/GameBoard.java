@@ -143,20 +143,13 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
 
     @Override
     public void addRandomQueenCheat(){
-        List<Location> emptyLocations = this.getEmptyLocations();
-        int randomEmptyIndex  =  (int)(Math.random() * emptyLocations.size());
-        Location randomLocation = emptyLocations.get(randomEmptyIndex);
-
-        PieceInterface newPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("QUEEN"),randomLocation,getBounds());
+        PieceInterface newPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("QUEEN"),this.randomEmptyLocation(),getBounds());
         currentPlayer.addPiece(newPiece);
         pieces.add(newPiece);
     }
 
     @Override
     public void moveKingRandomCheat(){
-        List<Location> emptyLocations = this.getEmptyLocations();
-        int randomEmptyIndex  =  (int)(Math.random() * emptyLocations.size());
-        Location randomLocation = emptyLocations.get(randomEmptyIndex);
         List<PieceInterface> currentPlayerPieces = currentPlayer.getPieces();
         PieceInterface king = null;
         for(PieceInterface piece: currentPlayerPieces){
@@ -164,7 +157,7 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
                 king = piece;
             }
         }
-        king.moveTo(randomLocation);
+        king.moveTo(this.randomEmptyLocation());
     }
 
     @Override
@@ -205,16 +198,23 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
 
     @Override
     public void decrementTimeCheat() {
-
+        currentPlayer.incrementTime(-60);
     }
 
+    //Make sure random piece isn't a king
     @Override
-    public void addRandomPiece() {
-        List<PieceInterface> currentPlayerPieces = currentPlayer.getPieces();
+    public void addRandomPieceCheat() {
         List<String> pieceOptions = new ArrayList<>();
         pieceOptions.addAll(Board.PIECES.keySet());
         pieceOptions.remove("KING");
 
+        int randomPieceIndex  =  (int)(Math.random() * pieceOptions.size());
+        String randomPieceKey = pieceOptions.get(randomPieceIndex);
+        String randomPieceName = Board.PIECES.getString(randomPieceKey);
+
+        PieceInterface newPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),randomPieceName,this.randomEmptyLocation(),getBounds());
+        currentPlayer.addPiece(newPiece);
+        pieces.add(newPiece);
 
     }
 }
