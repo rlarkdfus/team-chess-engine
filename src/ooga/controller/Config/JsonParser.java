@@ -27,7 +27,7 @@ public class JsonParser {
     try {
       currFileString = readFile(file);
     } catch (FileNotFoundException e) {
-      ViewInterface.showError(e.getMessage());
+      //ViewInterface.showError(e.getMessage());
     }
     return buildJSON(currFileString);
   }

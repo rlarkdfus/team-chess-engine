@@ -37,7 +37,7 @@ public class TimeControllerTest {
     void testSetValidInitialTime() {
         int minutes = 20;
         String expected = "20:00";
-        timeController.setInitialTime(minutes);
+        timeController.setInitialTime(players, minutes);
         timeController.configTimers(players);
         timeController.resetTimers(players);
         for (PlayerInterface player : players) {
@@ -49,7 +49,7 @@ public class TimeControllerTest {
     void testSetInvalidInitialTime() {
         int minutes = -1;
         String expected = "00:00";
-        timeController.setInitialTime(minutes);
+        timeController.setInitialTime(players, minutes);
         timeController.configTimers(players);
         timeController.resetTimers(players);
         for (PlayerInterface player : players) {
@@ -61,7 +61,7 @@ public class TimeControllerTest {
     void testSetValidIncrement() {
         int seconds = 9;
         String expected = "10:09";
-        timeController.setIncrement(seconds);
+        timeController.setIncrement(players, seconds);
         timeController.configTimers(players);
         timeController.resetTimers(players);
         for (PlayerInterface player : players) {
@@ -74,7 +74,7 @@ public class TimeControllerTest {
     void testSetInvalidIncrement() {
         int seconds = -1;
         String expected = "10:00";
-        timeController.setIncrement(seconds);
+        timeController.setIncrement(players, seconds);
         timeController.configTimers(players);
         timeController.resetTimers(players);
         for (PlayerInterface player : players) {
