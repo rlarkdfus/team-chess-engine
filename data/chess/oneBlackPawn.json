@@ -4,7 +4,7 @@
   "boardSize": "8x8",
   "boardColors": ["#f3dab0", "#bb885b"],
   "players": ["w", "b"],
-  "rules": "data/chess/rules/oneBlackPawn.json",
+  "rules": "data/chess/rules/default.json",
   "style": "companion",
   "time": 10,
   "powerups": "data/chess/powerups/noPowerups.json",

@@ -12,8 +12,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-       new LoginController();
+       //new LoginController();
 //        new EditorController();
-//        new GameController();
+        new GameController();
     }
 }

@@ -4,6 +4,7 @@ import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
 import ooga.model.Powerups.PowerupInterface;
+
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ import java.util.List;
 public class GameBoard extends Board implements GameEngine {
     private EndConditionRunner endCondition;
     private int turnCount;
+    private List<Location> emptyLocations;
 
     /**
      * the gameboard initializes the turns and the legal moves of each piece
@@ -34,9 +36,6 @@ public class GameBoard extends Board implements GameEngine {
             piece.updateMoves(pieces);
         }
         updateLegalMoves();
-        if (!players.isEmpty()) {
-            this.currentPlayer = players.get(0);
-        }
     }
 
     /**
@@ -56,6 +55,7 @@ public class GameBoard extends Board implements GameEngine {
      */
     @Override
     protected void updateGameRules(PieceInterface piece) {
+        PlayerInterface currentPlayer = findPlayerTurn(turnCount);
         for(PowerupInterface powerupInterface: powerupInterfaceList){
             powerupInterface.checkPowerUp(piece, piece.getLocation(), currentPlayer, pieces);
         }
@@ -107,7 +107,6 @@ public class GameBoard extends Board implements GameEngine {
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn) % players.size());
         return players.get((turn) % players.size());
     }
 
@@ -119,4 +118,11 @@ public class GameBoard extends Board implements GameEngine {
     public GameState checkGameState() {
         return endCondition.satisfiedEndCondition(players);
     }
+
+//    public List<Location> getEmptyLocations(){
+//        List<Location> emptyLocations
+//        for(int col: bounds.getCol()){
+//            for(int row: boun)
+//        }
+//    }
 }

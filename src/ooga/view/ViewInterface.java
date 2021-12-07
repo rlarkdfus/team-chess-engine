@@ -12,7 +12,7 @@ public interface ViewInterface {
      */
     void updateDisplay(List<PieceViewBuilder> pieceViewList);
 
-    void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds);
+    void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds);
 
     void changeBoardColor(Color color1, Color color2);
 

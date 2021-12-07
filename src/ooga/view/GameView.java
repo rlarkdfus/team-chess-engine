@@ -29,8 +29,8 @@ public class GameView extends View {
   }
 
   @Override
-  public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
-    super.initializeDisplay(pieceViewList, bounds);
+  public void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds) {
+    super.initializeDisplay(pieceViewList, specialLocations, bounds);
     updatePlayerStatsUI(controller.getUpdatedScores());
   }
 

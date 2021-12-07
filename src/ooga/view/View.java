@@ -34,7 +34,7 @@ public abstract class View implements ViewInterface {
     }
 
     @Override
-    public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
+    public void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds) {
         this.boardView = initializeBoardView(pieceViewList, bounds);
         initializeUI(viewController);
         scene = initializeScene();
