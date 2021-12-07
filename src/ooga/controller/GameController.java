@@ -33,8 +33,8 @@ public class GameController extends Controller implements GameControllerInterfac
   public static final int DEFAULT_INITIAL_TIME = 5;
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
   public static final String FILE_NOT_FOUND = "fileNotFound";
-  public static final String GUEST_ONE = "guest1";
-  public static final String GUEST_TWO = "guest2";
+  public static final String GUEST_ONE = "Guest 1";
+  public static final String GUEST_TWO = "Guest 2";
 
   private TimeController timeController;
   private Map<Enum, JSONObject> playersAttributes;

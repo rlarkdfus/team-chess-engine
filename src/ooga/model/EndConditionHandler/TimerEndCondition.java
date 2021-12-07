@@ -2,8 +2,6 @@ package ooga.model.EndConditionHandler;
 
 import java.util.List;
 import java.util.Map;
-import ooga.controller.Config.InvalidEndGameConfigException;
-import ooga.controller.Config.InvalidGameConfigException;
 import ooga.model.GameState;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
