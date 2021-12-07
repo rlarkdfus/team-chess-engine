@@ -1,10 +1,11 @@
 package ooga.model;
 
 import ooga.Location;
+import ooga.controller.Config.PieceBuilder;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
 import ooga.model.Powerups.PowerupInterface;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,10 +16,10 @@ import java.util.List;
  * Location, PieceInterface, and Move
  * usage - a user is able to call its methods to get and manage the moves of a piece
  */
-public class GameBoard extends Board implements GameEngine {
+public class GameBoard extends Board implements GameEngine, CheatInterface{
     private EndConditionRunner endCondition;
     private int turnCount;
-    private List<Location> emptyLocations;
+    private PlayerInterface currentPlayer;
 
     /**
      * the gameboard initializes the turns and the legal moves of each piece
@@ -36,6 +37,9 @@ public class GameBoard extends Board implements GameEngine {
             piece.updateMoves(pieces);
         }
         updateLegalMoves();
+        if (!players.isEmpty()) {
+            this.currentPlayer = players.get(0);
+        }
     }
 
     /**
@@ -60,7 +64,7 @@ public class GameBoard extends Board implements GameEngine {
             powerupInterface.checkPowerUp(piece, piece.getLocation(), currentPlayer, pieces);
         }
         System.out.println(currentPlayer.getTeam() + " " + currentPlayer.getScore());
-        turnCount++;
+        incrementTurn();
         toggleTimers();
     }
 
@@ -119,10 +123,97 @@ public class GameBoard extends Board implements GameEngine {
         return endCondition.satisfiedEndCondition(players);
     }
 
-//    public List<Location> getEmptyLocations(){
-//        List<Location> emptyLocations
-//        for(int col: bounds.getCol()){
-//            for(int row: boun)
-//        }
-//    }
+
+    private void incrementTurn(){
+        turnCount++;
+    }
+
+    @Override
+    public void incrementTurnCheat(){
+        incrementTurn();
+    }
+
+    @Override
+    public void addRandomQueenCheat(){
+        PieceInterface newPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("QUEEN"),this.randomEmptyLocation(),getBounds());
+        currentPlayer.addPiece(newPiece);
+        pieces.add(newPiece);
+    }
+
+    @Override
+    public void moveKingRandomCheat(){
+        List<PieceInterface> currentPlayerPieces = currentPlayer.getPieces();
+        PieceInterface king = null;
+        for(PieceInterface piece: currentPlayerPieces){
+            if(piece.getName().equals(Board.PIECES.getString("KING"))) {
+                king = piece;
+            }
+        }
+        king.moveTo(this.randomEmptyLocation());
+    }
+
+    @Override
+    public void transformAllPawnsCheat(){
+        List<PieceInterface> currentPlayerPieces = currentPlayer.getPieces();
+
+        for(PieceInterface piece: currentPlayerPieces){
+            if(piece.getName().equals(Board.PIECES.getString("PAWN"))) {
+                piece.transform(PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("DEFAULT_PROMOTION"),piece.getLocation(),getBounds()));
+            }
+        }
+
+    }
+
+    @Override
+    public void queenToPawnCheat(){
+        PlayerInterface opponent = players.get((turnCount+1) % players.size());
+        List<PieceInterface> opponentPieces = opponent.getPieces();
+        PieceInterface queen = null;
+        for(PieceInterface piece: opponentPieces){
+            if(piece.getName().equals(Board.PIECES.getString("QUEEN"))) {
+                queen = piece;
+                queen.transform(PieceBuilder.buildPiece(opponent.getTeam(),Board.PIECES.getString("PAWN"),piece.getLocation(),getBounds()));
+            }
+        }
+    }
+
+    @Override
+    public void addTimeCheat(){
+        currentPlayer.incrementTime(600);
+    }
+
+    @Override
+    public void removeRandomPieceCheat() {
+        int randomIndex = (int)(Math.random() * currentPlayer.getPieces().size());
+        PieceInterface randomPiece = currentPlayer.getPieces().get(randomIndex);
+        if(randomPiece.getName().equals(Board.PIECES.getString("KING"))){
+            removeRandomPieceCheat();
+        }else{
+            currentPlayer.removePiece(randomPiece);
+            pieces.remove(randomPiece);
+            return;
+        }
+    }
+
+    @Override
+    public void decrementTimeCheat() {
+        currentPlayer.incrementTime(-60);
+    }
+
+    //Make sure random piece isn't a king
+    @Override
+    public void addRandomPieceCheat() {
+        List<String> pieceOptions = new ArrayList<>();
+        pieceOptions.addAll(Board.PIECES.keySet());
+        pieceOptions.remove("KING");
+
+        int randomPieceIndex  =  (int)(Math.random() * pieceOptions.size());
+        String randomPieceKey = pieceOptions.get(randomPieceIndex);
+        String randomPieceName = Board.PIECES.getString(randomPieceKey);
+
+        PieceInterface newPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),randomPieceName,this.randomEmptyLocation(),getBounds());
+        currentPlayer.addPiece(newPiece);
+        pieces.add(newPiece);
+
+    }
 }
