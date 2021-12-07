@@ -20,6 +20,9 @@ import ooga.model.PieceInterface;
 import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
+import java.util.function.Consumer;
+import java.util.Map;
+
 /**
  * @author albert luis gordon sam tarun richard
  *
@@ -38,7 +41,7 @@ public abstract class Controller implements ControllerInterface {
 
   private static final String CONTROLLER_PATH = Controller.class.getPackageName() + ".";
   private static final String CONTROLLER_SUFFIX = "Controller";
-
+  private Map<String, Consumer<?>> CHEAT_KEYS;
   private Engine model;
   private ViewInterface view;
   private File jsonFile;
