@@ -36,9 +36,6 @@ public class GameBoard extends Board implements GameEngine {
             piece.updateMoves(pieces);
         }
         updateLegalMoves();
-        if (!players.isEmpty()) {
-            this.currentPlayer = players.get(0);
-        }
     }
 
     /**
@@ -58,6 +55,7 @@ public class GameBoard extends Board implements GameEngine {
      */
     @Override
     protected void updateGameRules(PieceInterface piece) {
+        PlayerInterface currentPlayer = findPlayerTurn(turnCount);
         for(PowerupInterface powerupInterface: powerupInterfaceList){
             powerupInterface.checkPowerUp(piece, piece.getLocation(), currentPlayer, pieces);
         }
@@ -109,7 +107,6 @@ public class GameBoard extends Board implements GameEngine {
     }
 
     private PlayerInterface findPlayerTurn(int turn) {
-        currentPlayer = players.get((turn) % players.size());
         return players.get((turn) % players.size());
     }
 
