@@ -2,7 +2,7 @@ package ooga.controller;
 
 import ooga.Location;
 /**
- * @Authors gordon albert luis richard sam
+ * @author gordon albert luis richard sam
  * <p>
  * purpose - this class defines the methods that are used in editor mode. This interface extends the
  *  controller interface so it inherits those methods that connect the view and model. The methods below

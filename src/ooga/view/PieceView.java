@@ -12,6 +12,13 @@ public class PieceView extends ImageView {
     private String style;
     private Location location;
 
+    /**
+     * creates PieceView with the specified team, name, style, and location
+     * @param team the side the PieceView is part of
+     * @param name the type of the PieceView
+     * @param style the style of the PieceView
+     * @param location the Location of the PieceView in the board
+     */
     public PieceView(String team, String name, String style, Location location) {
         super(String.format("images/%s/%s%s.png", style, team, name));
         this.team = team;

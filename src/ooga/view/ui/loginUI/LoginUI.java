@@ -9,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import ooga.controller.LoginController;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
+
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class LoginUI extends GridPane implements UIInterface {
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String WELCOME = "welcome";
-    public static final String BLACK_TEAM= "blackTeam";
+    public static final String BLACK_TEAM = "blackTeam";
     public static final String WHITE_TEAM = "whiteTeam";
     public static final String LOGIN = "login";
     public static final String REGISTER = "register";
@@ -49,6 +50,7 @@ public class LoginUI extends GridPane implements UIInterface {
 
     /**
      * Creates a new LoginUI
+     *
      * @param loginController LoginController to handle the user inputs and convert them to usable
      *                        data
      */
@@ -61,13 +63,13 @@ public class LoginUI extends GridPane implements UIInterface {
     }
 
     /**
-     *
+     * creates the login fields whose values will be updated and accessed
      */
     private void initializeTextFields() {
-        blackUsernameField = viewUtility.makeTextField(BLACK_USERNAME_FIELD,  e -> handleKeyPressed(e));
-        blackPasswordField = viewUtility.makePasswordField(BLACK_PASSWORD_FIELD, e -> handleKeyPressed(e));
-        whiteUsernameField = viewUtility.makeTextField(WHITE_USERNAME_FIELD,  e -> handleKeyPressed(e));
-        whitePasswordField = viewUtility.makePasswordField(WHITE_PASSWORD_FIELD, e -> handleKeyPressed(e));
+        blackUsernameField = viewUtility.makeTextField(BLACK_USERNAME_FIELD, this::handleKeyPressed);
+        blackPasswordField = viewUtility.makePasswordField(BLACK_PASSWORD_FIELD, this::handleKeyPressed);
+        whiteUsernameField = viewUtility.makeTextField(WHITE_USERNAME_FIELD, this::handleKeyPressed);
+        whitePasswordField = viewUtility.makePasswordField(WHITE_PASSWORD_FIELD, this::handleKeyPressed);
     }
 
     /**
@@ -92,19 +94,28 @@ public class LoginUI extends GridPane implements UIInterface {
         this.add(viewUtility.makeButton(GUEST, e -> handleGuestKeyPressed()), 2, 11, 1, 1);
     }
 
+    /**
+     * attempts a login if Enter is pressed
+     *
+     * @param e the KeyEvent
+     */
     private void handleKeyPressed(KeyEvent e) {
-        if (this.getChildren().contains(incorrectPassword)) {
-            this.getChildren().remove(incorrectPassword);
-        }
+        this.getChildren().remove(incorrectPassword);
         if (e.getCode() == KeyCode.ENTER) {
             handleLoginAction();
         }
     }
 
+    /**
+     * handles the guest key pressed button
+     */
     private void handleGuestKeyPressed() {
         loginController.handleGuestLogin();
     }
 
+    /**
+     * handles a login attempt
+     */
     private void handleLoginAction() {
         String whiteUsername = whiteUsernameField.getText();
         String whitePassword = whitePasswordField.getText();
@@ -117,6 +128,9 @@ public class LoginUI extends GridPane implements UIInterface {
         }
     }
 
+    /**
+     * handles the registration of a user
+     */
     private void handleRegisterAction() {
         Dialog dlg = viewUtility.makeDialog(List.of(viewUtility.makeLabel(USERNAME), viewUtility.makeLabel(PASSWORD)),
                 List.of(viewUtility.makeTextField(REGISTER_USERNAME_FIELD), viewUtility.makeTextField(REGISTER_PASSWORD_FIELD)));
