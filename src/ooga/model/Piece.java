@@ -1,21 +1,21 @@
 package ooga.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import ooga.Location;
 import ooga.model.Moves.Move;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
- * @authors
- * purpose - the class manages each piece, and keeps track of its attributes as well as the
+ * @authors purpose - the class manages each piece, and keeps track of its attributes as well as the
  * moves that it has available to it
  * assumptions - it assumes that the moves are valid
  * dependencies - it depends on PieceInterface, Location and Move
  * usage - a piece is created from the parsed json files using the parsed parameters
  */
 public class Piece implements PieceInterface {
-  private String team;
+  private final String team;
   private String name;
   private int score;
   private Location location;
@@ -26,11 +26,12 @@ public class Piece implements PieceInterface {
 
   /**
    * create a piece object with the following parameters
-   * @param team team name
-   * @param name piece name
+   *
+   * @param team     team name
+   * @param name     piece name
    * @param location location of piece
-   * @param moves list of all moves available to piece
-   * @param score value of a piece
+   * @param moves    list of all moves available to piece
+   * @param score    value of a piece
    */
   public Piece(String team, String name, Location location, List<Move> moves, int score) {
     this.location = location;
@@ -43,6 +44,7 @@ public class Piece implements PieceInterface {
 
   /**
    * gets white or black team, used for modifying move vector
+   *
    * @return the team name
    */
   @Override
@@ -52,6 +54,7 @@ public class Piece implements PieceInterface {
 
   /**
    * returns the value of a piece
+   *
    * @return the score of a piece
    */
   @Override
@@ -61,47 +64,52 @@ public class Piece implements PieceInterface {
 
   /**
    * returns the name of a piece
+   *
    * @return the name of a piece
    */
-    @Override
-    public String getName() {
-        return name;
-    }
+  @Override
+  public String getName() {
+    return name;
+  }
 
   /**
    * returns the location of a piece
+   *
    * @return location of a piece
    */
   @Override
-    public Location getLocation() {
-        return location;
-    }
+  public Location getLocation() {
+    return location;
+  }
 
   /**
    * moves piece and updates first move and moved flags
+   *
    * @param location location to move a piece to
    */
   @Override
-    public void moveTo(Location location) {
-      firstMove = !firstMove && !moved;
-      if(firstMove) {
-        System.out.println(this);
-      }
-      moved = true;
-      tryMove(location);
+  public void moveTo(Location location) {
+    firstMove = !firstMove && !moved;
+    if (firstMove) {
+      System.out.println(this);
     }
+    moved = true;
+    tryMove(location);
+  }
 
   /**
    * set a piece location
+   *
    * @param location move a piece to location
    */
   @Override
-    public void tryMove(Location location) {
-      this.location = location;
-    }
+  public void tryMove(Location location) {
+    this.location = location;
+  }
 
   /**
    * override toString to print out piece information
+   *
    * @return string representation of team and piece
    */
   @Override
@@ -111,6 +119,7 @@ public class Piece implements PieceInterface {
 
   /**
    * override equals to check if pieces have same score, location, name, and team
+   *
    * @param o other piece
    * @return whether pieces have same score, location, team, and name
    */
@@ -124,12 +133,13 @@ public class Piece implements PieceInterface {
 
   /**
    * get all the locations a piece can move to
+   *
    * @return list of all end locations of a piece's moves
    */
   @Override
   public List<Location> getEndLocations() {
     List<Location> locations = new ArrayList<>();
-    for(Move move : moves) {
+    for (Move move : moves) {
       locations.addAll(move.getEndLocations());
     }
     return locations;
@@ -137,6 +147,7 @@ public class Piece implements PieceInterface {
 
   /**
    * return whether a piece has moved
+   *
    * @return whether a piece has moved
    */
   @Override
@@ -146,6 +157,7 @@ public class Piece implements PieceInterface {
 
   /**
    * return whether a piece has just done its first move
+   *
    * @return whether a piece has just done its first move
    */
   @Override
@@ -165,13 +177,14 @@ public class Piece implements PieceInterface {
 
   /**
    * this method returns the move that results in a piece being at the end location
+   *
    * @param end location of a move
    * @return the move that goes to end location
    */
   @Override
   public Move getMove(Location end) {
-    for(Move move : moves) {
-      if(end.inList(move.getEndLocations())) {
+    for (Move move : moves) {
+      if (end.inList(move.getEndLocations())) {
         return move;
       }
     }
@@ -180,33 +193,36 @@ public class Piece implements PieceInterface {
 
   /**
    * this method updates the move locations of all pieces
+   *
    * @param pieces all pieces
    */
   @Override
   public void updateMoves(List<PieceInterface> pieces) {
     firstMoveUpdate = firstMove && moved;
     firstMove = false;
-    for(Move move : moves) {
+    for (Move move : moves) {
       move.updateMoveLocations(this, pieces);
     }
   }
 
   /**
    * return the moves of a piece
+   *
    * @return list of all moves of a piece
    */
   @Override
-  public List<Move> getMoves(){
+  public List<Move> getMoves() {
     return moves;
   }
 
   /**
    * return whether this piece and another piece are on the same team
+   *
    * @param piece other piece
    * @return whether piece and other piece are on the same team
    */
   @Override
-  public boolean isSameTeam(PieceInterface piece){
+  public boolean isSameTeam(PieceInterface piece) {
     return team.equals(piece.getTeam());
   }
 }

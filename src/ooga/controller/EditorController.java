@@ -1,7 +1,6 @@
 package ooga.controller;
 
 
-import java.io.File;
 import ooga.Location;
 import ooga.controller.Config.Builder;
 import ooga.model.EditorBoard;
@@ -10,18 +9,20 @@ import ooga.model.Engine;
 import ooga.view.EditorView;
 import ooga.view.ViewInterface;
 
+import java.io.File;
+
 /**
  * @author albert luis gordon sam richard
- *
+ * <p>
  * purpose - this class is a controller type object so it connects the model and view. This specific
- *  subclass is used for when we are in editor mode, which allows for users to freely add, remove, and
- *  move pieces on the board. This is done by calling editor subclasses of the view and model and their subclasses.
+ * subclass is used for when we are in editor mode, which allows for users to freely add, remove, and
+ * move pieces on the board. This is done by calling editor subclasses of the view and model and their subclasses.
  * assumptions - we assume that the defaultConfiguration file is valid. if this isn't the case, the
- *  game will crash.
+ * game will crash.
  * dependencies - this class depends on the editor model classes, the editor view classes, and the
- *  boardbuilder classes.
+ * boardbuilder classes.
  * To use - The user must only create a new EditorController object instead of a GameController object
- *  in main.
+ * in main.
  */
 public class EditorController extends Controller implements EditorControllerInterface {
 
@@ -44,7 +45,7 @@ public class EditorController extends Controller implements EditorControllerInte
    */
   @Override
   protected Engine initializeModel(Builder boardBuilder) {
-    model = new EditorBoard(boardBuilder.getInitialPlayers(),boardBuilder.getBoardSize());
+    model = new EditorBoard(boardBuilder.getInitialPlayers(), boardBuilder.getBoardSize());
     return model;
   }
 
@@ -61,6 +62,7 @@ public class EditorController extends Controller implements EditorControllerInte
   /**
    * this method is used by the editor view to determine if the user has selected a new menu piece. if so,
    * we copy down the new piece's team and type so that we can create new copies of that piece on the board
+   *
    * @param team - the clicked piece's team color
    * @param name - the clicked piece's type
    * @return - true or false depending on if the user selected a new menu piece
@@ -80,6 +82,7 @@ public class EditorController extends Controller implements EditorControllerInte
 
   /**
    * this method is used to figure out if the user has selected a menu piece or not
+   *
    * @return true or false depending on if the user has selected a menu piece or not
    */
   @Override
@@ -91,8 +94,9 @@ public class EditorController extends Controller implements EditorControllerInte
    * this method is used to add a new piece to the board. the piece that is added is based on which
    * piece was clicked on, as that will set selectedteam and selectedname. The location is based on where
    * the user clicked after selecting which menu piece they want to create
+   *
    * @param location - the location that the user clicked to indicate where they want the piece to be
-   * placed
+   *                 placed
    */
   @Override
   public void addPiece(Location location) {

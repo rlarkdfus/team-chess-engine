@@ -1,8 +1,9 @@
 package ooga.controller.Config;
 
+import org.json.JSONObject;
+
 import java.io.FileWriter;
 import java.io.IOException;
-import org.json.JSONObject;
 
 /**
  * Purpose: JSONWriter is used to be able to save a JSONFile to a specified file path. This will
@@ -12,6 +13,7 @@ import org.json.JSONObject;
  * filePath that exists on the local computer. We also assume the LocationWriter will effectively
  * write a csv file detailing the states of the pieces.
  * Dependencies: JsonParser
+ *
  * @author Luis Pereda
  */
 public class JSONWriter {
@@ -23,10 +25,11 @@ public class JSONWriter {
    * saveFile() saves a jsonFile to a specified file path. This will allow the user of the
    * application to get a file with the game settings saved to their local computer if they wish
    * to start the game again at a later date.
+   *
    * @param jsonObject JSONObject containing the settings of the game
-   * @param filePath The path where the JSON will be saved to
+   * @param filePath   The path where the JSON will be saved to
    * @throws IOException If there is an issue with the path to which the file is saved or creating a
-   * FileWriter, then this exception will be thrown
+   *                     FileWriter, then this exception will be thrown
    */
   public static void saveFile(JSONObject jsonObject, String filePath) throws IOException {
     jsonObject.remove(CSV);

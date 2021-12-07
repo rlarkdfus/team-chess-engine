@@ -1,15 +1,11 @@
 package ooga.controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.LogUtils;
-import ooga.controller.Config.*;
+import ooga.controller.Config.Builder;
+import ooga.controller.Config.JSONWriter;
+import ooga.controller.Config.JsonParser;
 import ooga.model.*;
 import ooga.view.GameOverScreen;
 import ooga.view.GameView;
@@ -17,19 +13,24 @@ import ooga.view.ViewInterface;
 import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+
 /**
- * @author  albert luis gordon sam richard
- *
+ * @author albert luis gordon sam richard
+ * <p>
  * purpose - this class is a controller type object so it connects the model and view. This specific
- *  subclass is used for when we are in game mode, which allows for users to play a turn, toggle the timer,
- *  and log their wins.
+ * subclass is used for when we are in game mode, which allows for users to play a turn, toggle the timer,
+ * and log their wins.
  * assumptions - we assume that the defaultConfiguration file is valid. if this isn't the case, the
- *  game will crash.
+ * game will crash.
  * dependencies - this class depends on the game model classes, the game view classes, and the
- *  boardbuilder classes.
+ * boardbuilder classes.
  * To use - The user must only create a new GameController object in main.
  */
-public class GameController extends Controller implements GameControllerInterface{
+public class GameController extends Controller implements GameControllerInterface {
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
   public static final String WINS = "wins";
   public static final String JSON_WRITER_FILE_PATH = "data/chess/profiles/profiles";
@@ -48,7 +49,7 @@ public class GameController extends Controller implements GameControllerInterfac
   private GameEngine model;
   private Map<Enum, String> usernames;
 
-  public GameController(){
+  public GameController() {
     super();
   }
 
@@ -61,6 +62,7 @@ public class GameController extends Controller implements GameControllerInterfac
    * this method overrides an abstract superclass method. Here a model is created and initalized
    * with the pieces, endcondition handler, powerups, and bounds that were built by the boardbuilder.
    * We also initialize a timecontroller and start the timer
+   *
    * @param boardBuilder - a boardbuilder object that holds vital objects like the pieces, powerups, and endconditions
    * @return - an Engine object that is initialized.
    */
@@ -78,6 +80,7 @@ public class GameController extends Controller implements GameControllerInterfac
   /**
    * This method overrides an abstract superclass method. Here the view is created and initialized
    * with the pieces and bounds built by the boardbuilder.
+   *
    * @param boardBuilder - a boardbuilder object that holds vital objects like the pieces, powerups, and endconditions
    * @return - a view object that's been initialized.
    */
@@ -90,11 +93,12 @@ public class GameController extends Controller implements GameControllerInterfac
 
   /**
    * this method finds all the players' usernames mapped to their respective team
+   *
    * @return - a map of team to player username
    */
   @Override
   public Map<Enum, String> getUsernames() {
-    if(usernames == null) {
+    if (usernames == null) {
       usernames = new HashMap<>();
       usernames.put(GameState.BLACK, GUEST_TWO);
       usernames.put(GameState.WHITE, GUEST_ONE);
@@ -104,16 +108,16 @@ public class GameController extends Controller implements GameControllerInterfac
 
   /**
    * this method finds the amount of times the players have won a game
+   *
    * @return - a map of player names to their win count
    */
   @Override
   public Map<Enum, Integer> getWins() {
     Map<Enum, Integer> winMap = new HashMap<>();
-    if(playersAttributes == null) {
+    if (playersAttributes == null) {
       winMap.put(GameState.WHITE, 0);
       winMap.put(GameState.BLACK, 0);
-    }
-    else {
+    } else {
       usernames.keySet().forEach(team -> winMap.put(team, playersAttributes.get(team).getInt(WINS)));
     }
     return winMap;
@@ -123,6 +127,7 @@ public class GameController extends Controller implements GameControllerInterfac
    * This overridden method calls the super class method which moves the piece in model, and then
    * updates the view. Then, it checks the game state to see if the game is over. If so, we show the
    * game over screen and update the win counter for the players
+   *
    * @param start is initial location of moved piece
    * @param end   is final location of moved piece
    */
@@ -131,7 +136,7 @@ public class GameController extends Controller implements GameControllerInterfac
     super.movePiece(start, end);
     GameState gameState = model.checkGameState();
     if (gameState != GameState.RUNNING) {
-      LogUtils.info(this,"winner: " + gameState);
+      LogUtils.info(this, "winner: " + gameState);
       incrementPlayerWin(gameState);
       new GameOverScreen(this, gameState.toString());
     }
@@ -141,15 +146,15 @@ public class GameController extends Controller implements GameControllerInterfac
    * this method finds the player who won
    */
   private void incrementPlayerWin(GameState gameState) {
-      if (playersAttributes != null) {
-        for (Enum player : playersAttributes.keySet()) {
-          System.out.println("Size %d" + playersAttributes.size());
-          if (player == gameState) {
-            incrementWinAndSaveJSON(gameState, player);
-          }
+    if (playersAttributes != null) {
+      for (Enum player : playersAttributes.keySet()) {
+        System.out.println("Size %d" + playersAttributes.size());
+        if (player == gameState) {
+          incrementWinAndSaveJSON(gameState, player);
         }
       }
     }
+  }
 
   /**
    * this method adds a win to the player's json file
@@ -181,6 +186,7 @@ public class GameController extends Controller implements GameControllerInterfac
 
   /**
    * gets the amount of time left on a player's timer
+   *
    * @param side the side of the player
    * @return a StringProperty ("mm:ss") representing the amount of time left
    */
@@ -212,7 +218,8 @@ public class GameController extends Controller implements GameControllerInterfac
   /**
    * This methods uses the input maps to find the player json file and the player name from the Piece Color
    * that they played as (this is the enum).
-   * @param usernames - a map from the piece color to the player's username
+   *
+   * @param usernames         - a map from the piece color to the player's username
    * @param playersAttributes - a map from the piece color to the player's json file
    */
   public void setPlayers(Map<Enum, String> usernames, Map<Enum, JSONObject> playersAttributes) {
@@ -221,18 +228,19 @@ public class GameController extends Controller implements GameControllerInterfac
   }
 
   public List<Integer> getUpdatedScores() {
-      List<Integer> scores = new ArrayList<>();
-      for (PlayerInterface player : model.getPlayers()) {
-          scores.add(player.getScore());
-      }
-      return scores;
+    List<Integer> scores = new ArrayList<>();
+    for (PlayerInterface player : model.getPlayers()) {
+      scores.add(player.getScore());
+    }
+    return scores;
   }
 
   /**
    * This calls methods in the gameboard to perform cheats.
+   *
    * @param cheat the name of the cheat defined in Cheat.properties
    */
-  public void handleCheat(String cheat){
+  public void handleCheat(String cheat) {
     String methodName = CHEAT_NAMES.getString(cheat);
     try {
       Method method = GameBoard.class.getDeclaredMethod(methodName);
@@ -246,7 +254,7 @@ public class GameController extends Controller implements GameControllerInterfac
     }
 
     // happens every time
-    ((GameBoard)model).updateLegalMoves();
+    ((GameBoard) model).updateLegalMoves();
     super.updateView();
     System.out.println(model);
   }

@@ -12,23 +12,24 @@ import ooga.model.PieceInterface;
  * as part of its end locations
  */
 public class LongCastleMove extends CastleMove {
-    /**
-     * queen side castling
-     * @param dRow delta row
-     * @param dCol delta col
-     * @param take move takes
-     * @param limited move is limited
-     */
-    public LongCastleMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
-        super(dRow, dCol, take, limited,bounds);
-    }
+  /**
+   * queen side castling
+   *
+   * @param dRow    delta row
+   * @param dCol    delta col
+   * @param take    move takes
+   * @param limited move is limited
+   */
+  public LongCastleMove(int dRow, int dCol, boolean take, boolean limited, Location bounds) {
+    super(dRow, dCol, take, limited, bounds);
+  }
 
-    /**
-     * @param king location of king
-     * @return location of rook
-     */
-    @Override
-    protected Location findRookLocation(PieceInterface king) {
-        return new Location(king.getLocation().getRow(), 0);
-    }
+  /**
+   * @param king location of king
+   * @return location of rook
+   */
+  @Override
+  protected Location findRookLocation(PieceInterface king) {
+    return new Location(king.getLocation().getRow(), 0);
+  }
 }

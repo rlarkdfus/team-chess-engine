@@ -1,7 +1,5 @@
 package ooga.view;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import ooga.Location;
@@ -13,15 +11,19 @@ import ooga.view.boardview.EditorBoardView;
 import ooga.view.boardview.PieceMenuView;
 import ooga.view.ui.settingsUI.SettingsUI;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EditorView extends View {
 
   private SettingsUI settingsUI;
   private BoardView boardView;
   private PieceMenuView pieceMenu;
-  private EditorControllerInterface controller;
+  private final EditorControllerInterface controller;
 
   /**
    * creates the EditorView
+   *
    * @param controller the controller responsible for handling actions in the EditorView
    */
   public EditorView(EditorControllerInterface controller) {
@@ -31,9 +33,9 @@ public class EditorView extends View {
   /**
    * initializes the display of the BoardView based on piece images, special locations, and parameters
    *
-   * @param pieceViewList         the list of piece images
-   * @param specialLocations      the locations of special pieces (such as powerups)
-   * @param bounds                the dimensions of the board
+   * @param pieceViewList    the list of piece images
+   * @param specialLocations the locations of special pieces (such as powerups)
+   * @param bounds           the dimensions of the board
    */
   @Override
   protected BoardView initializeBoardView(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds) {
@@ -43,7 +45,6 @@ public class EditorView extends View {
   }
 
   /**
-   *
    * @param viewController the viewController responsible for handling actions in the UI
    */
   @Override
@@ -53,6 +54,7 @@ public class EditorView extends View {
 
   /**
    * adds the UI nodes to a GridPane
+   *
    * @return the GridPane holding the UIs created
    */
   @Override
@@ -66,6 +68,7 @@ public class EditorView extends View {
 
   /**
    * changes the styles of the pieces in the board in the EditorView
+   *
    * @param style the new style of the boardView pieces
    */
   @Override
@@ -76,6 +79,7 @@ public class EditorView extends View {
 
   /**
    * changes the colors of the board in the EditorView
+   *
    * @param color1 the new first color used by the boardView
    * @param color2 the new second color used by the boardView
    */

@@ -1,7 +1,5 @@
 package ooga.view;
 
-import java.util.Map;
-
 import javafx.scene.layout.GridPane;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
@@ -15,6 +13,7 @@ import ooga.view.ui.settingsUI.SettingsUI;
 import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
 
 import java.util.List;
+import java.util.Map;
 
 public class GameView extends View {
   private BoardView boardView;
@@ -22,7 +21,7 @@ public class GameView extends View {
   private PlayerStatsUI playerStatsUI; // left
   private TimeConfigurationUI timeConfigurationUI;
   private CheatUI cheatUI;
-  private GameControllerInterface controller;
+  private final GameControllerInterface controller;
 
   private final int WHITE_SCORE_INDEX = 0;
   private final int BLACK_SCORE_INDEX = 1;
@@ -81,7 +80,7 @@ public class GameView extends View {
     initializePlayers(controller.getUsernames(), controller.getWins());
   }
 
-  public void toggleCheatsVisible(){
+  public void toggleCheatsVisible() {
     cheatUI.setVisible(!cheatUI.isVisible());
   }
 }

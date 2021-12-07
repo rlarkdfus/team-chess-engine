@@ -1,13 +1,14 @@
 package ooga.controller.Config;
 
+import ooga.Location;
+import ooga.model.PieceInterface;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import ooga.Location;
-import ooga.model.PieceInterface;
 
 /**
  * Purpose: LocationWriter handles the task of converting the data from the pieces contained in
@@ -57,8 +58,8 @@ public class LocationWriter {
     for (int i = 0; i < 8; i++) {
       int[] gridRowInts = new int[8];
       String[] gridRow = Arrays.stream(gridRowInts)
-          .mapToObj(String::valueOf)
-          .toArray(String[]::new);
+              .mapToObj(String::valueOf)
+              .toArray(String[]::new);
       tempGrid.add(gridRow);
     }
   }
@@ -69,7 +70,7 @@ public class LocationWriter {
       int col = location.getCol();
       int row = location.getRow();
       tempGrid.get(row)[col] = String.format(TEAM_PIECETYPE_FORMAT, piece.getTeam(),
-          piece.getName());
+              piece.getName());
     });
   }
 

@@ -1,11 +1,11 @@
 package ooga.model;
 
-import java.util.List;
 import javafx.beans.property.StringProperty;
 
+import java.util.List;
+
 /**
- * @authors
- * purpose - this is the api for interacting with the players to manipulate their pieces and their timers
+ * @authors purpose - this is the api for interacting with the players to manipulate their pieces and their timers
  * assumptions - it assumes that the timers and pieces are all valid
  * dependencies - it does not depend on anything
  * usage - the board gets pieces from the players, and can interact with the timers
@@ -23,6 +23,7 @@ public interface PlayerInterface {
 
   /**
    * gets the remaining time a player has
+   *
    * @return the remaining time
    */
   StringProperty getTimeLeft();
@@ -34,8 +35,9 @@ public interface PlayerInterface {
 
   /**
    * this configures the increment and the initial time of the timer
+   *
    * @param initialTime initial time
-   * @param increment the amount to increment timer by after move
+   * @param increment   the amount to increment timer by after move
    */
   void configTimer(int initialTime, int increment);
 
@@ -46,30 +48,35 @@ public interface PlayerInterface {
 
   /**
    * sets the time increment to the specified value
+   *
    * @param specifiedTime time to increment by
    */
   void incrementTime(Integer specifiedTime);
 
   /**
    * get a list of all the pieces a player holds
+   *
    * @return list of all pieces a player holds
    */
   List<PieceInterface> getPieces();
 
   /**
    * adds a piece to the player's list of pieces
+   *
    * @param piece piece to add to the player's list
    */
   void addPiece(PieceInterface piece);
 
   /**
    * get a players team
+   *
    * @return the team a player is on
    */
   String getTeam();
 
   /**
    * remove a piece from the player's list of pieces
+   *
    * @param piece to remove from the player's list
    */
   void removePiece(PieceInterface piece);
@@ -81,6 +88,7 @@ public interface PlayerInterface {
 
   /**
    * get a player's score
+   *
    * @return the player's score
    */
   int getScore();
