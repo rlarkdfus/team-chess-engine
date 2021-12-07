@@ -14,6 +14,18 @@ import ooga.view.ViewInterface;
 import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
+/**
+ * @Authors albert luis gordon sam richard
+ *
+ * purpose - this class is a controller type object so it connects the model and view. This specific
+ *  subclass is used for when we are in game mode, which allows for users to play a turn, toggle the timer,
+ *  and log their wins.
+ * assumptions - we assume that the defaultConfiguration file is valid. if this isn't the case, the
+ *  game will crash.
+ * dependencies - this class depends on the game model classes, the game view classes, and the
+ *  boardbuilder classes.
+ * To use - The user must only create a new GameController object in main.
+ */
 public class GameController extends Controller implements GameControllerInterface{
   public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");
   public static final String WINS = "wins";

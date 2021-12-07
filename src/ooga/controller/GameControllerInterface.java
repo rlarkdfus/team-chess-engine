@@ -9,8 +9,8 @@ import javafx.beans.property.StringProperty;
  *
  * purpose - this class defines the methods that are specific to the GameController object.
  * assumptions - that all the methods below are defined
- * dependencies - this class depends on the model classes, the view classes, and the boardbuilder classes.
- * To use - The user create a new controller object and a default view and model will be created. If a file
+ * dependencies - this class depends on the game model and view classes, and the boardbuilder classes.
+ * To use - The user create a new game controller object and a default view and model will be created. If a file
  *  is selected, the file is sent to boardbuilder and then new view and model objects are created and
  *  the game is remade.
  */
