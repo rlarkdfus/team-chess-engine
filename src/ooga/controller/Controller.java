@@ -2,7 +2,6 @@ package ooga.controller;
 
 import ooga.Location;
 
-import ooga.controller.Config.*;
 import ooga.view.ViewInterface;
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +14,6 @@ import ooga.controller.Config.JSONWriter;
 import ooga.controller.Config.JsonParser;
 import ooga.controller.Config.LocationWriter;
 import ooga.controller.Config.PieceViewBuilder;
-import java.io.InvalidClassException;
-import java.util.ArrayList;
-import java.util.List;
 
 import ooga.model.Engine;
 import ooga.model.PieceInterface;
@@ -25,7 +21,7 @@ import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
 /**
- * @Authors albert luis gordon sam tarun richard
+ * @author albert luis gordon sam tarun richard
  *
  * purpose - this class starts the game and connects the board and view, and holds all the game configuration objects.
  *  This is the parent class of editor and game controllers so this class holds all the common methods like

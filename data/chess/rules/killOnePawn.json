@@ -1,0 +1,14 @@
+{
+  "endCon1": {
+    "ruleType": "Elimination",
+    "pieceType": [
+      "P"
+    ]
+  },
+  "endCon2": {
+    "ruleType": "Checkmate",
+    "pieceType": [
+      "K"
+    ]
+  }
+}

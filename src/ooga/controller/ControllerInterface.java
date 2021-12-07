@@ -5,7 +5,7 @@ import java.util.List;
 import ooga.Location;
 
 /**
- * @Authors gordon albert luis richard tarun sam
+ * @author gordon albert luis richard tarun sam
  * <p>
  * purpose - this class defines the shared methods that are common to all Controller type objects.
  * assumptions - that all the methods below are defined dependencies - this class depends on the

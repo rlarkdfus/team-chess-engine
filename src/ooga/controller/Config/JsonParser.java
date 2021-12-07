@@ -3,8 +3,7 @@ package ooga.controller.Config;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-
-import ooga.view.ViewInterface;
+import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
 /**
@@ -17,6 +16,8 @@ import org.json.JSONObject;
  */
 public class JsonParser {
 
+  private static final String FILE_NOT_FOUND = "fileNotFound";
+
   /**
    * takes in a json file and then out puts a jsonobject object.
    * @param file - file object of a json file
@@ -27,7 +28,7 @@ public class JsonParser {
     try {
       currFileString = readFile(file);
     } catch (FileNotFoundException e) {
-      //ViewInterface.showError(e.getMessage());
+      ViewUtility.showError(FILE_NOT_FOUND);
     }
     return buildJSON(currFileString);
   }
@@ -42,7 +43,7 @@ public class JsonParser {
       currFileString += (scan.nextLine());
     }
     scan.close();
-    return currFileString.toString();
+    return currFileString;
   }
 
   private static JSONObject buildJSON(String currFileString) {

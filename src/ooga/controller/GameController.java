@@ -2,7 +2,6 @@ package ooga.controller;
 
 import java.io.File;
 import java.util.*;
-import java.util.Map.Entry;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.LogUtils;
@@ -15,7 +14,7 @@ import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
 /**
- * @Authors albert luis gordon sam richard
+ * @author  albert luis gordon sam richard
  *
  * purpose - this class is a controller type object so it connects the model and view. This specific
  *  subclass is used for when we are in game mode, which allows for users to play a turn, toggle the timer,
@@ -33,15 +32,13 @@ public class GameController extends Controller implements GameControllerInterfac
   private final File userProfilesFile = new File("data/chess/profiles/profiles.json");
   public static final int DEFAULT_INITIAL_TIME = 5;
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
+  public static final String FILE_NOT_FOUND = "fileNotFound";
+  public static final String GUEST_ONE = "guest1";
+  public static final String GUEST_TWO = "guest2";
 
   private TimeController timeController;
-
   private Map<Enum, JSONObject> playersAttributes;
-
-  private int initialTime = DEFAULT_INITIAL_TIME;
-  private int increment = DEFAULT_INITIAL_INCREMENT;
   private GameEngine model;
-
   private Map<Enum, String> usernames;
 
   public GameController(){
@@ -92,8 +89,8 @@ public class GameController extends Controller implements GameControllerInterfac
   public Map<Enum, String> getUsernames() {
     if(usernames == null) {
       usernames = new HashMap<>();
-      usernames.put(GameState.BLACK, "Guest 2");
-      usernames.put(GameState.WHITE, "Guest 1");
+      usernames.put(GameState.BLACK, GUEST_TWO);
+      usernames.put(GameState.WHITE, GUEST_ONE);
     }
     return usernames;
   }
@@ -158,7 +155,7 @@ public class GameController extends Controller implements GameControllerInterfac
     try {
       JSONWriter.saveFile(userProfiles, JSON_WRITER_FILE_PATH);
     } catch (Exception e) {
-      ViewUtility.showError("File not found");
+      ViewUtility.showError(FILE_NOT_FOUND);
     }
   }
 
