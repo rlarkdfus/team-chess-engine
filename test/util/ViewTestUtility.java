@@ -21,8 +21,8 @@ public class ViewTestUtility extends DukeApplicationTest {
     /**
      * Utility function for testing moving a piece to a spot
      * @param side the side the piece is on ("b" or "w")
-     * @param start coordinates of start location "(x,y)"
-     * @param end coordinates of end location "(x,y)"
+     * @param start the start location
+     * @param end the end location
      * @return if the movement was successful
      */
     public boolean testMovePiece(String side, String piece, Location start, Location end) {
@@ -38,7 +38,7 @@ public class ViewTestUtility extends DukeApplicationTest {
      * Utility function for testing if a piece exists at a spot
      * @param side the side the piece is on ("b" or "w")
      * @param piece the type of the piece
-     * @param location coordinates of the location ("x,y")
+     * @param location the location
      * @return if the piece of the given side and type exists at the location in the board
      */
     public boolean pieceExists(String side, String piece, Location location) {
@@ -55,7 +55,7 @@ public class ViewTestUtility extends DukeApplicationTest {
      * Utility function for querying a PieceView in the scene
      * @param side the side the piece is on ("b" or "w")
      * @param piece the type of the piece
-     * @param location coordinates of the location ("x,y")
+     * @param location the location
      * @param style the style of the piece
      * @return the PieceView with the specified parameters if it exists in the scene
      * @throws EmptyNodeQueryException if the PieceView does not exist in the scene
@@ -66,7 +66,7 @@ public class ViewTestUtility extends DukeApplicationTest {
 
     /**
      * Utility function for querying a BoardSquare (a Rectangle node) in the scene
-     * @param location coordinates of the location ("x,y")
+     * @param location the location
      * @return the Rectangle with the specified parameters if it exists in the scene
      * @throws EmptyNodeQueryException if the BoardSquare does not exist in the scene
      */

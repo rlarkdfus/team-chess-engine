@@ -5,12 +5,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.JsonParser;
 import ooga.controller.Config.LocationParser;
 import ooga.controller.Config.LocationWriter;
+import ooga.model.GameBoard;
+import ooga.model.GameEngine;
+import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -43,9 +47,11 @@ class LocationWriterTest {
   @Test
   void givenDefaultBoard_WhenWriteToFile_ThenValuesAreCorrect()
       throws Exception {
-
-    List<PlayerInterface> players = boardBuilder.getInitialPlayers();
-    locWriter.saveCSV(directory.toString(), players);
+    List<PieceInterface> pieces = new ArrayList<>();
+    for(PlayerInterface player : boardBuilder.getInitialPlayers()) {
+      pieces.addAll(player.getPieces());
+    }
+    locWriter.saveCSV(directory.toString(), pieces);
 
     File expectedFile = new File("data/chess/locations/chess.csv");
     assertLinesMatch(Files.readAllLines(expectedFile.toPath()), Files.readAllLines(directory));

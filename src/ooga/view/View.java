@@ -1,14 +1,14 @@
 package ooga.view;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Stack;
+
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
-import ooga.controller.ControllerInterface;
 import ooga.view.boardview.BoardView;
 import ooga.view.util.ViewUtility;
 
@@ -23,49 +23,37 @@ public abstract class View implements ViewInterface {
     public static final int STAGE_WIDTH = 1000;
     public static final int STAGE_HEIGHT = 700;
 
-    protected ControllerInterface controller;
-    protected ViewController viewController;
-    protected ViewUtility viewUtility;
+    private ViewController viewController;
     private Stage stage;
     private Scene scene;
-
-    //TODO: change protected
-    protected BoardView boardView;
+    private BoardView boardView;
 
     public View() {
         this.viewController = new ViewController(this);
-        this.viewUtility = new ViewUtility();
         this.stage = new Stage();
     }
 
-    protected Scene setupDisplay() {
-        GridPane root = new GridPane();
-        addUIs(root);
-        scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
-        applyStyleSheet(DEFAULT_STYLESHEET);
-        applyStyleSheet(DEFAULT_THEME);
-        return scene;
-    }
-
-    protected abstract void createResettableUIs();
-
-    protected abstract void createStaticUIs();
-
-    protected abstract void addUIs(GridPane root);
-
     @Override
-    public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
-        System.out.println("Initialize display");
-        createStaticUIs();
-        resetDisplay(pieceViewList, bounds);
-    }
-
-    @Override
-    public void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
-        System.out.println("Reset display");
-        createResettableUIs();
-        stage.setScene(setupDisplay());
+    public void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds) {
+        this.boardView = initializeBoardView(pieceViewList, specialLocations, bounds);
+        initializeUI(viewController);
+        scene = initializeScene();
+        stage.setScene(scene);
         stage.show();
+    }
+
+    protected abstract void initializeUI(ViewController viewController);
+
+    protected abstract GridPane addUIs();
+
+    protected abstract BoardView initializeBoardView(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds);
+
+    private Scene initializeScene() {
+        GridPane root = addUIs();
+        Scene scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
+        applyStyleSheet(scene, DEFAULT_STYLESHEET);
+        applyStyleSheet(scene, DEFAULT_THEME);
+        return scene;
     }
 
     @Override
@@ -84,16 +72,16 @@ public abstract class View implements ViewInterface {
     }
 
     public void changeLanguage(String language) {
-        viewUtility.changeLanguage(language);
+        ViewUtility.changeLanguage(language);
     }
 
     @Override
     public void changeTheme(String theme) {
-        scene.getStylesheets().remove(1);
-        applyStyleSheet(theme);
+        ((Stack)scene.getStylesheets()).pop();
+        applyStyleSheet(scene, theme);
     }
 
-    private void applyStyleSheet(String name) {
+    private void applyStyleSheet(Scene scene, String name) {
         scene.getStylesheets().add(getClass().getResource(STYLE_PACKAGE + name + STYLE_EXTENSION).toExternalForm());
     }
 }

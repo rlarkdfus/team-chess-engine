@@ -46,6 +46,8 @@ public interface Builder {
    */
   List<PieceViewBuilder> getInitialPieceViews();
 
+  public List<Location> getPowerupLocations();
+
   /**
    * Getter method that is used to send the board dimensions to the board. This is used when pieces
    * are built so when promotion happens, this is a necessary piece of information for keeping piece

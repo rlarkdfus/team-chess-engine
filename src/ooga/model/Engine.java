@@ -20,12 +20,6 @@ public interface Engine {
   void movePiece(Location start, Location end);
 
   /**
-   * Determine whether the win condition of the game is satisfied, and declare a winner.
-   * @return the current gamestate
-   */
-  GameState checkGameState();
-
-  /**
    * get the legal end locations of a piece at location
    * @param location of a piece to get end locations from
    * @return the end locations of the piece at location
@@ -50,12 +44,4 @@ public interface Engine {
    * @return whether the piece can move
    */
   boolean canMovePiece(Location location);
-
-  /**
-   * add a piece to the board
-   * @param team team of the piece
-   * @param name name of the piece
-   * @param location location of the piece
-   */
-  void addPiece(String team, String name, Location location);
 }

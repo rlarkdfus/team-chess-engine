@@ -29,11 +29,11 @@ public class LocationWriter {
    * saveCSV() saves the locations of all the pieces to a csv file which can later be uploaded to
    * initialize a new game. This uses the PlayerInterface API to get all the pieces from the players.
    * @param filePath String representing the path where the file will be saved.
-   * @param players API representing the players of the game, each holding the pieces of one team.
+   * @param pieces API representing the pieces on the board.
    * @throws IOException
    */
-  public void saveCSV(String filePath, List<PlayerInterface> players) throws IOException {
-    makeGrid(players);
+  public void saveCSV(String filePath, List<PieceInterface> pieces) throws IOException {
+    makeGrid(pieces);
     FileWriter fileWriter = new FileWriter(filePath);
     BufferedWriter writer = new BufferedWriter(fileWriter);
     for (String row : csvGrid) {
@@ -43,11 +43,11 @@ public class LocationWriter {
     writer.close();
   }
 
-  private void makeGrid(List<PlayerInterface> players) {
+  private void makeGrid(List<PieceInterface> pieces) {
     csvGrid = new ArrayList<>();
     List<String[]> tempGrid = new ArrayList<>();
     setZeroes(tempGrid);
-    setPieces(players, tempGrid);
+    setPieces(pieces, tempGrid);
     listStringArrToListString(tempGrid);
   }
 
@@ -61,16 +61,13 @@ public class LocationWriter {
     }
   }
 
-  private void setPieces(List<PlayerInterface> players, List<String[]> tempGrid) {
-    for(PlayerInterface player: players) {
-      List<PieceInterface> pieces = player.getPieces();
-      pieces.forEach(piece -> {
-        Location location = piece.getLocation();
-        int col = location.getCol();
-        int row = location.getRow();
-        tempGrid.get(row)[col] = String.format(TEAM_PIECETYPE_FORMAT, piece.getTeam(), piece.getName());
-      });
-    }
+  private void setPieces(List<PieceInterface> pieces, List<String[]> tempGrid) {
+    pieces.forEach(piece -> {
+      Location location = piece.getLocation();
+      int col = location.getCol();
+      int row = location.getRow();
+      tempGrid.get(row)[col] = String.format(TEAM_PIECETYPE_FORMAT, piece.getTeam(), piece.getName());
+    });
   }
 
   private void listStringArrToListString(List<String[]> tempGrid) {

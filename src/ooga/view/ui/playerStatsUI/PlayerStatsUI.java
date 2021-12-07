@@ -52,7 +52,6 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
         this.add(viewUtility.makeLabel("white_time_label"), 0, 6);
         this.add(viewUtility.makeText("white_timer_display", controller.getTimeLeft(WHITE_INDEX)), 0, 7);
         this.add(whiteWinsLabel, 0, 8);
-
         this.add(whiteNameScoreLabel, 0, 9);
         this.add(whiteScoreDisplay, 0, 10);
     }

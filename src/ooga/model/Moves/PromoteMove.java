@@ -50,6 +50,16 @@ public class PromoteMove extends Move {
     }
 
     /**
+     * Returns list of all possible locations of a given piece based on other pieces disregarding checks
+     * @param piece is the piece player is attempting to move
+     * @return list of all potential locations regardless of game rules
+     */
+    @Override
+    public List<Location> findAllEndLocations(PieceInterface piece, List<PieceInterface> pieces) {
+        return new ArrayList<>();
+    }
+
+    /**
      * @param piece current piece
      * @param potentialLocation location to move to
      * @param pieces all pieces

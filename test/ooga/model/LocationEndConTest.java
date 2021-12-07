@@ -22,7 +22,7 @@ public class LocationEndConTest {
 
   EndConditionRunner endConRunner;
   List<PlayerInterface> players;
-  Board board;
+  GameEngine board;
 
   @BeforeEach
   void setUp()
