@@ -35,7 +35,7 @@ public abstract class View implements ViewInterface {
 
     @Override
     public void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds) {
-        this.boardView = initializeBoardView(pieceViewList, bounds);
+        this.boardView = initializeBoardView(pieceViewList, specialLocations, bounds);
         initializeUI(viewController);
         scene = initializeScene();
         stage.setScene(scene);
@@ -46,7 +46,7 @@ public abstract class View implements ViewInterface {
 
     protected abstract GridPane addUIs();
 
-    protected abstract BoardView initializeBoardView(List<PieceViewBuilder> pieceViewList, Location bounds);
+    protected abstract BoardView initializeBoardView(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds);
 
     private Scene initializeScene() {
         GridPane root = addUIs();

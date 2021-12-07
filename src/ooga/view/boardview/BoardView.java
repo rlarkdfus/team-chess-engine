@@ -149,8 +149,8 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     return selectedLocation;
   }
 
-  public void addPowerupViews(List<Location> powerupLocations) {
-    for (Location location : powerupLocations) {
+  public void markInitialSpecialLocation(List<Location> specialLocations) {
+    for (Location location : specialLocations) {
       findBoardSquare(location).getChildren().add(new PowerupView(location));
     }
   }

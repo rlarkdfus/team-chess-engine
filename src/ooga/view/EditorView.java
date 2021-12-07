@@ -26,9 +26,9 @@ public class EditorView extends View {
   }
 
   @Override
-  protected BoardView initializeBoardView(List<PieceViewBuilder> pieceViewList, Location bounds) {
-    this.boardView = new EditorBoardView(controller, new ArrayList<>(), Main.DEFAULT_ROW, Main.DEFAULT_ROW);
-    this.pieceMenu = new PieceMenuView(controller, pieceViewList, bounds.getRow(), bounds.getCol());
+  protected BoardView initializeBoardView(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds) {
+    boardView = new EditorBoardView(controller, new ArrayList<>(), Main.DEFAULT_ROW, Main.DEFAULT_ROW);
+    pieceMenu = new PieceMenuView(controller, pieceViewList, bounds.getRow(), bounds.getCol());
     return boardView;
   }
 

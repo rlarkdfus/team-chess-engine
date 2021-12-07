@@ -42,8 +42,9 @@ public class GameView extends View {
     playerStatsUI.updateUI(scores.get(WHITE_SCORE_INDEX), scores.get(BLACK_SCORE_INDEX));
   }
 
-  protected BoardView initializeBoardView(List<PieceViewBuilder> pieceViewList, Location bounds) {
-    this.boardView = new GameBoardView(controller, pieceViewList, bounds.getRow(), bounds.getCol());
+  protected BoardView initializeBoardView(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds) {
+    boardView = new GameBoardView(controller, pieceViewList, bounds.getRow(), bounds.getCol());
+    boardView.markInitialSpecialLocation(specialLocations);
     return boardView;
   }
 
