@@ -6,6 +6,14 @@ import ooga.model.PieceInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @authors sam
+ * purpose - teleport allows a piece to move to a specific square anytime
+ * assumptions - it assumes that the piece and players are all valid
+ * dependencies - it depends on Location and PieceInterface
+ * usage - if a piece has this move the move class will check if it is legal and return it
+ * as part of its end locations
+ */
 public class TeleportMove extends TranslationMove {
     private final boolean take;
     /**

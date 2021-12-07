@@ -14,6 +14,16 @@ import ooga.model.GameState;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
+/**
+ * @authors
+ * purpose - the purpose of this file is to determine the location end condition which requires pieces
+ * to be on certain squares in order to win
+ * assumptions - it assumes that there are enough pieces to meet the condition as well as that the pieces
+ * and players are valid
+ * dependencies - it depends on PieceInterface, PlayerInterface, and GameState
+ * usage - the end condition runner loops through all the end conditions and calls checkmate to see if
+ * a checkmate is met
+ */
 public class LocationEndCondition implements EndConditionInterface{
   private Map<ooga.Location, String> targetLocations;
   private Map<String, Integer> minPieceAmounts;

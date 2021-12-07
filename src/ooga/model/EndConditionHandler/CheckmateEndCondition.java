@@ -7,6 +7,14 @@ import ooga.model.Moves.MoveUtility;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
+/**
+ * @authors
+ * purpose - this class handles checkmate end conditions, and returns the winner if a checkmate is found
+ * assumptions - it assumes that all the pieces and players are valid
+ * dependencies - it depends on PieceInterface, PlayerInterface, and GameState
+ * usage - the end condition runner loops through all the end conditions and calls checkmate to see if
+ * a checkmate is met
+ */
 public class CheckmateEndCondition implements EndConditionInterface {
   protected List<PieceInterface> pieces;
 

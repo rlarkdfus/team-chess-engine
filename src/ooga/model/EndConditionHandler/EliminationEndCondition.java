@@ -14,6 +14,15 @@ import ooga.model.GameState;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
+/**
+ * @authors
+ * purpose - the purpose of this file is to determine the elimination end condition which is satisfied
+ * when enough of a certain piece have been eliminated
+ * assumptions - it assumes that all the pieces and players are valid
+ * dependencies - it depends on PieceInterface, PlayerInterface, and GameState
+ * usage - the end condition runner loops through all the end conditions and calls checkmate to see if
+ * a checkmate is met
+ */
 public class EliminationEndCondition implements EndConditionInterface {
   public static final String UNDERSCORE = "_";
   public static final String PIECE_TEAM_TYPE_FORMAT = "%s_%s";

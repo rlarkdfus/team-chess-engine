@@ -6,6 +6,15 @@ import ooga.model.PieceInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @authors gordon, sam
+ * purpose - defines en passant, which allows a piece to take a piece indirectly when it meets
+ * the conditions on firstmove
+ * assumptions - it assumes that the pieces and players are valid
+ * dependencies - it depends on Location, Board, and PieceInterface
+ * usage - if a piece has this move the move class will check if it is legal and return it
+ * as part of its end locations
+ */
 public class EnPassantMove extends Move {
     /**
      * en passant move for pawns to indirectly take other pawns
