@@ -71,6 +71,7 @@ public class BoardBuilder implements Builder {
     } catch (Exception e) {
       //default file shouldn't have any issues
       e.printStackTrace();
+      LogUtils.error(this,e.getCause());
     }
   }
 
@@ -92,6 +93,7 @@ public class BoardBuilder implements Builder {
   @Override
   public void build(File file)
       throws CsvException, FileNotFoundException, PlayerNotFoundException, InvalidPieceConfigException, InvalidGameConfigException, InvalidEndGameConfigException, InvalidPowerupsConfigException {
+    LogUtils.error(this, "loading file in boardbuilder: "+file);
     pieceList = new ArrayList<>();
     playerList = new ArrayList<>();
     JSONObject gameJson = JsonParser.loadFile(file);
