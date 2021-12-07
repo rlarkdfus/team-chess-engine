@@ -9,6 +9,14 @@ import ooga.model.PieceInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @authors gordon, sam
+ * purpose - promotion allows a piece to transform into another piece
+ * assumptions - it assumes that the pieces and players are all valid
+ * dependencies - it depends on Location, PieceBuilder, Board, and PieceInterface
+ * usage - if a piece has this move the move class will check if it is legal and return it
+ * as part of its end locations
+ */
 public class PromoteMove extends Move {
     /**
      * promotions of a pawn to another piece
