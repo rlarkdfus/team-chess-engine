@@ -134,12 +134,12 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
         turnCount++;
     }
 
-@Override
+    @Override
     public void incrementTurnCheat(){
         incrementTurn();
     }
 
-@Override
+    @Override
     public void addRandomQueenCheat(){
         List<Location> emptyLocations = this.getEmptyLocations();
         int randomEmptyIndex  =  (int)(Math.random() * emptyLocations.size());
@@ -167,6 +167,7 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
 
     @Override
     public void transformAllPawnsCheat(){
+        System.out.println("transformcheat being run");
         List<PieceInterface> currentPlayerPieces = currentPlayer.getPieces();
 
         for(PieceInterface piece: currentPlayerPieces){
@@ -178,7 +179,7 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
     }
 
     @Override
-    public void queenToPawncheat(){
+    public void queenToPawnCheat(){
         PlayerInterface opponent = players.get((turnCount+1) % players.size());
         List<PieceInterface> opponentPieces = opponent.getPieces();
         PieceInterface queen = null;
@@ -188,13 +189,10 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
                 queen.transform(PieceBuilder.buildPiece(opponent.getTeam(),Board.PIECES.getString("PAWN"),piece.getLocation(),getBounds()));
             }
         }
-
     }
-
 
     @Override
     public void addTimeCheat(){
         currentPlayer.incrementTime(600);
     }
-
 }

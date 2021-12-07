@@ -5,6 +5,7 @@ import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.controller.GameControllerInterface;
 import ooga.view.boardview.GameBoardView;
+import ooga.view.ui.cheatUI.CheatUI;
 import ooga.view.ui.playerStatsUI.PlayerStatsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
 import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
@@ -16,6 +17,7 @@ public class GameView extends View {
   private SettingsUI settingsUI; // right
   private PlayerStatsUI playerStatsUI; // left
   private TimeConfigurationUI timeConfigurationUI;
+  private CheatUI cheatUI;
   GameControllerInterface controller;
 
   private final int WHITE_SCORE_INDEX = 0;
@@ -51,6 +53,7 @@ public class GameView extends View {
   protected void createResettableUIs() {
     this.settingsUI = new SettingsUI(controller, viewController);
     this.playerStatsUI = new PlayerStatsUI(controller);
+    this.cheatUI = new CheatUI(controller);
   }
 
   @Override
@@ -59,6 +62,7 @@ public class GameView extends View {
     root.add(boardView, 1, 1, 1, 2);
     root.add(playerStatsUI, 0, 1, 1, 2);
     root.add(timeConfigurationUI, 2, 2, 1, 1);
+    root.add(cheatUI, 2, 3);
   }
 
   @Override

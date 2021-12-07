@@ -109,7 +109,7 @@ public abstract class Board implements Engine {
     /**
      * this method updates the legal moves of each piece on the board
      */
-    protected void updateLegalMoves() {
+    public void updateLegalMoves() {
         for (PieceInterface piece : pieces) {
             piece.updateMoves(new ArrayList<>(pieces));
         }

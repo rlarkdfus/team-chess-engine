@@ -42,7 +42,7 @@ public abstract class View implements ViewInterface {
         GridPane root = new GridPane();
         addUIs(root);
         scene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT);
-        scene.setOnKeyPressed(e -> controller.handleKeyPress(e.getCode()));
+        scene.setOnKeyPressed(e -> viewController.handleKeyPress(e.getCode()));
         applyStyleSheet(DEFAULT_STYLESHEET);
         applyStyleSheet(DEFAULT_THEME);
         return scene;

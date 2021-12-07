@@ -5,6 +5,6 @@ public interface CheatInterface {
     void addRandomQueenCheat();
     void moveKingRandomCheat();
     void transformAllPawnsCheat();
-    void queenToPawncheat();
+    void queenToPawnCheat();
     void addTimeCheat();
 }
