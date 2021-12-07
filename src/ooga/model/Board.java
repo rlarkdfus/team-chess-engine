@@ -27,7 +27,6 @@ public abstract class Board implements Engine {
     protected List<PieceInterface> pieces;
 
     protected List<PowerupInterface> powerupInterfaceList;
-    protected PlayerInterface currentPlayer;
 
     /**
      * the board is constructed by passing in a list of players and bounds. the players each hold

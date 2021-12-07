@@ -1,6 +1,7 @@
 package ooga.model.Moves;
 
 import ooga.Location;
+import ooga.model.Board;
 import ooga.model.PieceInterface;
 
 import java.util.List;
@@ -47,34 +48,22 @@ public abstract class CastleMove extends Move {
     @Override
     protected boolean isLegal(PieceInterface king, Location potentialLocation, List<PieceInterface> pieces) {
         PieceInterface rook = MoveUtility.pieceAt(findRookLocation(king), pieces);
-
-        if(rook == null) {
-//            System.out.println("rook not found");
-            return false;
-        }
-
-        // make sure none have moved
-        if(king.hasMoved() || rook.hasMoved()) {
-//            System.out.println("moved");
-            return false;
-        }
-
-        // construct location 1 above, and 2 above, make sure they're clear
         Location intermediateLocation = new Location(potentialLocation.getRow(), potentialLocation.getCol()-getdCol()/2);
-        if(!MoveUtility.isClear(List.of(potentialLocation, intermediateLocation), pieces)) {
-//            System.out.println("not clear");
-            return false;
-        }
-        // must make sure nothing in that row is under attack
+
+        boolean underAttack = false;
         List<Location> kingLocations = List.of(king.getLocation(), potentialLocation, intermediateLocation);
         List<PieceInterface> attackingPieces = MoveUtility.getAttackingPieces(king.getTeam(), pieces);
         for(Location loc : kingLocations){
-            if(MoveUtility.underAttack(loc, attackingPieces, pieces)){
-//                System.out.println("under attack");
-                return false;
+            underAttack = MoveUtility.underAttack(loc, attackingPieces, pieces);
+            if(underAttack) {
+                break;
             }
         }
-//        System.out.println("can castle");
-        return true;
+
+        return rook != null &&
+                MoveUtility.isClear(List.of(potentialLocation, intermediateLocation), pieces) &&
+                rook.getName().equals(Board.PIECES.getString("ROOK")) &&
+                !king.hasMoved() &&
+                (!rook.hasMoved() || underAttack);
     }
 }
