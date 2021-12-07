@@ -23,9 +23,6 @@ public class GameController extends Controller implements GameControllerInterfac
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
   private TimeController timeController;
-
-  private int initialTime = DEFAULT_INITIAL_TIME;
-  private int increment = DEFAULT_INITIAL_INCREMENT;
   private GameEngine model;
 
   private Map<Enum, JSONObject> players;
@@ -51,9 +48,8 @@ public class GameController extends Controller implements GameControllerInterfac
   protected Engine initializeModel(Builder boardBuilder) {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
     model = new GameBoard(players, boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler(), boardBuilder.getBoardSize());
+    timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
     configureTimersStartOfApplication();
-    System.out.println("initializing model w/ time settings: " + initialTime + ", " + increment);
-    timeController = new TimeController(initialTime, increment);
     timeController.configTimers(players);
     startTimersForNewGame(players);
     return model;
@@ -145,7 +141,6 @@ public class GameController extends Controller implements GameControllerInterfac
     }
   }
 
-  //TODO: TIMER
   private void configureTimersStartOfApplication() {
     setInitialTime(DEFAULT_INITIAL_TIME);
     setIncrement(DEFAULT_INITIAL_INCREMENT);
@@ -176,7 +171,7 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   @Override
   public void setInitialTime(int minutes) {
-    initialTime = minutes;
+    timeController.setInitialTime(model.getPlayers(), minutes);
   }
 
   /**
@@ -186,7 +181,7 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   @Override
   public void setIncrement(int seconds) {
-    increment = seconds;
+    timeController.setIncrement(model.getPlayers(), seconds);
   }
 
   @Override

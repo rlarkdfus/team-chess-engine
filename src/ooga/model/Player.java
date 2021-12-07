@@ -41,6 +41,14 @@ public class Player implements PlayerInterface {
     }
 
     /**
+     * sets the timer of the player to its initial time but does not toggle the timer
+     */
+    @Override
+    public void setToInitialTime() {
+        moveTimer.setToInitialTime();
+    }
+
+    /**
      * start or stop a player's timer
      */
     @Override
@@ -53,7 +61,6 @@ public class Player implements PlayerInterface {
      */
     @Override
     public void resetTimer() {
-        System.out.println("resetting timer: " + team);
         moveTimer.reset();
     }
 

@@ -60,6 +60,9 @@ public class LoginUI extends GridPane implements UIInterface {
         createUI();
     }
 
+    /**
+     *
+     */
     private void initializeTextFields() {
         blackUsernameField = viewUtility.makeTextField(BLACK_USERNAME_FIELD,  e -> handleKeyPressed(e));
         blackPasswordField = viewUtility.makePasswordField(BLACK_PASSWORD_FIELD, e -> handleKeyPressed(e));
