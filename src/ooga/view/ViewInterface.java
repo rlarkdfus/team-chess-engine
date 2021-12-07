@@ -12,7 +12,7 @@ public interface ViewInterface {
      */
     void updateDisplay(List<PieceViewBuilder> pieceViewList);
 
-    void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds);
+    void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialPieceLocations, Location bounds);
 
     void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds);
 

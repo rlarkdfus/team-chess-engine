@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.view.PieceView;
+import ooga.view.PowerupView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   private List<BoardSquare> background;
   protected List<PieceView> pieceList;
+  private List<Location> specialLocations;
   private Location selectedLocation;
 
   private final int row;
@@ -28,6 +31,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
   public BoardView(List<PieceViewBuilder> pieceViews, int row, int col) {
     selectedLocation = null;
     pieceList = new ArrayList<>();
+    specialLocations = new ArrayList<>();
     this.row = row;
     this.col = col;
     initializeBoardView(pieceViews);
@@ -142,5 +146,11 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   protected Location getSelectedLocation() {
     return selectedLocation;
+  }
+
+  public void addPowerupViews(List<Location> powerupLocations) {
+    for (Location location : powerupLocations) {
+      findBoardSquare(location).getChildren().add(new PowerupView(location));
+    }
   }
 }
