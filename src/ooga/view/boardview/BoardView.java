@@ -9,6 +9,7 @@ import ooga.controller.Config.PieceViewBuilder;
 import ooga.controller.ControllerInterface;
 import ooga.view.PieceView;
 import ooga.view.PowerupView;
+import ooga.view.ViewController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +25,15 @@ import java.util.List;
  */
 public abstract class BoardView extends Group implements BoardViewInterface {
 
-  private static final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
-  private static final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
-  private static String DEFAULT_PIECE_STYLE = "companion";
-  public static final int SQUARE_WIDTH = 60;
-  public static final int SQUARE_HEIGHT = 60;
+  private static final Color DEFAULT_COLOR_1 = ViewController.DEFAULT_COLOR1;
+  private static final Color DEFAULT_COLOR_2 = ViewController.DEFAULT_COLOR2;
+  private static String DEFAULT_PIECE_STYLE = ViewController.DEFAULT_PIECE_STYLE;
+
+  public static final int SQUARE_WIDTH = ViewController.SQUARE_WIDTH;
+  public static final int SQUARE_HEIGHT = ViewController.SQUARE_HEIGHT;
 
   private List<BoardSquare> background;
   protected List<PieceView> pieceList;
-  private List<Location> specialLocations;
   private Location selectedLocation;
 
   private final int row;
@@ -47,7 +48,6 @@ public abstract class BoardView extends Group implements BoardViewInterface {
   public BoardView(List<PieceViewBuilder> pieceViews, int row, int col) {
     selectedLocation = null;
     pieceList = new ArrayList<>();
-    specialLocations = new ArrayList<>();
     this.row = row;
     this.col = col;
     initializeBoardView(pieceViews);

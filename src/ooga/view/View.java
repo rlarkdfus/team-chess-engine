@@ -1,7 +1,7 @@
 package ooga.view;
 
 import java.util.List;
-import java.util.Stack;
+import java.util.ResourceBundle;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -13,15 +13,16 @@ import ooga.view.boardview.BoardView;
 import ooga.view.util.ViewUtility;
 
 public abstract class View implements ViewInterface {
-
     public static final String DEFAULT_RESOURCE_PACKAGE = View.class.getPackageName() + ".resources.";
     public static final String STYLE_PACKAGE = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");
-    public static final String STYLE_EXTENSION = ".css";
-    public static final String DEFAULT_STYLESHEET = "style";
-    public static final String DEFAULT_THEME = "light";
+    public static final ResourceBundle STYLE_BUNDLE = ResourceBundle.getBundle("ooga/view/resources/Style");
 
-    public static final int STAGE_WIDTH = 1000;
-    public static final int STAGE_HEIGHT = 700;
+    public static final String STYLE_EXTENSION = STYLE_BUNDLE.getString("css_extension");
+    public static final String DEFAULT_STYLESHEET = STYLE_BUNDLE.getString("default_css");
+    public static final String DEFAULT_THEME = STYLE_BUNDLE.getString("default_theme");
+
+    public static final int STAGE_WIDTH = Integer.parseInt(STYLE_BUNDLE.getString("stage_width"));
+    public static final int STAGE_HEIGHT = Integer.parseInt(STYLE_BUNDLE.getString("stage_height"));
 
     private ViewController viewController;
     private Stage stage;
@@ -126,7 +127,7 @@ public abstract class View implements ViewInterface {
      */
     @Override
     public void changeTheme(String theme) {
-        ((Stack) scene.getStylesheets()).pop();
+        scene.getStylesheets().remove(scene.getStylesheets().size() - 1);
         applyStyleSheet(scene, theme);
     }
 
