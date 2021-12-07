@@ -5,6 +5,16 @@ import java.util.List;
 import ooga.model.PlayerInterface;
 import ooga.model.GameState;
 
+/**
+ * @authors
+ * purpose - the purpose of the endconditionrunner is to keep track of all the end conditions, loop through
+ * them, and return the state of the game if an end condition has determined a winner
+ * assumptions - it assumes that there are defined end conditions as well as that all the pieces and
+ * players are valid
+ * dependencies - it depends on the PlayerInterface and Gamestate
+ * usage - the satisfiedendcondition method is called after each move to see if an end condition has
+ * been met, and to check the game state
+ */
 public class EndConditionRunner {
   private List<EndConditionInterface> endConditions;
 
