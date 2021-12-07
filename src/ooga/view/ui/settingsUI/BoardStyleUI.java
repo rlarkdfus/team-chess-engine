@@ -4,6 +4,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import ooga.view.ViewController;
+import ooga.view.ui.UIHelper;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
 
@@ -14,6 +15,8 @@ import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 public class BoardStyleUI extends GridPane implements UIInterface {
+
+    public static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("ooga/view/ui/settingsUI/BoardStyleUI");
 
     public static final List<String> LANGUAGES = ViewController.LANGUAGES;
     public static final List<String> THEMES = ViewController.THEMES;
@@ -63,17 +66,18 @@ public class BoardStyleUI extends GridPane implements UIInterface {
 
     @Override
     public void createUI() {
-        this.add(viewUtility.makeLabel(BOARD_COLOR_LABEL), 0, 0);
-        this.add(colorPicker1, 1, 0);
-        this.add(colorPicker2, 1, 1);
-        this.add(viewUtility.makeLabel(PIECE_STYLE_LABEL), 0, 2);
-        this.add(viewUtility.makeMenu(PIECE_MENU, PIECE_STYLES, MENU_BEHAVIOR.get(PIECE_MENU)), 1, 2);
+        UIHelper.setResourceBundle(RESOURCE_BUNDLE);
+        this.add(viewUtility.makeLabel(BOARD_COLOR_LABEL), UIHelper.getCol(BOARD_COLOR_LABEL), UIHelper.getRow(BOARD_COLOR_LABEL));
+        this.add(colorPicker1, UIHelper.getCol(COLOR_PICKER1), UIHelper.getRow(COLOR_PICKER1));
+        this.add(colorPicker2, UIHelper.getCol(COLOR_PICKER2), UIHelper.getRow(COLOR_PICKER2));
+        this.add(viewUtility.makeLabel(PIECE_STYLE_LABEL), UIHelper.getCol(PIECE_STYLE_LABEL), UIHelper.getRow(PIECE_STYLE_LABEL));
+        this.add(viewUtility.makeMenu(PIECE_MENU, PIECE_STYLES, MENU_BEHAVIOR.get(PIECE_MENU)), UIHelper.getCol(PIECE_MENU), UIHelper.getRow(PIECE_MENU));
 
-        this.add(viewUtility.makeLabel(LANGUAGE_LABEL), 0, 3);
-        this.add(viewUtility.makeMenu(LANGUAGE_MENU, LANGUAGES, MENU_BEHAVIOR.get(LANGUAGE_MENU)), 1, 3);
+        this.add(viewUtility.makeLabel(LANGUAGE_LABEL), UIHelper.getCol(LANGUAGE_LABEL), UIHelper.getRow(LANGUAGE_LABEL));
+        this.add(viewUtility.makeMenu(LANGUAGE_MENU, LANGUAGES, MENU_BEHAVIOR.get(LANGUAGE_MENU)), UIHelper.getCol(LANGUAGE_MENU), UIHelper.getRow(LANGUAGE_MENU));
 
-        this.add(viewUtility.makeLabel(THEME_LABEL), 0, 4);
-        this.add(viewUtility.makeMenu(THEME_MENU, THEMES, MENU_BEHAVIOR.get(THEME_MENU)), 1, 4);
+        this.add(viewUtility.makeLabel(THEME_LABEL), UIHelper.getCol(THEME_LABEL), UIHelper.getRow(THEME_LABEL));
+        this.add(viewUtility.makeMenu(THEME_MENU, THEMES, MENU_BEHAVIOR.get(THEME_MENU)), UIHelper.getCol(THEME_MENU), UIHelper.getRow(THEME_MENU));
     }
 
     private void changePieceStyle(String style) {
