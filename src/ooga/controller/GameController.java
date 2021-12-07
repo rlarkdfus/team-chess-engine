@@ -2,6 +2,7 @@ package ooga.controller;
 
 import java.io.File;
 import java.util.*;
+import java.util.Map.Entry;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.LogUtils;
@@ -35,18 +36,17 @@ public class GameController extends Controller implements GameControllerInterfac
 
   private TimeController timeController;
 
-  private GameOverScreen gameOverScreen;
   private Map<Enum, JSONObject> playersAttributes;
 
   private int initialTime = DEFAULT_INITIAL_TIME;
   private int increment = DEFAULT_INITIAL_INCREMENT;
   private GameEngine model;
+
   private Map<Enum, String> usernames;
 
   public GameController(){
     super();
   }
-
 
   @Override
   protected File getDefaultConfiguration() {
@@ -64,9 +64,8 @@ public class GameController extends Controller implements GameControllerInterfac
   protected Engine initializeModel(Builder boardBuilder) {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
     model = new GameBoard(players, boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler(), boardBuilder.getBoardSize());
+    timeController = new TimeController(DEFAULT_INITIAL_TIME, DEFAULT_INITIAL_INCREMENT);
     configureTimersStartOfApplication();
-    System.out.println("initializing model w/ time settings: " + initialTime + ", " + increment);
-    timeController = new TimeController(initialTime, increment);
     timeController.configTimers(players);
     startTimersForNewGame(players);
     return model;
@@ -169,7 +168,6 @@ public class GameController extends Controller implements GameControllerInterfac
     }
   }
 
-  //TODO: TIMER
   private void configureTimersStartOfApplication() {
     setInitialTime(DEFAULT_INITIAL_TIME);
     setIncrement(DEFAULT_INITIAL_INCREMENT);
@@ -200,7 +198,7 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   @Override
   public void setInitialTime(int minutes) {
-    initialTime = minutes;
+    timeController.setInitialTime(model.getPlayers(), minutes);
   }
 
   /**
@@ -210,7 +208,7 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   @Override
   public void setIncrement(int seconds) {
-    increment = seconds;
+    timeController.setIncrement(model.getPlayers(), seconds);
   }
 
   /**

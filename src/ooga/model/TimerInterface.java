@@ -17,6 +17,11 @@ public interface TimerInterface {
     StringProperty getTimeLeft();
 
     /**
+     * sets the timer to its initial time but does not toggle it
+     */
+    void setToInitialTime();
+
+    /**
      * determines whether a timer has run out
      * @return whether a timer is out of time
      */
