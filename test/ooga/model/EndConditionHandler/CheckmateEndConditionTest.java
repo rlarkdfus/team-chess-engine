@@ -14,7 +14,6 @@ import ooga.controller.Config.InvalidEndGameConfigException;
 import ooga.controller.Config.InvalidGameConfigException;
 import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.*;
-import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Powerups.PowerupInterface;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

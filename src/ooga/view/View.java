@@ -54,8 +54,7 @@ public abstract class View implements ViewInterface {
     protected abstract void addUIs(GridPane root);
 
     @Override
-    public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
-        System.out.println("Initialize display");
+    public void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialPieceLocations, Location bounds) {
         createStaticUIs();
         resetDisplay(pieceViewList, bounds);
     }

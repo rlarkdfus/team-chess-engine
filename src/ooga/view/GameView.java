@@ -29,9 +29,10 @@ public class GameView extends View {
   }
 
   @Override
-  public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
-    super.initializeDisplay(pieceViewList, bounds);
+  public void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialPieceLocations, Location bounds) {
+    super.initializeDisplay(pieceViewList, specialPieceLocations, bounds);
     updatePlayerStatsUI(List.of(DEFAULT_INITIAL_WHITE_SCORE, DEFAULT_INITIAL_BLACK_SCORE));
+    boardView.addPowerupViews(specialPieceLocations);
   }
 
   private void initializePlayerNames(List<String> names) {

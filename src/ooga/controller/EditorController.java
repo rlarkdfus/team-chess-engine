@@ -32,9 +32,9 @@ public class EditorController extends Controller implements EditorControllerInte
   }
 
   @Override
-  protected ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds) {
+  protected ViewInterface initializeView(Builder boardBuilder) {
     ViewInterface view = new EditorView(this);
-    view.initializeDisplay(pieces, bounds);
+    view.initializeDisplay(boardBuilder.getInitialPieceViews(), boardBuilder.getPowerupLocations(), boardBuilder.getBoardSize());
     return view;
   }
 
