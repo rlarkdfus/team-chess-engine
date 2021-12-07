@@ -44,7 +44,4 @@ public interface Engine {
    * @return whether the piece can move
    */
   boolean canMovePiece(Location location);
-
-
-  Location randomEmptyLocation();
 }

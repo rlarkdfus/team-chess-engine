@@ -40,7 +40,7 @@ public class PromoteMove extends Move {
     @Override
     public void executeMove(PieceInterface piece, List<PieceInterface> pieces, Location end) {
         LogUtils.info(this,"Execute promote move");
-        PieceInterface newPiece = PieceBuilder.buildPiece(piece.getTeam(), Board.PIECES.getString("DEFAULT_PROMOTION"),end,getBounds());
+        PieceInterface newPiece = PieceBuilder.buildPiece(piece.getTeam(), Board.PIECES.getString("DefaultPromotionPiece"),end,getBounds());
         System.out.println(piece.getScore());
         piece.transform(newPiece);
         System.out.println(piece.getScore());

@@ -108,7 +108,7 @@ public abstract class Board implements Engine {
     /**
      * this method updates the legal moves of each piece on the board
      */
-    public void updateLegalMoves() {
+    protected void updateLegalMoves() {
         for (PieceInterface piece : pieces) {
             piece.updateMoves(new ArrayList<>(pieces));
         }
@@ -145,14 +145,10 @@ public abstract class Board implements Engine {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-//        str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
-        for(int i=0;i<bounds.getRow();i++){
-            str.append("\t " + i);
-        }
-        str.append("\n");
-        for (int i = 0; i < bounds.getRow(); i++) {
-            str.append(i + "\t|");
-            for (int j = 0; j < bounds.getCol(); j++) {
+        str.append("\t 0\t 1\t 2\t 3\t 4\t 5\t 6\t 7\n");
+        for (int i = 0; i < 8; i++) {
+            str.append(i).append("\t|");
+            for (int j = 0; j < 8; j++) {
                 Location location = new Location(i, j);
                 boolean found = false;
 
@@ -172,35 +168,4 @@ public abstract class Board implements Engine {
         str.append("____________________________________\n");
         return str.toString();
     }
-
-    /**
-     * get a list of all the empty squares on the board
-     * @return list of all empty locations
-     */
-
-    private List<Location>  getEmptyLocations(){
-        List<Location> emptyLocations = new ArrayList<>();
-        for(int rows = 0; rows< bounds.getRow();rows++){
-            for(int cols = 0; cols<bounds.getCol(); cols++){
-                Location currentLocation = new Location(rows,cols);
-                if(MoveUtility.pieceAt(currentLocation,pieces)==null){
-                    emptyLocations.add(currentLocation);
-                }
-            }
-        }
-        return emptyLocations;
-    }
-
-
-    /**
-     * get an empty locaiton by  finding empty locations and getting a random one
-     * @return an empty location
-     */
-
-    @Override
-    public Location randomEmptyLocation(){
-        List<Location> emptyLocations = this.getEmptyLocations();
-        int randomEmptyIndex  =  (int)(Math.random() * emptyLocations.size());
-        return emptyLocations.get(randomEmptyIndex);
-    };
 }

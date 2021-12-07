@@ -8,7 +8,6 @@ import ooga.controller.GameControllerInterface;
 import ooga.model.GameState;
 import ooga.view.boardview.BoardView;
 import ooga.view.boardview.GameBoardView;
-import ooga.view.ui.cheatUI.CheatUI;
 import ooga.view.ui.playerStatsUI.PlayerStatsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
 import ooga.view.ui.timeConfigurationUI.TimeConfigurationUI;
@@ -21,7 +20,6 @@ public class GameView extends View {
   private SettingsUI settingsUI; // right
   private PlayerStatsUI playerStatsUI; // left
   private TimeConfigurationUI timeConfigurationUI;
-  private CheatUI cheatUI;
   private GameControllerInterface controller;
 
   private final int WHITE_SCORE_INDEX = 0;
@@ -33,6 +31,7 @@ public class GameView extends View {
   }
 
   @Override
+
   public void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds) {
     super.initializeDisplay(pieceViewList, specialLocations, bounds);
     updatePlayerStatsUI(controller.getUpdatedScores());
@@ -59,7 +58,6 @@ public class GameView extends View {
     this.timeConfigurationUI = new TimeConfigurationUI(controller);
     this.settingsUI = new SettingsUI(controller, viewController);
     this.playerStatsUI = new PlayerStatsUI(controller);
-    this.cheatUI = new CheatUI(controller);
   }
 
   @Override
@@ -69,8 +67,6 @@ public class GameView extends View {
     root.add(boardView, 1, 1, 1, 2);
     root.add(playerStatsUI, 0, 1, 1, 2);
     root.add(timeConfigurationUI, 2, 2, 1, 1);
-    root.add(cheatUI, 2, 3);
-    cheatUI.setVisible(false);
     return root;
   }
 
@@ -79,10 +75,6 @@ public class GameView extends View {
     super.updateDisplay(pieceViewList);
     updatePlayerStatsUI(controller.getUpdatedScores());
     initializePlayers(controller.getUsernames(), controller.getWins());
-  }
-
-  public void toggleCheatsVisible(){
-    cheatUI.setVisible(!cheatUI.isVisible());
   }
 }
 
