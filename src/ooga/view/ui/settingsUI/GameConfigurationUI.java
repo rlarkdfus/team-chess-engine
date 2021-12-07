@@ -2,6 +2,7 @@ package ooga.view.ui.settingsUI;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,7 +19,10 @@ public class GameConfigurationUI extends GridPane implements UIInterface {
     public static final String DOWNLOAD_GAME = "download_game";
     public static final String NEW_WINDOW = "new_window";
     public static final String RESET_WINDOW = "reset_window";
-    private final Map<String, EventHandler<ActionEvent>> buttonBehavior = Map.of(
+    private final Map<String, Consumer<String>> MENU_BEHAVIOR = Map.of(
+            GAME_VARIATION, e -> chooseVariation(e)
+    );
+    private final Map<String, EventHandler<ActionEvent>> BUTTON_BEHAVIOR = Map.of(
             UPLOAD_CONFIGURATION, e -> uploadConfiguration(),
             DOWNLOAD_GAME, e -> downloadGame(),
             NEW_WINDOW, e -> createNewWindow(),
@@ -39,16 +43,15 @@ public class GameConfigurationUI extends GridPane implements UIInterface {
     @Override
     public void createUI() {
         this.add(viewUtility.makeLabel(VARIATION_LABEL), 0, 0);
-        this.add(viewUtility.makeMenu(GAME_VARIATION, variations, this::chooseVariation), 1, 0);
-        this.add(viewUtility.makeButton(UPLOAD_CONFIGURATION, buttonBehavior.get(UPLOAD_CONFIGURATION)), 1, 1);
-        this.add(viewUtility.makeButton(DOWNLOAD_GAME, buttonBehavior.get(DOWNLOAD_GAME)), 2, 1);
-        this.add(viewUtility.makeButton(NEW_WINDOW, buttonBehavior.get(NEW_WINDOW)), 2, 2);
-        this.add(viewUtility.makeButton(RESET_WINDOW, buttonBehavior.get(RESET_WINDOW)), 1, 2);
+        this.add(viewUtility.makeMenu(GAME_VARIATION, variations, MENU_BEHAVIOR.get(GAME_VARIATION)), 1, 0);
+        this.add(viewUtility.makeButton(UPLOAD_CONFIGURATION, BUTTON_BEHAVIOR.get(UPLOAD_CONFIGURATION)), 1, 1);
+        this.add(viewUtility.makeButton(DOWNLOAD_GAME, BUTTON_BEHAVIOR.get(DOWNLOAD_GAME)), 2, 1);
+        this.add(viewUtility.makeButton(NEW_WINDOW, BUTTON_BEHAVIOR.get(NEW_WINDOW)), 2, 2);
+        this.add(viewUtility.makeButton(RESET_WINDOW, BUTTON_BEHAVIOR.get(RESET_WINDOW)), 1, 2);
     }
 
     private void chooseVariation(String controllerVariation) {
         controller.launchController(controllerVariation);
-
     }
 
     private void uploadConfiguration() {
