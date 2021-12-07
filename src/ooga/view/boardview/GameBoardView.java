@@ -3,6 +3,7 @@ package ooga.view.boardview;
 import java.util.List;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
+import ooga.controller.ControllerInterface;
 import ooga.controller.GameControllerInterface;
 
 public class GameBoardView extends BoardView {
@@ -20,16 +21,10 @@ public class GameBoardView extends BoardView {
         //user doesn't have piece selected and clicks on new piece
         //And add logic and is the same team
         if (startLocation == null) {
-            if (controller.canMovePiece(clickLocation)) {
-                selectPiece(clickLocation);
-                showLegalMoves(controller.getLegalMoves(clickLocation));
-            } else {
-                unselectPiece();
-            }
+            clickWithoutHavingPiece(controller, clickLocation);
         } else { //user selects new location with piece
             if (isLegalMove(clickLocation, controller.getLegalMoves(startLocation))) { //user clicks new location
-                controller.movePiece(startLocation, clickLocation);
-                unselectPiece();
+                movePiece(controller, clickLocation, startLocation);
             } else if (controller.canMovePiece(clickLocation)) {
                 unselectPiece();
                 selectPiece(clickLocation);
