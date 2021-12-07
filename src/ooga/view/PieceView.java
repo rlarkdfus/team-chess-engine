@@ -12,7 +12,7 @@ public class PieceView extends ImageView {
     private String style;
     private Location location;
 
-    public PieceView(String team, String name, String style, Location location){
+    public PieceView(String team, String name, String style, Location location) {
         super(String.format("images/%s/%s%s.png", style, team, name));
         this.team = team;
         this.name = name;
@@ -32,24 +32,38 @@ public class PieceView extends ImageView {
         return name;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
+
+    /**
+     * moves the pieceView to a specified location
+     *
+     * @param location the destination location
+     */
     public void moveTo(Location location) {
         this.location = location;
-        this.setX(location.getCol()*BoardView.SQUARE_WIDTH);
-        this.setY(location.getRow()*BoardView.SQUARE_HEIGHT);
+        this.setX(location.getCol() * BoardView.SQUARE_WIDTH);
+        this.setY(location.getRow() * BoardView.SQUARE_HEIGHT);
         setId();
     }
 
+    /**
+     * changes the style of the pieceView
+     *
+     * @param style the new style
+     */
     public void changeStyle(String style) {
         this.setImage(new Image(String.format("images/%s/%s%s.png", style, team, name)));
         this.style = style;
         setId();
     }
 
+    /**
+     * sets the ID of the pieceView
+     */
     private void setId() {
         this.setId(String.format("pieceView_side(%s)_piece(%s)_location(%d,%d)_style(%s)", team, name, location.getRow(), location.getCol(), style));
-    }
-    
-    public Location getLocation() {
-        return location;
     }
 }

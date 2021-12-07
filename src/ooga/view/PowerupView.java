@@ -10,6 +10,10 @@ public class PowerupView extends Circle {
 
     private Location location;
 
+    /**
+     * creates a circle representing a powerup in the View
+     * @param location the location of the powerup
+     */
     public PowerupView(Location location) {
         this.location = location;
         this.setRadius(POWER_UP_SIZE/2);

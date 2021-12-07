@@ -30,6 +30,9 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
             WHITE_TIME_DISPLAY, WHITE_INDEX,
             BLACK_TIME_DISPLAY, BLACK_INDEX
     );
+
+    private static final String WHITE_WINS_LABEL = "white_wins_label";
+    private static final String BLACK_WINS_LABEL = "black_wins_label";
     
     private ViewUtility viewUtility;
     private GameControllerInterface controller;
@@ -40,36 +43,53 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
     private Label whiteScoreDisplay;
     private Label blackScoreDisplay;
 
+    private Label whiteWinsLabel;
+    private Label blackWinsLabel;
+
+    private Label whiteTimeLabel;
+    private Label blackTimeLabel;
+
     public PlayerStatsUI(GameControllerInterface controller) {
         this.controller = controller;
         this.viewUtility = new ViewUtility();
         this.getStyleClass().add("GameSettingsUI");
-        makeScoreDisplayLabels();
+        initializeLabels();
         createUI();
     }
 
-    private void makeScoreDisplayLabels() {
+    private void initializeLabels() {
         whiteNameScoreLabel = viewUtility.makeLabel(WHITE_SCORE_LABEL);
         blackNameScoreLabel = viewUtility.makeLabel(BLACK_SCORE_LABEL);
         whiteScoreDisplay = viewUtility.makeLabel(WHITE_SCORE_DISPLAY);
         blackScoreDisplay = viewUtility.makeLabel(BLACK_SCORE_DISPLAY);
+        whiteWinsLabel = viewUtility.makeLabel(WHITE_WINS_LABEL);
+        blackWinsLabel = viewUtility.makeLabel(BLACK_WINS_LABEL);
+        whiteTimeLabel = viewUtility.makeLabel(WHITE_TIME_LABEL);
+        blackTimeLabel = viewUtility.makeLabel(BLACK_TIME_LABEL);
     }
 
     @Override
     public void createUI() {
-        this.add(blackNameScoreLabel, 0, 0);
-        this.add(blackScoreDisplay, 0, 1);
-        this.add(viewUtility.makeLabel(BLACK_TIME_LABEL), 0, 2);
-        this.add(viewUtility.makeText(BLACK_TIME_DISPLAY, getTimeLeft(TEAM_MAP.get(BLACK_TIME_DISPLAY))), 0, 3);
-        this.add(viewUtility.makeLabel(WHITE_TIME_LABEL), 0, 4);
-        this.add(viewUtility.makeText(WHITE_TIME_DISPLAY, getTimeLeft(TEAM_MAP.get(WHITE_TIME_DISPLAY))), 0, 5);
-        this.add(whiteNameScoreLabel, 0, 6);
-        this.add(whiteScoreDisplay, 0, 7);
+      this.add(blackNameScoreLabel, 0, 0);
+      this.add(blackScoreDisplay, 0, 1);
+      this.add(blackWinsLabel, 0, 2);
+      this.add(blackTimeLabel, 0, 3);
+      this.add(viewUtility.makeText(BLACK_TIME_DISPLAY, getTimeLeft(TEAM_MAP.get(BLACK_TIME_DISPLAY))), 0, 4);
+      this.add(whiteTimeLabel, 0, 5);
+      this.add(viewUtility.makeText(WHITE_TIME_DISPLAY, getTimeLeft(TEAM_MAP.get(WHITE_TIME_DISPLAY))), 0, 6);
+      this.add(whiteNameScoreLabel, 0, 7);
+      this.add(whiteScoreDisplay, 0, 8);
+      this.add(whiteWinsLabel, 0, 9);
     }
 
     public void initializePlayerNames(String whiteUsername, String blackUsername) {
         whiteNameScoreLabel.setText(String.format("%s score", whiteUsername));
         blackNameScoreLabel.setText(String.format("%s score", blackUsername));
+    }
+
+    public void initializePlayerWins(int whiteWins, int blackWins) {
+        whiteWinsLabel.setText(String.format("Wins: %d", whiteWins));
+        blackWinsLabel.setText(String.format("Wins: %d", blackWins));
     }
 
     public void updateUI(int whiteScore, int blackScore) {
