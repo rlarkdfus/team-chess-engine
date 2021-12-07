@@ -138,10 +138,9 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   private void incrementPlayerWin(GameState gameState) {
       if (playersAttributes != null) {
-        Iterator playersIter = playersAttributes.keySet().iterator();
-        while (playersIter.hasNext()) {
-          Enum player = (Enum) playersIter.next();
-          if (gameState == player) {
+        for (Enum player : playersAttributes.keySet()) {
+          System.out.println("Size %d" + playersAttributes.size());
+          if (player == gameState) {
             incrementWinAndSaveJSON(gameState, player);
           }
         }
@@ -153,13 +152,8 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   private void incrementWinAndSaveJSON(GameState gameState, Enum player) {
     JSONObject playerInfo = playersAttributes.get(player);
-    int wins = playersAttributes.get(player).getInt(WINS) + 1;
-    playersAttributes.remove(wins);
-    playerInfo.put(WINS, wins);
-    playersAttributes.remove(player);
-    playersAttributes.put(player, playerInfo);
+    playerInfo.put(WINS, (int) playerInfo.get(WINS) + 1);
     JSONObject userProfiles = JsonParser.loadFile(userProfilesFile);
-    userProfiles.remove(String.valueOf(usernames.get(gameState)));
     userProfiles.put(String.valueOf(usernames.get(gameState)), playerInfo);
     try {
       JSONWriter.saveFile(userProfiles, JSON_WRITER_FILE_PATH);

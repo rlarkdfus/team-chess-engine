@@ -6,6 +6,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
+import ooga.controller.ControllerInterface;
 import ooga.view.PieceView;
 import ooga.view.PowerupView;
 
@@ -153,5 +154,19 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     for (Location location : specialLocations) {
       findBoardSquare(location).getChildren().add(new PowerupView(location));
     }
+  }
+
+  protected void clickWithoutHavingPiece(ControllerInterface controller, Location clickLocation) {
+    if (controller.canMovePiece(clickLocation)) {
+      selectPiece(clickLocation);
+      showLegalMoves(controller.getLegalMoves(clickLocation));
+    } else {
+      unselectPiece();
+    }
+  }
+
+  protected void movePiece(ControllerInterface controller, Location clickLocation, Location startLocation) {
+    controller.movePiece(startLocation, clickLocation);
+    unselectPiece();
   }
 }

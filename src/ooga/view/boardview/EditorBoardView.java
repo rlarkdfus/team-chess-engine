@@ -21,16 +21,10 @@ public class EditorBoardView extends BoardView {
             controller.addPiece(clickLocation);
         } else {
             if (startLocation == null) {
-                if (controller.canMovePiece(clickLocation)) {
-                    selectPiece(clickLocation);
-                    showLegalMoves(controller.getLegalMoves(clickLocation));
-                } else {
-                    unselectPiece();
-                }
+                clickWithoutHavingPiece(controller, clickLocation);
             } else {
                 if (isLegalMove(clickLocation, controller.getLegalMoves(clickLocation))) { //user clicks new location
-                    controller.movePiece(startLocation, clickLocation);
-                    unselectPiece();
+                    movePiece(controller, clickLocation, startLocation);
                 }
             }
         }

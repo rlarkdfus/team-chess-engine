@@ -61,10 +61,8 @@ public class EditorBoard extends Board implements EditorEngine {
      */
     @Override
     protected void updateGameRules(PieceInterface piece) {
-        for(PieceInterface p : pieces) {
-            PieceInterface newPiece = new Piece(p.getTeam(), p.getName(), p.getLocation(), new ArrayList<>(), p.getScore());
-            p.transform(newPiece);
-        }
+        PieceInterface newPiece = new Piece(piece.getTeam(), piece.getName(), piece.getLocation(), new ArrayList<>(), piece.getScore());
+        piece.transform(newPiece);
     }
 
     /**
