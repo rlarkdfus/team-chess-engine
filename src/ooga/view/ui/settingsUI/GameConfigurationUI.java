@@ -2,6 +2,7 @@ package ooga.view.ui.settingsUI;
 
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
 import javafx.event.ActionEvent;
@@ -13,16 +14,18 @@ import ooga.view.util.ViewUtility;
 
 public class GameConfigurationUI extends GridPane implements UIInterface {
 
+    public final List<String> variations = ResourceBundle.getBundle("ooga/controller/resources/Variations").keySet().stream().toList();
+
     public static final String VARIATION_LABEL = "variation";
     public static final String GAME_VARIATION = "game_variation";
     public static final String UPLOAD_CONFIGURATION = "upload_configuration";
     public static final String DOWNLOAD_GAME = "download_game";
     public static final String NEW_WINDOW = "new_window";
     public static final String RESET_WINDOW = "reset_window";
-    private final Map<String, Consumer<String>> MENU_BEHAVIOR = Map.of(
+    public final Map<String, Consumer<String>> MENU_BEHAVIOR = Map.of(
             GAME_VARIATION, e -> chooseVariation(e)
     );
-    private final Map<String, EventHandler<ActionEvent>> BUTTON_BEHAVIOR = Map.of(
+    public final Map<String, EventHandler<ActionEvent>> BUTTON_BEHAVIOR = Map.of(
             UPLOAD_CONFIGURATION, e -> uploadConfiguration(),
             DOWNLOAD_GAME, e -> downloadGame(),
             NEW_WINDOW, e -> createNewWindow(),
@@ -31,7 +34,6 @@ public class GameConfigurationUI extends GridPane implements UIInterface {
 
     private ControllerInterface controller;
     private ViewUtility viewUtility;
-    private final List<String> variations = List.of("Game", "Editor");
 
     public GameConfigurationUI(ControllerInterface controller) {
         this.controller = controller;

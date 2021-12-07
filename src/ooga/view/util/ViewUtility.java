@@ -154,7 +154,7 @@ public class ViewUtility {
         MenuButton result = new MenuButton();
         List<MenuItem> options = new ArrayList<>();
         for(String option : choices) {
-            MenuItem menuItem = new MenuItem(option);
+            MenuItem menuItem = new MenuItem(languageResource.getString(option));
             menuItem.setOnAction(e -> {
                 response.accept(option);
                 result.setText(languageResource.getString(option));

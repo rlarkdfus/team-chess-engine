@@ -14,7 +14,7 @@ import ooga.controller.Controller;
 
 public class GameOverScreen {
 
-  private final int STAGE_SIZE = 200;
+  private final int STAGE_SIZE = Integer.parseInt(View.STYLE_BUNDLE.getString("game_over_stage_size"));
   private static final String DEFAULT_RESOURCE_PACKAGE =
       View.class.getPackageName() + ".resources.";
   private static final String STYLE_PACKAGE = "/" + DEFAULT_RESOURCE_PACKAGE.replace(".", "/");

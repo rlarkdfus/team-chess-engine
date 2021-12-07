@@ -8,10 +8,13 @@ import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 
 public class PlayerStatsUI extends GridPane implements UIInterface {
-    public static final int WHITE_INDEX = 0;
-    public static final int BLACK_INDEX = 1;
+    public static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("ooga/view/ui/playerStatsUI/PlayerStatsUI");
+
+    public static final int WHITE_INDEX = Integer.parseInt(RESOURCE_BUNDLE.getString("white_index"));
+    public static final int BLACK_INDEX = Integer.parseInt(RESOURCE_BUNDLE.getString("black_index"));
     
     private static final String WHITE_SCORE_LABEL = "white_score_label";
     private static final String BLACK_SCORE_LABEL = "black_score_label";
