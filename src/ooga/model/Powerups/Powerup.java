@@ -35,6 +35,7 @@ public abstract class Powerup implements PowerupInterface {
             for (Location location : powerupLocations) {
                 if (location.equals(endLocation)) {
                     powerupLocations.remove(location);
+                    break;
                 }
             }
         }

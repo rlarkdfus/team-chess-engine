@@ -50,6 +50,11 @@ public interface GameControllerInterface extends ControllerInterface{
    */
   StringProperty getTimeLeft(int side);
 
-  public List<Integer> getUpdatedScores();
+  List<Integer> getUpdatedScores();
 
-  }
+  /**
+   * This calls methods in the gameboard to perform cheats.
+   * @param cheat the name of the cheat defined in Cheat.properties
+   */
+  void handleCheat(String cheat);
+}

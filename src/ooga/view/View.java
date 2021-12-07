@@ -49,6 +49,7 @@ public abstract class View implements ViewInterface {
         this.boardView = initializeBoardView(pieceViewList, specialLocations, bounds);
         initializeUI(viewController);
         scene = initializeScene();
+        scene.setOnKeyPressed(e -> viewController.handleKeyPress(e.getCode()));
         stage.setScene(scene);
         stage.show();
     }

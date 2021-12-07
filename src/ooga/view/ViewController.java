@@ -1,5 +1,6 @@
 package ooga.view;
 
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 import java.util.*;
@@ -82,5 +83,11 @@ public class ViewController {
             themeMap.put(theme, colors);
         }
         return themeMap;
+    }
+
+    public void handleKeyPress(KeyCode k) {
+        if (k==KeyCode.C){
+            ((GameView)view).toggleCheatsVisible();
+        }
     }
 }
