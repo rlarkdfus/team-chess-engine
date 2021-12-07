@@ -14,8 +14,6 @@ public interface ViewInterface {
 
     void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds);
 
-    void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds);
-
     void changeBoardColor(Color color1, Color color2);
 
     void changePieceStyle(String style);

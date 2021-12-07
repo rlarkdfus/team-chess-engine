@@ -12,11 +12,11 @@ import java.util.List;
 
 public abstract class BoardView extends Group implements BoardViewInterface {
 
-  private final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
-  private final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
-  private String DEFAULT_PIECE_STYLE = "companion";
-  private final int SQUARE_WIDTH = 60;
-  private final int SQUARE_HEIGHT = 60;
+  private static final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
+  private static final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
+  private static String DEFAULT_PIECE_STYLE = "companion";
+  public static final int SQUARE_WIDTH = 60;
+  public static final int SQUARE_HEIGHT = 60;
 
   private List<BoardSquare> background;
   protected List<PieceView> pieceList;
@@ -134,7 +134,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
   }
 
   private Location findClickLocation(MouseEvent mouse) {
-    return new Location((int) mouse.getY() / SQUARE_WIDTH, (int) mouse.getX() / SQUARE_WIDTH);
+    return new Location((int) mouse.getY() / SQUARE_HEIGHT, (int) mouse.getX() / SQUARE_WIDTH);
   }
 
   private BoardSquare findBoardSquare(Location location) {
