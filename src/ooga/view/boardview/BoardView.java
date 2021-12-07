@@ -15,13 +15,15 @@ public abstract class BoardView extends Group implements BoardViewInterface {
   private final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
   private final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
   private String DEFAULT_PIECE_STYLE = "companion";
+  private final int SQUARE_WIDTH = 60;
+  private final int SQUARE_HEIGHT = 60;
 
   private List<BoardSquare> background;
   protected List<PieceView> pieceList;
   private Location selectedLocation;
 
-  private int row;
-  private int col;
+  private final int row;
+  private final int col;
 
   public BoardView(List<PieceViewBuilder> pieceViews, int row, int col) {
     selectedLocation = null;
@@ -110,7 +112,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     for (int i = 0; i < row; i++) {
       for (int j = 0; j < col; j++) {
         Location location = new Location(i, j);
-        BoardSquare boardSquare = new BoardSquare(location, null);
+        BoardSquare boardSquare = new BoardSquare(SQUARE_WIDTH, SQUARE_HEIGHT, location, null);
         background.add(boardSquare);
         this.getChildren().add(boardSquare);
       }
@@ -118,7 +120,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
   }
 
-  private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style) {
+  private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style){
     for (PieceViewBuilder piece : pieceViews) {
       PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
       pieceList.add(newPiece);
@@ -132,7 +134,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
   }
 
   private Location findClickLocation(MouseEvent mouse) {
-    return new Location((int) mouse.getY() / 60, (int) mouse.getX() / 60);
+    return new Location((int) mouse.getY() / SQUARE_WIDTH, (int) mouse.getX() / SQUARE_WIDTH);
   }
 
   private BoardSquare findBoardSquare(Location location) {
@@ -141,9 +143,5 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   protected Location getSelectedLocation() {
     return selectedLocation;
-  }
-
-  public void showCheck(Location location) {
-    findBoardSquare(location).check();
   }
 }

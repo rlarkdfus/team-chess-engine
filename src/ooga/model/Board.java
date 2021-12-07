@@ -66,7 +66,7 @@ public abstract class Board implements Engine {
         updateLegalMoves();
     }
 
-    private void executeMove(PieceInterface piece, Location end) {
+    protected void executeMove(PieceInterface piece, Location end) {
         Move move = getMove(end, piece);
         move.executeMove(piece, pieces, end);
         updatePlayerPieces();
@@ -89,6 +89,7 @@ public abstract class Board implements Engine {
                 }
             }
         }
+
     }
 
     /**
@@ -115,13 +116,6 @@ public abstract class Board implements Engine {
     }
 
     /**
-     * see if the game is still running or if its over
-     * @return the current game state
-     */
-    @Override
-    public abstract GameState checkGameState();
-
-    /**
      * determine whether player selects their own piece on their turn
      * @param location location that a player selects
      * @return whether that location has a piece that the player can move
@@ -134,25 +128,6 @@ public abstract class Board implements Engine {
      * @return the list of legal end locations of a piece at that location making a move
      */
     public abstract List<Location> getLegalMoves(Location location);
-
-    /**
-     * this method adds a piece to the board
-     * @param team the piece's team
-     * @param name the piece's name
-     * @param location the location of the piece
-     */
-    @Override
-    public void addPiece(String team, String name, Location location) {
-        PieceInterface newPiece = new Piece(team, name, null, null, 0);
-        for(PlayerInterface player : players) {
-            if(newPiece.getTeam().equals(player.getTeam())) {
-                player.addPiece(newPiece);
-                break;
-            }
-        }
-        executeMove(newPiece, location);
-        pieces.add(newPiece);
-    }
 
     /**
      * this method returns a list of all the pieces

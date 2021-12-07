@@ -1,0 +1,13 @@
+{
+  "type": "chess",
+  "board": "square",
+  "boardSize": "8x8",
+  "time": 10,
+  "timeIncrement": 5,
+  "boardColors": ["#f3dab0", "#bb885b"],
+  "players": ["w", "b"],
+  "powerups": "data/chess/powerups/noPowerups.json",
+  "rules": "data/chess/rules/defaultNoTimer.json",
+  "style": "companion",
+  "csv": "data/chess/locations/chessTester.csv"
+}

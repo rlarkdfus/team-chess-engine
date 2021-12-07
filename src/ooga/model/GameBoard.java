@@ -14,7 +14,7 @@ import java.util.List;
  * Location, PieceInterface, and Move
  * usage - a user is able to call its methods to get and manage the moves of a piece
  */
-public class GameBoard extends Board {
+public class GameBoard extends Board implements GameEngine {
     private EndConditionRunner endCondition;
     private int turnCount;
 
@@ -34,8 +34,9 @@ public class GameBoard extends Board {
             piece.updateMoves(pieces);
         }
         updateLegalMoves();
-        this.currentPlayer = players.get(0);
-
+        if (!players.isEmpty()) {
+            this.currentPlayer = players.get(0);
+        }
     }
 
     /**
