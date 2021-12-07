@@ -1,11 +1,9 @@
 package ooga.model.Powerups;
 
 import ooga.Location;
-import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.PieceInterface;
 import ooga.model.PlayerInterface;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 public abstract class Powerup implements PowerupInterface {

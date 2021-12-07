@@ -62,18 +62,19 @@ public class LoginController {
     public boolean handleLoginAttempt (String username1, String password1, String username2, String password2) {
         if (username1.equals(username2)) {
             ViewUtility.showError(SAME_PROFILE_ERROR);
-        }
-        if (isValidLogin(username1, password1) && isValidLogin(username2, password2)) {
-            Map<Enum, JSONObject> players = new HashMap<>();
-            Map<Enum, String> usernames = new HashMap<>();
-            players.put(GameState.BLACK, userProfilesJSON.getJSONObject(username1));
-            players.put(GameState.WHITE, userProfilesJSON.getJSONObject(username2));
-            usernames.put(GameState.BLACK, username1);
-            usernames.put(GameState.WHITE, username2);
-            new GameController().setPlayers(usernames, players);
+        } else {
+            if (isValidLogin(username1, password1) && isValidLogin(username2, password2)) {
+                Map<Enum, JSONObject> players = new HashMap<>();
+                Map<Enum, String> usernames = new HashMap<>();
+                players.put(GameState.BLACK, userProfilesJSON.getJSONObject(username1));
+                players.put(GameState.WHITE, userProfilesJSON.getJSONObject(username2));
+                usernames.put(GameState.BLACK, username1);
+                usernames.put(GameState.WHITE, username2);
+                new GameController().setPlayers(usernames, players);
 
-            hideLoginView();
-            return true;
+                hideLoginView();
+                return true;
+            }
         }
         return false;
     }
@@ -135,7 +136,11 @@ public class LoginController {
      * this method checks that the username given exists or doesn't
      */
     private JSONObject checkUsername(String username) {
-        JSONObject userData = userProfilesJSON.getJSONObject(username);
-        return userData;
+        try {
+            JSONObject userData = userProfilesJSON.getJSONObject(username);
+            return userData;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

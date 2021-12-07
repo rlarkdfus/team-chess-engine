@@ -6,7 +6,12 @@ import javafx.scene.shape.Rectangle;
 import ooga.Location;
 
 /**
- * Background of each Square on the board
+ * Purpose: This class represents an abstraction of what we see as each square or checker in the
+ * board. This allows encapsulates the complexity of representing which board squares are
+ * acceptable moves and thus aiding the user in his game play.
+ * Assumptions: We assume the shape of the BoardSquare class will be a rectangle.
+ * Dependencies: Location
+ * @author Gordon Kim
  */
 public class BoardSquare extends StackPane {
 
@@ -27,6 +32,13 @@ public class BoardSquare extends StackPane {
     private final int width;
     private final int height;
 
+    /**
+     * Create a new BoardSquare object
+     * @param width Width of board square
+     * @param height Height of board square
+     * @param location Location for square
+     * @param color Color of square
+     */
     public BoardSquare(int width, int height, Location location, Color color) {
         this.originalColor = color;
         this.width = width;
@@ -69,7 +81,7 @@ public class BoardSquare extends StackPane {
     /**
      * Set square's original color
      *
-     * @param originalColor
+     * @param originalColor Original color of square
      */
     public void setColor(Color originalColor) {
         this.originalColor = originalColor;
