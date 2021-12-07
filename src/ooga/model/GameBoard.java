@@ -132,6 +132,7 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
         return endCondition.satisfiedEndCondition(players);
     }
 
+
     private void incrementTurn(){
         turnCount++;
     }
@@ -162,7 +163,6 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
 
     @Override
     public void transformAllPawnsCheat(){
-        System.out.println("transformcheat being run");
         List<PieceInterface> currentPlayerPieces = currentPlayer.getPieces();
 
         for(PieceInterface piece: currentPlayerPieces){
