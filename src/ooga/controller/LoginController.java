@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 public class LoginController {
     public static final String USER_PROFILES = "data/chess/profiles/profiles.json";
-    public static final String RESOURCE_BUNDLE_PATH = "ooga/controller/resources/English";
     public static final String JSON_WRITER_FILE_PATH = "data/chess/profiles/profiles";
     public static final String USER_PROFILE_ERROR = "userProfileError";
     public static final String USERNAME_ERROR = "usernameError";
@@ -25,7 +24,6 @@ public class LoginController {
     public static final int STARTING_WINS = 0;
 
     private final File userProfiles = new File(USER_PROFILES);
-    private final ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH);
 
     private LoginView loginView;
     private JSONObject userProfilesJSON;
@@ -38,7 +36,7 @@ public class LoginController {
 
     public boolean handleLoginAttempt (String username1, String password1, String username2, String password2) {
         if (username1.equals(username2)) {
-            ViewUtility.showError(resourceBundle.getString(SAME_PROFILE_ERROR));
+            ViewUtility.showError(SAME_PROFILE_ERROR);
         }
         if (isValidLogin(username1, password1) && isValidLogin(username2, password2)) {
             Map<Enum, JSONObject> players = new HashMap<>();
@@ -47,7 +45,7 @@ public class LoginController {
             players.put(GameState.WHITE, userProfilesJSON.getJSONObject(username2));
             usernames.put(GameState.BLACK, username1);
             usernames.put(GameState.WHITE, username2);
-            new GameController(usernames, players);
+            new GameController().setPlayers(usernames, players);
 
             hideLoginView();
             return true;
@@ -57,11 +55,12 @@ public class LoginController {
 
     public void handleGuestLogin() {
         new GameController();
+        loginView.hideDisplay();
     }
 
     public void handleSignUp(String username, String password) {
         if (checkUsername(username) != null) {
-            ViewUtility.showError(resourceBundle.getString(ACCOUNT_EXISTS_ERROR));
+            ViewUtility.showError(ACCOUNT_EXISTS_ERROR);
         } else {
             JSONObject newProfile = new JSONObject();
             newProfile.put(PASSWORD, password);
@@ -70,7 +69,7 @@ public class LoginController {
             try {
                 JSONWriter.saveFile(userProfilesJSON, JSON_WRITER_FILE_PATH);
             } catch (IOException e) {
-                ViewUtility.showError(resourceBundle.getString(USER_PROFILE_ERROR));
+                ViewUtility.showError(USER_PROFILE_ERROR);
             }
         }
     }
@@ -86,7 +85,7 @@ public class LoginController {
             return truePassword.equals(password);
         }
         catch (Exception e) {
-            ViewUtility.showError(resourceBundle.getString(USERNAME_ERROR));
+            ViewUtility.showError(USERNAME_ERROR);
         }
         return false;
     }

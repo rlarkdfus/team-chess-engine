@@ -12,17 +12,10 @@ public class PieceView extends ImageView {
     private String style;
     private Location location;
 
-<<<<<<< HEAD
-    public PieceView(String side, String piece, String style, Location location) {
-        super(String.format("images/%s/%s%s.png", style, side, piece));
-        this.side = side;
-        this.piece = piece;
-=======
     public PieceView(String team, String name, String style, Location location){
         super(String.format("images/%s/%s%s.png", style, team, name));
         this.team = team;
         this.name = name;
->>>>>>> 1dc0d1373ac97e551eb9625607d4fa144b85c534
         this.style = style;
         this.location = location;
         this.setFitWidth(BoardView.SQUARE_WIDTH);

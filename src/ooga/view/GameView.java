@@ -1,16 +1,12 @@
 package ooga.view;
 
 import java.util.Map;
-import javafx.beans.property.StringProperty;
 import javafx.scene.layout.GridPane;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.controller.GameControllerInterface;
-<<<<<<< HEAD
 import ooga.model.GameState;
-=======
 import ooga.view.boardview.BoardView;
->>>>>>> 1dc0d1373ac97e551eb9625607d4fa144b85c534
 import ooga.view.boardview.GameBoardView;
 import ooga.view.ui.playerStatsUI.PlayerStatsUI;
 import ooga.view.ui.settingsUI.SettingsUI;
@@ -35,21 +31,16 @@ public class GameView extends View {
   }
 
   @Override
-<<<<<<< HEAD
-  public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
-    super.initializeDisplay(pieceViewList, bounds);
-    updatePlayerStatsUI(List.of(DEFAULT_INITIAL_WHITE_SCORE, DEFAULT_INITIAL_BLACK_SCORE));
-    initializePlayers(controller.getUsernames());
-=======
+
   public void initializeDisplay(List<PieceViewBuilder> pieceViewList, List<Location> specialLocations, Location bounds) {
     super.initializeDisplay(pieceViewList, specialLocations, bounds);
     updatePlayerStatsUI(controller.getUpdatedScores());
->>>>>>> 1dc0d1373ac97e551eb9625607d4fa144b85c534
   }
 
 
-  private void initializePlayers(Map<Enum, String> names) {
+  private void initializePlayers(Map<Enum, String> names, Map<Enum, Integer> wins) {
     playerStatsUI.initializePlayerNames(names.get(GameState.WHITE), names.get(GameState.BLACK));
+    playerStatsUI.initializePlayerWins(wins.get(GameState.WHITE), wins.get(GameState.BLACK));
   }
 
   private void updatePlayerStatsUI(List<Integer> scores) {
@@ -83,7 +74,7 @@ public class GameView extends View {
   public void updateDisplay(List<PieceViewBuilder> pieceViewList) {
     super.updateDisplay(pieceViewList);
     updatePlayerStatsUI(controller.getUpdatedScores());
-    initializePlayers(controller.getUsernames());
+    initializePlayers(controller.getUsernames(), controller.getWins());
   }
 }
 
