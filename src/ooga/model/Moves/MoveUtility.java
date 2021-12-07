@@ -9,6 +9,14 @@ import ooga.model.PieceInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @authors gordon, sam
+ * purpose - this class gets the piece at a location, and can get all the pieces that are attacking a piece
+ * assumptions - it assumes that the pieces and players are all valid
+ * dependencies - it depends on Location, Board, and PieceInterface
+ * usage - other classes can call moveutility to get the piece at a location and use incheck to determine if
+ * moves are valid
+ */
 public class MoveUtility {
     /**
      * return whether a team is in check
@@ -16,8 +24,6 @@ public class MoveUtility {
      * @param pieces all pieces
      * @return team in check or not
      */
-
-
     public static boolean inCheck(String team, List<PieceInterface> pieces) {
         PieceInterface king = findKing(team, pieces);
         List<PieceInterface> attackingPieces = getAttackingPieces(king.getTeam(), pieces);

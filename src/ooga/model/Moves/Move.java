@@ -7,6 +7,15 @@ import ooga.model.PieceInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @authors gordon, sam
+ * purpose - this class defines methods for moving a piece and trying moves to see if they are legal
+ * moves
+ * assumptions - it assumes that pieces and players are all valid
+ * dependencies - it depends on Location, Turn, and PieceInterface
+ * usage - a piece can get its end locations from move which will return all the squares that a piece
+ * can move to when clicked
+ */
 public abstract class Move {
 
     private final int dRow;

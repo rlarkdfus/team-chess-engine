@@ -47,7 +47,7 @@ class PlayerInterfaceTest {
     @Test
     void addPiece(){
         player.addPiece(piece);
-        Assertions.assertEquals(player.getPieces().size(), 1);
+        Assertions.assertEquals(player.getPieces().size(), 2);
     }
 
     @Test

@@ -40,16 +40,19 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
 
     private Label whiteNameScoreLabel;
     private Label blackNameScoreLabel;
-
     private Label whiteScoreDisplay;
     private Label blackScoreDisplay;
-
     private Label whiteWinsLabel;
     private Label blackWinsLabel;
 
     private Label whiteTimeLabel;
     private Label blackTimeLabel;
 
+    /**
+     * creates the PlayerStatsUI GridPane
+     *
+     * @param controller the controller responsible for handling actions in the PlayerStatsUI
+     */
     public PlayerStatsUI(GameControllerInterface controller) {
         this.controller = controller;
         this.viewUtility = new ViewUtility();
@@ -58,6 +61,9 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
         createUI();
     }
 
+    /**
+     * creates the labels that can be updated in the PlayerStatsUI
+     */
     private void initializeLabels() {
         whiteNameScoreLabel = viewUtility.makeLabel(WHITE_SCORE_LABEL);
         blackNameScoreLabel = viewUtility.makeLabel(BLACK_SCORE_LABEL);
@@ -69,6 +75,9 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
         blackTimeLabel = viewUtility.makeLabel(BLACK_TIME_LABEL);
     }
 
+    /**
+     * adds various UI elements to the PlayerStatsUI GridPane
+     */
     @Override
     public void createUI() {
         UIHelper.setResourceBundle(RESOURCE_BUNDLE);
@@ -84,16 +93,34 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
       this.add(whiteWinsLabel, UIHelper.getCol(WHITE_WINS_LABEL), UIHelper.getRow(WHITE_WINS_LABEL));
     }
 
+    /**
+     * sets the players' usernames to the appropriate labels
+     *
+     * @param whiteUsername the first player's username
+     * @param blackUsername the second player's username
+     */
     public void initializePlayerNames(String whiteUsername, String blackUsername) {
         whiteNameScoreLabel.setText(String.format("%s score", whiteUsername));
         blackNameScoreLabel.setText(String.format("%s score", blackUsername));
     }
 
+    /**
+     * initialize
+     *
+     * @param whiteWins the number of wins of the first player
+     * @param blackWins the number of wins of the second player
+     */
     public void initializePlayerWins(int whiteWins, int blackWins) {
         whiteWinsLabel.setText(String.format("Wins: %d", whiteWins));
         blackWinsLabel.setText(String.format("Wins: %d", blackWins));
     }
 
+    /**
+     * updates the UI with the updated scores of the players
+     *
+     * @param whiteScore the score of the first side
+     * @param blackScore the score of the second side
+     */
     public void updateUI(int whiteScore, int blackScore) {
         whiteScoreDisplay.setText(String.valueOf(whiteScore));
         blackScoreDisplay.setText(String.valueOf(blackScore));

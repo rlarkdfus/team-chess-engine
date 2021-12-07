@@ -29,10 +29,8 @@ public class GameViewTest extends DukeApplicationTest {
     @Test
     void testSetTimerInitialTime() {
         Slider minutesSlider = lookup("#minutes_slider").query();
-        Button newGame = lookup("#new_game").queryButton();
         String expected = "09:00";
         setValue(minutesSlider, Integer.parseInt(expected.split(":")[0]));
-        clickOn(newGame);
         Text blackTimeLabel = lookup("#black_timer_display").query();
         assertEquals(expected, blackTimeLabel.getText());
     }
@@ -120,11 +118,21 @@ public class GameViewTest extends DukeApplicationTest {
     }
 
     @Test
-    void testNewGame() {
+    void testResetWindow() {
         Location whiteStart = new Location(6, 0);
         Location whiteEnd = new Location(5, 0);
         viewTestUtility.testMovePiece(WHITE, PAWN, whiteStart, whiteEnd);
-        Button reset = lookup("#new_game").queryButton();
+        Button reset = lookup("#reset_window").queryButton();
+        clickOn(reset);
+        assertDoesNotThrow(() -> viewTestUtility.queryPieceView(WHITE, PAWN, whiteStart, STYLE_COMPANION));
+    }
+
+    @Test
+    void testNewWindow() {
+        Location whiteStart = new Location(6, 0);
+        Location whiteEnd = new Location(5, 0);
+        viewTestUtility.testMovePiece(WHITE, PAWN, whiteStart, whiteEnd);
+        Button reset = lookup("#new_window").queryButton();
         clickOn(reset);
         assertDoesNotThrow(() -> viewTestUtility.queryPieceView(WHITE, PAWN, whiteStart, STYLE_COMPANION));
     }

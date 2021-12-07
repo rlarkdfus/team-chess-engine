@@ -6,6 +6,15 @@ import ooga.model.PieceInterface;
 
 import java.util.List;
 
+/**
+ * @authors gordon, sam
+ * purpose - castlemove defines moves for castling kingside and queenside. it finds the pawn and
+ * determines whether a castle is legal
+ * assumptions - it assumes that the pieces and players are all valid
+ * dependencies - it depends on PieceInterface, Board, and Location
+ * usage - if a piece has this move the move class will check if castlemove is legal and return it
+ * as part of its end locations
+ */
 public abstract class CastleMove extends Move {
     /**
      * castling with the king and rook

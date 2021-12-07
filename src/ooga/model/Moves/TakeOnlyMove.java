@@ -6,6 +6,14 @@ import ooga.model.PieceInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @authors gordon, sam
+ * purpose - takeonlymove defines moves that can only be taken if they will take another piece
+ * assumptions - it assumes that piece and player are valid
+ * dependencies - it depends on Location and PieceInterface
+ * usage - if a piece has this move the move class will check if it is legal and return it
+ * as part of its end locations
+ */
 public class TakeOnlyMove extends TranslationMove {
     /**
      * moves that can only be executed if they take another piece

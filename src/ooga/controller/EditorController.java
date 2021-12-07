@@ -2,10 +2,8 @@ package ooga.controller;
 
 
 import java.io.File;
-import java.util.List;
 import ooga.Location;
 import ooga.controller.Config.Builder;
-import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.EditorBoard;
 import ooga.model.EditorEngine;
 import ooga.model.Engine;
@@ -13,7 +11,7 @@ import ooga.view.EditorView;
 import ooga.view.ViewInterface;
 
 /**
- * @Authors albert luis gordon sam richard
+ * @author albert luis gordon sam richard
  *
  * purpose - this class is a controller type object so it connects the model and view. This specific
  *  subclass is used for when we are in editor mode, which allows for users to freely add, remove, and

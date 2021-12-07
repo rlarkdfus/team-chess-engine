@@ -14,6 +14,15 @@ import ooga.view.ViewController;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Purpose: Abstract class representing a general board view implementation. This removes a great deal of the complexity
+ * involved in creating a board view for each of the subclasses that extend this class. This abstraction allows child
+ * classes to focus on their unique functionalities without each having to be burdened by the work handled by this class
+ * in creating a board UI.
+ * Assumptions:
+ *
+ * @author Gordon Kim, Richard Deng
+ */
 public abstract class BoardView extends Group implements BoardViewInterface {
 
   private static final Color DEFAULT_COLOR_1 = ViewController.DEFAULT_COLOR1;
@@ -30,6 +39,12 @@ public abstract class BoardView extends Group implements BoardViewInterface {
   private final int row;
   private final int col;
 
+  /**
+   * Create a new BoardView object
+   * @param pieceViews List of view representations of the pieces
+   * @param row Row number
+   * @param col Column number
+   */
   public BoardView(List<PieceViewBuilder> pieceViews, int row, int col) {
     selectedLocation = null;
     pieceList = new ArrayList<>();
@@ -47,6 +62,10 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     });
   }
 
+  /**
+   * Update the board view so that it reflects the state of the program in the model.
+   * @param pieceViews List of view representations of the pieces.
+   */
   @Override
   public void updateBoardView(List<PieceViewBuilder> pieceViews) {
     clearBoard();
@@ -57,6 +76,11 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     }
   }
 
+  /**
+   * Change the colors of the squares on the board.
+   * @param color1 Color of first type of squares
+   * @param color2 Color of second type of squares
+   */
   @Override
   public void changeColors(Color color1, Color color2) {
     for (int i = 0; i < row; i++) {
@@ -67,6 +91,10 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     }
   }
 
+  /**
+   * Change the style of the piece icon styles
+   * @param style Icon style
+   */
   @Override
   public void changePieceStyle(String style) {
     for (PieceView pieceView : pieceList) {
@@ -84,27 +112,54 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     }
   }
 
+  /**
+   * Handles the work of what a click on the board should do. Method is abstract as each class
+   * extending this one should have its own implementation so that a click performs the correct
+   * action.
+   * @param clickLocation Location
+   */
   protected abstract void clickBoard(Location clickLocation);
 
+  /**
+   * Highlights squares on the board
+   * @param location
+   */
   protected void highlightBoardSquare(Location location) {
     findBoardSquare(location).highlight();
   }
 
+  /**
+   * Selects a piece on the board
+   * @param location
+   */
   protected void selectPiece(Location location) {
     selectedLocation = location;
     findBoardSquare(location).select();
   }
 
+  /**
+   * Returns true if legal move
+   * @param clickLocation
+   * @param legalMoves
+   * @return
+   */
   protected boolean isLegalMove(Location clickLocation, List<Location> legalMoves) {
     return clickLocation.inList(legalMoves);
   }
 
+  /**
+   * List containing locations of legal moves
+   * @param legalMoves
+   */
   protected void showLegalMoves(List<Location> legalMoves) {
     for (Location squareLoc : legalMoves) {
       highlightBoardSquare(squareLoc);
     }
   }
 
+  /**
+   * Unselect a piece
+   */
   protected void unselectPiece() {
     selectedLocation = null;
     for (BoardSquare boardSquare : background) {
@@ -146,10 +201,18 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     return background.get(location.getRow() * col + location.getCol());
   }
 
+  /**
+   * Returns desired selected location
+   * @return
+   */
   protected Location getSelectedLocation() {
     return selectedLocation;
   }
 
+  /**
+   * Marks locations
+   * @param specialLocations
+   */
   public void markInitialSpecialLocation(List<Location> specialLocations) {
     for (Location location : specialLocations) {
       findBoardSquare(location).getChildren().add(new PowerupView(location));
