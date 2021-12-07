@@ -2,11 +2,11 @@ package ooga.model;
 
 import ooga.Location;
 import ooga.controller.Config.BoardBuilder;
+import ooga.model.Powerups.PowerupInterface;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import ooga.model.Powerups.PowerupInterface;
 
 public class ModelTestHelper {
     public static final File DEFAULT_CHESS_CONFIGURATION = new File("data/chess/defaultChess.json");

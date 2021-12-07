@@ -4,6 +4,7 @@ import ooga.Location;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
 import ooga.model.Powerups.PowerupInterface;
+
 import java.util.List;
 
 /**
@@ -17,6 +18,7 @@ import java.util.List;
 public class GameBoard extends Board implements GameEngine {
     private EndConditionRunner endCondition;
     private int turnCount;
+    private List<Location> emptyLocations;
 
     /**
      * the gameboard initializes the turns and the legal moves of each piece
@@ -119,4 +121,11 @@ public class GameBoard extends Board implements GameEngine {
     public GameState checkGameState() {
         return endCondition.satisfiedEndCondition(players);
     }
+
+//    public List<Location> getEmptyLocations(){
+//        List<Location> emptyLocations
+//        for(int col: bounds.getCol()){
+//            for(int row: boun)
+//        }
+//    }
 }

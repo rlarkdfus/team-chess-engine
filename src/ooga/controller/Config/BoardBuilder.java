@@ -112,6 +112,15 @@ public class BoardBuilder implements Builder {
     return pieceList;
   }
 
+  @Override
+  public List<Location> getPowerupLocations() {
+    List<Location> locations = new ArrayList<>();
+    for (PowerupInterface powerup : powerupsList) {
+      locations.addAll(powerup.getPowerupLocations());
+    }
+    return locations;
+  }
+
   /**
    * Overridden interface getter method.
    * @return a Location object that represent the bounds of the board

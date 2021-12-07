@@ -1,8 +1,6 @@
 package ooga.model;
 
 import ooga.Location;
-import ooga.Turn;
-import ooga.controller.Config.PieceBuilder;
 import ooga.model.Moves.Move;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,6 @@ public abstract class Board implements Engine {
     private Location bounds;
     protected List<PlayerInterface> players;
     protected List<PieceInterface> pieces;
-
     protected List<PowerupInterface> powerupInterfaceList;
     protected PlayerInterface currentPlayer;
 
@@ -43,7 +40,6 @@ public abstract class Board implements Engine {
             pieces.addAll(player.getPieces());
         }
         powerupInterfaceList = new ArrayList<>();
-
     }
 
     /**
@@ -52,6 +48,10 @@ public abstract class Board implements Engine {
      */
     public List<PlayerInterface> getPlayers() {
         return players;
+    }
+
+    public List<PowerupInterface> getPowerUps() {
+        return powerupInterfaceList;
     }
 
     /**

@@ -47,7 +47,7 @@ public abstract class Controller implements ControllerInterface {
     jsonFile = getDefaultConfiguration();
     BoardBuilder boardBuilder = new BoardBuilder(jsonFile);
     model = initializeModel(boardBuilder);
-    view = initializeView(boardBuilder.getInitialPieceViews(),boardBuilder.getBoardSize());
+    view = initializeView(boardBuilder);
   }
 
   /**
@@ -69,11 +69,10 @@ public abstract class Controller implements ControllerInterface {
    * this method initializes a view by using the objects made by the boardbuilder.
    * we assume that the boardbuilder has run .build() with a valid json file and that
    * the following parameters have been made.
-   * @param pieces -  a list of data objects that are used to produce javafx objects in view
-   * @param bounds -  a location object that is used to define the bounds of the display board
+   * @param boardBuilder - a boardbuilder object that holds vital objects like the pieces, powerups, and endconditions
    * @return - a view object that is used to display the game
    */
-  protected abstract ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds);
+  protected abstract ViewInterface initializeView(Builder boardBuilder);
 
   protected void updateView() {
     List<PieceViewBuilder> pieces = createPieceViewList(model.getPieces());
@@ -115,7 +114,7 @@ public abstract class Controller implements ControllerInterface {
       BoardBuilder boardBuilder = new BoardBuilder(file);
       jsonFile = file;
       model = initializeModel(boardBuilder);
-      view = initializeView(boardBuilder.getInitialPieceViews(), boardBuilder.getBoardSize());
+      view = initializeView(boardBuilder);
     } catch (Exception ignored) {
     }
 
