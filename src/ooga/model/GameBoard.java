@@ -193,7 +193,15 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
 
     @Override
     public void removeRandomPieceCheat() {
-
+        int randomIndex = (int)(Math.random() * currentPlayer.getPieces().size());
+        PieceInterface randomPiece = currentPlayer.getPieces().get(randomIndex);
+        if(randomPiece.getName().equals(Board.PIECES.getString("KING"))){
+            removeRandomPieceCheat();
+        }else{
+            currentPlayer.removePiece(randomPiece);
+            pieces.remove(randomPiece);
+            return;
+        }
     }
 
     @Override
