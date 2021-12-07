@@ -13,11 +13,7 @@ import ooga.controller.Config.Builder;
 import ooga.controller.Config.InvalidEndGameConfigException;
 import ooga.controller.Config.InvalidGameConfigException;
 import ooga.controller.Config.InvalidPieceConfigException;
-import ooga.model.Board;
-import ooga.model.EndConditionHandler.EndConditionRunner;
-import ooga.model.GameBoard;
-import ooga.model.GameState;
-import ooga.model.PlayerInterface;
+import ooga.model.*;
 import ooga.model.Powerups.PowerupInterface;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +23,7 @@ class CheckmateEndConditionTest {
 
   EndConditionRunner endConRunner;
   List<PlayerInterface> players;
-  Board board;
+  GameEngine board;
 
   @BeforeEach
   void setUp()

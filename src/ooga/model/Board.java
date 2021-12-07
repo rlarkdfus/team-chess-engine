@@ -1,8 +1,6 @@
 package ooga.model;
 
 import ooga.Location;
-import ooga.Turn;
-import ooga.controller.Config.PieceBuilder;
 import ooga.model.Moves.Move;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +23,7 @@ public abstract class Board implements Engine {
     private Location bounds;
     protected List<PlayerInterface> players;
     protected List<PieceInterface> pieces;
-
     protected List<PowerupInterface> powerupInterfaceList;
-    protected PlayerInterface currentPlayer;
 
     /**
      * the board is constructed by passing in a list of players and bounds. the players each hold
@@ -43,7 +39,6 @@ public abstract class Board implements Engine {
             pieces.addAll(player.getPieces());
         }
         powerupInterfaceList = new ArrayList<>();
-
     }
 
     /**
@@ -52,6 +47,10 @@ public abstract class Board implements Engine {
      */
     public List<PlayerInterface> getPlayers() {
         return players;
+    }
+
+    public List<PowerupInterface> getPowerUps() {
+        return powerupInterfaceList;
     }
 
     /**
@@ -66,7 +65,7 @@ public abstract class Board implements Engine {
         updateLegalMoves();
     }
 
-    private void executeMove(PieceInterface piece, Location end) {
+    protected void executeMove(PieceInterface piece, Location end) {
         Move move = getMove(end, piece);
         move.executeMove(piece, pieces, end);
         updatePlayerPieces();
@@ -89,6 +88,7 @@ public abstract class Board implements Engine {
                 }
             }
         }
+
     }
 
     /**
@@ -115,13 +115,6 @@ public abstract class Board implements Engine {
     }
 
     /**
-     * see if the game is still running or if its over
-     * @return the current game state
-     */
-    @Override
-    public abstract GameState checkGameState();
-
-    /**
      * determine whether player selects their own piece on their turn
      * @param location location that a player selects
      * @return whether that location has a piece that the player can move
@@ -134,25 +127,6 @@ public abstract class Board implements Engine {
      * @return the list of legal end locations of a piece at that location making a move
      */
     public abstract List<Location> getLegalMoves(Location location);
-
-    /**
-     * this method adds a piece to the board
-     * @param team the piece's team
-     * @param name the piece's name
-     * @param location the location of the piece
-     */
-    @Override
-    public void addPiece(String team, String name, Location location) {
-        PieceInterface newPiece = new Piece(team, name, null, null, 0);
-        for(PlayerInterface player : players) {
-            if(newPiece.getTeam().equals(player.getTeam())) {
-                player.addPiece(newPiece);
-                break;
-            }
-        }
-        executeMove(newPiece, location);
-        pieces.add(newPiece);
-    }
 
     /**
      * this method returns a list of all the pieces

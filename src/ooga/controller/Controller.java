@@ -1,24 +1,22 @@
 package ooga.controller;
 
+import ooga.Location;
+
+import ooga.view.ViewInterface;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import ooga.Location;
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.JSONWriter;
 import ooga.controller.Config.JsonParser;
 import ooga.controller.Config.LocationWriter;
 import ooga.controller.Config.PieceViewBuilder;
-import ooga.model.EndConditionHandler.EndConditionInterface;
 import ooga.model.Engine;
 import ooga.model.PieceInterface;
-import ooga.view.View;
-import ooga.view.ViewInterface;
+import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
 /**
@@ -37,12 +35,12 @@ import org.json.JSONObject;
  */
 public abstract class Controller implements ControllerInterface {
 
-  //TODO: change protected
+  private static final String CONTROLLER_PATH = Controller.class.getPackageName() + ".";
+  private static final String CONTROLLER_SUFFIX = "Controller";
+
   private Engine model;
   private ViewInterface view;
   private File jsonFile;
-  private static final String CONTROLLER_PATH = Controller.class.getPackageName() + ".";
-  private static final String CONTROLLER_SUFFIX = "Controller";
 
   /**
    * This constructor creates default model and view objects to that the player can either play the game,
@@ -52,7 +50,7 @@ public abstract class Controller implements ControllerInterface {
     jsonFile = getDefaultConfiguration();
     BoardBuilder boardBuilder = new BoardBuilder(jsonFile);
     model = initializeModel(boardBuilder);
-    view = initializeView(boardBuilder.getInitialPieceViews(),boardBuilder.getBoardSize());
+    view = initializeView(boardBuilder);
   }
 
   /**
@@ -74,11 +72,10 @@ public abstract class Controller implements ControllerInterface {
    * this method initializes a view by using the objects made by the boardbuilder.
    * we assume that the boardbuilder has run .build() with a valid json file and that
    * the following parameters have been made.
-   * @param pieces -  a list of data objects that are used to produce javafx objects in view
-   * @param bounds -  a location object that is used to define the bounds of the display board
+   * @param boardBuilder - a boardbuilder object that holds vital objects like the pieces, powerups, and endconditions
    * @return - a view object that is used to display the game
    */
-  protected abstract ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds);
+  protected abstract ViewInterface initializeView(Builder boardBuilder);
 
   protected void updateView() {
     List<PieceViewBuilder> pieces = createPieceViewList(model.getPieces());
@@ -89,7 +86,9 @@ public abstract class Controller implements ControllerInterface {
    */
   @Override
   public void reset() {
-    uploadConfiguration(getDefaultConfiguration());
+    BoardBuilder boardBuilder = new BoardBuilder(jsonFile);
+    model = initializeModel(boardBuilder);
+    view.initializeDisplay(boardBuilder.getInitialPieceViews(), boardBuilder.getPowerupLocations(), boardBuilder.getBoardSize());
   }
 
   /**
@@ -109,7 +108,6 @@ public abstract class Controller implements ControllerInterface {
     return model.canMovePiece(location);
   }
 
-
   /**
    * sets up a new game with the initial configuration file
    *
@@ -117,10 +115,8 @@ public abstract class Controller implements ControllerInterface {
    */
   @Override
   public void uploadConfiguration(File file) {
-    BoardBuilder boardBuilder = new BoardBuilder(file);
-    jsonFile = file;
-    model = initializeModel(boardBuilder);
-    view = initializeView(boardBuilder.getInitialPieceViews(), boardBuilder.getBoardSize());
+      jsonFile = file;
+      reset();
   }
 
   /**
@@ -159,7 +155,7 @@ public abstract class Controller implements ControllerInterface {
       JSONObject jsonObject = JsonParser.loadFile(jsonFile);
       JSONWriter.saveFile(jsonObject, filePath);
       LocationWriter locationWriter = new LocationWriter();
-      locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
+      locationWriter.saveCSV(filePath + ".csv", model.getPieces());
     } catch (IOException ignored) {
     }
   }
@@ -175,19 +171,15 @@ public abstract class Controller implements ControllerInterface {
   }
 
   /**
-   * method to help get the model object in subclasses
-   */
-  protected Engine getModel(){
-    return model;
-  }
-
-  /**
    * launches a new controller from the selected game variation
    * @param variation the variation of the controller to use
    */
-  public void launchController(String variation) throws Throwable{
-    Class<?> clazz = Class.forName(CONTROLLER_PATH + variation + CONTROLLER_SUFFIX);
-    ControllerInterface controller = (ControllerInterface) clazz.getDeclaredConstructor().newInstance();
+  public void launchController(String variation) {
+    try {
+      Class<?> clazz = Class.forName(CONTROLLER_PATH + variation + CONTROLLER_SUFFIX);
+      ControllerInterface controller = (ControllerInterface) clazz.getDeclaredConstructor().newInstance();
+    } catch (Exception e) {
+      ViewUtility.showError("InvalidGameVariation");
+    }
   }
-
 }

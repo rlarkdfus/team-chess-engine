@@ -46,7 +46,6 @@ public class BoardStyleUI extends GridPane implements UIInterface {
         this.add(viewUtility.makeLabel("piece_style_label"), 0, 2);
         this.add(viewUtility.makeMenu("piece_style", PIECE_STYLES, style -> viewController.handleChangePieceStyle(style)), 1, 2);
 
-
         this.add(viewUtility.makeLabel("language"), 0, 3);
         this.add(viewUtility.makeMenu("language_variation", LANGUAGES, e -> viewController.changeLanguage(e)), 1, 3);
 

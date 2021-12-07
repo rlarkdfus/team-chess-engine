@@ -7,10 +7,7 @@ import ooga.Location;
 import ooga.controller.Config.BoardBuilder;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.InvalidPieceConfigException;
-import ooga.model.Board;
-import ooga.model.GameBoard;
-import ooga.model.GameState;
-import ooga.model.PlayerInterface;
+import ooga.model.*;
 import ooga.model.Powerups.PowerupInterface;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +16,7 @@ import org.junit.jupiter.api.Test;
 class PuzzleEndConditionTest {
     EndConditionRunner endConRunner;
     List<PlayerInterface> players;
-    Board board;
+    GameEngine board;
 
     @BeforeEach
     void setUp() {
