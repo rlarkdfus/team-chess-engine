@@ -1,12 +1,9 @@
 package ooga.view;
 
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javax.swing.text.html.CSS;
 import ooga.controller.LoginController;
 import ooga.view.ui.loginUI.LoginUI;
 import ooga.view.util.ViewUtility;
@@ -49,7 +46,7 @@ public class LoginView {
     }
 
     public void hideDisplay() {
-        stage.hide();
+        stage.close();
     }
 
     public void showError(String message) {

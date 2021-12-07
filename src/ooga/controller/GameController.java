@@ -91,8 +91,9 @@ public class GameController extends Controller implements GameControllerInterfac
   @Override
   public Map<Enum, String> getUsernames() {
     if(usernames == null) {
-      System.out.println("Im doing something wrong");
       usernames = new HashMap<>();
+      usernames.put(GameState.BLACK, "Guest 2");
+      usernames.put(GameState.WHITE, "Guest 1");
     }
     return usernames;
   }
@@ -105,6 +106,10 @@ public class GameController extends Controller implements GameControllerInterfac
   public Map<Enum, Integer> getWins() {
     Map<Enum, Integer> winMap = new HashMap<>();
     usernames.keySet().forEach(team -> winMap.put(team, playersAttributes.get(team).getInt(WINS)));
+    if(winMap.isEmpty()) {
+      winMap.put(GameState.WHITE, 0);
+      winMap.put(GameState.BLACK, 0);
+    }
     return winMap;
   }
 
@@ -205,16 +210,16 @@ public class GameController extends Controller implements GameControllerInterfac
     increment = seconds;
   }
 
-//  /**
-//   * This methods uses the input maps to find the player json file and the player name from the Piece Color
-//   * that they played as (this is the enum).
-//   * @param usernames - a map from the piece color to the player's username
-//   * @param players - a map from the piece color to the player's json file
-//   */
-//  public void setPlayers() {
-//    this.playersAttributes = playersAttributes;
-//    this.usernames = usernames;
-//  }
+  /**
+   * This methods uses the input maps to find the player json file and the player name from the Piece Color
+   * that they played as (this is the enum).
+   * @param usernames - a map from the piece color to the player's username
+   * @param playersAttributes - a map from the piece color to the player's json file
+   */
+  public void setPlayers(Map<Enum, String> usernames, Map<Enum, JSONObject> playersAttributes) {
+    this.playersAttributes = playersAttributes;
+    this.usernames = usernames;
+  }
 
     public List<Integer> getUpdatedScores() {
         List<Integer> scores = new ArrayList<>();

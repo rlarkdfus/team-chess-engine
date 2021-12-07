@@ -35,12 +35,14 @@ public class GameView extends View {
   public void initializeDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
     super.initializeDisplay(pieceViewList, bounds);
     updatePlayerStatsUI(List.of(DEFAULT_INITIAL_WHITE_SCORE, DEFAULT_INITIAL_BLACK_SCORE));
-    initializePlayers(controller.getUsernames());
+//    initializePlayers(controller.getUsernames(), controller.getWins());
+
   }
 
 
-  private void initializePlayers(Map<Enum, String> names) {
+  private void initializePlayers(Map<Enum, String> names, Map<Enum, Integer> wins) {
     playerStatsUI.initializePlayerNames(names.get(GameState.WHITE), names.get(GameState.BLACK));
+    playerStatsUI.initializePlayerWins(wins.get(GameState.WHITE), wins.get(GameState.BLACK));
   }
 
   private void updatePlayerStatsUI(List<Integer> scores) {
@@ -70,7 +72,7 @@ public class GameView extends View {
   public void updateDisplay(List<PieceViewBuilder> pieceViewList) {
     super.updateDisplay(pieceViewList);
     updatePlayerStatsUI(controller.getUpdatedScores());
-    initializePlayers(controller.getUsernames());
+    initializePlayers(controller.getUsernames(), controller.getWins());
   }
 
   @Override
