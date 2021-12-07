@@ -43,8 +43,7 @@ public class ViewController {
 
     public void handleKeyPress(KeyCode k){
         if (k==KeyCode.C){
-            //todo unhide cheat menu
-//            revealCheatMenu();
+            ((GameView)view).toggleCheatsVisible();
         }
     }
 }

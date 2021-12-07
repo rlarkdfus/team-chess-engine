@@ -63,6 +63,7 @@ public class GameView extends View {
     root.add(playerStatsUI, 0, 1, 1, 2);
     root.add(timeConfigurationUI, 2, 2, 1, 1);
     root.add(cheatUI, 2, 3);
+    cheatUI.setVisible(false);
   }
 
   @Override
@@ -75,6 +76,10 @@ public class GameView extends View {
   public void resetDisplay(List<PieceViewBuilder> pieceViewList, Location bounds) {
     this.boardView = new GameBoardView(controller, pieceViewList, bounds.getRow(), bounds.getCol());
     super.resetDisplay(pieceViewList, bounds);
+  }
+
+  public void toggleCheatsVisible(){
+    cheatUI.setVisible(!cheatUI.isVisible());
   }
 }
 
