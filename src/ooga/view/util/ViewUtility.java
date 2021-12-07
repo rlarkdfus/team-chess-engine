@@ -1,14 +1,11 @@
 package ooga.view.util;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.StringProperty;
 
 import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -69,6 +66,12 @@ public class ViewUtility {
         return (Button) setID(property, result);
     }
 
+    /**
+     * makes a TextField node
+     *
+     * @param property the property for the TextField
+     * @return the TextField created
+     */
     public TextField makeTextField(String property) {
         TextField result = new TextField();
         result.getStyleClass().add("text-field");
@@ -116,58 +119,43 @@ public class ViewUtility {
     }
 
     /**
-     * makes a Text node whose text changes often
+     * makes a MenuButton node
      *
-     * @param property   the property for the Text node
-     * @param boundValue the StringProperty that the text will display
-     * @return the Text created
+     * @param property the property for the MenuButton
+     * @param choices  the list of Strings representing the options for the MenuButton
+     * @param response the event that occurs when we select an option
+     * @return the MenuButton created
      */
-    public Label makeLabel(String property, StringProperty boundValue) {
-        Label result = new Label();
-        result.setText(languageResource.getString(property));
-        result.getStyleClass().add("text");
-        result.textProperty().bind(boundValue);
-        return (Label) setID(property, result);
-    }
-
-    /**
-     * makes a ComboBox node
-     *
-     * @param property the property for the ComboBox
-     * @param choices  the List of Strings representing the choices for the ComboBox
-     * @param response the event to occur on action with the ComboBox
-     * @return the ComboBox created
-     */
-    public ComboBox makeComboBox(String property, List<String> choices, Consumer<String> response) {
-        ComboBox result = new ComboBox();
-        Map<String, String> lang = new HashMap<>();
-        for (String option : choices) {
-            lang.put(languageResource.getString(option), option);
-        }
-        result.setItems(FXCollections.observableArrayList(lang.keySet().stream().toList()));
-        result.valueProperty().addListener((o, oldValue, newValue) -> response.accept(lang.get(newValue)));
-        result.getStyleClass().add("combo-box");
-        return (ComboBox) setID(property, result);
-    }
-
     public MenuButton makeMenu(String property, List<String> choices, Consumer<String> response) {
         MenuButton result = new MenuButton();
         List<MenuItem> options = new ArrayList<>();
-        for(String option : choices) {
-            MenuItem menuItem = new MenuItem(option);
-            menuItem.setOnAction(e -> {
-                response.accept(option);
-                result.setText(languageResource.getString(option));
-            });
-            menuItem.getStyleClass().add("menu-item");
-            menuItem.setId(option);
-            options.add(menuItem);
-        }
+        createMenuItems(choices, response, result, options);
         result.getStyleClass().add("menu-button");
         result.getItems().addAll(options);
         result.setText(languageResource.getString(choices.get(0)));
         menuButtons.add(result);
         return (MenuButton) setID(property, result);
+    }
+
+    /**
+     * populates a MenuButton with menuItems
+     *
+     * @param choices    the list of Strings representing the options for the MenuButton
+     * @param response   the event that occurs when we select an option
+     * @param menuButton the menuButton for which the menuItems are for
+     * @param options    the options of the menuButton
+     */
+    private void createMenuItems(List<String> choices, Consumer<String> response, MenuButton menuButton, List<MenuItem> options) {
+        for (String option : choices) {
+            MenuItem menuItem = new MenuItem(option);
+            menuItem.setOnAction(e -> {
+                response.accept(option);
+                menuButton.setText(languageResource.getString(option));
+            });
+            menuItem.getStyleClass().add("menu-item");
+            menuItem.setId(option);
+            options.add(menuItem);
+        }
     }
 
     /**
@@ -201,11 +189,6 @@ public class ViewUtility {
         return (ColorPicker) setID(property, result);
     }
 
-    public GridPane makeGridPane(String property) {
-        GridPane result = new GridPane();
-        return (GridPane) setID(property, result);
-    }
-
     /**
      * creates a FileChooser to select a JSON file
      *
@@ -227,9 +210,6 @@ public class ViewUtility {
      */
     public String saveJSONPath() {
         FileChooser fileChooser = new FileChooser();
-//        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter(
-//                JSON_FILE_EXTENSION_DESCRIPTION, JSON_EXTENSION);
-//        fileChooser.getExtensionFilters().addAll(fileExtension);
         File file = fileChooser.showSaveDialog(new Stage());
         return file != null ? file.getAbsolutePath() : EMPTY_FILE_PATH;
     }
@@ -259,19 +239,12 @@ public class ViewUtility {
     }
 
     /**
-     * makes a TextInputDialog without a cancel button
+     * returns a Dialog with Labels and TextFields
      *
-     * @param headerText the header of the TextInputDialog
-     *                   //* @param response the condition for allowing the text input dialog to close
-     * @return the TextInputDialog created
+     * @param labels     the list of Labels used in the Dialog
+     * @param textFields the list of TextFields used in the Dialog
+     * @return the Dialog created
      */
-    public TextInputDialog makeUncancellableTextInputDialog(String headerText) {
-        TextInputDialog result = new TextInputDialog();
-        result.setHeaderText(headerText);
-        result.getDialogPane().getButtonTypes().remove(ButtonType.CANCEL);
-        return result;
-    }
-
     public Dialog makeDialog(List<Label> labels, List<TextField> textFields) {
         Dialog dlg = new Dialog();
         dlg.getDialogPane().setContent(makeLabelsFieldsGridPane(labels, textFields));
@@ -281,7 +254,13 @@ public class ViewUtility {
         return dlg;
     }
 
-    // makes an n by 2 grid with labels in the first column, textfields in the second; n is number of rows
+    /**
+     * makes an n by 2 grid with labels in the first column, textfields in the second; n is number of rows
+     *
+     * @param labels     the list of Labels used in the Dialog
+     * @param textFields the list of TextFields used in the Dialog
+     * @return the GridPane containing the Labels and TextFields
+     */
     private GridPane makeLabelsFieldsGridPane(List<Label> labels, List<TextField> textFields) {
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -294,6 +273,12 @@ public class ViewUtility {
         return grid;
     }
 
+    /**
+     * gets a list of Strings representing the values from a list of TextFields
+     *
+     * @param textFields the list of TextFields
+     * @return the list of Strings obtained
+     */
     private List<String> getTextFieldStrings(List<TextField> textFields) {
         List<String> strings = new ArrayList<>();
         for (TextField textField : textFields) {
@@ -302,40 +287,34 @@ public class ViewUtility {
         return strings;
     }
 
+    /**
+     * gets a list of Strings representing the values from the dialog text fields
+     *
+     * @param dlg the Dialog from which to retrieve results from
+     * @return the list of Strings obtained
+     */
     public List<String> getDialogResults(Dialog dlg) {
         Optional<List<String>> strArr = dlg.showAndWait();
         return strArr.get();
     }
 
+    /**
+     * changes the language of all the labeled nodes
+     *
+     * @param language the new language
+     */
     public static void changeLanguage(String language) {
         languageResource = ResourceBundle.getBundle(LANGUAGE_RESOURCE_PATH + language);
         for (Labeled component : components) {
             component.setText(languageResource.getString(component.getId()));
         }
-        for(MenuButton menuButton : menuButtons) {
-            for(MenuItem menuItem : menuButton.getItems()) {
-                if(menuItem.getText().equals(menuButton.getText())) {
+        for (MenuButton menuButton : menuButtons) {
+            for (MenuItem menuItem : menuButton.getItems()) {
+                if (menuItem.getText().equals(menuButton.getText())) {
                     menuButton.textProperty().setValue(languageResource.getString(menuItem.getId()));
                 }
                 menuItem.textProperty().setValue(languageResource.getString(menuItem.getId()));
             }
         }
-    }
-
-    public void setTextInputDialogCloseRestrictions(TextInputDialog textInputDialog, Set<String> acceptableValues) {
-        Button okButton = (Button) textInputDialog.getDialogPane().lookupButton(ButtonType.OK);
-        TextField inputField = textInputDialog.getEditor();
-        BooleanBinding isInvalid = Bindings.createBooleanBinding(() -> !acceptableValues.contains(inputField.getText().toLowerCase()), inputField.textProperty());
-        okButton.disableProperty().bind(isInvalid);
-    }
-
-    /**
-     * Displays a TextInputDialog and gets the value inputted by a user
-     *
-     * @param textInputDialog the textInputDialog to display and retrieve a string from
-     * @return the String value inputted
-     */
-    public String getTextInputDialogResult(TextInputDialog textInputDialog) {
-        return textInputDialog.showAndWait().get();
     }
 }

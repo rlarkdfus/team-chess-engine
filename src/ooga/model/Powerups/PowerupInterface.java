@@ -15,7 +15,7 @@ public interface PowerupInterface {
      * @param pieceInterface piece that is being moved
      * @param endLocation  end location of the piece being moved
      * @param currentPlayer current player who
-     * @param allPieces list of all pieces intialized on the board
+     * @param allPieces list of all pieces initialized on the board
      * @exception FileNotFoundException if file for transformed piece does not exist
      * @exception InvalidPieceConfigException if transformed piece does not exist
      */

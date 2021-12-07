@@ -21,15 +21,23 @@ public class LoginView {
 
     private LoginController loginController;
     private Stage stage;
-    private ViewUtility viewUtility;
 
+    /**
+     * creates the login UI
+     *
+     * @param loginController the loginController responsible for handling the LoginView's behaviors
+     */
     public LoginView(LoginController loginController) {
         this.loginController = loginController;
         this.stage = new Stage();
         this.stage.setResizable(false);
-        this.viewUtility = new ViewUtility();
     }
 
+    /**
+     * sets up the display
+     *
+     * @return the Scene created
+     */
     private Scene setupDisplay() {
         GridPane root = new GridPane();
         root.getStyleClass().add(CSS_ID);
@@ -40,16 +48,27 @@ public class LoginView {
         return scene;
     }
 
+    /**
+     * shows the login screen
+     */
     public void initializeDisplay() {
         stage.setScene(setupDisplay());
         stage.show();
     }
 
+    /**
+     * closes the login screen
+     */
     public void hideDisplay() {
         stage.close();
     }
 
+    /**
+     * shows an error in the view
+     *
+     * @param message the error message
+     */
     public void showError(String message) {
-        viewUtility.showError(message);
+        ViewUtility.showError(message);
     }
 }
