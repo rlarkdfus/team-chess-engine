@@ -2,6 +2,8 @@ package ooga.controller;
 
 import java.io.File;
 import java.util.List;
+
+import javafx.scene.input.KeyCode;
 import ooga.Location;
 
 /**
@@ -76,4 +78,6 @@ public interface ControllerInterface {
    * @throws Throwable if class not found or no such method
    */
   void launchController(String controllerVariation) throws Throwable;
+
+  void handleKeyPress(KeyCode code);
 }

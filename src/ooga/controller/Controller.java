@@ -1,5 +1,6 @@
 package ooga.controller;
 
+import javafx.scene.input.KeyCode;
 import ooga.Location;
 import ooga.view.ViewInterface;
 import java.io.File;
@@ -15,6 +16,10 @@ import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.Engine;
 import ooga.model.PieceInterface;
 import org.json.JSONObject;
+
+import java.util.function.Consumer;
+import java.util.Map;
+import static java.util.Map.entry;
 
 /**
  * @Authors albert luis gordon sam tarun richard
@@ -34,7 +39,7 @@ public abstract class Controller implements ControllerInterface {
 
   private static final String CONTROLLER_PATH = Controller.class.getPackageName() + ".";
   private static final String CONTROLLER_SUFFIX = "Controller";
-
+  private Map<String, Consumer<?>> CHEAT_KEYS;
   private Engine model;
   private ViewInterface view;
   private File jsonFile;
@@ -48,6 +53,7 @@ public abstract class Controller implements ControllerInterface {
     BoardBuilder boardBuilder = new BoardBuilder(jsonFile);
     model = initializeModel(boardBuilder);
     view = initializeView(boardBuilder.getInitialPieceViews(),boardBuilder.getBoardSize());
+    initializeCheatKeys();
   }
 
   /**
@@ -183,5 +189,16 @@ public abstract class Controller implements ControllerInterface {
     }
     catch (Exception ignored) {
     }
+  }
+
+  public void handleKeyPress(KeyCode k){
+//    CHEAT_KEYS.get(k.toString());
+  }
+
+  private void initializeCheatKeys(){
+    CHEAT_KEYS = Map.ofEntries(
+            entry("1", e -> launchController("Editor"))
+//            entry("2", e -> model.incrementTurn())
+    );
   }
 }

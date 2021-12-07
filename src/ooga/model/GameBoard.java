@@ -1,6 +1,7 @@
 package ooga.model;
 
 import ooga.Location;
+import ooga.controller.Config.PieceBuilder;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
 import ooga.model.Powerups.PowerupInterface;
@@ -14,7 +15,7 @@ import java.util.List;
  * Location, PieceInterface, and Move
  * usage - a user is able to call its methods to get and manage the moves of a piece
  */
-public class GameBoard extends Board implements GameEngine {
+public class GameBoard extends Board implements GameEngine, CheatInterface{
     private EndConditionRunner endCondition;
     private int turnCount;
 
@@ -60,7 +61,16 @@ public class GameBoard extends Board implements GameEngine {
             powerupInterface.checkPowerUp(piece, piece.getLocation(), currentPlayer, pieces);
         }
         System.out.println(currentPlayer.getTeam() + " " + currentPlayer.getScore());
-        turnCount++;
+
+        //Tried the cheats
+//        incrementTurnCheat();
+////        addRandomPiece();
+////        moveKingRandom();
+//        addTimeCheat();
+//        queenToPawncheat();
+
+
+        incrementTurn();
         toggleTimers();
     }
 
@@ -108,7 +118,7 @@ public class GameBoard extends Board implements GameEngine {
 
     private PlayerInterface findPlayerTurn(int turn) {
         currentPlayer = players.get((turn) % players.size());
-        return players.get((turn) % players.size());
+        return currentPlayer;
     }
 
     /**
@@ -119,4 +129,72 @@ public class GameBoard extends Board implements GameEngine {
     public GameState checkGameState() {
         return endCondition.satisfiedEndCondition(players);
     }
+
+    private void incrementTurn(){
+        turnCount++;
+    }
+
+@Override
+    public void incrementTurnCheat(){
+        incrementTurn();
+    }
+
+@Override
+    public void addRandomQueenCheat(){
+        List<Location> emptyLocations = this.getEmptyLocations();
+        int randomEmptyIndex  =  (int)(Math.random() * emptyLocations.size());
+        Location randomLocation = emptyLocations.get(randomEmptyIndex);
+
+        PieceInterface newPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("QUEEN"),randomLocation,getBounds());
+        currentPlayer.addPiece(newPiece);
+        pieces.add(newPiece);
+    }
+
+    @Override
+    public void moveKingRandomCheat(){
+        List<Location> emptyLocations = this.getEmptyLocations();
+        int randomEmptyIndex  =  (int)(Math.random() * emptyLocations.size());
+        Location randomLocation = emptyLocations.get(randomEmptyIndex);
+        List<PieceInterface> currentPlayerPieces = currentPlayer.getPieces();
+        PieceInterface king = null;
+        for(PieceInterface piece: currentPlayerPieces){
+            if(piece.getName().equals(Board.PIECES.getString("KING"))) {
+                king = piece;
+            }
+        }
+        king.moveTo(randomLocation);
+    }
+
+    @Override
+    public void transformAllPawnsCheat(){
+        List<PieceInterface> currentPlayerPieces = currentPlayer.getPieces();
+
+        for(PieceInterface piece: currentPlayerPieces){
+            if(piece.getName().equals(Board.PIECES.getString("PAWN"))) {
+                piece.transform(PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("DEFAULT_PROMOTION"),piece.getLocation(),getBounds()));
+            }
+        }
+
+    }
+
+    @Override
+    public void queenToPawncheat(){
+        PlayerInterface opponent = players.get((turnCount+1) % players.size());
+        List<PieceInterface> opponentPieces = opponent.getPieces();
+        PieceInterface queen = null;
+        for(PieceInterface piece: opponentPieces){
+            if(piece.getName().equals(Board.PIECES.getString("QUEEN"))) {
+                queen = piece;
+                queen.transform(PieceBuilder.buildPiece(opponent.getTeam(),Board.PIECES.getString("PAWN"),piece.getLocation(),getBounds()));
+            }
+        }
+
+    }
+
+
+    @Override
+    public void addTimeCheat(){
+        currentPlayer.incrementTime(600);
+    }
+
 }
