@@ -20,6 +20,7 @@ public class ViewController {
 
     /**
      * creates a ViewController object
+     *
      * @param view the ViewInterface representing the UI from which actions are handled
      */
     public ViewController(ViewInterface view) {
@@ -28,6 +29,7 @@ public class ViewController {
 
     /**
      * calls on the view to change the board color
+     *
      * @param color1 the new first board square color
      * @param color2 the new second board square color
      */
@@ -37,6 +39,7 @@ public class ViewController {
 
     /**
      * calls on the view to change the piece style
+     *
      * @param style the new piece style
      */
     public void handleChangePieceStyle(String style) {
@@ -45,6 +48,7 @@ public class ViewController {
 
     /**
      * calls on the view to change the language
+     *
      * @param language the new language
      */
     public void changeLanguage(String language) {
@@ -53,6 +57,7 @@ public class ViewController {
 
     /**
      * calls on the view to change the theme
+     *
      * @param theme the new theme
      */
     public void changeTheme(String theme) {

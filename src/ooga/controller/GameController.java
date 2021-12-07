@@ -23,9 +23,13 @@ public class GameController extends Controller implements GameControllerInterfac
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
   private TimeController timeController;
+
+  private Map<Enum, JSONObject> playersAttributes;
+
+  private int initialTime = DEFAULT_INITIAL_TIME;
+  private int increment = DEFAULT_INITIAL_INCREMENT;
   private GameEngine model;
 
-  private Map<Enum, JSONObject> players;
   private Map<Enum, String> usernames;
 
   public GameController(){
@@ -69,22 +73,34 @@ public class GameController extends Controller implements GameControllerInterfac
   }
 
   /**
-   * this method finds all the players' usernames and the amount of times they've one a game
+   * this method finds all the players' usernames mapped to their respective team
+   * @return - a map of team to player username
+   */
+  @Override
+  public Map<Enum, String> getUsernames() {
+    if(usernames == null) {
+      usernames = new HashMap<>();
+      usernames.put(GameState.BLACK, "Guest 2");
+      usernames.put(GameState.WHITE, "Guest 1");
+    }
+    return usernames;
+  }
+
+  /**
+   * this method finds the amount of times the players have won a game
    * @return - a map of player names to their win count
    */
-  public Map<String, Integer> getUsernameAndWins() {
-
-    Map<String, Integer> usernameToWinsMap = new HashMap<>();
-    if (players != null) {
-      Iterator playersIter = players.entrySet().iterator();
-      Iterator usernamesIter = usernames.entrySet().iterator();
-      while (playersIter.hasNext() && usernamesIter.hasNext()) {
-        Entry<Enum, String> usernameEntry = (Entry) usernamesIter.next();
-        Entry<Enum, JSONObject> playersEntry = (Entry) playersIter.next();
-        usernameToWinsMap.put(usernameEntry.getValue(), playersEntry.getValue().getInt("wins"));
-      }
+  @Override
+  public Map<Enum, Integer> getWins() {
+    Map<Enum, Integer> winMap = new HashMap<>();
+    if(playersAttributes == null) {
+      winMap.put(GameState.WHITE, 0);
+      winMap.put(GameState.BLACK, 0);
     }
-    return usernameToWinsMap;
+    else {
+      usernames.keySet().forEach(team -> winMap.put(team, playersAttributes.get(team).getInt(WINS)));
+    }
+    return winMap;
   }
 
   /**
@@ -101,7 +117,6 @@ public class GameController extends Controller implements GameControllerInterfac
     if (gameState != GameState.RUNNING) {
       LogUtils.info(this,"winner: " + gameState);
       incrementPlayerWin(gameState);
-      getUsernameAndWins();
       new GameOverScreen(this, gameState.toString());
     }
   }
@@ -110,30 +125,30 @@ public class GameController extends Controller implements GameControllerInterfac
    * this method finds the player who won
    */
   private void incrementPlayerWin(GameState gameState) {
-    if (players != null) {
-      Iterator playersIter = players.keySet().iterator();
-      while (playersIter.hasNext()) {
-        Enum player = (Enum) playersIter.next();
-        if (gameState == player) {
-          incrementWinAndSaveJSON(gameState, player);
+      if (playersAttributes != null) {
+        Iterator playersIter = playersAttributes.keySet().iterator();
+        while (playersIter.hasNext()) {
+          Enum player = (Enum) playersIter.next();
+          if (gameState == player) {
+            incrementWinAndSaveJSON(gameState, player);
+          }
         }
       }
     }
-  }
 
   /**
    * this method adds a win to the player's json file
    */
   private void incrementWinAndSaveJSON(GameState gameState, Enum player) {
-    JSONObject playerInfo = players.get(player);
-    int wins = players.get(player).getInt(WINS) + 1;
-    players.remove(wins);
+    JSONObject playerInfo = playersAttributes.get(player);
+    int wins = playersAttributes.get(player).getInt(WINS) + 1;
+    playersAttributes.remove(wins);
     playerInfo.put(WINS, wins);
-    players.remove(player);
-    players.put(player, playerInfo);
+    playersAttributes.remove(player);
+    playersAttributes.put(player, playerInfo);
     JSONObject userProfiles = JsonParser.loadFile(userProfilesFile);
-    userProfiles.remove(usernames.get(gameState));
-    userProfiles.put(usernames.get(gameState), playerInfo);
+    userProfiles.remove(String.valueOf(usernames.get(gameState)));
+    userProfiles.put(String.valueOf(usernames.get(gameState)), playerInfo);
     try {
       JSONWriter.saveFile(userProfiles, JSON_WRITER_FILE_PATH);
     } catch (Exception e) {
@@ -184,24 +199,14 @@ public class GameController extends Controller implements GameControllerInterfac
     timeController.setIncrement(model.getPlayers(), seconds);
   }
 
-  @Override
-  public Map<Enum, String> getUsernames() {
-    return null;
-  }
-
-  @Override
-  public Map<Enum, Integer> getWins() {
-    return null;
-  }
-
   /**
    * This methods uses the input maps to find the player json file and the player name from the Piece Color
    * that they played as (this is the enum).
    * @param usernames - a map from the piece color to the player's username
-   * @param players - a map from the piece color to the player's json file
+   * @param playersAttributes - a map from the piece color to the player's json file
    */
-  public void setPlayers(Map<Enum, String> usernames, Map<Enum, JSONObject> players) {
-    this.players = players;
+  public void setPlayers(Map<Enum, String> usernames, Map<Enum, JSONObject> playersAttributes) {
+    this.playersAttributes = playersAttributes;
     this.usernames = usernames;
   }
 

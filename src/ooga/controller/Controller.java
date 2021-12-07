@@ -1,10 +1,20 @@
 package ooga.controller;
 
 import ooga.Location;
+
 import ooga.controller.Config.*;
 import ooga.view.ViewInterface;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import ooga.controller.Config.BoardBuilder;
+import ooga.controller.Config.Builder;
+import ooga.controller.Config.JSONWriter;
+import ooga.controller.Config.JsonParser;
+import ooga.controller.Config.LocationWriter;
+import ooga.controller.Config.PieceViewBuilder;
 import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
