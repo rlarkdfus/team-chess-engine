@@ -2,6 +2,7 @@ package ooga.view.ui.timeConfigurationUI;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import ooga.controller.GameController;
 import ooga.controller.GameControllerInterface;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
@@ -27,7 +28,6 @@ public class TimeConfigurationUI extends GridPane implements UIInterface {
         this.add(viewUtility.makeLabel("increment_label"), 0, 3);
         this.add(viewUtility.makeSlider("increment_slider", 0, 20, 10, this::handleIncrementSliderAction), 1, 3);
         this.add(viewUtility.makeLabel("increment_slider_value"), 2, 3);
-        this.add(viewUtility.makeButton("new_game", e -> controller.reset()), 0, 4);
     }
 
     private void handleMinutesSliderAction(Double minutes) {

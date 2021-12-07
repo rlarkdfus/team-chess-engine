@@ -1,22 +1,17 @@
 package ooga.controller;
 
-import javafx.beans.property.StringProperty;
 import ooga.Location;
+import ooga.controller.Config.*;
 import ooga.view.ViewInterface;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
-import ooga.controller.Config.BoardBuilder;
-import ooga.controller.Config.Builder;
-import ooga.controller.Config.JSONWriter;
-import ooga.controller.Config.JsonParser;
-import ooga.controller.Config.LocationWriter;
-import ooga.controller.Config.PieceViewBuilder;
+
 import ooga.model.Engine;
 import ooga.model.PieceInterface;
+import ooga.view.util.ViewUtility;
 import org.json.JSONObject;
 
 /**
@@ -86,7 +81,9 @@ public abstract class Controller implements ControllerInterface {
    */
   @Override
   public void reset() {
-    uploadConfiguration(getDefaultConfiguration());
+    BoardBuilder boardBuilder = new BoardBuilder(jsonFile);
+    model = initializeModel(boardBuilder);
+    view.initializeDisplay(boardBuilder.getInitialPieceViews(), boardBuilder.getPowerupLocations(), boardBuilder.getBoardSize());
   }
 
   /**
@@ -113,14 +110,8 @@ public abstract class Controller implements ControllerInterface {
    */
   @Override
   public void uploadConfiguration(File file) {
-    try {
-      BoardBuilder boardBuilder = new BoardBuilder(file);
       jsonFile = file;
-      model = initializeModel(boardBuilder);
-      view = initializeView(boardBuilder);
-    } catch (Exception ignored) {
-    }
-
+      reset();
   }
 
   /**
@@ -159,7 +150,7 @@ public abstract class Controller implements ControllerInterface {
       JSONObject jsonObject = JsonParser.loadFile(jsonFile);
       JSONWriter.saveFile(jsonObject, filePath);
       LocationWriter locationWriter = new LocationWriter();
-      locationWriter.saveCSV(filePath + ".csv", model.getPlayers());
+      locationWriter.saveCSV(filePath + ".csv", model.getPieces());
     } catch (IOException ignored) {
     }
   }
@@ -182,9 +173,8 @@ public abstract class Controller implements ControllerInterface {
     try {
       Class<?> clazz = Class.forName(CONTROLLER_PATH + variation + CONTROLLER_SUFFIX);
       ControllerInterface controller = (ControllerInterface) clazz.getDeclaredConstructor().newInstance();
-    }
-    catch (Exception ignored) {
+    } catch (Exception e) {
+      ViewUtility.showError("InvalidGameVariation");
     }
   }
-
 }
