@@ -217,4 +217,25 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
         pieces.add(newPiece);
 
     }
+
+    @Override
+    public void addRandomRookCheat(){
+        PieceInterface newPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("ROOK"),this.randomEmptyLocation(),getBounds());
+        currentPlayer.addPiece(newPiece);
+        pieces.add(newPiece);
+    }
+
+    @Override
+    public void addRandomBishopCheat(){
+        PieceInterface newPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("BISHOP"),this.randomEmptyLocation(),getBounds());
+        currentPlayer.addPiece(newPiece);
+        pieces.add(newPiece);
+    }
+
+    @Override
+    public void addRandomKnightCheat(){
+        PieceInterface newPiece = PieceBuilder.buildPiece(currentPlayer.getTeam(),Board.PIECES.getString("KNIGHT"),this.randomEmptyLocation(),getBounds());
+        currentPlayer.addPiece(newPiece);
+        pieces.add(newPiece);
+    }
 }

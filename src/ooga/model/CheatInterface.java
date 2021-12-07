@@ -10,5 +10,8 @@ public interface CheatInterface {
     void removeRandomPieceCheat();
     void decrementTimeCheat();
     void addRandomPieceCheat();
+    public void addRandomRookCheat();
+    public void addRandomBishopCheat();
+    public void addRandomKnightCheat();
 
 }
