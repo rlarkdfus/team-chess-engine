@@ -7,6 +7,7 @@ import ooga.Location;
 import ooga.controller.Config.Builder;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.model.EditorBoard;
+import ooga.model.EditorEngine;
 import ooga.model.Engine;
 import ooga.view.EditorView;
 import ooga.view.ViewInterface;
@@ -17,6 +18,8 @@ public class EditorController extends Controller implements EditorControllerInte
   private String selectedTeam;
   private String selectedName;
 
+  private EditorEngine model;
+
   @Override
   protected File getDefaultConfiguration() {
     return DEFAULT_CHESS_CONFIGURATION;
@@ -24,13 +27,14 @@ public class EditorController extends Controller implements EditorControllerInte
 
   @Override
   protected Engine initializeModel(Builder boardBuilder) {
-    return new EditorBoard(boardBuilder.getInitialPlayers(),boardBuilder.getBoardSize());
+    model = new EditorBoard(boardBuilder.getInitialPlayers(),boardBuilder.getBoardSize());
+    return model;
   }
 
   @Override
-  protected ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds) {
+  protected ViewInterface initializeView(Builder boardBuilder) {
     ViewInterface view = new EditorView(this);
-    view.initializeDisplay(pieces, bounds);
+    view.initializeDisplay(boardBuilder.getInitialPieceViews(), boardBuilder.getPowerupLocations(), boardBuilder.getBoardSize());
     return view;
   }
 
@@ -54,7 +58,7 @@ public class EditorController extends Controller implements EditorControllerInte
 
   @Override
   public void addPiece(Location location) {
-    getModel().addPiece(selectedTeam, selectedName, location);
+    model.addPiece(selectedTeam, selectedName, location);
     updateView();
   }
 }

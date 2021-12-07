@@ -44,6 +44,7 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
         this.add(blackScoreDisplay, 0, 1);
         this.add(viewUtility.makeLabel("black_time_label"), 0, 2);
         this.add(viewUtility.makeText("black_timer_display", controller.getTimeLeft(BLACK_INDEX)), 0, 3);
+<<<<<<< HEAD
 //        this.add(viewUtility.makeLabel("move_history_label"), 0, 4);
 //        this.add(viewUtility.makeGridPane("move_history_gridpane"), 0, 5);
         this.add(viewUtility.makeButton("download_game", e -> controller.downloadGame(viewUtility.saveJSONPath())), 0, 6);
@@ -51,6 +52,12 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
         this.add(viewUtility.makeText("white_timer_display", controller.getTimeLeft(WHITE_INDEX)), 0, 8);
         this.add(whiteNameScoreLabel, 0, 9);
         this.add(whiteScoreDisplay, 0, 10);
+=======
+        this.add(viewUtility.makeLabel("white_time_label"), 0, 4);
+        this.add(viewUtility.makeText("white_timer_display", controller.getTimeLeft(WHITE_INDEX)), 0, 5);
+        this.add(whiteNameScoreLabel, 0, 6);
+        this.add(whiteScoreDisplay, 0, 7);
+>>>>>>> 1dc0d1373ac97e551eb9625607d4fa144b85c534
     }
 
     public void initializePlayerNames(String whiteUsername, String blackUsername) {

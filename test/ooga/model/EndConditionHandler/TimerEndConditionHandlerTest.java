@@ -18,7 +18,6 @@ import ooga.controller.Config.InvalidEndGameConfigException;
 import ooga.controller.Config.InvalidGameConfigException;
 import ooga.controller.Config.InvalidPieceConfigException;
 import ooga.model.Board;
-import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.GameBoard;
 import ooga.model.GameState;
 import ooga.model.PlayerInterface;

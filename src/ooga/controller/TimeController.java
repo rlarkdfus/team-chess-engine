@@ -31,7 +31,9 @@ public class TimeController {
     }
 
     public void startPlayer1Timer(List<PlayerInterface> players) {
-        players.get(0).toggleTimer();
+        if (!players.isEmpty()) {
+            players.get(0).toggleTimer();
+        }
     }
 
     public void resetTimers(List<PlayerInterface> players) {

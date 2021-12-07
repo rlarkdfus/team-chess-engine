@@ -7,19 +7,22 @@ import javafx.scene.paint.Color;
 import ooga.Location;
 import ooga.controller.Config.PieceViewBuilder;
 import ooga.view.PieceView;
+import ooga.view.PowerupView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BoardView extends Group implements BoardViewInterface {
 
-  private final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
-  private final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
-  private final String DEFAULT_PIECE_STYLE = "companion";
-  private final int SQUARE_WIDTH = 60;
-  private final int SQUARE_HEIGHT = 60;
+  private static final Color DEFAULT_COLOR_1 = Color.web("#f3dab0");
+  private static final Color DEFAULT_COLOR_2 = Color.web("#bb885b");
+  private static String DEFAULT_PIECE_STYLE = "companion";
+  public static final int SQUARE_WIDTH = 60;
+  public static final int SQUARE_HEIGHT = 60;
 
   private List<BoardSquare> background;
   protected List<PieceView> pieceList;
+  private List<Location> specialLocations;
   private Location selectedLocation;
 
   private final int row;
@@ -28,6 +31,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
   public BoardView(List<PieceViewBuilder> pieceViews, int row, int col) {
     selectedLocation = null;
     pieceList = new ArrayList<>();
+    specialLocations = new ArrayList<>();
     this.row = row;
     this.col = col;
     initializeBoardView(pieceViews);
@@ -69,6 +73,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
         pieceView.changeStyle(style);
       }
     }
+    DEFAULT_PIECE_STYLE = style;
   }
 
   private void annotate(MouseEvent mouse) {
@@ -119,7 +124,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
     changeColors(DEFAULT_COLOR_1, DEFAULT_COLOR_2);
   }
 
-  private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style) {
+  private void renderInitialChessPieces(List<PieceViewBuilder> pieceViews, String style){
     for (PieceViewBuilder piece : pieceViews) {
       PieceView newPiece = new PieceView(piece.getTeam(), piece.getName(), style, piece.getLocation());
       pieceList.add(newPiece);
@@ -133,7 +138,7 @@ public abstract class BoardView extends Group implements BoardViewInterface {
   }
 
   private Location findClickLocation(MouseEvent mouse) {
-    return new Location((int) mouse.getY() / SQUARE_WIDTH, (int) mouse.getX() / SQUARE_WIDTH);
+    return new Location((int) mouse.getY() / SQUARE_HEIGHT, (int) mouse.getX() / SQUARE_WIDTH);
   }
 
   private BoardSquare findBoardSquare(Location location) {
@@ -142,5 +147,11 @@ public abstract class BoardView extends Group implements BoardViewInterface {
 
   protected Location getSelectedLocation() {
     return selectedLocation;
+  }
+
+  public void markInitialSpecialLocation(List<Location> specialLocations) {
+    for (Location location : specialLocations) {
+      findBoardSquare(location).getChildren().add(new PowerupView(location));
+    }
   }
 }

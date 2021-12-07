@@ -49,7 +49,7 @@ public class GameViewTest extends DukeApplicationTest {
     @Test
     void testSetTimeLabelUpdate() {
         Slider minutesSlider = lookup("#minutes_slider").query();
-        String expected = "18";
+        String expected = "9";
         setValue(minutesSlider, Integer.parseInt(expected));
         Label incrementSliderLabel = lookup("#minutes_slider_value").query();
         assertEquals(expected, incrementSliderLabel.getText());
@@ -77,7 +77,7 @@ public class GameViewTest extends DukeApplicationTest {
 
     @Test
     void testChangeStyle() {
-        ComboBox styleChanger = lookup("#piece_style").query();
+        MenuButton styleChanger = lookup("#piece_style").query();
         String style = "horsey";
         Location location = new Location(0, 0);
         clickOn(styleChanger);
@@ -112,10 +112,10 @@ public class GameViewTest extends DukeApplicationTest {
     }
 
     @Test
-    void testDoubleRightClickEmptySquareDeselect() {
+    void doubleClickEmptySquareDeselect() {
         Location location = new Location(4, 4);
         Rectangle spot = viewTestUtility.queryBoardSquare(location);
-        rightClickOn(spot).rightClickOn(spot);
+        rightClickOn(spot).clickOn(spot);
         assertThrows(EmptyNodeQueryException.class, () -> lookup(String.format("#annotate_location(%d,%d)", location.getRow(), location.getCol())).query());
     }
 

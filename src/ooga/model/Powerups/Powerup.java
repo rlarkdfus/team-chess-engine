@@ -23,10 +23,9 @@ public abstract class Powerup implements PowerupInterface{
     }
 
     @Override
-    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces) {
+    public void checkPowerUp(PieceInterface pieceInterface, Location endLocation, PlayerInterface currentPlayer, List<PieceInterface> allPieces){
         if(hitPowerup(endLocation)){
             execute(pieceInterface,endLocation, currentPlayer, allPieces);
-//            removeUsedPowerup(endLocation);
         }
     }
 
@@ -64,7 +63,8 @@ public abstract class Powerup implements PowerupInterface{
          return bounds;
      }
 
-     protected List<Location> getPowerupLocations(){
+     @Override
+     public List<Location> getPowerupLocations(){
         return powerupLocations;
     }
 }

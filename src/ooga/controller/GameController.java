@@ -5,14 +5,8 @@ import java.util.*;
 import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.LogUtils;
-import ooga.controller.Config.Builder;
-import ooga.controller.Config.JSONWriter;
-import ooga.controller.Config.JsonParser;
-import ooga.controller.Config.PieceViewBuilder;
-import ooga.model.Engine;
-import ooga.model.GameBoard;
-import ooga.model.GameState;
-import ooga.model.PlayerInterface;
+import ooga.controller.Config.*;
+import ooga.model.*;
 import ooga.view.GameOverScreen;
 import ooga.view.GameView;
 import ooga.view.ViewInterface;
@@ -28,11 +22,13 @@ public class GameController extends Controller implements GameControllerInterfac
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
 
   private TimeController timeController;
-  private int initialTime;
-  private int increment;
 
   private GameOverScreen gameOverScreen;
   private Map<Enum, JSONObject> playersAttributes;
+
+  private int initialTime = DEFAULT_INITIAL_TIME;
+  private int increment = DEFAULT_INITIAL_INCREMENT;
+  private GameEngine model;
   private Map<Enum, String> usernames;
 
   public GameController(){
@@ -59,8 +55,7 @@ public class GameController extends Controller implements GameControllerInterfac
   @Override
   protected Engine initializeModel(Builder boardBuilder) {
     List<PlayerInterface> players = boardBuilder.getInitialPlayers();
-    Engine model = new GameBoard(players, boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler(),
-            boardBuilder.getBoardSize());
+    model = new GameBoard(players, boardBuilder.getEndConditionHandler(), boardBuilder.getPowerupsHandler(), boardBuilder.getBoardSize());
     configureTimersStartOfApplication();
     System.out.println("initializing model w/ time settings: " + initialTime + ", " + increment);
     timeController = new TimeController(initialTime, increment);
@@ -72,15 +67,13 @@ public class GameController extends Controller implements GameControllerInterfac
   /**
    * This method overrides an abstract superclass method. Here the view is created and initialized
    * with the pieces and bounds built by the boardbuilder.
-   * @param pieces -  a list of data objects that are used to produce javafx objects in view
-   * @param bounds -  a location object that is used to define the bounds of the display board
+   * @param boardBuilder - a boardbuilder object that holds vital objects like the pieces, powerups, and endconditions
    * @return - a view object that's been initialized.
    */
   @Override
-  protected ViewInterface initializeView(List<PieceViewBuilder> pieces, Location bounds) {
+  protected ViewInterface initializeView(Builder boardBuilder) {
     ViewInterface view = new GameView(this);
-    //view.resetDisplay(pieces, bounds);
-    view.initializeDisplay(pieces, bounds);
+    view.initializeDisplay(boardBuilder.getInitialPieceViews(), boardBuilder.getPowerupLocations(), boardBuilder.getBoardSize());
     return view;
   }
 
@@ -118,11 +111,11 @@ public class GameController extends Controller implements GameControllerInterfac
   @Override
   public void movePiece(Location start, Location end) {
     super.movePiece(start, end);
-    GameState gameState = getModel().checkGameState();
+    GameState gameState = model.checkGameState();
     if (gameState != GameState.RUNNING) {
-      LogUtils.info(this,"winner: "+gameState);
-      gameOverScreen = new GameOverScreen(this, gameState.toString());
+      LogUtils.info(this,"winner: " + gameState);
       incrementPlayerWin(gameState);
+      new GameOverScreen(this, gameState.toString());
     }
   }
 
@@ -182,7 +175,7 @@ public class GameController extends Controller implements GameControllerInterfac
    */
   @Override
   public StringProperty getTimeLeft(int side) {
-    return getModel().getPlayers().get(side).getTimeLeft();
+    return model.getPlayers().get(side).getTimeLeft();
   }
 
   /**
