@@ -28,7 +28,6 @@ public class GameController extends Controller implements GameControllerInterfac
   private int increment = DEFAULT_INITIAL_INCREMENT;
   private GameEngine model;
 
-  private GameOverScreen gameOverScreen;
   private Map<Enum, JSONObject> players;
   private Map<Enum, String> usernames;
 
@@ -69,7 +68,6 @@ public class GameController extends Controller implements GameControllerInterfac
   @Override
   protected ViewInterface initializeView(Builder boardBuilder) {
     ViewInterface view = new GameView(this);
-    //view.resetDisplay(pieces, bounds);
     view.initializeDisplay(boardBuilder.getInitialPieceViews(), boardBuilder.getPowerupLocations(), boardBuilder.getBoardSize());
     return view;
   }
@@ -106,10 +104,10 @@ public class GameController extends Controller implements GameControllerInterfac
     super.movePiece(start, end);
     GameState gameState = model.checkGameState();
     if (gameState != GameState.RUNNING) {
-      LogUtils.info(this,"winner: "+gameState);
-      gameOverScreen = new GameOverScreen(this, gameState.toString());
+      LogUtils.info(this,"winner: " + gameState);
       incrementPlayerWin(gameState);
       getUsernameAndWins();
+      new GameOverScreen(this, gameState.toString());
     }
   }
 
