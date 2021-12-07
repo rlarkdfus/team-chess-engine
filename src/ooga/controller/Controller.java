@@ -1,9 +1,12 @@
 package ooga.controller;
 
+import javafx.beans.property.StringProperty;
 import ooga.Location;
 import ooga.view.ViewInterface;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import ooga.controller.Config.BoardBuilder;
@@ -183,4 +186,5 @@ public abstract class Controller implements ControllerInterface {
     catch (Exception ignored) {
     }
   }
+
 }

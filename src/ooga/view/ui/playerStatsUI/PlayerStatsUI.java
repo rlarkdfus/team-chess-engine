@@ -1,5 +1,6 @@
 package ooga.view.ui.playerStatsUI;
 
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import ooga.controller.GameControllerInterface;
@@ -18,6 +19,9 @@ public class PlayerStatsUI extends GridPane implements UIInterface {
 
     private Label whiteScoreDisplay;
     private Label blackScoreDisplay;
+
+    private Label whiteWinsLabel;
+    private Label blackWinsLabel;
 
     public PlayerStatsUI(GameControllerInterface controller) {
         this.controller = controller;

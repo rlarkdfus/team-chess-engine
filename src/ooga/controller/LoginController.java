@@ -47,7 +47,7 @@ public class LoginController {
             players.put(GameState.WHITE, userProfilesJSON.getJSONObject(username2));
             usernames.put(GameState.BLACK, username1);
             usernames.put(GameState.WHITE, username2);
-            new GameController().setPlayers(usernames, players);
+            new GameController(usernames, players);
 
             hideLoginView();
             return true;

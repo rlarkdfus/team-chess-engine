@@ -30,11 +30,18 @@ public interface GameControllerInterface extends ControllerInterface{
    */
   void setIncrement(int seconds);
 
+
   /**
-   * this method finds all the players' usernames and the amount of times they've one a game
-   * @return - a map of player names to their win count
+   * this method finds all the players' usernames mapped to their respective team
+   * @return - a map of team to player username
    */
-  Map<String, Integer> getUsernameAndWins();
+  Map<Enum, String> getUsernames();
+
+  /**
+   * this method finds the amount of times the players have won a game
+   * @return - a map of team to number of wins
+   */
+  Map<Enum, Integer> getWins();
 
   /**
    * gets the amount of time left on a player's timer
