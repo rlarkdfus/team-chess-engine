@@ -7,7 +7,7 @@
   "time": 10,
   "powerups": "data/chess/powerups/noPowerups.json",
   "timeIncrement": 5,
-  "csv": "/Users/luispereda/Documents/CS 307/Projects/ooga_team09/data/chess/belugaaa.csv",
+  "csv": "data/chess/belugaaa.csv",
   "rules": "data/chess/rules/killOnePawn.json",
   "style": "companion",
   "type": "chess",

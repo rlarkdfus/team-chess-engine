@@ -9,6 +9,16 @@ import ooga.view.util.ViewUtility;
 
 public class TimeConfigurationUI extends GridPane implements UIInterface {
 
+    private static final String TIME_CONTROL_LABEL = "time_control";
+    private static final String MINUTES_LABEL = "minutes_label";
+    private static final String MINUTES_SLIDER = "minutes_slider";
+    private static final String MINUTES_SLIDER_VALUE = "minutes_slider_value";
+
+    private static final String INCREMENT_LABEL = "increment_label";
+    private static final String INCREMENT_SLIDER = "increment_slider";
+    private static final String INCREMENT_SLIDER_VALUE = "increment_slider_value";
+
+
     private GameControllerInterface controller;
     private ViewUtility viewUtility;
 
@@ -21,13 +31,13 @@ public class TimeConfigurationUI extends GridPane implements UIInterface {
 
     @Override
     public void createUI() {
-        this.add(viewUtility.makeLabel("time_control"), 0, 1);
-        this.add(viewUtility.makeLabel("minutes_label"), 0, 2);
-        this.add(viewUtility.makeSlider("minutes_slider", 1, 9, 5, this::handleMinutesSliderAction), 1, 2);
-        this.add(viewUtility.makeLabel("minutes_slider_value"), 2, 2);
-        this.add(viewUtility.makeLabel("increment_label"), 0, 3);
-        this.add(viewUtility.makeSlider("increment_slider", 0, 20, 10, this::handleIncrementSliderAction), 1, 3);
-        this.add(viewUtility.makeLabel("increment_slider_value"), 2, 3);
+        this.add(viewUtility.makeLabel(TIME_CONTROL_LABEL), 0, 1);
+        this.add(viewUtility.makeLabel(MINUTES_LABEL), 0, 2);
+        this.add(viewUtility.makeSlider(MINUTES_SLIDER, 1, 9, 5, this::handleMinutesSliderAction), 1, 2);
+        this.add(viewUtility.makeLabel(MINUTES_SLIDER_VALUE), 2, 2);
+        this.add(viewUtility.makeLabel(INCREMENT_LABEL), 0, 3);
+        this.add(viewUtility.makeSlider(INCREMENT_SLIDER, 0, 20, 10, this::handleIncrementSliderAction), 1, 3);
+        this.add(viewUtility.makeLabel(INCREMENT_SLIDER_VALUE), 2, 3);
     }
 
     private void handleMinutesSliderAction(Double minutes) {

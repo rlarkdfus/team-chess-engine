@@ -5,6 +5,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import ooga.Location;
 
+import java.util.ResourceBundle;
+
 /**
  * Purpose: This class represents an abstraction of what we see as each square or checker in the
  * board. This allows encapsulates the complexity of representing which board squares are
@@ -15,18 +17,16 @@ import ooga.Location;
  */
 public class BoardSquare extends StackPane {
 
-    private static final Color LEGAL_MOVES_FILTER_COLOR = Color.web("#b8e1ff");
-    private static final Color SELECT_FILTER_COLOR = Color.web("#13315C");
-    private static final Color ANNOTATE_FILTER_COLOR = Color.web("EA3546");
-    private static final Color CHECK_FILTER_COLOR = Color.RED;
-    private static final double DEFAULT_FILTER_OPACITY = 0.5;
-    private static final double CHECK_FILTER_OPACITY = 1.0;
+    private static final ResourceBundle STYLE = ResourceBundle.getBundle("ooga/view/boardview/BoardSquare");
+    private static final Color LEGAL_MOVES_FILTER_COLOR = Color.web(STYLE.getString("legal_moves_filter"));
+    private static final Color SELECT_FILTER_COLOR = Color.web(STYLE.getString("select_filter"));
+    private static final Color ANNOTATE_FILTER_COLOR = Color.web(STYLE.getString("annotate_filter"));
+    private static final double DEFAULT_FILTER_OPACITY = Double.parseDouble(STYLE.getString("default_filter_opacity"));
 
     private Rectangle square;
     private Rectangle selectFilter;
     private Rectangle legalMovesFilter;
     private Rectangle annotateFilter;
-    private Rectangle checkFilter;
 
     private Color originalColor;
     private final int width;
@@ -57,8 +57,6 @@ public class BoardSquare extends StackPane {
         legalMovesFilter = createHighlight(LEGAL_MOVES_FILTER_COLOR, DEFAULT_FILTER_OPACITY);
         selectFilter = createHighlight(SELECT_FILTER_COLOR, DEFAULT_FILTER_OPACITY);
         annotateFilter = createHighlight(ANNOTATE_FILTER_COLOR, DEFAULT_FILTER_OPACITY);
-        checkFilter = createHighlight(CHECK_FILTER_COLOR, CHECK_FILTER_OPACITY);
-
         setIDs(location);
     }
 
@@ -67,7 +65,6 @@ public class BoardSquare extends StackPane {
         legalMovesFilter.setId(String.format("legal_location(%d,%d)", location.getRow(), location.getCol()));
         selectFilter.setId(String.format("select_location(%d,%d)", location.getRow(), location.getCol()));
         annotateFilter.setId(String.format("annotate_location(%d,%d)", location.getRow(), location.getCol()));
-        checkFilter.setId(String.format("check_location(%d,%d)", location.getRow(), location.getCol()));
     }
 
     /**
@@ -113,13 +110,6 @@ public class BoardSquare extends StackPane {
         }
     }
 
-    /**
-     * Add checked square highlight (solid red by default)
-     */
-    public void check() {
-        this.getChildren().add(checkFilter);
-        System.out.println("CHECKED SQUARE SHOULD HAPPEN");
-    }
 
     private Rectangle createHighlight(Color color, double opacity) {
         Rectangle highlight = new Rectangle(width, height);

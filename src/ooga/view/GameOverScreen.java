@@ -95,7 +95,7 @@ public class GameOverScreen {
      */
     private Node makeWinnerPicture() {
         try {
-            if (winner == null) {
+            if (winner.equals("draw")) {
                 Label drawLabel = new Label("Draw");
                 drawLabel.setId("DrawText");
                 return drawLabel;
