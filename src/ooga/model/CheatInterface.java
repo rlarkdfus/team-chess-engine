@@ -7,4 +7,8 @@ public interface CheatInterface {
     void transformAllPawnsCheat();
     void queenToPawnCheat();
     void addTimeCheat();
+    void removeRandomPieceCheat();
+    void decrementTimeCheat();
+    void addRandomPiece();
+
 }

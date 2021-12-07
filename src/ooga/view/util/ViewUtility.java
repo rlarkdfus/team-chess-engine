@@ -30,7 +30,7 @@ public class ViewUtility {
     public final String EMPTY_FILE_PATH = "";
     public static final String LANGUAGE_RESOURCE_PATH = "ooga/view/resources/";
     public static final String DEFAULT_LANGUAGE = "English";
-    private static ResourceBundle languageResource;
+    public static ResourceBundle languageResource;
 
     private static List<Labeled> components = new ArrayList<>();
     private static List<MenuButton> menuButtons = new ArrayList<>();
@@ -155,6 +155,7 @@ public class ViewUtility {
         List<MenuItem> options = new ArrayList<>();
         for(String option : choices) {
             MenuItem menuItem = new MenuItem(option);
+            menuItem.textProperty().set(languageResource.getString(option));
             menuItem.setOnAction(e -> {
                 response.accept(option);
                 result.setText(languageResource.getString(option));

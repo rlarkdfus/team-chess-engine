@@ -5,7 +5,10 @@ import ooga.controller.Config.PieceBuilder;
 import ooga.model.EndConditionHandler.EndConditionRunner;
 import ooga.model.Moves.Move;
 import ooga.model.Powerups.PowerupInterface;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @authors
@@ -68,7 +71,6 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
 ////        moveKingRandom();
 //        addTimeCheat();
 //        queenToPawncheat();
-
 
         incrementTurn();
         toggleTimers();
@@ -194,5 +196,25 @@ public class GameBoard extends Board implements GameEngine, CheatInterface{
     @Override
     public void addTimeCheat(){
         currentPlayer.incrementTime(600);
+    }
+
+    @Override
+    public void removeRandomPieceCheat() {
+
+    }
+
+    @Override
+    public void decrementTimeCheat() {
+
+    }
+
+    @Override
+    public void addRandomPiece() {
+        List<PieceInterface> currentPlayerPieces = currentPlayer.getPieces();
+        List<String> pieceOptions = new ArrayList<>();
+        pieceOptions.addAll(Board.PIECES.keySet());
+        pieceOptions.remove("KING");
+
+
     }
 }

@@ -28,7 +28,9 @@ public class GameController extends Controller implements GameControllerInterfac
   private final File userProfilesFile = new File("data/chess/profiles/profiles.json");
   public static final int DEFAULT_INITIAL_TIME = 5;
   public static final int DEFAULT_INITIAL_INCREMENT = 5;
-  private static final String CHEAT_FILE_PATH = "ooga/controller/resources/Cheat.properties";
+  public static final String CHEAT_FILE_PATH = "ooga/controller/resources/Cheat.properties";
+
+  public static ResourceBundle CHEAT_NAMES = ResourceBundle.getBundle("ooga/controller/resources/Cheat");
 
   private TimeController timeController;
 
@@ -226,15 +228,9 @@ public class GameController extends Controller implements GameControllerInterfac
    * @param cheat the name of the cheat defined in Cheat.properties
    */
   public void handleCheat(String cheat){
-    Properties prop = new Properties();
-    InputStream in = getClass().getClassLoader().getResourceAsStream(CHEAT_FILE_PATH);
+    String methodName = CHEAT_NAMES.getString(cheat);
     try {
-      prop.load(in);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    try {
-      Method method = GameBoard.class.getDeclaredMethod((String) prop.get(cheat));
+      Method method = GameBoard.class.getDeclaredMethod(methodName);
       method.invoke(model);
     } catch (NoSuchMethodException e) {
       e.printStackTrace();

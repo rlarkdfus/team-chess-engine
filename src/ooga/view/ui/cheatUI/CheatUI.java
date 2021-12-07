@@ -1,10 +1,14 @@
 package ooga.view.ui.cheatUI;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javafx.scene.layout.GridPane;
 import ooga.controller.ControllerInterface;
+import ooga.controller.GameController;
 import ooga.controller.GameControllerInterface;
+import ooga.view.View;
 import ooga.view.ui.UIInterface;
 import ooga.view.util.ViewUtility;
 
@@ -12,11 +16,14 @@ public class CheatUI extends GridPane implements UIInterface {
 
     private ControllerInterface controller;
     private ViewUtility viewUtility;
-    private final List<String> cheats = List.of("cheat1", "cheat2", "cheat3", "cheat4", "cheat5", "cheat6");
+    private List<String> cheats;
 
     public CheatUI(ControllerInterface controller) {
+        cheats = new ArrayList<>();
         this.controller = controller;
         this.viewUtility = new ViewUtility();
+        cheats.addAll(GameController.CHEAT_NAMES.keySet());
+        System.out.println(cheats);
         this.getStyleClass().add("SettingsUI");
         createUI();
     }
