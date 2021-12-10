@@ -127,4 +127,18 @@ public class EditorViewTest extends DukeApplicationTest {
             }
         }
     }
+
+    @Test
+    void testPlaceTwoPiecesWithDeselectAndMoveSecondPiece() {
+        Location start1 = BLACK_PIECE_MENU_LOCATIONS.get(BISHOP);
+        Location end = new Location(2, 6);
+        viewTestUtility.testMovePiece(BLACK, BISHOP, start1, end);
+        viewTestUtility.testMovePiece(BLACK, BISHOP, start1, start1);
+        Location start2 = WHITE_PIECE_MENU_LOCATIONS.get(KNIGHT);
+        Location end2 = new Location (2, 7);
+        viewTestUtility.testMovePiece(WHITE, KNIGHT, start2, end2);
+        viewTestUtility.testMovePiece(WHITE, KNIGHT, start2, start2);
+        Location end3 = new Location(5,5);
+        assertDoesNotThrow(() -> viewTestUtility.testMovePiece(WHITE, KNIGHT, end2, end3));
+    }
 }

@@ -78,7 +78,7 @@ public class EditorBoard extends Board implements EditorEngine {
    */
   @Override
   public void addPiece(String team, String name, Location location) {
-    PieceInterface newPiece = new Piece(team, name, null, null, 0);
+    PieceInterface newPiece = new Piece(team, name, location, new ArrayList<>(), 0);
     for (PlayerInterface player : players) {
       if (newPiece.getTeam().equals(player.getTeam())) {
         player.addPiece(newPiece);
