@@ -47,8 +47,19 @@ Features implemented:
 board layouts
 * Users can change the piece style, board color, language, and theme
 
-Cheat Codes:
-* 
+Cheat Codes: hit 'c', and then select the desired cheat
+* incrementTurnCheat
+* addRandomQueenCheat
+* moveKingRandomCheat
+* transformAllPawnsCheat
+* queenToPawnCheat
+* addTimeCheat
+* removeRandomPieceCheat
+* decrementTimeCheat
+* addRandomPieceCheat
+* addRandomRookCheat
+* addRandomBishopCheat
+* addRandomKnightCheat
 
 ### Notes/Assumptions
 
