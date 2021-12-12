@@ -22,6 +22,7 @@ class TeleportMoveTest {
     Location endLocation;
     Builder builder;
     PieceInterface pawn;
+    PieceInterface pawn2;
 
     @BeforeEach
     void setUp() {
@@ -44,6 +45,14 @@ class TeleportMoveTest {
         Move move = pawn.getMove(endLocation);
         move.executeMove(pawn, allpieces, endLocation);
         move.updateMoveLocations(pawn, allpieces);
+
+        pawn2 = MoveUtility.pieceAt(new Location(6, 1), allpieces);
+        for(Move move2 : pawn2.getMoves()) {
+            move2.updateMoveLocations(pawn2, allpieces);
+        }
+        //should have 2 options to move
+        int numLegalMoves2 = pawn2.getEndLocations().size();
+        assertEquals(2, numLegalMoves2,"should have only 2 options to move");
     }
 
     private void makePiece(String file) {

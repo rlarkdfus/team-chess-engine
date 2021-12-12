@@ -39,7 +39,13 @@ public class TeleportMove extends TranslationMove {
    */
   @Override
   public List<Location> findAllEndLocations(PieceInterface piece, List<PieceInterface> pieces) {
-    return List.of(new Location(getdRow(), getdCol()));
+    List<Location> endLocations = new ArrayList<>();
+    Location location = new Location(getdRow(), getdCol());
+    PieceInterface targetPiece = MoveUtility.pieceAt(location, pieces);
+    if (!(targetPiece != null && targetPiece.isSameTeam(piece))) {
+      endLocations.add(location);
+    }
+    return endLocations;
   }
 
   /**
