@@ -3,8 +3,7 @@ ooga
 
 This project implements a player for multiple related games.
 
-Names: Tarun Amasa (tra23), Richard Deng (rld39), Gordon Kim (kk388), Samuel Li (sbl28), Luis Pereda 
-Amaya (lip4), Albert Yuan (aly11)
+Names: Tarun Amasa (tra23), Richard Deng (rld39), Gordon Kim (kk388), Samuel Li (sbl28), Luis Pereda Amaya (lip4), Albert Yuan (aly11)
 
 ### Timeline
 
@@ -13,15 +12,6 @@ Start Date: 11/10
 Finish Date: 12/6
 
 Hours Spent: 150
-
-### Primary Roles
-
-Tarun - powerups
-Richard - view, all things timer related, 
-Gordon - view, editor mode, model, moves
-Sam - model, endconditions, moves
-Luis - login, loading and saving games, boardbuilder and all things config
-Albert - boardbuilder and all things config, endconditions
 
 ### Resources Used
 
@@ -91,3 +81,4 @@ pieces in specific locations
 ### Impressions
 
 
+# team-chess-engine
