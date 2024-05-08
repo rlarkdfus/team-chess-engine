@@ -1,4 +1,4 @@
-ooga
+# team-chess-engine
 ====
 
 This project implements a player for multiple related games.
@@ -67,8 +67,6 @@ Interesting data files:
 to win the game
 * data/chess/Stalemate - test out stalemate my moving the bottom right rook to the left
 
-Known Bugs:
-* 
 
 Noteworthy Features:
 * Multiple different type of checkmates - regular, eliminating a list of pieces, positioning certain 
@@ -76,9 +74,5 @@ pieces in specific locations
 * multiple different type of powerups - promotion, timer bonuses
 * All types of chess moves (checking, en passant) are functional
 * An editor mode that allows for the user to freely add and remove pieces on the board
-* 
-
-### Impressions
 
 
-# team-chess-engine
